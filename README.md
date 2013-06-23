@@ -20,7 +20,7 @@ Install Guide
 
 2) Download MyTownLib and place it in your servers mods/ folder
 
-3) Download PermissionsEx from below, place it in servers mods/ folder
+3) Download PermissionsEx from http://www.minecraftforum.net/topic/1650110-, place it in servers mods/ folder
 
 4) Start server, stop server to generate config/MyTown/MyTown.cfg and database
 
