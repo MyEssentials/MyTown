@@ -1,0 +1,22 @@
+[
+{
+  "modid": "MyTown",
+  "name": "MyTown",
+  "description": "Adds the possibility to create towns in Minecraft server that protect the players
+  and the player builds.",
+  "version": "1.5.1.0",
+  "mcversion": "1.5.1",
+  "url": "http://www.minecraftforum.net/topic/1650110-mytown-aperf-server-protection-and-performance-mods/",
+  "updateUrl": "",
+  "authors": [
+    "AlphAest"
+  ],
+  "credits": "By AlphAest, inspired by the Bukkit plugin Towny",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "requiredMods": [ "Forge", "PermissionsEx" ],
+  "useDependencyInformation": "true"
+}
+]

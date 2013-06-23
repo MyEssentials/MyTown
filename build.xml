@@ -1,0 +1,73 @@
+<?xml version="1.0" ?> 
+<project name="MyTown" default="build">
+
+	<property file="build.properties" prefix="build"/>
+
+	<target name="clean">
+		<delete file="/home/joe/MinecraftModding/mcp/src/minecraft/mcmod.info" />
+		<delete dir="/home/joe/MinecraftModding/mcp/reobf/minecraft" />
+		<delete dir="/home/joe/MinecraftModding/mcp/src/minecraft/ee" />
+		<delete dir="/home/joe/MinecraftModding/mcp/src/minecraft/ru" />
+		<delete dir="/home/joe/MinecraftModding/mcp/src/minecraft/railcraft" />
+	</target>
+
+	<target name="prep">
+		<copy todir="/home/joe/MinecraftModding/mcp/src/minecraft">
+			<fileset dir="/home/joe/MinecraftModding/eclipse/MyTown/src" />
+		</copy>
+	</target>
+
+	<target name="recompile">
+		<exec dir="/home/joe/MinecraftModding\mcp" executable="cmd" osfamily="windows">
+			<arg line="/c recompile.bat" />
+		</exec>
+		<exec dir="/home/joe/MinecraftModding\mcp" executable="bash" osfamily="unix">
+			<arg line="recompile.sh" />
+		</exec>
+	</target>
+
+	<target name="reobfuscate">
+		<exec dir="/home/joe/MinecraftModding\mcp" executable="cmd" osfamily="windows">
+			<arg line="/c reobfuscate_srg.bat" />
+		</exec>
+		<exec dir="/home/joe/MinecraftModding\mcp" executable="bash" osfamily="unix">
+			<arg line="reobfuscate_srg.sh" />
+		</exec>
+	</target>
+
+	<target name="build">
+		<!-- Prep for the build -->
+		<antcall target="clean" />
+		<antcall target="prep" />
+		<antcall target="recompile" />		
+		<antcall target="reobfuscate" />
+
+		<!-- Build the jar -->
+		<mkdir dir="/home/joe/MinecraftModding/release/MyTown" />
+		<jar destfile="/home/joe/MinecraftModding/release/MyTown/MyTown.jar">
+			<fileset dir="/home/joe/MinecraftModding\mcp\src\minecraft\" includes="mcmod.info" />
+			<fileset dir="/home/joe/MinecraftModding\mcp\reobf\minecraft" />
+		</jar>
+
+		<!-- Clean up the MCP source now that we are done -->
+		<antcall target="clean" />
+	</target>
+
+	<target name="release">
+		<!-- Prep for the build -->
+		<antcall target="clean" />
+		<antcall target="prep" />
+		<antcall target="recompile" />		
+		<antcall target="reobfuscate" />
+
+		<!-- Build the jar -->
+		<mkdir dir="/home/joe/MinecraftModding/release/MyTown" />
+		<jar destfile="/home/joe/MinecraftModding/release/MyTown/MyTown.jar">
+			<fileset dir="/home/joe/MinecraftModding\mcp\src\minecraft\" includes="mcmod.info" />
+			<fileset dir="/home/joe/MinecraftModding\mcp\reobf\minecraft" />
+		</jar>
+
+		<!-- Clean up the MCP source now that we are done -->
+		<antcall target="clean" />
+	</target>
+</project>
