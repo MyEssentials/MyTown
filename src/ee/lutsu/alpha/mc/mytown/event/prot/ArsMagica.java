@@ -18,7 +18,6 @@ import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
-//import common.ArsMagica.EntitySpellProjectile;
 
 public class ArsMagica extends ProtBase{
     public static ArsMagica instance = new ArsMagica();
@@ -26,6 +25,9 @@ public class ArsMagica extends ProtBase{
     private Class<?> clSpellScrollBase = null, clIDamagingSpell, clEntitySpellProjectile, clISummonCreature, clEntityLightMage, clEntityDarkMage, clIRangedSpell, clIBeamSpell;
     public int explosionRadius = 6;
     
+    /**
+     * Load the classes needed for protection checking (Throws exception if they are not there)
+     */
     @Override
     public void load() throws Exception{
         clSpellScrollBase = Class.forName("mithion.arsmagica.api.spells.SpellScrollBase");
@@ -37,12 +39,18 @@ public class ArsMagica extends ProtBase{
         clEntityLightMage = Class.forName("mithion.arsmagica.entities.EntityLightMage");
         clEntityDarkMage = Class.forName("mithion.arsmagica.entities.EntityDarkMage");
     }
-
+    
+    /**
+     * Whether the Protection is loaded or not
+     */
     @Override
     public boolean loaded() {
         return clSpellScrollBase != null;
     }
     
+    /**
+     * Check if an entity (projectile in this case) is within the town, and if it is allowed
+     */
     @Override
     public String update(Entity e) throws Exception{
         if (clEntitySpellProjectile.isInstance(e)){
@@ -72,6 +80,9 @@ public class ArsMagica extends ProtBase{
         return null;
     }
     
+    /**
+     * Check if a tool was used inside a town and sees if the user of the tool is allowed to use it
+     */
     @Override
     public String update(Resident res, Item tool, ItemStack item) throws Exception{
         if (clSpellScrollBase.isInstance(tool) && (clIDamagingSpell.isInstance(tool) || clISummonCreature.isInstance(tool))){
@@ -94,6 +105,9 @@ public class ArsMagica extends ProtBase{
         return clSpellScrollBase.isInstance(e);
     }
     
+    /**
+     * All it does it gets a list of people in the range of something (a spell for instance)
+     */
     private List<Entity> getTargets(World world, Vec3 tvec, EntityPlayer p, double range){
         Entity pointedEntity = null;
         Vec3 vec3d = world.getWorldVec3Pool().getVecFromPool(p.posX, p.posY, p.posZ);
