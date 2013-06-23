@@ -1,7 +1,7 @@
 MyTown
 ======
 
-A continuation of alphaest's MyTown mod for minecraft.
+A continuation of alphaest's MyTown mod for minecraft, http://www.minecraftforum.net/topic/1650110-146-151mytown-aperf-server-protection-and-performance-mods/.
 
 Land protection mod. Create new towns, add members to it, set up personalised plots, configure plot/town permissions.
 
