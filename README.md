@@ -16,9 +16,10 @@ Features
 * Autocomplete for all commands, tab away - /t in<tab> Sp0<tab>
 
 Install Guide
+
 1) Download MyTown and place it in your servers mods/ folder
 
-2) Download MyTownLib and place it in your servers mods/ folder
+2) Download MyTownLib from https://docs.google.com/file/d/0B2uY0gk2-lQFZnRnZDlTNEEwdm8/edit and place it in your servers mods/ folder
 
 3) Download PermissionsEx from http://www.minecraftforum.net/topic/1650110-, place it in servers mods/ folder
 
