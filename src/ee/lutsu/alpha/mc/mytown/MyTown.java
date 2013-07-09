@@ -65,13 +65,24 @@ public class MyTown
 	public LinkedList<ItemIdRange> carts = null;
 	public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
     public PermissionsBase perms;
-    public PermissionsBase tempperms;
+    public boolean permHandlerLoaded = false;
 	
     @Mod.Instance("MyTown")
     public static MyTown instance;
     public Configuration config = new Configuration(new File(CONFIG_FILE));
     
 	public List<CommandBase> commands = new ArrayList<CommandBase>();
+	
+	public static void registerPermHandler(PermissionsBase permHandler){
+	    if (!MyTown.instance.permHandlerLoaded){
+	        if (permHandler.load()){
+	            Log.info("PermissionHandler %s Loaded", permHandler.name);
+	            MyTown.instance.perms = permHandler;
+	        } else{
+                Log.info("PermissionHandler %s Failed To Load", permHandler.name);
+	        }
+	    }
+	}
 	
 	private void addCommands()
 	{
@@ -136,28 +147,6 @@ public class MyTown
         finally
         {
             config.save(); // re-save to add the missing configuration variables
-        }
-        
-        try {
-            tempperms = new VaultPermissions();
-            tempperms.load();
-            perms = tempperms;
-        } catch (Exception e) {
-            Log.info("Vault integration failed to load (%s)", e.getMessage());
-            try {
-                tempperms = new PEXPermissions();
-                tempperms.load();
-                perms = tempperms;
-            } catch (Exception e2) {
-                Log.info("Forge PEX integration failed to load (%s)", e2.getMessage());
-                try {
-                    tempperms = new FallbackPermissions();
-                    tempperms.load();
-                    perms = tempperms;
-                } catch (Exception e3) {
-                    Log.info("Fallback integration failed to load (%s)", e3.getMessage());
-                }
-            }
         }
         
 		Log.info("Loaded");

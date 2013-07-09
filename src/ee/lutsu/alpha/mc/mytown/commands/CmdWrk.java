@@ -22,6 +22,7 @@ public class CmdWrk extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
+        Log.info("%s requested mytown.adm.cmd.wrk", cs.getCommandSenderName());
 		return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.wrk");
 	}
 

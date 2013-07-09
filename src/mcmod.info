@@ -9,14 +9,15 @@
   "url": "http://www.minecraftforum.net/topic/1650110-mytown-aperf-server-protection-and-performance-mods/",
   "updateUrl": "",
   "authors": [
-    "AlphAest"
+    "AlphAest",
+    "Legobear154"
   ],
   "credits": "By AlphAest, Updated by Legobear154, inspired by the Bukkit plugin Towny",
   "logoFile": "",
   "screenshots": [
   ],
   "parent":"",
-  "requiredMods": [ "Forge", "PermissionsEx" ],
+  "requiredMods": [ "Forge" ],
   "useDependencyInformation": "true"
 }
 ]

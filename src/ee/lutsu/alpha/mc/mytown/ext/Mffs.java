@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.google.common.base.Joiner;
 
-import ru.tehkode.permissions.IPermissions;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 

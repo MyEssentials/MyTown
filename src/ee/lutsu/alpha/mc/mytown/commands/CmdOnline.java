@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.Formatter;
+import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
