@@ -1,8 +1,9 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.ext.Mffs;
 import net.minecraft.command.CommandBase;
@@ -23,7 +24,7 @@ public class CmdSpawn extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return cs instanceof EntityPlayerMP && Permissions.canAccess(cs, "mytown.ecmd.spawn");
+		return cs instanceof EntityPlayerMP && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.spawn");
 	}
 
 	@Override

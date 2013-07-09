@@ -8,12 +8,12 @@ import java.util.logging.Level;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 
 public class CmdMyTown extends CommandBase
@@ -33,7 +33,7 @@ public class CmdMyTown extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return Permissions.canAccess(cs, "mytown.cmd");
+		return MyTown.instance.perms.canAccess(cs, "mytown.cmd");
 	}
 	
 	@Override

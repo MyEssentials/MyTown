@@ -1,6 +1,7 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import net.minecraft.command.CommandServerTp;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -16,7 +17,7 @@ public class CmdTeleport extends CommandServerTp
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return (cs instanceof MinecraftServer) || (cs instanceof EntityPlayer && (Permissions.canAccess(cs, "mytown.adm.cmd.tp") || MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase())));
+		return (cs instanceof MinecraftServer) || (cs instanceof EntityPlayer && (MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.tp") || MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase())));
 	}
 	
 	@Override

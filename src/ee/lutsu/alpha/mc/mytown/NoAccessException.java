@@ -28,14 +28,16 @@ public class NoAccessException extends Exception
 		while ((index = perm.lastIndexOf(".")) != -1) {
 			perm = perm.substring(0, index);
 
-			message = Permissions.getOption(executor, "permission-denied-" + perm, null);
+			message = MyTown.instance.perms.getOption(executor, "permission-denied-" + perm, null);
+			//TODO Permissions.getOption(executor, "permission-denied-" + perm, null);
 			if (message == null)
 				continue;
 
 			return message;
 		}
 
-		message = Permissions.getOption(executor, "permission-denied", null);
+		//TODO message = Permissions.getOption(executor, "permission-denied", null);
+		message = MyTown.instance.perms.getOption(executor, "permission-denied", null);
 		if (message != null)
 			return message;
 		

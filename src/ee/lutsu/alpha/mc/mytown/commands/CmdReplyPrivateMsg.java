@@ -8,9 +8,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import ee.lutsu.alpha.mc.mytown.Formatter;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+import ee.lutsu.alpha.mc.mytown.MyTown;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandServerMessage;
 import net.minecraft.command.CommandServerSay;
@@ -38,7 +38,7 @@ public class CmdReplyPrivateMsg extends CommandBase
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender cs)
     {
-    	return cs instanceof EntityPlayer && Permissions.canAccess(cs, "mytown.ecmd.reply");
+    	return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.reply");
     }
     
     @Override

@@ -5,8 +5,9 @@ import com.google.common.base.Joiner;
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
@@ -117,7 +118,7 @@ public class CmdChat extends CommandBase
 	
 	public static String sendGlobalChat(Resident res, String msg, ChatChannel ch, boolean emote)
 	{
-		if (!Permissions.canAccess(res, "mytown.chat.allowcaps"))
+		if (!MyTown.instance.perms.canAccess(res, "mytown.chat.allowcaps"))
 			msg = msg.toLowerCase();
 
 		String formatted = Formatter.formatChat(res, msg, ch, emote);
@@ -201,7 +202,7 @@ public class CmdChat extends CommandBase
 		if (!channel.enabled)
 			return;
 		
-		if (Permissions.canAccess(sender, "mytown.chat.allowcolors"))
+		if (MyTown.instance.perms.canAccess(sender, "mytown.chat.allowcolors"))
 			msg = Formatter.dollarToColorPrefix(msg);
 		
 		String s;

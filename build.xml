@@ -4,33 +4,34 @@
 	<property file="build.properties" prefix="build"/>
 
 	<target name="clean">
-		<delete file="/home/joe/MinecraftModding/mcp/src/minecraft/mcmod.info" />
-		<delete dir="/home/joe/MinecraftModding/mcp/reobf/minecraft" />
-		<delete dir="/home/joe/MinecraftModding/mcp/src/minecraft/ee" />
-		<delete dir="/home/joe/MinecraftModding/mcp/src/minecraft/ru" />
-		<delete dir="/home/joe/MinecraftModding/mcp/src/minecraft/railcraft" />
+		<delete file="/home/joe/Documents/MinecraftModding/mcpc-1.5.xc-1.5.2/src/minecraft/mcmod.info" />
+		<delete dir="/home/joe/Documents/MinecraftModding/mcpc-1.5.x/reobf/minecraft" />
+		<delete dir="/home/joe/Documents/MinecraftModding/mcpc-1.5.x/src/minecraft/ee" />
+		<delete dir="/home/joe/Documents/MinecraftModding/mcpc-1.5.x/src/minecraft/ru" />
+		<delete dir="/home/joe/Documents/MinecraftModding/mcpc-1.5.x/src/minecraft/railcraft" />
+		<delete dir="/home/joe/Documents/MinecraftModding/mcpc-1.5.x/src/minecraft/mithion" />
 	</target>
 
 	<target name="prep">
-		<copy todir="/home/joe/MinecraftModding/mcp/src/minecraft">
-			<fileset dir="/home/joe/MinecraftModding/eclipse/MyTown/src" />
+		<copy todir="/home/joe/Documents/MinecraftModding/mcpc-1.5.x/src/minecraft">
+			<fileset dir="/home/joe/Documents/MinecraftModding/eclipse/MyTown/src" />
 		</copy>
 	</target>
 
 	<target name="recompile">
-		<exec dir="/home/joe/MinecraftModding\mcp" executable="cmd" osfamily="windows">
+		<exec dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x" executable="cmd" osfamily="windows">
 			<arg line="/c recompile.bat" />
 		</exec>
-		<exec dir="/home/joe/MinecraftModding\mcp" executable="bash" osfamily="unix">
+		<exec dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x" executable="bash" osfamily="unix">
 			<arg line="recompile.sh" />
 		</exec>
 	</target>
 
 	<target name="reobfuscate">
-		<exec dir="/home/joe/MinecraftModding\mcp" executable="cmd" osfamily="windows">
+		<exec dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x" executable="cmd" osfamily="windows">
 			<arg line="/c reobfuscate_srg.bat" />
 		</exec>
-		<exec dir="/home/joe/MinecraftModding\mcp" executable="bash" osfamily="unix">
+		<exec dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x" executable="bash" osfamily="unix">
 			<arg line="reobfuscate_srg.sh" />
 		</exec>
 	</target>
@@ -43,13 +44,13 @@
 		<antcall target="reobfuscate" />
 
 		<!-- Build the jar -->
-		<mkdir dir="/home/joe/MinecraftModding/release/MyTown" />
-		<jar destfile="/home/joe/MinecraftModding/release/MyTown/MyTown.jar">
-			<fileset dir="/home/joe/MinecraftModding\mcp\src\minecraft\" includes="mcmod.info" />
-			<fileset dir="/home/joe/MinecraftModding\mcp\reobf\minecraft" />
+		<mkdir dir="/home/joe/Documents/MinecraftModding/release/MyTown" />
+		<jar destfile="/home/joe/Documents/MinecraftModding/release/MyTown/MyTown.jar">
+			<fileset dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x\src\minecraft\" includes="mcmod.info" />
+			<fileset dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x\reobf\minecraft" />
 		</jar>
 
-		<!-- Clean up the MCP source now that we are done -->
+		<!-- Clean up the mcpc-1.5.x source now that we are done -->
 		<antcall target="clean" />
 	</target>
 
@@ -61,13 +62,13 @@
 		<antcall target="reobfuscate" />
 
 		<!-- Build the jar -->
-		<mkdir dir="/home/joe/MinecraftModding/release/MyTown" />
-		<jar destfile="/home/joe/MinecraftModding/release/MyTown/MyTown.jar">
-			<fileset dir="/home/joe/MinecraftModding\mcp\src\minecraft\" includes="mcmod.info" />
-			<fileset dir="/home/joe/MinecraftModding\mcp\reobf\minecraft" />
+		<mkdir dir="/home/joe/Documents/MinecraftModding/release/MyTown" />
+		<jar destfile="/home/joe/Documents/MinecraftModding/release/MyTown/MyTown.jar">
+			<fileset dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x\src\minecraft\" includes="mcmod.info" />
+			<fileset dir="/home/joe/Documents/MinecraftModding\mcpc-1.5.x\reobf\minecraft" />
 		</jar>
 
-		<!-- Clean up the MCP source now that we are done -->
+		<!-- Clean up the mcpc-1.5.x source now that we are done -->
 		<antcall target="clean" />
 	</target>
 </project>

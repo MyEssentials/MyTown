@@ -8,8 +8,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 
@@ -24,7 +25,7 @@ public class CmdDelHome extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return cs instanceof EntityPlayerMP && Permissions.canAccess(cs, "mytown.ecmd.delhome");
+		return cs instanceof EntityPlayerMP && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.delhome");
 	}
 
 	@Override

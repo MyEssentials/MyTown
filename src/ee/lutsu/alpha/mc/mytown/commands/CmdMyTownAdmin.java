@@ -16,7 +16,7 @@ import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
@@ -46,7 +46,7 @@ public class CmdMyTownAdmin extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return Permissions.canAccess(cs, "mytown.adm.cmd");
+		return MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd");
 	}
 	
 	@Override
@@ -81,14 +81,14 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdReload.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.reload")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.reload")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				MyTown.instance.reload();
 				cs.sendChatToPlayer(Term.TownadmModReloaded.toString());
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdResetFocusedChannels.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.reschannels")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.reschannels")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				int i = 0;
 				for (Resident r : MyTownDatasource.instance.residents)
@@ -103,7 +103,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdWipeDim.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.wipedim")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.wipedim")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length < 2)
 					cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdWipeDim.toString(), Term.TownadmCmdWipeDimArgs.toString(), Term.TownadmCmdWipeDimDesc.toString(), color));
@@ -120,7 +120,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdNew.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.new")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.new")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length != 3)
 					cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdNew.toString(), Term.TownadmCmdNewArgs.toString(), Term.TownadmCmdNewDesc.toString(), color));
@@ -133,7 +133,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdDelete.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.delete")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.delete")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length != 2)
 					cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdDelete.toString(), Term.TownadmCmdDeleteArgs.toString(), Term.TownadmCmdDeleteDesc.toString(), color));
@@ -150,7 +150,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdSet.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.set")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.set")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length < 4)
 					cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdSet.toString(), Term.TownadmCmdSetArgs.toString(), Term.TownadmCmdSetDesc.toString(), color));
@@ -182,7 +182,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdRem.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.rem")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.rem")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length < 3)
 					cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdRem.toString(), Term.TownadmCmdRemArgs.toString(), Term.TownadmCmdRemDesc.toString(), color));
@@ -205,7 +205,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdExtra.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.extra")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.extra")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length < 3)
 					cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdExtra.toString(), Term.TownadmCmdExtraArgs.toString(), Term.TownadmCmdExtraDesc.toString(), color));
@@ -222,7 +222,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdSnoopPrivateChat.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.snoop")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.snoop")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				boolean done = CmdPrivateMsg.snoopers.remove(MinecraftServer.getServer());
 				if (!done)
@@ -232,7 +232,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdExtraRes.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.extrares")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.extrares")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length != 4)
 					cs.sendChatToPlayer(Formatter.formatAdminCommand(Term.TownadmCmdExtraRes.toString(), Term.TownadmCmdExtraResArgs.toString(), Term.TownadmCmdExtraResDesc.toString(), color));
@@ -275,7 +275,7 @@ public class CmdMyTownAdmin extends CommandBase
 				
 				if (var2.length < 3) // show
 				{
-					if (!Permissions.canAccess(cs, "mytown.adm.cmd.perm.show." + node)) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+					if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.perm.show." + node)) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 					showPermissions(cs, node);
 				}
 				else
@@ -283,12 +283,12 @@ public class CmdMyTownAdmin extends CommandBase
 					String action = var2[2];
 					if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Set.toString()) && var2.length > 3)
 					{
-						if (!Permissions.canAccess(cs, "mytown.adm.cmd.perm.set." + node + "." + var2[3])) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+						if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.perm.set." + node + "." + var2[3])) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 						setPermissions(cs, node, var2[3], var2.length > 4 ? var2[4] : null);
 					}
 					else if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Force.toString()))
 					{
-						if (!Permissions.canAccess(cs, "mytown.adm.cmd.perm.force." + node)) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+						if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.perm.force." + node)) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 						
 						flushPermissions(cs, node, var2.length > 3 ? var2[3] : null);
 					}
@@ -298,7 +298,7 @@ public class CmdMyTownAdmin extends CommandBase
 			}
 			else if (var2[0].equalsIgnoreCase(Term.TownadmCmdClaim.toString()))
 			{
-				if (!Permissions.canAccess(cs, "mytown.adm.cmd.claim")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
+				if (!MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.claim")) { cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString()); return; }
 				
 				if (var2.length < 2) // /ta claim townname [playername] [x.y:x.y]
 				{

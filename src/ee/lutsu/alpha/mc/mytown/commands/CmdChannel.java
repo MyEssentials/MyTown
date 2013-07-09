@@ -6,10 +6,10 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 
@@ -61,7 +61,7 @@ public class CmdChannel extends CommandBase
 			if (!ch.enabled)
 				ch = ChatChannel.defaultChannel;
 
-			if (!Permissions.canAccess(res, "mytown.chat.focus." + ch.name.toLowerCase()))
+			if (!MyTown.instance.perms.canAccess(res, "mytown.chat.focus." + ch.name.toLowerCase()))
 			{
 				var1.sendChatToPlayer("§4You cannot focus to " + ch.name + " channel");
 				return;

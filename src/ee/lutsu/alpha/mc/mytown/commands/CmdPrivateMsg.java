@@ -8,9 +8,9 @@ import com.google.common.collect.Maps;
 
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+import ee.lutsu.alpha.mc.mytown.MyTown;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
-
 import net.minecraft.command.CommandServerMessage;
 import net.minecraft.command.CommandServerSay;
 import net.minecraft.command.ICommandSender;
@@ -29,7 +29,7 @@ public class CmdPrivateMsg extends CommandServerMessage
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender cs)
     {
-    	return cs instanceof EntityPlayer && Permissions.canAccess(cs, "mytown.ecmd.msg");
+    	return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.msg");
     }
     
     public void processCommand(ICommandSender cs, String[] arg)
@@ -80,7 +80,7 @@ public class CmdPrivateMsg extends CommandServerMessage
     	
     	lastMessages.put(target, sender);
     	
-		if (Permissions.canAccess(sender, "mytown.chat.allowcolors"))
+		if (MyTown.instance.perms.canAccess(sender, "mytown.chat.allowcolors"))
 			msg = Formatter.dollarToColorPrefix(msg);
 		
     	for (ICommandSender cs : snoopers)

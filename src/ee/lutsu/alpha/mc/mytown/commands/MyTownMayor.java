@@ -7,15 +7,15 @@ import java.util.logging.Level;
 import ee.lutsu.alpha.mc.mytown.Assert;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
 import ee.lutsu.alpha.mc.mytown.entities.Resident.Rank;
 import ee.lutsu.alpha.mc.mytown.event.PlayerEvents;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -168,7 +168,7 @@ public class MyTownMayor
 				if (r.town() != res.town())
 					throw new CommandException(Term.TownErrPlayerNotInYourTown);
 				
-				if (!Permissions.canAccess(r, "mytown.cmd.new")) 
+				if (!MyTown.instance.perms.canAccess(r, "mytown.cmd.new")) 
 					throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement);
 				
 

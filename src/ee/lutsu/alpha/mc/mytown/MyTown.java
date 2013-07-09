@@ -64,6 +64,8 @@ public class MyTown
 	public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
 	public LinkedList<ItemIdRange> carts = null;
 	public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
+    public PermissionsBase perms;
+    public PermissionsBase tempperms;
 	
     @Mod.Instance("MyTown")
     public static MyTown instance;
@@ -135,7 +137,29 @@ public class MyTown
         {
             config.save(); // re-save to add the missing configuration variables
         }
-
+        
+        try {
+            tempperms = new VaultPermissions();
+            tempperms.load();
+            perms = tempperms;
+        } catch (Exception e) {
+            Log.info("Vault integration failed to load (%s)", e.getMessage());
+            try {
+                tempperms = new PEXPermissions();
+                tempperms.load();
+                perms = tempperms;
+            } catch (Exception e2) {
+                Log.info("Forge PEX integration failed to load (%s)", e2.getMessage());
+                try {
+                    tempperms = new FallbackPermissions();
+                    tempperms.load();
+                    perms = tempperms;
+                } catch (Exception e3) {
+                    Log.info("Fallback integration failed to load (%s)", e3.getMessage());
+                }
+            }
+        }
+        
 		Log.info("Loaded");
     }
     

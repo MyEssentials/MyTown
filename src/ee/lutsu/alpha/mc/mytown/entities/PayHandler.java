@@ -1,6 +1,7 @@
 package ee.lutsu.alpha.mc.mytown.entities;
 
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.Term;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -69,7 +70,7 @@ public class PayHandler
 		doneHandler = actor;
 		doneHandlerArgs = args;
 		
-		if (stack == null || stack.stackSize < 1 || Permissions.canAccess(owner, "mytown.cost.bypass." + action))
+		if (stack == null || stack.stackSize < 1 || MyTown.instance.perms.canAccess(owner, "mytown.cost.bypass." + action) /*Permissions.canAccess(owner, "mytown.cost.bypass." + action)*/)
 			purchaseComplete();
 		else
 		{

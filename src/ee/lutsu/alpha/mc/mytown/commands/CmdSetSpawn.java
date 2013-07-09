@@ -1,7 +1,8 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
 import ee.lutsu.alpha.mc.mytown.Log;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+import ee.lutsu.alpha.mc.mytown.MyTown;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -23,7 +24,7 @@ public class CmdSetSpawn extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return cs instanceof EntityPlayer && (Permissions.canAccess(cs, "mytown.adm.cmd.setspawn") || MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase()));
+		return cs instanceof EntityPlayer && (MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.setspawn") || MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase()));
 	}
 	
 	@Override

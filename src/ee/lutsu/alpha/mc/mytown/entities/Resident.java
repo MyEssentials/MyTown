@@ -16,7 +16,7 @@ import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.Permissions;
+//import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.commands.CmdChat;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
@@ -146,22 +146,23 @@ public class Resident
 	
 	public boolean shouldShowTownBlocks()
 	{
-		return Permissions.canAccess(this, "mytown.adm.showblocks");
+		//return Permissions.canAccess(this, "mytown.adm.showblocks");
+	    return MyTown.instance.perms.canAccess(this, "mytown.adm.showblocks");
 	}
 	
 	public boolean shouldShowPlayerLocation()
 	{
-		return Permissions.canAccess(this, "mytown.adm.showlocation");
+		return MyTown.instance.perms.canAccess(this, "mytown.adm.showlocation");
 	}
 	
 	public boolean canByPassCheck(TownSettingCollection.Permissions level)
 	{
-		return Permissions.canAccess(this, "mytown.adm.bypass." + level.toString().toLowerCase());
+		return MyTown.instance.perms.canAccess(this, "mytown.adm.bypass." + level.toString().toLowerCase());
 	}
 	
 	public boolean pvpBypass()
 	{
-		return Permissions.canAccess(this, "mytown.adm.bypass.pvp");
+		return MyTown.instance.perms.canAccess(this, "mytown.adm.bypass.pvp");
 	}
 	
 	public boolean canInteract(int chunkX, int chunkZ, TownSettingCollection.Permissions askedFor)
@@ -377,13 +378,13 @@ public class Resident
 	public String prefix()
 	{
 		String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
-		return Permissions.getPrefix(name(), w);
+		return MyTown.instance.perms.getPrefix(name(), w);
 	}
 	
 	public String postfix()
 	{
 		String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
-		return Permissions.getPostfix(name(), w);
+		return MyTown.instance.perms.getPostfix(name(), w);
 	}
 	
 	public static Resident loadFromDB(int id, String name, Town town, Rank r, ChatChannel c, Date created, Date lastLogin, String extra, String home)
@@ -803,7 +804,7 @@ public class Resident
 		teleportTargetHome = home;
 		
 		long now = System.currentTimeMillis();
-		long takesTime = Permissions.canAccess(this, "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
+		long takesTime = MyTown.instance.perms.canAccess(this, "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
 		
 		teleportToSpawnStamp = System.currentTimeMillis() + takesTime;
 		
