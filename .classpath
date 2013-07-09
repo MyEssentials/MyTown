@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="class"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Minecraft"/>
+	<classpathentry kind="lib" path="/home/joe/Documents/MinecraftModding/mcp-1.5.x/lib/MyTownLib.jar"/>
+	<classpathentry kind="lib" path="/home/joe/Documents/Java Libs/bukkit-1.5.2-R1.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
