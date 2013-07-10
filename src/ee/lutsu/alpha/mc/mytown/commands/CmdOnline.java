@@ -9,6 +9,7 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.Formatter;
@@ -37,7 +38,12 @@ public class CmdOnline extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
 	{
-		return MyTown.instance.perms.canAccess(par1ICommandSender, "mytown.ecmd.online");
+        if (par1ICommandSender instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)par1ICommandSender;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+        }
+        return false;
+		//return MyTown.instance.perms.canAccess(par1ICommandSender, "mytown.ecmd.online");
 	}
 
 	@Override

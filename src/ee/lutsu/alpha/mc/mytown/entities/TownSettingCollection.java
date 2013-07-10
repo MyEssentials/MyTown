@@ -2,13 +2,12 @@ package ee.lutsu.alpha.mc.mytown.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 
 import com.google.common.base.Joiner;
 
-import ee.lutsu.alpha.mc.mytown.Assert;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.Term;
@@ -267,7 +266,8 @@ public class TownSettingCollection
 		{
 			if (!isWild || set.wildValue != null)
 			{
-				if (all || MyTown.instance.perms.canAccess(cs, "mytown.cmd.perm.set." + node + "." + set.getSerializationKey()))
+			    EntityPlayer p = (EntityPlayer)cs;
+				if (all || MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getSerializationKey()))
 					cs.sendChatToPlayer(String.format("§a%s §2[%s] : %s%s",
 						set.getName(),
 						set.getSerializationKey(),

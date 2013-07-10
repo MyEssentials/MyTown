@@ -69,8 +69,7 @@ public class PayHandler
 		requestedItem = stack;
 		doneHandler = actor;
 		doneHandlerArgs = args;
-		
-		if (stack == null || stack.stackSize < 1 || MyTown.instance.perms.canAccess(owner, "mytown.cost.bypass." + action) /*Permissions.canAccess(owner, "mytown.cost.bypass." + action)*/)
+		if (stack == null || stack.stackSize < 1 || MyTown.instance.perms.canAccess(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cost.bypass." + action) /*MyTown.instance.perms.canAccess(owner.onlinePlayer, "mytown.cost.bypass." + action)*/)
 			purchaseComplete();
 		else
 		{

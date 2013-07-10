@@ -148,15 +148,15 @@ public class Town
 		if (mayor == null)
 			return 1;
 		
-		if (MyTown.instance.perms.canAccess(mayor, "mytown.mayor.blocks.32"))
+		if (MyTown.instance.perms.canAccess(mayor.name(), mayor.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.mayor.blocks.32"))
 			return 32;
-		if (MyTown.instance.perms.canAccess(mayor, "mytown.mayor.blocks.16"))
+		if (MyTown.instance.perms.canAccess(mayor.name(), mayor.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.mayor.blocks.16"))
 			return 16;
-		if (MyTown.instance.perms.canAccess(mayor, "mytown.mayor.blocks.8"))
+		if (MyTown.instance.perms.canAccess(mayor.name(), mayor.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.mayor.blocks.8"))
 			return 8;
-		if (MyTown.instance.perms.canAccess(mayor, "mytown.mayor.blocks.4"))
+		if (MyTown.instance.perms.canAccess(mayor.name(), mayor.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.mayor.blocks.4"))
 			return 4;
-		if (MyTown.instance.perms.canAccess(mayor, "mytown.mayor.blocks.2"))
+		if (MyTown.instance.perms.canAccess(mayor.name(), mayor.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.mayor.blocks.2"))
 			return 2;
 		
 		return 1;
@@ -167,13 +167,13 @@ public class Town
 		if (res == null)
 			return 1;
 		
-		if (MyTown.instance.perms.canAccess(res, "mytown.resident.blocksmulti.10"))
+		if (MyTown.instance.perms.canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.resident.blocksmulti.10"))
 			return 10;
-		if (MyTown.instance.perms.canAccess(res, "mytown.resident.blocksmulti.8"))
+		if (MyTown.instance.perms.canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.resident.blocksmulti.8"))
 			return 8;
-		if (MyTown.instance.perms.canAccess(res, "mytown.resident.blocksmulti.4"))
+		if (MyTown.instance.perms.canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.resident.blocksmulti.4"))
 			return 4;
-		if (MyTown.instance.perms.canAccess(res, "mytown.resident.blocksmulti.2"))
+		if (MyTown.instance.perms.canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.resident.blocksmulti.2"))
 			return 2;
 		
 		return 1;

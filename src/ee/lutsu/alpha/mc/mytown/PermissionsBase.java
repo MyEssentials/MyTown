@@ -10,11 +10,11 @@ public abstract class PermissionsBase {
     
     public abstract boolean load();
     
-    public abstract boolean canAccess(EntityPlayer name, String node);
+    //public abstract boolean canAccess(EntityPlayer name, String node);
     
-    public abstract boolean canAccess(ICommandSender name, String node);
+    //public abstract boolean canAccess(ICommandSender name, String node);
     
-    public abstract boolean canAccess(Resident name, String node);
+    //public abstract boolean canAccess(Resident name, String node);
     
     public abstract boolean canAccess(String name, String world, String node);
     

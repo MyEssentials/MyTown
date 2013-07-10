@@ -31,7 +31,12 @@ public class CmdHomes extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return cs instanceof EntityPlayerMP && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.homes");
+        if (cs instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)cs;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.homes");
+        }
+        return false;
+		//return cs instanceof EntityPlayerMP && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.homes");
 	}
 	
 	@Override

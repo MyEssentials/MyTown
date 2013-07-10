@@ -118,7 +118,7 @@ public class CmdChat extends CommandBase
 	
 	public static String sendGlobalChat(Resident res, String msg, ChatChannel ch, boolean emote)
 	{
-		if (!MyTown.instance.perms.canAccess(res, "mytown.chat.allowcaps"))
+		if (!MyTown.instance.perms.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps"))
 			msg = msg.toLowerCase();
 
 		String formatted = Formatter.formatChat(res, msg, ch, emote);
@@ -202,7 +202,7 @@ public class CmdChat extends CommandBase
 		if (!channel.enabled)
 			return;
 		
-		if (MyTown.instance.perms.canAccess(sender, "mytown.chat.allowcolors"))
+		if (MyTown.instance.perms.canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors"))
 			msg = Formatter.dollarToColorPrefix(msg);
 		
 		String s;

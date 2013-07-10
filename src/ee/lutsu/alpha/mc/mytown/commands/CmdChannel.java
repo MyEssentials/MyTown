@@ -61,7 +61,7 @@ public class CmdChannel extends CommandBase
 			if (!ch.enabled)
 				ch = ChatChannel.defaultChannel;
 
-			if (!MyTown.instance.perms.canAccess(res, "mytown.chat.focus." + ch.name.toLowerCase()))
+			if (!MyTown.instance.perms.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase()))
 			{
 				var1.sendChatToPlayer("§4You cannot focus to " + ch.name + " channel");
 				return;

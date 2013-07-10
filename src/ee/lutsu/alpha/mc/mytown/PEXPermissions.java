@@ -57,11 +57,12 @@ public class PEXPermissions extends PermissionsBase{
             return canAccess(pl.username, String.valueOf(pl.dimension), node);
         }
     }
-    
+    /*
     public boolean canAccess(Resident name, String node)
     {
         return canAccess(name.name(), name.onlinePlayer != null ? String.valueOf(name.onlinePlayer.dimension) : "0", node);
     }
+    */
     
     public boolean canAccess(String name, String world, String node)
     {

@@ -38,7 +38,12 @@ public class CmdReplyPrivateMsg extends CommandBase
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender cs)
     {
-    	return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.reply");
+        if (cs instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)cs;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+        }
+        return false;
+    	//return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.reply");
     }
     
     @Override

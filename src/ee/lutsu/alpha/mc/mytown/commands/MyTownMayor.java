@@ -168,7 +168,7 @@ public class MyTownMayor
 				if (r.town() != res.town())
 					throw new CommandException(Term.TownErrPlayerNotInYourTown);
 				
-				if (!MyTown.instance.perms.canAccess(r, "mytown.cmd.new")) 
+				if (!MyTown.instance.perms.canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) 
 					throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement);
 				
 

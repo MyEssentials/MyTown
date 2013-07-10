@@ -24,7 +24,12 @@ public class CmdSetSpawn extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return cs instanceof EntityPlayer && (MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.setspawn") || MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase()));
+	    if (cs instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)cs;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+        }
+        return false;
+        //return cs instanceof EntityPlayer && (MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.setspawn") || MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase()));
 	}
 	
 	@Override

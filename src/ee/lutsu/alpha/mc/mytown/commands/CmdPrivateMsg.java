@@ -29,7 +29,12 @@ public class CmdPrivateMsg extends CommandServerMessage
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender cs)
     {
-    	return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.msg");
+        if (cs instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)cs;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+        }
+        return false;
+    	//return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.msg");
     }
     
     public void processCommand(ICommandSender cs, String[] arg)
@@ -80,7 +85,7 @@ public class CmdPrivateMsg extends CommandServerMessage
     	
     	lastMessages.put(target, sender);
     	
-		if (MyTown.instance.perms.canAccess(sender, "mytown.chat.allowcolors"))
+		if (MyTown.instance.perms.canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors"))
 			msg = Formatter.dollarToColorPrefix(msg);
 		
     	for (ICommandSender cs : snoopers)

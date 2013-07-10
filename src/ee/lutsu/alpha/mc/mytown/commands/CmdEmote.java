@@ -12,6 +12,7 @@ import net.minecraft.command.CommandServerEmote;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet3Chat;
 import net.minecraft.server.MinecraftServer;
 
@@ -20,7 +21,12 @@ public class CmdEmote extends CommandServerEmote
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender cs)
     {
-    	return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.me");
+        if (cs instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)cs;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.me");
+        }
+        return false;
+    	//return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.me");
     }
 
     public void processCommand(ICommandSender cs, String[] arg)

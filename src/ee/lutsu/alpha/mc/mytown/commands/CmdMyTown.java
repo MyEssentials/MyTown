@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
@@ -33,7 +34,12 @@ public class CmdMyTown extends CommandBase
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs)
 	{
-		return MyTown.instance.perms.canAccess(cs, "mytown.cmd");
+        if (cs instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)cs;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd");
+        }
+        return false;
+		//return MyTown.instance.perms.canAccess(cs, "mytown.cmd");
 	}
 	
 	@Override

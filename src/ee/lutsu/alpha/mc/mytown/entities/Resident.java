@@ -147,22 +147,23 @@ public class Resident
 	public boolean shouldShowTownBlocks()
 	{
 		//return Permissions.canAccess(this, "mytown.adm.showblocks");
-	    return MyTown.instance.perms.canAccess(this, "mytown.adm.showblocks");
+	    //return MyTown.instance.perms.canAccess(this.onlinePlayer, "mytown.adm.showblocks");
+	    return MyTown.instance.perms.canAccess(this.name(), this.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.showblocks");
 	}
 	
 	public boolean shouldShowPlayerLocation()
 	{
-		return MyTown.instance.perms.canAccess(this, "mytown.adm.showlocation");
+		return MyTown.instance.perms.canAccess(this.name(), this.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.showlocation");
 	}
 	
 	public boolean canByPassCheck(TownSettingCollection.Permissions level)
 	{
-		return MyTown.instance.perms.canAccess(this, "mytown.adm.bypass." + level.toString().toLowerCase());
+		return MyTown.instance.perms.canAccess(this.name(), this.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass." + level.toString().toLowerCase());
 	}
 	
 	public boolean pvpBypass()
 	{
-		return MyTown.instance.perms.canAccess(this, "mytown.adm.bypass.pvp");
+		return MyTown.instance.perms.canAccess(this.name(), this.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.pvp");
 	}
 	
 	public boolean canInteract(int chunkX, int chunkZ, TownSettingCollection.Permissions askedFor)
@@ -804,7 +805,7 @@ public class Resident
 		teleportTargetHome = home;
 		
 		long now = System.currentTimeMillis();
-		long takesTime = MyTown.instance.perms.canAccess(this, "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
+		long takesTime = MyTown.instance.perms.canAccess(this.name(), this.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
 		
 		teleportToSpawnStamp = System.currentTimeMillis() + takesTime;
 		
