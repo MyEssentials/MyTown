@@ -5,8 +5,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 
 public class FallbackPermissions extends PermissionsBase {
-    public boolean load(){
+    public FallbackPermissions(){
         name = "Fallback";
+    }
+    
+    public boolean load(){
         return true;
     }
     

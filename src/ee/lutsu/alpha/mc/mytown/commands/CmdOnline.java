@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -21,27 +22,24 @@ import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
 
-public class CmdOnline extends CommandBase
-{
+public class CmdOnline extends CommandBase{
 	@Override
-	public String getCommandName() 
-	{
+	public String getCommandName(){
 		return Term.OnlineCommand.toString();
 	}
 	
 	@Override
-    public List getCommandAliases()
-    {
+    public List getCommandAliases(){
         return Arrays.asList(Term.OnlineCommandAliases.toString().split(" "));
     }
 	
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender)
-	{
-        if (par1ICommandSender instanceof EntityPlayerMP){
-            EntityPlayerMP p = (EntityPlayerMP)par1ICommandSender;
-            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+	public boolean canCommandSenderUseCommand(ICommandSender sender){
+        if (sender instanceof EntityPlayerMP){
+            EntityPlayerMP p = (EntityPlayerMP)sender;
+            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.online");
         }
+        Log.log(Level.INFO, "%s failed to use node %s", sender.getCommandSenderName(), "mytown.ecmd.online");
         return false;
 		//return MyTown.instance.perms.canAccess(par1ICommandSender, "mytown.ecmd.online");
 	}

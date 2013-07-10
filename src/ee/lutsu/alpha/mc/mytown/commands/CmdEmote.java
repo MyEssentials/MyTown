@@ -26,7 +26,6 @@ public class CmdEmote extends CommandServerEmote
             return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.me");
         }
         return false;
-    	//return cs instanceof EntityPlayer && MyTown.instance.perms.canAccess(cs, "mytown.ecmd.me");
     }
 
     public void processCommand(ICommandSender cs, String[] arg)

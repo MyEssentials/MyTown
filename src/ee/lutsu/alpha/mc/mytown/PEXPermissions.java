@@ -4,7 +4,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
-import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ru.tehkode.permissions.IPermissionEntity;
 import ru.tehkode.permissions.IPermissions;
 
@@ -12,8 +11,11 @@ public class PEXPermissions extends PermissionsBase{
     int pexOn = 0;
     IPermissions pex = null;
     
+    public PEXPermissions(){
+        name = "Forge PEX";
+    }
+    
     public boolean load(){
-        name = "Forge PEx";
         try {
             Class.forName("ru.tehkode.permissions.bukkit.PermissionsEx");
         } catch (ClassNotFoundException e) {
@@ -57,12 +59,6 @@ public class PEXPermissions extends PermissionsBase{
             return canAccess(pl.username, String.valueOf(pl.dimension), node);
         }
     }
-    /*
-    public boolean canAccess(Resident name, String node)
-    {
-        return canAccess(name.name(), name.onlinePlayer != null ? String.valueOf(name.onlinePlayer.dimension) : "0", node);
-    }
-    */
     
     public boolean canAccess(String name, String world, String node)
     {

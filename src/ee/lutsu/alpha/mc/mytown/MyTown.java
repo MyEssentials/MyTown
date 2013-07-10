@@ -13,7 +13,6 @@ import java.util.logging.Level;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ServerCommandManager;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet3Chat;
 import net.minecraft.server.MinecraftServer;
@@ -23,7 +22,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
@@ -31,7 +29,23 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
-import ee.lutsu.alpha.mc.mytown.commands.*;
+import ee.lutsu.alpha.mc.mytown.commands.CmdChannel;
+import ee.lutsu.alpha.mc.mytown.commands.CmdChat;
+import ee.lutsu.alpha.mc.mytown.commands.CmdDelHome;
+import ee.lutsu.alpha.mc.mytown.commands.CmdEmote;
+import ee.lutsu.alpha.mc.mytown.commands.CmdGamemode;
+import ee.lutsu.alpha.mc.mytown.commands.CmdHome;
+import ee.lutsu.alpha.mc.mytown.commands.CmdHomes;
+import ee.lutsu.alpha.mc.mytown.commands.CmdMyTown;
+import ee.lutsu.alpha.mc.mytown.commands.CmdMyTownAdmin;
+import ee.lutsu.alpha.mc.mytown.commands.CmdOnline;
+import ee.lutsu.alpha.mc.mytown.commands.CmdPrivateMsg;
+import ee.lutsu.alpha.mc.mytown.commands.CmdReplyPrivateMsg;
+import ee.lutsu.alpha.mc.mytown.commands.CmdSetHome;
+import ee.lutsu.alpha.mc.mytown.commands.CmdSetSpawn;
+import ee.lutsu.alpha.mc.mytown.commands.CmdSpawn;
+import ee.lutsu.alpha.mc.mytown.commands.CmdTeleport;
+import ee.lutsu.alpha.mc.mytown.commands.CmdWrk;
 import ee.lutsu.alpha.mc.mytown.entities.ItemIdRange;
 import ee.lutsu.alpha.mc.mytown.entities.Nation;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
@@ -39,7 +53,11 @@ import ee.lutsu.alpha.mc.mytown.entities.SavedHomeList;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
-import ee.lutsu.alpha.mc.mytown.event.*;
+import ee.lutsu.alpha.mc.mytown.event.PlayerEvents;
+import ee.lutsu.alpha.mc.mytown.event.ProtBase;
+import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
+import ee.lutsu.alpha.mc.mytown.event.TickHandler;
+import ee.lutsu.alpha.mc.mytown.event.WorldEvents;
 import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 import ee.lutsu.alpha.mc.mytown.sql.Database;
 
@@ -76,16 +94,18 @@ public class MyTown
 	public static void registerPermHandler(PermissionsBase permHandler){
 	    if (!MyTown.instance.permHandlerLoaded){
 	        if (permHandler.load()){
-	            Log.info("PermissionHandler %s Loaded", permHandler.name);
+	            Log.info("[Perms] PermissionHandler %s Loaded", permHandler.name);
 	            MyTown.instance.perms = permHandler;
+	            MyTown.instance.permHandlerLoaded = true;
 	        } else{
-                Log.info("PermissionHandler %s Failed To Load", permHandler.name);
+                Log.info("[Perms] PermissionHandler %s Failed To Load", permHandler.name);
 	        }
+	    } else{
+	        Log.log(Level.INFO, "[Perms] A PermissionHandler(%s) is already loaded. %s not loaded.", MyTown.instance.perms.name, permHandler.name);
 	    }
 	}
 	
-	private void addCommands()
-	{
+	private void addCommands(){
 		commands.add(new CmdMyTown());
 		commands.add(new CmdMyTownAdmin());
 		commands.add(new CmdChannel());
@@ -108,21 +128,16 @@ public class MyTown
 	}
 
     @Mod.PreInit
-    public void preInit(FMLPreInitializationEvent ev)
-    {
+    public void preInit(FMLPreInitializationEvent ev){
     	addCommands();
         loadConfig();
     }
 
     @Mod.ServerStarted
-    public void modsLoaded(FMLServerStartedEvent var1)
-    {
-    	try
-    	{
+    public void modsLoaded(FMLServerStartedEvent var1){
+    	try{
     		MyTownDatasource.instance.init();
-    	}
-    	catch(Exception ex)
-    	{
+    	}catch(Exception ex){
     		throw new RuntimeException(ex.getMessage(), ex);
     	}
     	
@@ -134,39 +149,38 @@ public class MyTown
     	TickRegistry.registerTickHandler(TickHandler.instance, Side.SERVER);
     	MinecraftForge.EVENT_BUS.register(WorldEvents.instance);
     	
-        try
-        {
+        try{
             loadCommandsConfig(config);
             WorldBorder.instance.continueGeneratingChunks();
-        }
-        catch (Exception var8)
-        {
+        }catch (Exception var8){
             FMLLog.log(Level.SEVERE, var8, MOD_NAME + " was unable to load it\'s configuration successfully", new Object[0]);
             throw new RuntimeException(var8);
-        }
-        finally
-        {
+        }finally{
             config.save(); // re-save to add the missing configuration variables
+        }
+
+        MyTown.registerPermHandler(new PEXPermissions());
+        MyTown.registerPermHandler(new FallbackPermissions());
+        
+        if (!MyTown.instance.permHandlerLoaded){
+            FMLLog.log(Level.SEVERE, "MyTown failed to load any permission handlers!", "");
+            throw new RuntimeException("MyTown failed to load any permission handlers!");
         }
         
 		Log.info("Loaded");
     }
     
     @Mod.ServerStopping
-    public void serverStopping(FMLServerStoppingEvent ev) throws InterruptedException
-    {
+    public void serverStopping(FMLServerStoppingEvent ev) throws InterruptedException{
     	WorldBorder.instance.stopGenerators();
     }
 
-    public void saveConfig()
-    {
+    public void saveConfig(){
     	config.save();
     }
     
-    public void loadConfig()
-    {
-        try
-        {
+    public void loadConfig(){
+        try{
             config.load();
             
             loadGeneralConfigs(config);
@@ -178,36 +192,27 @@ public class MyTown
             
             TickHandler.instance.loadConfigs();
             WorldBorder.instance.loadConfig();
-        }
-        catch (Exception e)
-        {
+        }catch (Exception e){
             Log.severe(MOD_NAME + " was unable to load it\'s configuration successfully", e);
             throw new RuntimeException(e);
-        }
-        finally
-        {
+        }finally{
             config.save(); // re-save to add the missing configuration variables
         }
     }
     
-    public void reload()
-    {
+    public void reload(){
     	loadConfig();
 
     	ProtectionEvents.instance.reload();
     	
-    	try
-    	{
+    	try{
     		MyTownDatasource.instance.init();
-    	}
-    	catch(Exception ex)
-    	{
+    	}catch(Exception ex){
     		throw new RuntimeException(ex.getMessage(), ex);
     	}
     }
     
-    private void loadGeneralConfigs(Configuration config) throws IOException
-    {
+    private void loadGeneralConfigs(Configuration config) throws IOException{
     	Property prop; 
     	
         prop = config.get("General", "Translations", "");
@@ -255,8 +260,7 @@ public class MyTown
         SavedHomeList.defaultIsBed = config.get("General", "DefaultHomeIsBed", SavedHomeList.defaultIsBed, "Are the /sethome and /home commands with no home name linked to the bed location?").getBoolean(SavedHomeList.defaultIsBed);
     }
     
-    private void loadCostConfigs(Configuration config)
-    {
+    private void loadCostConfigs(Configuration config){
     	config.addCustomCategoryComment("cost", "MyTown item based economy");
     	config.addCustomCategoryComment("cost.list", "Defines what and how much costs. Set the amount to 0 to disable the cost. Syntax: [amount]x[item id]:[sub id]");
     	for (Cost c : Cost.values())
@@ -268,8 +272,7 @@ public class MyTown
     	Cost.homeSetNewAdditional = config.get("cost", "HomeCostAdditionPerHome", Cost.homeSetNewAdditional, "How much of the /sethome cost item is requested more for every home the player has when the player is creating a new home location. Ex. with 2 homes = /sethome cost + this * 2").getInt();
     }
     
-    private static ItemStack getItemStackConfig(Configuration config, String cat, String node, ItemStack def, String comment)
-    {
+    private static ItemStack getItemStackConfig(Configuration config, String cat, String node, ItemStack def, String comment){
     	String sDef = "";
     	if (def != null)
     		sDef = def.stackSize + "x" + def.itemID + (def.getItemDamage() != 0 ? ":" + def.getItemDamage() : "");
@@ -289,8 +292,7 @@ public class MyTown
     	return new ItemStack(id, cnt, sub);
     }
     
-    private void loadDatabaseConfigs(Configuration config)
-    {
+    private void loadDatabaseConfigs(Configuration config){
         Property prop; 
         
         prop = config.get("Database", "Type", "SQLite");
@@ -322,8 +324,7 @@ public class MyTown
         MyTownDatasource.instance.dbpath = prop.getString();
     }
     
-    private void loadChatConfigs(Configuration config)
-    {
+    private void loadChatConfigs(Configuration config){
         Property prop; 
         
         prop = config.get("Chat", "FormatChat", true);
@@ -358,40 +359,33 @@ public class MyTown
         prop.comment = "Default chat channel for newcomers";
         ChatChannel.defaultChannel = ChatChannel.parse(prop.getString());
         
-        for (ChatChannel ch : ChatChannel.values())
-        {
+        for (ChatChannel ch : ChatChannel.values()){
             prop = config.get("Chat", "Channel_" + ch.toString(), "");
             prop.comment = "<enabled>;<name>;<abbrevation>;<color>;<inlineswitch> like " + String.format("%s;%s;%s;%s", ch.enabled ? 1 : 0, ch.name, ch.abbrevation, ch.color);
             ch.load(prop.getString());
         }
     }
     
-    private void loadExtraProtectionConfig(Configuration config)
-    {
+    private void loadExtraProtectionConfig(Configuration config){
         ProtectionEvents.instance.enabled = config.get("ProtEx", "Enabled", true, "Run the extra protections").getBoolean(true);
         ProtectionEvents.instance.dynamicEnabling = config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);
         
-        if (ProtectionEvents.instance.dynamicEnabling) // delete nodes
-        {
+        if (ProtectionEvents.instance.dynamicEnabling){
         	config.getCategory("ProtEx").clear();
         	
             config.get("ProtEx", "Enabled", true, "Run the extra protections?").set(ProtectionEvents.instance.enabled);
             config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").set(ProtectionEvents.instance.dynamicEnabling);
-        }
-        else
-        {
+        }else{
 	        for (ProtBase prot : ProtectionEvents.getProtections())
 	            prot.enabled = config.get("ProtEx", prot.getMod(), prot.defaultEnabled(), prot.getComment()).getBoolean(false);
         }
     }
     
-    private void loadCommandsConfig(Configuration config)
-    {
+    private void loadCommandsConfig(Configuration config){
         Property prop; 
     	ServerCommandManager mgr = (ServerCommandManager)MinecraftServer.getServer().getCommandManager();
     	
-    	for (CommandBase cmd : commands)
-    	{
+    	for (CommandBase cmd : commands){
             prop = config.get("Commands", "Enable_" + cmd.getCommandName(), true);
             prop.comment = String.format("Should the %s [/%s] command be used?", cmd.getClass().getSimpleName(), cmd.getCommandName());
             
@@ -400,17 +394,14 @@ public class MyTown
     	}
     }
     
-    private void loadPerms(Configuration config)
-    {
+    private void loadPerms(Configuration config){
         Property prop; 
         
         prop = config.get("ServerPerms", "Server", "");
         serverSettings.deserialize(prop.getString());
         
-        serverSettings.saveHandler = new ISettingsSaveHandler()
-        {
-			public void save(TownSettingCollection sender, Object tag) 
-			{
+        serverSettings.saveHandler = new ISettingsSaveHandler(){
+			public void save(TownSettingCollection sender, Object tag){
 				MyTown.instance.config.get("ServerPerms", "Server", "").set(sender.serialize());
 				MyTown.instance.config.save();
 			}
@@ -419,10 +410,8 @@ public class MyTown
         prop = config.get("WildPerms", "Server", "");
         serverWildSettings.deserialize(prop.getString());
         
-        serverWildSettings.saveHandler = new ISettingsSaveHandler()
-        {
-			public void save(TownSettingCollection sender, Object tag) 
-			{
+        serverWildSettings.saveHandler = new ISettingsSaveHandler(){
+			public void save(TownSettingCollection sender, Object tag){
 				MyTown.instance.config.get("WildPerms", "Server", "").set(sender.serialize());
 				MyTown.instance.config.save();
 			}
@@ -430,8 +419,7 @@ public class MyTown
         
         ConfigCategory cat = config.getCategory("WildPerms");
 
-        for (Property p : cat.values())
-        {
+        for (Property p : cat.values()){
         	if (!p.getName().startsWith("Dim_"))
         		continue;
 
@@ -441,10 +429,8 @@ public class MyTown
         }
     }
     
-    public TownSettingCollection getWorldWildSettings(int w)
-    {
-    	for (Entry<Integer, TownSettingCollection> set : worldWildSettings.entrySet())
-    	{
+    public TownSettingCollection getWorldWildSettings(int w){
+    	for (Entry<Integer, TownSettingCollection> set : worldWildSettings.entrySet()){
     		if (set.getKey() == w)
     			return set.getValue();
     	}
@@ -452,10 +438,8 @@ public class MyTown
     	TownSettingCollection set = new TownSettingCollection(false, true);
     	set.tag = new Integer(w);
     	set.setParent(serverWildSettings);
-    	set.saveHandler = new ISettingsSaveHandler()
-        {
-			public void save(TownSettingCollection sender, Object tag) 
-			{
+    	set.saveHandler = new ISettingsSaveHandler(){
+			public void save(TownSettingCollection sender, Object tag){
 				int w = (Integer)tag;
 				MyTown.instance.config.get("WildPerms", "Dim_" + String.valueOf(w), "").set(sender.serialize());
 				MyTown.instance.config.save();
