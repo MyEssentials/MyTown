@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Minecraft"/>
 	<classpathentry kind="lib" path="/home/joe/Documents/MinecraftModding/mcp-1.5.x/lib/MyTownLib.jar"/>
 	<classpathentry kind="lib" path="/home/joe/Documents/Java Libs/bukkit-1.5.2-R1.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/forgeperms"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -38,7 +38,7 @@ public class Table {
 
     /**
      * Add a column to the table
-     *
+     * 
      * @param column
      */
     public void add(Column column) {
@@ -46,33 +46,38 @@ public class Table {
 
         columns.add(column);
     }
-    
+
     /**
      * Add a column to the table
      * 
-     * @param Column name
-     * @param Column data type
+     * @param Column
+     *            name
+     * @param Column
+     *            data type
      */
-    public void add(String name, String type)
-    {
-    	add(name, type, false, false);
+    public void add(String name, String type) {
+        add(name, type, false, false);
     }
-    
+
     /**
      * Add a column to the table
      * 
-     * @param Column name
-     * @param Column data type
-     * @param Set as primary key?
-     * @param Set as auto increment?
+     * @param Column
+     *            name
+     * @param Column
+     *            data type
+     * @param Set
+     *            as primary key?
+     * @param Set
+     *            as auto increment?
      */
-    public void add(String name, String type, boolean primary, boolean autoIncrement)
-    {
-    	Column x = new Column(name);
-    	x.setType(type);
-    	x.setPrimary(primary);
-    	x.setAutoIncrement(autoIncrement);
-    	add(x);
+    public void add(String name, String type, boolean primary,
+            boolean autoIncrement) {
+        Column x = new Column(name);
+        x.setType(type);
+        x.setPrimary(primary);
+        x.setAutoIncrement(autoIncrement);
+        add(x);
     }
 
     /**
@@ -81,7 +86,7 @@ public class Table {
     public void execute() {
         StringBuilder buffer = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
 
-        String prefix = this.database.prefix;
+        String prefix = database.prefix;
 
         // the table name
         buffer.append(prefix).append(name);
@@ -100,7 +105,8 @@ public class Table {
                 buffer.append("PRIMARY KEY ");
             }
 
-            if (column.shouldAutoIncrement() && database.getType() == Type.MySQL) {
+            if (column.shouldAutoIncrement()
+                    && database.getType() == Type.MySQL) {
                 buffer.append("AUTO_INCREMENT ");
             }
 
@@ -111,7 +117,7 @@ public class Table {
             }
 
             // check if there's more columns in the stack
-            if (index != (columns.size() - 1)) {
+            if (index != columns.size() - 1) {
                 buffer.append(",");
                 buffer.append(" ");
             }
@@ -154,7 +160,7 @@ public class Table {
 
     /**
      * Set if the table is in memory
-     *
+     * 
      * @param memory
      */
     public void setMemory(boolean memory) {

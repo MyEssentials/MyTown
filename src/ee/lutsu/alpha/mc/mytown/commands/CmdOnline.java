@@ -7,71 +7,70 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 
+import com.sperion.forgeperms.ForgePerms;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import ee.lutsu.alpha.mc.mytown.ChatChannel;
-import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
-import ee.lutsu.alpha.mc.mytown.entities.Town;
 
-public class CmdOnline extends CommandBase{
-	@Override
-	public String getCommandName(){
-		return Term.OnlineCommand.toString();
-	}
-	
-	@Override
-    public List getCommandAliases(){
+public class CmdOnline extends CommandBase {
+    @Override
+    public String getCommandName() {
+        return Term.OnlineCommand.toString();
+    }
+
+    @Override
+    public List getCommandAliases() {
         return Arrays.asList(Term.OnlineCommandAliases.toString().split(" "));
     }
-	
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender){
-        if (sender instanceof EntityPlayerMP){
-            EntityPlayerMP p = (EntityPlayerMP)sender;
-            return MyTown.instance.perms.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.online");
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        if (sender instanceof EntityPlayerMP) {
+            EntityPlayerMP p = (EntityPlayerMP) sender;
+            return ForgePerms.getPermissionsHandler().canAccess(p.username,
+                    p.worldObj.provider.getDimensionName(),
+                    "mytown.ecmd.online");
         }
-        Log.log(Level.INFO, "%s failed to use node %s", sender.getCommandSenderName(), "mytown.ecmd.online");
+        Log.log(Level.INFO, "%s failed to use node %s",
+                sender.getCommandSenderName(), "mytown.ecmd.online");
         return false;
-		//return MyTown.instance.perms.canAccess(par1ICommandSender, "mytown.ecmd.online");
-	}
+        // return MyTown.instance.perms.canAccess(par1ICommandSender,
+        // "mytown.ecmd.online");
+    }
 
-	@Override
-	public void processCommand(ICommandSender cs, String[] args) 
-	{
-		ArrayList<Resident> sorted = new ArrayList<Resident>(MyTownDatasource.instance.getOnlineResidents());
-		
-		Collections.sort(sorted, new Comparator<Resident>()
-		{
-			@Override
-			public int compare(Resident arg0, Resident arg1)
-			{
-				return arg0.name().compareToIgnoreCase(arg1.name());
-			}
-		});
+    @Override
+    public void processCommand(ICommandSender cs, String[] args) {
+        ArrayList<Resident> sorted = new ArrayList<Resident>(
+                MyTownDatasource.instance.getOnlineResidents());
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(Term.OnlineCmdListStart.toString(sorted.size(), ""));
-		int i = 0;
-		
-		for (Resident e : sorted)
-		{
-			String n = e.formattedName();
-			if (i > 0)
-				sb.append("§f, ");
+        Collections.sort(sorted, new Comparator<Resident>() {
+            @Override
+            public int compare(Resident arg0, Resident arg1) {
+                return arg0.name().compareToIgnoreCase(arg1.name());
+            }
+        });
 
-			i++;
-			sb.append(n);
-		}
-		
-		cs.sendChatToPlayer(sb.toString());
-	}
+        StringBuilder sb = new StringBuilder();
+        sb.append(Term.OnlineCmdListStart.toString(sorted.size(), ""));
+        int i = 0;
+
+        for (Resident e : sorted) {
+            String n = e.formattedName();
+            if (i > 0) {
+                sb.append("§f, ");
+            }
+
+            i++;
+            sb.append(n);
+        }
+
+        cs.sendChatToPlayer(sb.toString());
+    }
 }

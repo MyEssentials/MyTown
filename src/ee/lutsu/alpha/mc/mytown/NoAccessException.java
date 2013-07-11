@@ -1,46 +1,53 @@
 package ee.lutsu.alpha.mc.mytown;
 
+import com.sperion.forgeperms.ForgePerms;
+
 import net.minecraft.command.ICommandSender;
 
-public class NoAccessException extends Exception
-{
-	public String node;
-	public ICommandSender executor;
-	
-	public NoAccessException(ICommandSender executor, String node)
-	{
-		this.node = node;
-		this.executor = executor;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return Formatter.dollarToColorPrefix(getCustomizedMessage(Term.ErrCannotAccessCommand.toString()));
-	}
-	
-	private String getCustomizedMessage(String def)
-	{
-		String message;
-		String perm = node;
-		int index;
+@SuppressWarnings("serial")
+public class NoAccessException extends Exception {
+    public String node;
+    public ICommandSender executor;
 
-		while ((index = perm.lastIndexOf(".")) != -1) {
-			perm = perm.substring(0, index);
+    public NoAccessException(ICommandSender executor, String node) {
+        this.node = node;
+        this.executor = executor;
+    }
 
-			message = MyTown.instance.perms.getOption(executor, "permission-denied-" + perm, null);
-			//TODO Permissions.getOption(executor, "permission-denied-" + perm, null);
-			if (message == null)
-				continue;
+    @Override
+    public String toString() {
+        return Formatter
+                .dollarToColorPrefix(getCustomizedMessage(Term.ErrCannotAccessCommand
+                        .toString()));
+    }
 
-			return message;
-		}
+    private String getCustomizedMessage(String def) {
+        String message;
+        String perm = node;
+        int index;
 
-		//TODO message = Permissions.getOption(executor, "permission-denied", null);
-		message = MyTown.instance.perms.getOption(executor, "permission-denied", null);
-		if (message != null)
-			return message;
-		
-		return def;
-	}
+        while ((index = perm.lastIndexOf(".")) != -1) {
+            perm = perm.substring(0, index);
+
+            message = ForgePerms.getPermissionsHandler().getOption(executor,
+                    "permission-denied-" + perm, null);
+            // TODO Permissions.getOption(executor, "permission-denied-" + perm,
+            // null);
+            if (message == null) {
+                continue;
+            }
+
+            return message;
+        }
+
+        // TODO message = Permissions.getOption(executor, "permission-denied",
+        // null);
+        message = ForgePerms.getPermissionsHandler().getOption(executor,
+                "permission-denied", null);
+        if (message != null) {
+            return message;
+        }
+
+        return def;
+    }
 }

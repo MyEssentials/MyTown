@@ -1,14 +1,5 @@
-
 package ee.lutsu.alpha.mc.mytown.sql;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-
-import ee.lutsu.alpha.mc.mytown.Log;
-import ee.lutsu.alpha.mc.mytown.MyTown;
-
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.PreparedStatement;
@@ -18,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+
 public abstract class Database {
 
     public enum Type {
-        MySQL("mysql.jar"),
-        SQLite("sqlite.jar"),
-        NONE("nil");
+        MySQL("mysql.jar"), SQLite("sqlite.jar"), NONE("nil");
 
         private String driver;
 
@@ -37,7 +28,7 @@ public abstract class Database {
 
         /**
          * Match the given string to a database type
-         *
+         * 
          * @param str
          * @return
          */
@@ -63,7 +54,7 @@ public abstract class Database {
     public Type currentType = Type.NONE;
     public String username = "";
     public String password = "";
-    
+
     public String host = "";
     public String dbname = "";
     public String dbpath = "";
@@ -82,7 +73,7 @@ public abstract class Database {
 
     /**
      * The default database engine being used. This is set via config
-     *
+     * 
      * @default SQLite
      */
     public static Type DefaultType = Type.NONE;
@@ -98,13 +89,14 @@ public abstract class Database {
     protected boolean loaded = false;
 
     /**
-     * If the high level statement cache should be used. If this is false, already cached statements are ignored
+     * If the high level statement cache should be used. If this is false,
+     * already cached statements are ignored
      */
     private boolean useStatementCache = true;
 
     /**
      * Set the value of auto commit
-     *
+     * 
      * @param autoCommit
      * @return TRUE if successful, FALSE if exception was thrown
      */
@@ -132,7 +124,7 @@ public abstract class Database {
 
     /**
      * Print an exception to stdout
-     *
+     * 
      * @param exception
      */
     protected void printException(Exception exception) {
@@ -153,16 +145,18 @@ public abstract class Database {
 
     /**
      * Connect to MySQL
-     *
+     * 
      * @return if the connection was successful
      */
     public boolean connect() throws Exception {
-        if (connection != null)
+        if (connection != null) {
             return true;
+        }
 
-        if (currentType == null || currentType == Type.NONE)
-        	throw new Exception("Unknown Connection type");
-        
+        if (currentType == null || currentType == Type.NONE) {
+            throw new Exception("Unknown Connection type");
+        }
+
         // What class should we try to load?
         String className = "";
         if (currentType == Type.MySQL) {
@@ -172,9 +166,9 @@ public abstract class Database {
         }
 
         Driver driver;
-        
+
         // Load the database jar,Load the driver class
-    	driver = (Driver)Class.forName(className).newInstance();
+        driver = (Driver) Class.forName(className).newInstance();
 
         // Create the properties to pass to the driver
         Properties properties = new Properties();
@@ -187,10 +181,16 @@ public abstract class Database {
         }
 
         // Connect to the database
-        connection = driver.connect("jdbc:" + currentType.toString().toLowerCase() + ":" + getDatabasePath(), properties);
-        if (connection == null)
-        	throw new NullPointerException("Connecting to database failed: unknown error - using jdbc:" + currentType.toString().toLowerCase() + ":" + getDatabasePath());
-        
+        connection = driver.connect("jdbc:"
+                + currentType.toString().toLowerCase() + ":"
+                + getDatabasePath(), properties);
+        if (connection == null) {
+            throw new NullPointerException(
+                    "Connecting to database failed: unknown error - using jdbc:"
+                            + currentType.toString().toLowerCase() + ":"
+                            + getDatabasePath());
+        }
+
         connected = true;
         return true;
     }
@@ -213,9 +213,10 @@ public abstract class Database {
      * @return the connection to the database
      */
     public Connection getConnection() {
-    	if (connection == null)
-    		throw new NullPointerException("No connection!");
-    	
+        if (connection == null) {
+            throw new NullPointerException("No connection!");
+        }
+
         return connection;
     }
 
@@ -223,10 +224,11 @@ public abstract class Database {
      * @return the path where the database file should be saved
      */
     public String getDatabasePath() {
-        if (currentType == Type.MySQL)
+        if (currentType == Type.MySQL) {
             return "//" + host + "/" + dbname;
-        else
-        	return dbpath;
+        } else {
+            return dbpath;
+        }
     }
 
     /**
@@ -242,8 +244,9 @@ public abstract class Database {
     public abstract void load();
 
     /**
-     * Prepare a statement unless it's already cached (and if so, just return it)
-     *
+     * Prepare a statement unless it's already cached (and if so, just return
+     * it)
+     * 
      * @param sql
      * @return
      */
@@ -252,23 +255,27 @@ public abstract class Database {
     }
 
     /**
-     * Prepare a statement unless it's already cached (and if so, just return it)
-     *
+     * Prepare a statement unless it's already cached (and if so, just return
+     * it)
+     * 
      * @param sql
      * @param returnGeneratedKeys
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public PreparedStatement prepare(String sql, boolean returnGeneratedKeys) throws SQLException {
-        if (connection == null)
-        	throw new SQLException("No connection");
+    public PreparedStatement prepare(String sql, boolean returnGeneratedKeys)
+            throws SQLException {
+        if (connection == null) {
+            throw new SQLException("No connection");
+        }
 
-        if (useStatementCache && statementCache.containsKey(sql))
+        if (useStatementCache && statementCache.containsKey(sql)) {
             return statementCache.get(sql);
+        }
 
-        PreparedStatement preparedStatement = returnGeneratedKeys ?
-        	connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) :
-        	connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = returnGeneratedKeys ? connection
+                .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+                : connection.prepareStatement(sql);
 
         statementCache.put(sql, preparedStatement);
 
@@ -277,37 +284,40 @@ public abstract class Database {
 
     /**
      * Add a column to a table
-     *
+     * 
      * @param table
      * @param column
      */
     public boolean addColumn(String table, String column, String type) {
-        return executeUpdateNoException("ALTER TABLE " + table + " ADD " + column + " " + type);
+        return executeUpdateNoException("ALTER TABLE " + table + " ADD "
+                + column + " " + type);
     }
 
     /**
      * Add a column to a table
-     *
+     * 
      * @param table
      * @param column
      */
     public boolean dropColumn(String table, String column) {
-        return executeUpdateNoException("ALTER TABLE " + table + " DROP COLUMN " + column);
+        return executeUpdateNoException("ALTER TABLE " + table
+                + " DROP COLUMN " + column);
     }
 
     /**
      * Rename a table
-     *
+     * 
      * @param table
      * @param newName
      */
     public boolean renameTable(String table, String newName) {
-        return executeUpdateNoException("ALTER TABLE " + table + " RENAME TO " + newName);
+        return executeUpdateNoException("ALTER TABLE " + table + " RENAME TO "
+                + newName);
     }
 
     /**
      * Drop a table
-     *
+     * 
      * @param table
      */
     public boolean dropTable(String table) {
@@ -316,7 +326,7 @@ public abstract class Database {
 
     /**
      * Execute an update, ignoring any exceptions
-     *
+     * 
      * @param query
      * @return true if an exception was thrown
      */
@@ -349,8 +359,9 @@ public abstract class Database {
     }
 
     /**
-     * Returns true if the high level statement cache should be used. If this is false, already cached statements are ignored
-     *
+     * Returns true if the high level statement cache should be used. If this is
+     * false, already cached statements are ignored
+     * 
      * @return
      */
     public boolean useStatementCache() {
@@ -359,7 +370,7 @@ public abstract class Database {
 
     /**
      * Set if the high level statement cache should be used.
-     *
+     * 
      * @param useStatementCache
      * @return
      */

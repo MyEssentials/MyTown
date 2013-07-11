@@ -8,13 +8,13 @@
 
 	<target name="clean">
 		<delete file="${mcp}/src/minecraft/mcmod.info" />
+		<delete dir="${mcp}/src/minecraft/com" />
+		<delete dir="${mcp}/src/minecraft/org" />
 		<delete dir="${mcp}/reobf/minecraft" />
 		<delete dir="${mcp}/src/minecraft/ee" />
 		<delete dir="${mcp}/src/minecraft/ru" />
 		<delete dir="${mcp}/src/minecraft/railcraft" />
 		<delete dir="${mcp}/src/minecraft/mithion" />
-		<delete dir="${mcp}/src/minecraft/com" />
-		<delete dir="${mcp}/src/minecraft/org" />
 	</target>
 
 	<target name="prep">

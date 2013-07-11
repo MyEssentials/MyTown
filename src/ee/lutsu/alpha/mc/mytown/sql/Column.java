@@ -3,7 +3,8 @@ package ee.lutsu.alpha.mc.mytown.sql;
 class Column {
 
     /**
-     * If the table should auto increment. Note: This is automatically set for SQLite with:
+     * If the table should auto increment. Note: This is automatically set for
+     * SQLite with:
      * <p>
      * table.setPrimary(true);
      * </p>
