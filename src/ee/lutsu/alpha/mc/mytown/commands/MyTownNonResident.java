@@ -61,23 +61,20 @@ public class MyTownNonResident {
         if (args.length < 1 || args.length == 1 && args[0].equals("?")
                 || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
             handled = true;
-            cs.sendChatToPlayer(Formatter.formatCommand(
-                    Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(),
+            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew
+                    .toString(), Term.TownCmdNewArgs.toString(),
                     Term.TownCmdNewDesc.toString(), color));
-            cs.sendChatToPlayer(Formatter.formatCommand(
-                    Term.TownCmdAccept.toString(), "",
-                    Term.TownCmdAcceptDesc.toString(), color));
-            cs.sendChatToPlayer(Formatter.formatCommand(
-                    Term.TownCmdDeny.toString(), "",
-                    Term.TownCmdDenyDesc.toString(), color));
+            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdAccept
+                    .toString(), "", Term.TownCmdAcceptDesc.toString(), color));
+            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdDeny
+                    .toString(), "", Term.TownCmdDenyDesc.toString(), color));
         } else if (args[0].equalsIgnoreCase(Term.TownCmdNew.toString())) {
             Assert.Perm(cs, "mytown.cmd.new.dim" + res.onlinePlayer.dimension);
             handled = true;
 
             if (args.length < 2 || args.length > 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdNew.toString(),
-                        Term.TownCmdNewArgs.toString(),
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew
+                        .toString(), Term.TownCmdNewArgs.toString(),
                         Term.TownCmdNewDesc.toString(), color));
             } else {
                 TownBlock home = MyTownDatasource.instance.getOrMakeBlock(
@@ -121,8 +118,8 @@ public class MyTownNonResident {
                                     ((EntityPlayer) obj).sendChatToPlayer(msg);
                                 }
 
-                                t.sendTownInfo(res.onlinePlayer,
-                                        res.shouldShowTownBlocks());
+                                t.sendTownInfo(res.onlinePlayer, res
+                                        .shouldShowTownBlocks());
                             }
                         }, args, home);
             }

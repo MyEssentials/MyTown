@@ -49,8 +49,8 @@ public class SavedHomeList extends ArrayList<SavedHome> {
     public SavedHome get(String name) {
         if (defaultIsBed && name == null) {
             if (!owner.isOnline()) {
-                throw new RuntimeException(
-                        Term.HomeCmdOwnerNotOnline.toString());
+                throw new RuntimeException(Term.HomeCmdOwnerNotOnline
+                        .toString());
             }
 
             return SavedHome.fromBed((EntityPlayerMP) owner.onlinePlayer); // bed
@@ -84,8 +84,8 @@ public class SavedHomeList extends ArrayList<SavedHome> {
         boolean newHome = getHomeName(name) == null;
 
         if (newHome) {
-            Assert.Perm(owner.onlinePlayer,
-                    "mytown.ecmd.sethome.new_" + String.valueOf(size() + 1));
+            Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.new_"
+                    + String.valueOf(size() + 1));
         }
 
         if (defaultIsBed && name == null) // bed

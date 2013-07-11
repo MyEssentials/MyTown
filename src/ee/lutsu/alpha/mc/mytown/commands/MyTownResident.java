@@ -102,15 +102,14 @@ public class MyTownResident {
                     && (args[0].equals("?") || args[0]
                             .equalsIgnoreCase(Term.CommandHelp.toString()))) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdLeave.toString(), "",
-                        Term.TownCmdLeaveDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdOnline.toString(), "",
-                        Term.TownCmdOnlineDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdPerm.toString(),
-                        Term.TownCmdPermArgs.toString(),
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdLeave
+                        .toString(), "", Term.TownCmdLeaveDesc.toString(),
+                        color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdOnline
+                        .toString(), "", Term.TownCmdOnlineDesc.toString(),
+                        color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPerm
+                        .toString(), Term.TownCmdPermArgs.toString(),
                         Term.TownCmdPermDesc.toString(), color));
             } else if (args[0].equalsIgnoreCase(Term.TownCmdLeave.toString())) {
                 Assert.Perm(cs, "mytown.cmd.leave");
@@ -122,8 +121,8 @@ public class MyTownResident {
                 }
 
                 Town t = res.town();
-                t.sendNotification(Level.INFO,
-                        Term.TownPlayerLeft.toString(res.name()));
+                t.sendNotification(Level.INFO, Term.TownPlayerLeft.toString(res
+                        .name()));
                 t.removeResident(res);
             } else if (args[0].equalsIgnoreCase(Term.TownCmdOnline.toString())) {
                 Assert.Perm(cs, "mytown.cmd.online");
@@ -150,9 +149,9 @@ public class MyTownResident {
                 handled = true;
                 if (args.length < 2) {
                     cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdPerm.toString(),
-                            Term.TownCmdPermArgs.toString(),
-                            Term.TownCmdPermDesc.toString(), color));
+                            Term.TownCmdPerm.toString(), Term.TownCmdPermArgs
+                                    .toString(), Term.TownCmdPermDesc
+                                    .toString(), color));
                     return true;
                 }
 
@@ -163,9 +162,9 @@ public class MyTownResident {
                         && !node.equalsIgnoreCase(Term.TownCmdPermArgsPlot
                                 .toString())) {
                     cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdPerm.toString(),
-                            Term.TownCmdPermArgs.toString(),
-                            Term.TownCmdPermDesc.toString(), color));
+                            Term.TownCmdPerm.toString(), Term.TownCmdPermArgs
+                                    .toString(), Term.TownCmdPermDesc
+                                    .toString(), color));
                     return true;
                 }
 
@@ -176,7 +175,8 @@ public class MyTownResident {
                 } else {
                     String action = args[2];
                     if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set
-                            .toString()) && args.length > 3) {
+                            .toString())
+                            && args.length > 3) {
                         Assert.Perm(cs, "mytown.cmd.perm.set." + node + "."
                                 + args[3]);
 
@@ -250,8 +250,8 @@ public class MyTownResident {
         } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
             TownBlock block = (TownBlock) set.tag;
             title = String.format("the plot @ dim %s, %s,%s owned by '%s'",
-                    block.worldDimension(), block.x(), block.z(),
-                    block.ownerDisplay());
+                    block.worldDimension(), block.x(), block.z(), block
+                            .ownerDisplay());
         }
 
         set.show(sender, title, node, false);

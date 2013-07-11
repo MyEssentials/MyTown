@@ -23,11 +23,9 @@ import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
 public abstract class ProtBase {
     public boolean enabled = false;
 
-    public void reload() {
-    }
+    public void reload() {}
 
-    public void load() throws Exception {
-    }
+    public void load() throws Exception {}
 
     public boolean loaded() {
         return true;
@@ -105,8 +103,7 @@ public abstract class ProtBase {
         }
 
         Entity var4 = null;
-        List<?> var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(
-                e,
+        List<?> var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e,
                 e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(
                         1.0D, 1.0D, 1.0D));
         double var6 = 0.0D;
@@ -159,8 +156,7 @@ public abstract class ProtBase {
             for (; times >= 0 && !e.isDead; times--) {
                 try {
                     e.attackEntityFrom(DamageSource.generic, 1000);
-                } catch (Exception ex2) {
-                }
+                } catch (Exception ex2) {}
             }
 
             if (times == 0) {

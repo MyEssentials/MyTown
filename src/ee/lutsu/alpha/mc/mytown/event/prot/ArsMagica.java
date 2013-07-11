@@ -23,7 +23,7 @@ public class ArsMagica extends ProtBase {
 
     private Class<?> clSpellScrollBase = null, clIDamagingSpell,
             clEntitySpellProjectile, clISummonCreature, clEntityLightMage,
-            clEntityDarkMage; //clIRangedSpell, clIBeamSpell;
+            clEntityDarkMage; // clIRangedSpell, clIBeamSpell;
     public int explosionRadius = 6;
 
     /**
@@ -32,14 +32,22 @@ public class ArsMagica extends ProtBase {
      */
     @Override
     public void load() throws Exception {
-        clSpellScrollBase = Class.forName("mithion.arsmagica.api.spells.SpellScrollBase");
-        clIDamagingSpell = Class.forName("mithion.arsmagica.api.spells.interfaces.IDamagingSpell");
-        //clIRangedSpell = Class.forName("mithion.arsmagica.api.spells.interfaces.IRangedSpell");
-        //clIBeamSpell = Class.forName("mithion.arsmagica.api.spells.interfaces.IBeamSpell");
-        clEntitySpellProjectile = Class.forName("mithion.arsmagica.entities.EntitySpellProjectile");
-        clISummonCreature = Class.forName("mithion.arsmagica.api.spells.interfaces.ISummonCreature");
-        clEntityLightMage = Class.forName("mithion.arsmagica.entities.EntityLightMage");
-        clEntityDarkMage = Class.forName("mithion.arsmagica.entities.EntityDarkMage");
+        clSpellScrollBase = Class
+                .forName("mithion.arsmagica.api.spells.SpellScrollBase");
+        clIDamagingSpell = Class
+                .forName("mithion.arsmagica.api.spells.interfaces.IDamagingSpell");
+        // clIRangedSpell =
+        // Class.forName("mithion.arsmagica.api.spells.interfaces.IRangedSpell");
+        // clIBeamSpell =
+        // Class.forName("mithion.arsmagica.api.spells.interfaces.IBeamSpell");
+        clEntitySpellProjectile = Class
+                .forName("mithion.arsmagica.entities.EntitySpellProjectile");
+        clISummonCreature = Class
+                .forName("mithion.arsmagica.api.spells.interfaces.ISummonCreature");
+        clEntityLightMage = Class
+                .forName("mithion.arsmagica.entities.EntityLightMage");
+        clEntityDarkMage = Class
+                .forName("mithion.arsmagica.entities.EntityDarkMage");
     }
 
     /**
@@ -133,8 +141,7 @@ public class ArsMagica extends ProtBase {
         Vec3 vec3d2 = vec3d.addVector(tvec.xCoord * range, tvec.yCoord * range,
                 tvec.zCoord * range);
         float f1 = 1.0F;
-        List<?> list = world.getEntitiesWithinAABBExcludingEntity(
-                p,
+        List<?> list = world.getEntitiesWithinAABBExcludingEntity(p,
                 p.boundingBox.addCoord(tvec.xCoord * range,
                         tvec.yCoord * range, tvec.zCoord * range).expand(f1,
                         f1, f1));

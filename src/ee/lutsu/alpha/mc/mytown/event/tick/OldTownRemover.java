@@ -43,15 +43,12 @@ public class OldTownRemover extends TickBase {
                 if (t.nation() != null) {
                     if (t.nation().capital() == t) {
                         if (t.nation().towns().size() > 1) {
-                            Town newCapitol = t
-                                    .nation()
-                                    .towns()
-                                    .get(t.nation().towns().indexOf(t) == 0 ? 1
-                                            : 0);
+                            Town newCapitol = t.nation().towns().get(
+                                    t.nation().towns().indexOf(t) == 0 ? 1 : 0);
                             Log.info(String
                                     .format("[OldTownRemover]Moving capitol of %s to %s",
-                                            t.nation().name(),
-                                            newCapitol.name()));
+                                            t.nation().name(), newCapitol
+                                                    .name()));
                             t.nation().setCapital(newCapitol);
                             t.nation().removeTown(t);
                         } else {

@@ -74,8 +74,8 @@ public class TownBlock {
             throw new RuntimeException("Error in block info : " + info);
         }
 
-        TownBlock t = new TownBlock(Integer.parseInt(splits[0]),
-                Integer.parseInt(splits[1]), Integer.parseInt(splits[2]));
+        TownBlock t = new TownBlock(Integer.parseInt(splits[0]), Integer
+                .parseInt(splits[1]), Integer.parseInt(splits[2]));
 
         if (splits.length > 3) {
             t.owner_name = splits[3];

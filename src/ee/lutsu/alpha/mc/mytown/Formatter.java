@@ -70,12 +70,11 @@ public class Formatter {
                     .format("<%s> %s", res.name(), line);
         }
 
-        return (emote ? Term.EmoteFormat : Term.ChatFormat).toString()
-                .replace("$color$", channel.color)
-                .replace("$channel$", channel.abbrevation)
-                .replace("$name$", res.name()).replace("$msg$", line)
-                .replace("$prefix$", res.prefix())
-                .replace("$postfix$", res.postfix());
+        return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace(
+                "$color$", channel.color).replace("$channel$",
+                channel.abbrevation).replace("$name$", res.name()).replace(
+                "$msg$", line).replace("$prefix$", res.prefix()).replace(
+                "$postfix$", res.postfix());
     }
 
     public static String formatChatSystem(String line, ChatChannel channel) {
@@ -84,21 +83,21 @@ public class Formatter {
         }
 
         return Term.ChatFormat.toString().replace("$color$", channel.color)
-                .replace("$channel$", channel.abbrevation)
-                .replace("$name$", "§4MyTown").replace("$msg$", line)
-                .replace("$prefix$", "§f[§4Sys§f]").replace("$postfix$", "");
+                .replace("$channel$", channel.abbrevation).replace("$name$",
+                        "§4MyTown").replace("$msg$", line).replace("$prefix$",
+                        "§f[§4Sys§f]").replace("$postfix$", "");
     }
 
     public static String formatPrivMsg(Resident sender, Resident receiver,
             String line, boolean out) {
         return (out ? Term.PrivMsgFormatOut : Term.PrivMsgFormatIn).toString()
-                .replace("$sname$", sender.name())
-                .replace("$sprefix$", sender.prefix())
+                .replace("$sname$", sender.name()).replace("$sprefix$",
+                        sender.prefix())
                 .replace("$spostfix$", sender.postfix())
 
-                .replace("$name$", receiver.name())
-                .replace("$prefix$", receiver.prefix())
-                .replace("$postfix$", receiver.postfix())
+                .replace("$name$", receiver.name()).replace("$prefix$",
+                        receiver.prefix()).replace("$postfix$",
+                        receiver.postfix())
 
                 .replace("$msg$", line);
     }

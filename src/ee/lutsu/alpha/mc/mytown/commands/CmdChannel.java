@@ -3,13 +3,13 @@ package ee.lutsu.alpha.mc.mytown.commands;
 import java.util.Arrays;
 import java.util.List;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
@@ -58,7 +58,8 @@ public class CmdChannel extends CommandBase {
                 ch = ChatChannel.defaultChannel;
             }
 
-            if (!ForgePerms.getPermissionsHandler().canAccess(res.onlinePlayer.username,
+            if (!ForgePerms.getPermissionsHandler().canAccess(
+                    res.onlinePlayer.username,
                     res.onlinePlayer.worldObj.provider.getDimensionName(),
                     "mytown.chat.focus." + ch.name.toLowerCase())) {
                 var1.sendChatToPlayer("§4You cannot focus to " + ch.name

@@ -53,8 +53,7 @@ public class Nation {
         id = val;
     }
 
-    protected Nation() {
-    }
+    protected Nation() {}
 
     public Nation(String pName, Town pCapital) throws CommandException {
         checkName(pName);
@@ -231,8 +230,8 @@ public class Nation {
             }
         }
 
-        pl.sendChatToPlayer(Term.NationStatusName.toString(nationColor,
-                n.name()));
+        pl.sendChatToPlayer(Term.NationStatusName.toString(nationColor, n
+                .name()));
 
         pl.sendChatToPlayer(Term.NationStatusGeneral.toString(b1, b2, m1));
         pl.sendChatToPlayer(Term.NationStatusCapital

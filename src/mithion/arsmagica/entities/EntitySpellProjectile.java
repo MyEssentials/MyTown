@@ -16,14 +16,11 @@ public class EntitySpellProjectile extends Entity {
     public double accelerationZ;
 
     @Override
-    protected void entityInit() {
-    }
+    protected void entityInit() {}
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-    }
+    protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-    }
+    protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
 }

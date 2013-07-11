@@ -344,8 +344,7 @@ public abstract class Database {
                 if (statement != null) {
                     statement.close();
                 }
-            } catch (SQLException e) {
-            }
+            } catch (SQLException e) {}
         }
 
         return exception;

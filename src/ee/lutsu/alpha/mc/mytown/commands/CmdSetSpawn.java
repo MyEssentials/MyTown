@@ -1,15 +1,15 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.Log;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 
 public class CmdSetSpawn extends CommandBase {
     @Override

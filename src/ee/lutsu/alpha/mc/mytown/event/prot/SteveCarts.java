@@ -82,9 +82,8 @@ public class SteveCarts extends ProtBase {
         }
 
         Vec3 next = (Vec3) mGetNextblock.invoke(module);
-        MyTownDatasource.instance.getBlock(e.dimension,
-                ChunkCoord.getCoord(next.xCoord),
-                ChunkCoord.getCoord(next.zCoord));
+        MyTownDatasource.instance.getBlock(e.dimension, ChunkCoord
+                .getCoord(next.xCoord), ChunkCoord.getCoord(next.zCoord));
 
         if (railerModules.size() > 0) // railer
         {
@@ -118,8 +117,8 @@ public class SteveCarts extends ProtBase {
 
     private boolean canRoam(int dim, double x, double yFrom, double yTo,
             double z, boolean miner) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim,
-                ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord
+                .getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
                 b = b.getFirstFullSidingClockwise(b.town());

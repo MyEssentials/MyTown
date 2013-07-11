@@ -2,17 +2,17 @@ package ee.lutsu.alpha.mc.mytown.commands;
 
 import java.util.logging.Level;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Cost;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
@@ -86,10 +86,10 @@ public class CmdSetHome extends CommandBase {
             cs.sendChatToPlayer(Formatter.commandError(Level.WARNING,
                     ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
-            Log.log(Level.WARNING,
-                    String.format("Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE,
-                    ex.toString()));
+            Log.log(Level.WARNING, String.format(
+                    "Command execution error by %s", cs), ex);
+            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
+                    .toString()));
         }
     }
 

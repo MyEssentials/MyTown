@@ -136,13 +136,10 @@ public class ProtectionEvents implements ITickHandler {
             }
 
             if (kill != null) {
-                String sTool = String.format(
-                        "[%s] %s",
-                        item.itemID
-                                + (item.isStackable()
-                                        && item.getItemDamage() > 0 ? ":"
-                                        + item.getItemDamage() : ""),
-                        tool.getLocalizedName(null));
+                String sTool = String.format("[%s] %s", item.itemID
+                        + (item.isStackable() && item.getItemDamage() > 0 ? ":"
+                                + item.getItemDamage() : ""), tool
+                        .getLocalizedName(null));
 
                 EntityPlayer pl = r.onlinePlayer;
                 Log.severe(String
@@ -227,8 +224,8 @@ public class ProtectionEvents implements ITickHandler {
                         }
                     } else {
                         Log.severe(String.format(
-                                "Entity %s tried to bypass using %s",
-                                e.toString(), kill));
+                                "Entity %s tried to bypass using %s", e
+                                        .toString(), kill));
                     }
 
                     toRemove.add(e);
@@ -382,8 +379,7 @@ public class ProtectionEvents implements ITickHandler {
     }
 
     @Override
-    public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-    }
+    public void tickEnd(EnumSet<TickType> type, Object... tickData) {}
 
     @Override
     public EnumSet<TickType> ticks() {

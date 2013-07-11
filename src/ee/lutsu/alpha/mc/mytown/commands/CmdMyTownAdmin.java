@@ -4,13 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
@@ -45,7 +46,8 @@ public class CmdMyTownAdmin extends CommandBase {
                     p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
         }
         return false;
-        // return ForgePerms.getPermissionsHandler().canAccess(cs, "mytown.adm.cmd");
+        // return ForgePerms.getPermissionsHandler().canAccess(cs,
+        // "mytown.adm.cmd");
     }
 
     @Override
@@ -69,21 +71,21 @@ public class CmdMyTownAdmin extends CommandBase {
                 cs.sendChatToPlayer(Term.LineSeperator.toString());
 
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(
-                        Term.TownadmCmdNew.toString(),
-                        Term.TownadmCmdNewArgs.toString(),
-                        Term.TownadmCmdNewDesc.toString(), color));
+                        Term.TownadmCmdNew.toString(), Term.TownadmCmdNewArgs
+                                .toString(), Term.TownadmCmdNewDesc.toString(),
+                        color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(
                         Term.TownadmCmdDelete.toString(),
                         Term.TownadmCmdDeleteArgs.toString(),
                         Term.TownadmCmdDeleteDesc.toString(), color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(
-                        Term.TownadmCmdSet.toString(),
-                        Term.TownadmCmdSetArgs.toString(),
-                        Term.TownadmCmdSetDesc.toString(), color));
+                        Term.TownadmCmdSet.toString(), Term.TownadmCmdSetArgs
+                                .toString(), Term.TownadmCmdSetDesc.toString(),
+                        color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(
-                        Term.TownadmCmdRem.toString(),
-                        Term.TownadmCmdRemArgs.toString(),
-                        Term.TownadmCmdRemDesc.toString(), color));
+                        Term.TownadmCmdRem.toString(), Term.TownadmCmdRemArgs
+                                .toString(), Term.TownadmCmdRemDesc.toString(),
+                        color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(
                         Term.TownadmCmdExtra.toString(),
                         Term.TownadmCmdExtraArgs.toString(),
@@ -96,8 +98,8 @@ public class CmdMyTownAdmin extends CommandBase {
                         Term.TownadmCmdReload.toString(), "",
                         Term.TownadmCmdReloadDesc.toString(), color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(
-                        Term.TownadmCmdPerm.toString(),
-                        Term.TownadmCmdPermArgs.toString(),
+                        Term.TownadmCmdPerm.toString(), Term.TownadmCmdPermArgs
+                                .toString(),
                         Term.TownadmCmdPermDesc.toString(), color));
                 cs.sendChatToPlayer(Formatter.formatAdminCommand(
                         Term.TownadmCmdClaim.toString(),
@@ -116,7 +118,9 @@ public class CmdMyTownAdmin extends CommandBase {
                         Term.TownadmCmdSnoopPrivateChatDesc.toString(), color));
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdReload
                     .toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reload")) {
+                if (!ForgePerms.getPermissionsHandler().canAccess(p.username,
+                        p.worldObj.provider.getDimensionName(),
+                        "mytown.adm.cmd.reload")) {
                     cs.sendChatToPlayer(Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -182,8 +186,8 @@ public class CmdMyTownAdmin extends CommandBase {
                 } else {
                     Resident r = src.getOrMakeResident(var2[2]);
                     Town t = new Town(var2[1], r, null);
-                    cs.sendChatToPlayer(Term.TownadmCreatedNewTown.toString(
-                            t.name(), r.name()));
+                    cs.sendChatToPlayer(Term.TownadmCreatedNewTown.toString(t
+                            .name(), r.name()));
                 }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdDelete
                     .toString())) {
@@ -380,8 +384,8 @@ public class CmdMyTownAdmin extends CommandBase {
 
                 if (var2.length < 3) // show
                 {
-                    if (!ForgePerms.getPermissionsHandler().canAccess(p.username,
-                            p.worldObj.provider.getDimensionName(),
+                    if (!ForgePerms.getPermissionsHandler().canAccess(
+                            p.username, p.worldObj.provider.getDimensionName(),
                             "mytown.adm.cmd.perm.show." + node)) {
                         cs.sendChatToPlayer(Term.ErrCannotAccessCommand
                                 .toString());
@@ -391,8 +395,10 @@ public class CmdMyTownAdmin extends CommandBase {
                 } else {
                     String action = var2[2];
                     if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Set
-                            .toString()) && var2.length > 3) {
-                        if (!ForgePerms.getPermissionsHandler().canAccess(p.username,
+                            .toString())
+                            && var2.length > 3) {
+                        if (!ForgePerms.getPermissionsHandler().canAccess(
+                                p.username,
                                 p.worldObj.provider.getDimensionName(),
                                 "mytown.adm.cmd.perm.set." + node + "."
                                         + var2[3])) {
@@ -405,7 +411,8 @@ public class CmdMyTownAdmin extends CommandBase {
                     } else if (action
                             .equalsIgnoreCase(Term.TownadmCmdPermArgs2Force
                                     .toString())) {
-                        if (!ForgePerms.getPermissionsHandler().canAccess(p.username,
+                        if (!ForgePerms.getPermissionsHandler().canAccess(
+                                p.username,
                                 p.worldObj.provider.getDimensionName(),
                                 "mytown.adm.cmd.perm.force." + node)) {
                             cs.sendChatToPlayer(Term.ErrCannotAccessCommand
@@ -485,7 +492,8 @@ public class CmdMyTownAdmin extends CommandBase {
                         dim = Integer.parseInt(sp[2]);
                     } else {
                         Resident res = cs instanceof EntityPlayer ? MyTownDatasource.instance
-                                .getOrMakeResident((EntityPlayer) cs) : null;
+                                .getOrMakeResident((EntityPlayer) cs)
+                                : null;
                         if (res == null) {
                             throw new CommandException(
                                     Term.ErrNotUsableByConsole); // console
@@ -497,7 +505,8 @@ public class CmdMyTownAdmin extends CommandBase {
                     }
                 } else {
                     Resident res = cs instanceof EntityPlayer ? MyTownDatasource.instance
-                            .getOrMakeResident((EntityPlayer) cs) : null;
+                            .getOrMakeResident((EntityPlayer) cs)
+                            : null;
                     if (res == null) {
                         throw new CommandException(Term.ErrNotUsableByConsole);
                     }
@@ -535,8 +544,8 @@ public class CmdMyTownAdmin extends CommandBase {
                     }
                 }
 
-                cs.sendChatToPlayer(Term.TownBlocksClaimed.toString(nr,
-                        sb.toString()));
+                cs.sendChatToPlayer(Term.TownBlocksClaimed.toString(nr, sb
+                        .toString()));
             } else if (var2[0].equalsIgnoreCase("togglegen")) {
                 WorldBorder.instance.genenabled = !WorldBorder.instance.genenabled;
                 MyTown.instance.config.get("worldborder",
@@ -552,11 +561,10 @@ public class CmdMyTownAdmin extends CommandBase {
             cs.sendChatToPlayer(Formatter.commandError(Level.WARNING,
                     ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
-            Log.log(Level.WARNING,
-                    String.format("Admin command execution error by %s", cs),
-                    ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE,
-                    ex.toString()));
+            Log.log(Level.WARNING, String.format(
+                    "Admin command execution error by %s", cs), ex);
+            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
+                    .toString()));
         }
 
     }
@@ -622,8 +630,8 @@ public class CmdMyTownAdmin extends CommandBase {
         } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
             TownBlock block = (TownBlock) set.tag;
             title = String.format("the plot @ dim %s, %s,%s owned by '%s'",
-                    block.worldDimension(), block.x(), block.z(),
-                    block.ownerDisplay());
+                    block.worldDimension(), block.x(), block.z(), block
+                            .ownerDisplay());
         } else if (node.equalsIgnoreCase(Term.TownadmCmdPermArgsServer
                 .toString())) {
             title = "the server (default for towns)";

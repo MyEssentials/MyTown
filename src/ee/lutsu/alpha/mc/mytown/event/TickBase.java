@@ -15,8 +15,7 @@ public abstract class TickBase {
         return MyTownDatasource.instance;
     }
 
-    public void loadConfig() throws Exception {
-    }
+    public void loadConfig() throws Exception {}
 
     public boolean enabled() {
         return true;

@@ -10,7 +10,6 @@ import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.CommandException;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.Term;
 
 /**
@@ -159,8 +158,8 @@ public class TownSettingCollection {
         }
 
         if (value != null && value.equals("?")) {
-            throw new CommandException(Term.ErrPermSupportedValues,
-                    set.getValueType(), set.getValueDescription());
+            throw new CommandException(Term.ErrPermSupportedValues, set
+                    .getValueType(), set.getValueDescription());
         }
 
         try {
@@ -168,8 +167,8 @@ public class TownSettingCollection {
         } catch (Exception e) {
             String err = e.getClass().getSimpleName()
                     + (e.toString() != null ? ": " + e.toString() : "");
-            throw new CommandException(Term.ErrPermSupportedValues, err,
-                    set.getValueDescription());
+            throw new CommandException(Term.ErrPermSupportedValues, err, set
+                    .getValueDescription());
         }
 
         refresh();
@@ -247,10 +246,10 @@ public class TownSettingCollection {
                                 p.worldObj.provider.getDimensionName(),
                                 "mytown.cmd.perm.set." + node + "."
                                         + set.getSerializationKey())) {
-                    cs.sendChatToPlayer(String.format("§a%s §2[%s] : %s%s",
-                            set.getName(), set.getSerializationKey(),
-                            set.value == null ? "§d" : "§c",
-                            set.getVisualValue()));
+                    cs.sendChatToPlayer(String.format("§a%s §2[%s] : %s%s", set
+                            .getName(), set.getSerializationKey(),
+                            set.value == null ? "§d" : "§c", set
+                                    .getVisualValue()));
                 }
             }
         }

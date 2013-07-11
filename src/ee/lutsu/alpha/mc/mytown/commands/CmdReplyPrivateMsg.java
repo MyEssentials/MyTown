@@ -3,14 +3,13 @@ package ee.lutsu.alpha.mc.mytown.commands;
 import java.util.Arrays;
 import java.util.List;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import ee.lutsu.alpha.mc.mytown.MyTown;
+
+import com.sperion.forgeperms.ForgePerms;
 
 public class CmdReplyPrivateMsg extends CommandBase {
     @Override
@@ -43,8 +42,8 @@ public class CmdReplyPrivateMsg extends CommandBase {
             cs.sendChatToPlayer("§4Noone to reply to");
         } else {
             if (arg.length > 0) {
-                CmdPrivateMsg.sendChat((EntityPlayer) cs, pl,
-                        func_82360_a(cs, arg, 0));
+                CmdPrivateMsg.sendChat((EntityPlayer) cs, pl, func_82360_a(cs,
+                        arg, 0));
             } else {
                 CmdPrivateMsg.lockChatWithNotify((EntityPlayer) cs, pl);
             }

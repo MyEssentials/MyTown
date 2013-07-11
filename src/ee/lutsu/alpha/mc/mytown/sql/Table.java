@@ -145,8 +145,7 @@ public class Table {
             if (statement != null) {
                 try {
                     statement.close();
-                } catch (SQLException e) {
-                }
+                } catch (SQLException e) {}
             }
         }
     }

@@ -1,7 +1,5 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandServerTp;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -9,7 +7,8 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import ee.lutsu.alpha.mc.mytown.MyTown;
+
+import com.sperion.forgeperms.ForgePerms;
 
 public class CmdTeleport extends CommandServerTp {
     @Override
@@ -65,9 +64,7 @@ public class CmdTeleport extends CommandServerTp {
                 }
 
                 if (targetPlayer.worldObj != self.worldObj) {
-                    MinecraftServer
-                            .getServer()
-                            .getConfigurationManager()
+                    MinecraftServer.getServer().getConfigurationManager()
                             .transferPlayerToDimension(self,
                                     targetPlayer.dimension);
                 }
@@ -76,11 +73,8 @@ public class CmdTeleport extends CommandServerTp {
                         targetPlayer.posX, targetPlayer.posY,
                         targetPlayer.posZ, targetPlayer.rotationYaw,
                         targetPlayer.rotationPitch);
-                notifyAdmins(
-                        cs,
-                        "commands.tp.success",
-                        new Object[] { self.getEntityName(),
-                                targetPlayer.getEntityName() });
+                notifyAdmins(cs, "commands.tp.success", new Object[] {
+                        self.getEntityName(), targetPlayer.getEntityName() });
             } else if (self.worldObj != null) {
                 int dim = arg.length > 3 ? Integer
                         .parseInt(arg[arg.length - 4]) : self.dimension;
@@ -97,9 +91,7 @@ public class CmdTeleport extends CommandServerTp {
 
                 self.playerNetServerHandler.setPlayerLocation(var5, var7, var9,
                         self.rotationYaw, self.rotationPitch);
-                notifyAdmins(
-                        cs,
-                        "commands.tp.success.coordinates",
+                notifyAdmins(cs, "commands.tp.success.coordinates",
                         new Object[] { self.getEntityName(),
                                 Double.valueOf(var5), Double.valueOf(var7),
                                 Double.valueOf(var9) });

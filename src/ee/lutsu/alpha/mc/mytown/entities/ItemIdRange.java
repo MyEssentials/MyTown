@@ -12,8 +12,7 @@ public class ItemIdRange {
     public int toIdSub = -1;
     public boolean squareTest;
 
-    public ItemIdRange() {
-    }
+    public ItemIdRange() {}
 
     public ItemIdRange(String line) {
         load(line);

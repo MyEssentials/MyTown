@@ -1,10 +1,10 @@
 package ee.lutsu.alpha.mc.mytown.entities;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeEventFactory;
-import ee.lutsu.alpha.mc.mytown.MyTown;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.Term;
 
 public class PayHandler {
@@ -71,7 +71,14 @@ public class PayHandler {
         requestedItem = stack;
         doneHandler = actor;
         doneHandlerArgs = args;
-        if (stack == null || stack.stackSize < 1 || ForgePerms.getPermissionsHandler().canAccess(owner.name(),owner.onlinePlayer.worldObj.provider.getDimensionName(),"mytown.cost.bypass." + action)) {
+        if (stack == null
+                || stack.stackSize < 1
+                || ForgePerms.getPermissionsHandler()
+                        .canAccess(
+                                owner.name(),
+                                owner.onlinePlayer.worldObj.provider
+                                        .getDimensionName(),
+                                "mytown.cost.bypass." + action)) {
             purchaseComplete();
         } else {
             timeUntil = System.currentTimeMillis() + timeToPaySec * 1000;

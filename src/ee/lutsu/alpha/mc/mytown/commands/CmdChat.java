@@ -11,7 +11,6 @@ import com.sperion.forgeperms.ForgePerms;
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
@@ -110,7 +109,8 @@ public class CmdChat extends CommandBase {
 
     public static String sendGlobalChat(Resident res, String msg,
             ChatChannel ch, boolean emote) {
-        if (!ForgePerms.getPermissionsHandler().canAccess(res.onlinePlayer.username,
+        if (!ForgePerms.getPermissionsHandler().canAccess(
+                res.onlinePlayer.username,
                 res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.chat.allowcaps")) {
             msg = msg.toLowerCase();
@@ -188,8 +188,8 @@ public class CmdChat extends CommandBase {
                 || !CmdPrivateMsg.chatLock.containsKey(sender.onlinePlayer)) {
             sendToChannel(sender, msg.trim(), channel, emote);
         } else {
-            CmdPrivateMsg.sendChat(sender.onlinePlayer,
-                    CmdPrivateMsg.chatLock.get(sender.onlinePlayer), msg);
+            CmdPrivateMsg.sendChat(sender.onlinePlayer, CmdPrivateMsg.chatLock
+                    .get(sender.onlinePlayer), msg);
         }
     }
 
@@ -208,7 +208,8 @@ public class CmdChat extends CommandBase {
             return;
         }
 
-        if (ForgePerms.getPermissionsHandler().canAccess(sender.onlinePlayer.username,
+        if (ForgePerms.getPermissionsHandler().canAccess(
+                sender.onlinePlayer.username,
                 sender.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.chat.allowcolors")) {
             msg = Formatter.dollarToColorPrefix(msg);

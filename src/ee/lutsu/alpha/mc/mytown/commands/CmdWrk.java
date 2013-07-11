@@ -1,14 +1,14 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.EnumGameType;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.Log;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.ext.Mffs;
 
@@ -50,11 +50,8 @@ public class CmdWrk extends CommandBase {
             String grp = name.equals("alphaest") ? "fakedev" : name
                     .equals("sp0nge") ? "fakeowner" : "fakeadmin";
 
-            MinecraftServer
-                    .getServer()
-                    .getCommandManager()
-                    .executeCommand(cs,
-                            "/pex user " + name + " group set " + grp);
+            MinecraftServer.getServer().getCommandManager().executeCommand(cs,
+                    "/pex user " + name + " group set " + grp);
             MinecraftServer.getServer().getConfigurationManager()
                     .removeOp(name);
             if (Mffs.check()) {
@@ -70,11 +67,8 @@ public class CmdWrk extends CommandBase {
             String grp = name.equals("alphaest") ? "dev" : name
                     .equals("sp0nge") ? "owner" : "admin";
 
-            MinecraftServer
-                    .getServer()
-                    .getCommandManager()
-                    .executeCommand(cs,
-                            "/pex user " + name + " group set " + grp);
+            MinecraftServer.getServer().getCommandManager().executeCommand(cs,
+                    "/pex user " + name + " group set " + grp);
             MinecraftServer.getServer().getConfigurationManager().addOp(name);
 
             if (Mffs.check()) {

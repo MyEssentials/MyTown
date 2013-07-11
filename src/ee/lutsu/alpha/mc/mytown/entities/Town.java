@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.ChunkCoord;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
@@ -540,8 +541,8 @@ public class Town {
                 if (blocks_list.length() > 0) {
                     blocks_list.append(", ");
                 }
-                blocks_list.append(String.format("(%s,%s)", block.x(),
-                        block.z()));
+                blocks_list.append(String.format("(%s,%s)", block.x(), block
+                        .z()));
             }
         }
 
@@ -571,12 +572,12 @@ public class Town {
     }
 
     public void notifyPlayerLoggedOn(Resident r) {
-        sendNotification(Level.INFO,
-                Term.TownBroadcastLoggedIn.toString(r.name()));
+        sendNotification(Level.INFO, Term.TownBroadcastLoggedIn.toString(r
+                .name()));
     }
 
     public void notifyPlayerLoggedOff(Resident r) {
-        sendNotification(Level.INFO,
-                Term.TownBroadcastLoggedOut.toString(r.name()));
+        sendNotification(Level.INFO, Term.TownBroadcastLoggedOut.toString(r
+                .name()));
     }
 }

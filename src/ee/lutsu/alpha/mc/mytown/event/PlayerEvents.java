@@ -124,8 +124,8 @@ public class PlayerEvents implements IPlayerTracker {
                 && ev.entityPlayer.getHeldItem() != null
                 && ev.entityPlayer.getHeldItem().getItem() != null
                 && (ev.entityPlayer.getHeldItem().getItem() instanceof ItemMinecart || ItemIdRange
-                        .contains(MyTown.instance.carts,
-                                ev.entityPlayer.getHeldItem()))) {
+                        .contains(MyTown.instance.carts, ev.entityPlayer
+                                .getHeldItem()))) {
             int en = ev.entityPlayer.worldObj.getBlockId(x, y, z);
             if (Block.blocksList[en] instanceof BlockRail) {
                 if (targetBlock != null
@@ -392,12 +392,10 @@ public class PlayerEvents implements IPlayerTracker {
     }
 
     @Override
-    public void onPlayerChangedDimension(EntityPlayer player) {
-    }
+    public void onPlayerChangedDimension(EntityPlayer player) {}
 
     @Override
-    public void onPlayerRespawn(EntityPlayer player) {
-    }
+    public void onPlayerRespawn(EntityPlayer player) {}
 
     @ForgeSubscribe
     public void serverChat(ServerChatEvent ev) {

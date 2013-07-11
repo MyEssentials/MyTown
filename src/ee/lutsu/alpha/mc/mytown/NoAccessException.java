@@ -1,8 +1,8 @@
 package ee.lutsu.alpha.mc.mytown;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.ICommandSender;
+
+import com.sperion.forgeperms.ForgePerms;
 
 @SuppressWarnings("serial")
 public class NoAccessException extends Exception {

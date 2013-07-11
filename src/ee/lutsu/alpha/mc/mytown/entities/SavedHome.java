@@ -16,8 +16,7 @@ public class SavedHome {
     public float look1;
     public float look2;
 
-    protected SavedHome() {
-    }
+    protected SavedHome() {}
 
     public SavedHome(String name, Entity entityFrom) {
         this.name = name;

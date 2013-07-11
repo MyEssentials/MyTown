@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.Assert;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
@@ -99,9 +99,9 @@ public class MyTownMayor {
             if (args.length < 2) {
                 handled = true;
                 cs.sendChatToPlayer(Formatter.formatGroupCommand(
-                        Term.CommandHelp.toString(),
-                        Term.CommandHelpMayor.toString(),
-                        Term.CommandHelpMayorDesc.toString(), color));
+                        Term.CommandHelp.toString(), Term.CommandHelpMayor
+                                .toString(), Term.CommandHelpMayorDesc
+                                .toString(), color));
             } else if (args[1].equalsIgnoreCase(Term.CommandHelpMayor
                     .toString())) {
                 handled = true;
@@ -109,17 +109,15 @@ public class MyTownMayor {
                         Term.TownCmdAssistant.toString(),
                         Term.TownCmdAssistantArgs.toString(),
                         Term.TownCmdAssistantDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdMayor.toString(),
-                        Term.TownCmdMayorArgs.toString(),
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdMayor
+                        .toString(), Term.TownCmdMayorArgs.toString(),
                         Term.TownCmdMayorDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdRename.toString(),
-                        Term.TownCmdRenameArgs.toString(),
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRename
+                        .toString(), Term.TownCmdRenameArgs.toString(),
                         Term.TownCmdRenameDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdDelete.toString(), "",
-                        Term.TownCmdDeleteDesc.toString(), color));
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdDelete
+                        .toString(), "", Term.TownCmdDeleteDesc.toString(),
+                        color));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAssistant.toString())) {
             Assert.Perm(cs, "mytown.cmd.assistant");
@@ -186,9 +184,8 @@ public class MyTownMayor {
             handled = true;
 
             if (args.length != 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdMayor.toString(),
-                        Term.TownCmdMayorArgs.toString(),
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdMayor
+                        .toString(), Term.TownCmdMayorArgs.toString(),
                         Term.TownCmdMayorDesc.toString(), color));
             } else {
                 String name = args[1];
@@ -204,7 +201,8 @@ public class MyTownMayor {
                     throw new CommandException(Term.TownErrPlayerNotInYourTown);
                 }
 
-                if (!ForgePerms.getPermissionsHandler().canAccess(r.onlinePlayer.username,
+                if (!ForgePerms.getPermissionsHandler().canAccess(
+                        r.onlinePlayer.username,
                         r.onlinePlayer.worldObj.provider.getDimensionName(),
                         "mytown.cmd.new")) {
                     throw new CommandException(
@@ -245,9 +243,8 @@ public class MyTownMayor {
                 res.town().sendNotification(Level.INFO,
                         Term.TownRenamed.toString(res.town().name()));
             } else {
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdRename.toString(),
-                        Term.TownCmdRenameArgs.toString(),
+                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRename
+                        .toString(), Term.TownCmdRenameArgs.toString(),
                         Term.TownCmdRenameDesc.toString(), color));
             }
         }

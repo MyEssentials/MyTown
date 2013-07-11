@@ -171,7 +171,8 @@ public class Resident {
 
     public boolean shouldShowTownBlocks() {
         // return Permissions.canAccess(this, "mytown.adm.showblocks");
-        // return ForgePerms.getPermissionsHandler().canAccess(this.onlinePlayer,
+        // return
+        // ForgePerms.getPermissionsHandler().canAccess(this.onlinePlayer,
         // "mytown.adm.showblocks");
         return ForgePerms.getPermissionsHandler().canAccess(this.name(),
                 onlinePlayer.worldObj.provider.getDimensionName(),
@@ -589,9 +590,7 @@ public class Resident {
 
         if (onlinePlayer instanceof EntityPlayerMP) {
             if (onlinePlayer.dimension != prevDimension) {
-                MinecraftServer
-                        .getServer()
-                        .getConfigurationManager()
+                MinecraftServer.getServer().getConfigurationManager()
                         .transferPlayerToDimension(
                                 (EntityPlayerMP) onlinePlayer, prevDimension);
             }
@@ -633,9 +632,7 @@ public class Resident {
 
         if (h == null) {
             if (pl.dimension != pl.worldObj.provider.getRespawnDimension(pl)) {
-                MinecraftServer
-                        .getServer()
-                        .getConfigurationManager()
+                MinecraftServer.getServer().getConfigurationManager()
                         .transferPlayerToDimension(pl,
                                 pl.worldObj.provider.getRespawnDimension(pl));
             }
@@ -656,8 +653,8 @@ public class Resident {
             } else {
                 pl.sendChatToPlayer(Term.NoBedMessage.toString());
                 WorldInfo info = world.getWorldInfo();
-                pl.setLocationAndAngles(info.getSpawnX() + 0.5F,
-                        info.getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
+                pl.setLocationAndAngles(info.getSpawnX() + 0.5F, info
+                        .getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
             }
         } else {
             if (pl.dimension != h.dim) {
@@ -909,8 +906,8 @@ public class Resident {
         teleportTargetHome = home;
 
         System.currentTimeMillis();
-        long takesTime = ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                onlinePlayer.worldObj.provider.getDimensionName(),
+        long takesTime = ForgePerms.getPermissionsHandler().canAccess(
+                this.name(), onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass.teleportwait") ? 0
                 : home != null ? teleportToHomeWaitSeconds * 1000
                         : teleportToSpawnWaitSeconds * 1000;

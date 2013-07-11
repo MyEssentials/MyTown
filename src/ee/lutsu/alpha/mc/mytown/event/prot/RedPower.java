@@ -53,8 +53,8 @@ public class RedPower extends ProtBase {
             return null;
         }
 
-        Log.severe(String.format("Entity %s tried to bypass using %s",
-                e.toString(), s));
+        Log.severe(String.format("Entity %s tried to bypass using %s", e
+                .toString(), s));
 
         TileEntity motor = e.worldObj.getBlockTileEntity(mx, my, mz);
 
@@ -107,8 +107,8 @@ public class RedPower extends ProtBase {
                     .format("Redpower frame at Dim %s (%s,%s,%s), motor at Dim %s (%s,%s,%s) failed. Actor: %s",
                             e.worldObj.provider.dimensionId, e.xCoord,
                             e.yCoord, e.zCoord,
-                            e.worldObj.provider.dimensionId, mx, my, mz,
-                            actor.name());
+                            e.worldObj.provider.dimensionId, mx, my, mz, actor
+                                    .name());
         }
 
         return null;

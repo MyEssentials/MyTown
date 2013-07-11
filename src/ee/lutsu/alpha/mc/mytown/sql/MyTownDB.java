@@ -51,8 +51,7 @@ public abstract class MyTownDB extends Database {
         try {
             PreparedStatement s = prepare("SELECT * FROM " + prefix + "updates");
             r = s.executeQuery();
-        } catch (SQLException e) {
-        }
+        } catch (SQLException e) {}
 
         List<String> lst = Lists.newArrayList();
         while (r != null && r.next()) {
@@ -273,9 +272,9 @@ public abstract class MyTownDB extends Database {
                 set = statement.executeQuery();
 
                 while (set.next()) {
-                    nations.add(Nation.sqlLoad(set.getInt("Id"),
-                            set.getString("Name"), set.getInt("Capital"),
-                            set.getString("Towns"), set.getString("Extra")));
+                    nations.add(Nation.sqlLoad(set.getInt("Id"), set
+                            .getString("Name"), set.getInt("Capital"), set
+                            .getString("Towns"), set.getString("Extra")));
                 }
             } catch (Exception e) {
                 printException(e);
@@ -283,8 +282,7 @@ public abstract class MyTownDB extends Database {
                 if (set != null) {
                     try {
                         set.close();
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) {}
                 }
             }
 
@@ -403,8 +401,8 @@ public abstract class MyTownDB extends Database {
                             .id());
                     statement.setString(3, res.rank().toString());
                     statement.setString(4, res.activeChannel.toString());
-                    statement.setString(5,
-                            iso8601Format.format(res.lastLogin()));
+                    statement.setString(5, iso8601Format
+                            .format(res.lastLogin()));
                     statement.setString(6, res.serializeExtra());
                     statement.setString(7, sFriends);
                     statement.setString(8, res.home.serialize());
@@ -423,8 +421,8 @@ public abstract class MyTownDB extends Database {
                     statement.setString(3, res.rank().toString());
                     statement.setString(4, res.activeChannel.toString());
                     statement.setString(5, iso8601Format.format(res.created()));
-                    statement.setString(6,
-                            iso8601Format.format(res.lastLogin()));
+                    statement.setString(6, iso8601Format
+                            .format(res.lastLogin()));
                     statement.setString(7, res.serializeExtra());
                     statement.setString(8, sFriends);
                     statement.setString(9, res.home.serialize());
@@ -546,13 +544,13 @@ public abstract class MyTownDB extends Database {
                     int tid = set.getInt("Town");
                     Town town = tid > 0 ? getTown(tid) : null;
 
-                    Resident r = Resident.loadFromDB(set.getInt("Id"),
-                            set.getString("Name"), town,
-                            Rank.parse(set.getString("Rank")),
-                            ChatChannel.parse(set.getString("Channel")),
-                            iso8601Format.parse(set.getString("Created")),
-                            iso8601Format.parse(set.getString("LastLogin")),
-                            set.getString("Extra"), set.getString("Homes"));
+                    Resident r = Resident.loadFromDB(set.getInt("Id"), set
+                            .getString("Name"), town, Rank.parse(set
+                            .getString("Rank")), ChatChannel.parse(set
+                            .getString("Channel")), iso8601Format.parse(set
+                            .getString("Created")), iso8601Format.parse(set
+                            .getString("LastLogin")), set.getString("Extra"),
+                            set.getString("Homes"));
 
                     residents.add(r);
 
@@ -567,8 +565,7 @@ public abstract class MyTownDB extends Database {
                 if (set != null) {
                     try {
                         set.close();
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) {}
                 }
             }
 
@@ -607,9 +604,9 @@ public abstract class MyTownDB extends Database {
                 set = statement.executeQuery();
 
                 while (set.next()) {
-                    towns.add(loadFromSQL(set.getInt("Id"),
-                            set.getString("Name"), set.getInt("ExtraBlocks"),
-                            set.getString("Blocks"), set.getString("Extra")));
+                    towns.add(loadFromSQL(set.getInt("Id"), set
+                            .getString("Name"), set.getInt("ExtraBlocks"), set
+                            .getString("Blocks"), set.getString("Extra")));
                 }
             } catch (Exception e) {
                 printException(e);
@@ -617,8 +614,7 @@ public abstract class MyTownDB extends Database {
                 if (set != null) {
                     try {
                         set.close();
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) {}
                 }
             }
 

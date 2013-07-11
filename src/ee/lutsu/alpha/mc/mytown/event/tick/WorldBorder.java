@@ -87,26 +87,22 @@ public class WorldBorder extends TickBase {
             int radiusTo = kv.getValue().radius / 16 + 6;
             boolean circle = kv.getValue().typeCircle;
 
-            generators.add(ChunkGen.start(
-                    w,
-                    MyTown.instance.config.get("worldborder.generator",
-                            "dim_" + kv.getKey() + "_0_radius", 0).getInt(),
-                    radiusTo, circle, 0));
-            generators.add(ChunkGen.start(
-                    w,
-                    MyTown.instance.config.get("worldborder.generator",
-                            "dim_" + kv.getKey() + "_1_radius", 0).getInt(),
-                    radiusTo, circle, 1));
-            generators.add(ChunkGen.start(
-                    w,
-                    MyTown.instance.config.get("worldborder.generator",
-                            "dim_" + kv.getKey() + "_2_radius", 0).getInt(),
-                    radiusTo, circle, 2));
-            generators.add(ChunkGen.start(
-                    w,
-                    MyTown.instance.config.get("worldborder.generator",
-                            "dim_" + kv.getKey() + "_3_radius", 0).getInt(),
-                    radiusTo, circle, 3));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
+                    "worldborder.generator",
+                    "dim_" + kv.getKey() + "_0_radius", 0).getInt(), radiusTo,
+                    circle, 0));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
+                    "worldborder.generator",
+                    "dim_" + kv.getKey() + "_1_radius", 0).getInt(), radiusTo,
+                    circle, 1));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
+                    "worldborder.generator",
+                    "dim_" + kv.getKey() + "_2_radius", 0).getInt(), radiusTo,
+                    circle, 2));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
+                    "worldborder.generator",
+                    "dim_" + kv.getKey() + "_3_radius", 0).getInt(), radiusTo,
+                    circle, 3));
         }
 
         lastStamp = System.currentTimeMillis();
@@ -264,8 +260,7 @@ public class WorldBorder extends TickBase {
 
                 try {
                     gen.runThread.setPriority(Thread.MIN_PRIORITY);
-                } catch (Exception e) {
-                }
+                } catch (Exception e) {}
 
                 gen.runThread.start();
             }

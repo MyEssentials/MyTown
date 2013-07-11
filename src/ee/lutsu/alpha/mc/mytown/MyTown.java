@@ -76,33 +76,12 @@ public class MyTown {
     public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
     public LinkedList<ItemIdRange> carts = null;
     public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
-    //public PermissionsBase perms;
-    //public boolean permHandlerLoaded = false;
 
     @Mod.Instance("MyTown")
     public static MyTown instance;
     public Configuration config = new Configuration(new File(CONFIG_FILE));
 
     public List<CommandBase> commands = new ArrayList<CommandBase>();
-    /*
-    public static void registerPermHandler(PermissionsBase permHandler) {
-        if (!MyTown.instance.permHandlerLoaded) {
-            if (permHandler.load()) {
-                Log.info("[Perms] PermissionHandler %s Loaded",
-                        permHandler.name);
-                MyTown.instance.perms = permHandler;
-                MyTown.instance.permHandlerLoaded = true;
-            } else {
-                Log.info("[Perms] PermissionHandler %s Failed To Load",
-                        permHandler.name);
-            }
-        } else {
-            Log.log(Level.INFO,
-                    "[Perms] A PermissionHandler(%s) is already loaded. %s not loaded.",
-                    MyTown.instance.perms.name, permHandler.name);
-        }
-    }
-    */
 
     private void addCommands() {
         commands.add(new CmdMyTown());
@@ -161,18 +140,7 @@ public class MyTown {
         } finally {
             config.save(); // re-save to add the missing configuration variables
         }
-        
-        //MyTown.registerPermHandler(new PEXPermissions());
-        //MyTown.registerPermHandler(new FallbackPermissions());
-        /*
-        if (!MyTown.instance.permHandlerLoaded) {
-            FMLLog.log(Level.SEVERE,
-                    "MyTown failed to load any permission handlers!", "");
-            throw new RuntimeException(
-                    "MyTown failed to load any permission handlers!");
-        }
-        */
-        
+
         Log.info("Loaded");
     }
 
@@ -257,13 +225,9 @@ public class MyTown {
 
         prop = config.get("General", "CartItemIds", "");
         prop.comment = "Defines the cart id's which can be placed on a rail with carts perm on. Includes all cart-types.";
-        carts = ItemIdRange.parseList(Arrays
-                .asList(prop.getString().split(";")));
+        carts = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
 
-        Town.pvpSafeTowns = config
-                .get("General", "PVPSafeTown", "Spawn,Server",
-                        "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.")
-                .getString().split(",");
+        Town.pvpSafeTowns = config.get("General", "PVPSafeTown", "Spawn,Server", "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.").getString().split(",");
 
         prop = config
                 .get("General",

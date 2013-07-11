@@ -19,8 +19,7 @@ public class SingleBlockTools extends ProtBase {
     public static SingleBlockTools instance = new SingleBlockTools();
 
     @Override
-    public void load() throws Exception {
-    }
+    public void load() throws Exception {}
 
     @Override
     public boolean loaded() {
@@ -38,8 +37,8 @@ public class SingleBlockTools extends ProtBase {
     private boolean isCritical(Item e) {
         if (e instanceof ItemBucket
                 || e instanceof ItemBoat
-                || e.getClass().getSimpleName()
-                        .equalsIgnoreCase("ItemChestTransporter")) {
+                || e.getClass().getSimpleName().equalsIgnoreCase(
+                        "ItemChestTransporter")) {
             return true;
         }
 
@@ -49,8 +48,7 @@ public class SingleBlockTools extends ProtBase {
                     ItemStack.class, EntityPlayer.class, World.class,
                     int.class, int.class, int.class, int.class, float.class,
                     float.class, float.class);
-        } catch (NoSuchMethodException e1) {
-        } catch (NoClassDefFoundError e1) {
+        } catch (NoSuchMethodException e1) {} catch (NoClassDefFoundError e1) {
             // Log.warning("Cannot check the item " + e.getClass().toString() +
             // " for right click usage.");
             return true;

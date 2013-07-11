@@ -213,11 +213,9 @@ public class ThaumCraft extends ProtBase {
         Vec3 vec3d2 = vec3d.addVector(tvec.xCoord * range, tvec.yCoord * range,
                 tvec.zCoord * range);
         float f1 = 1.0F;
-        List list = world.getEntitiesWithinAABBExcludingEntity(
-                p,
-                p.boundingBox.addCoord(tvec.xCoord * range,
-                        tvec.yCoord * range, tvec.zCoord * range).expand(f1,
-                        f1, f1));
+        List list = world.getEntitiesWithinAABBExcludingEntity(p, p.boundingBox
+                .addCoord(tvec.xCoord * range, tvec.yCoord * range,
+                        tvec.zCoord * range).expand(f1, f1, f1));
 
         ArrayList<Entity> l = new ArrayList<Entity>();
         for (int i = 0; i < list.size(); i++) {
@@ -256,8 +254,8 @@ public class ThaumCraft extends ProtBase {
                         e.worldObj.provider.dimensionId, e.xCoord, e.yCoord,
                         e.zCoord, "#thaumcraft-bore#");
                 if (!actor.canInteract(e.worldObj.provider.dimensionId,
-                        fBore_digX.getInt(e), fBore_digY.getInt(e),
-                        fBore_digZ.getInt(e), Permissions.Build)) {
+                        fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ
+                                .getInt(e), Permissions.Build)) {
                     Log.warning(String
                             .format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed. Actor: %s",
                                     e.worldObj.provider.dimensionId, e.xCoord,

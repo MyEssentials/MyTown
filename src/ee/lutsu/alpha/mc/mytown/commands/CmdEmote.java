@@ -2,15 +2,15 @@ package ee.lutsu.alpha.mc.mytown.commands;
 
 import java.util.List;
 
-import com.sperion.forgeperms.ForgePerms;
-
 import net.minecraft.command.CommandServerEmote;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+
+import com.sperion.forgeperms.ForgePerms;
+
 import ee.lutsu.alpha.mc.mytown.Formatter;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;

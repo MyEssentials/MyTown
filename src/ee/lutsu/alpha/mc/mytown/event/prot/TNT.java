@@ -13,8 +13,7 @@ public class TNT extends ProtBase {
     public int explosionRadius = 4;
 
     @Override
-    public void load() throws Exception {
-    }
+    public void load() throws Exception {}
 
     @Override
     public boolean loaded() {

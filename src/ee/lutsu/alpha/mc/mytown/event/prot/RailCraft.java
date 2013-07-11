@@ -90,8 +90,8 @@ public class RailCraft extends ProtBase {
 
     private boolean canRoam(int dim, double x, double yFrom, double yTo,
             double z) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim,
-                ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord
+                .getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
                 b = b.getFirstFullSidingClockwise(b.town());
@@ -146,8 +146,8 @@ public class RailCraft extends ProtBase {
 
     private boolean canBlow(int dim, double x, double yFrom, double yTo,
             double z) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim,
-                ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord
+                .getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
                 b = b.getFirstFullSidingClockwise(b.town());

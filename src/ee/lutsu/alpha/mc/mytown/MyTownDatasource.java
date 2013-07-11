@@ -96,8 +96,8 @@ public class MyTownDatasource extends MyTownDB {
 
     public TownBlock getPermBlockAtCoord(int world_dimension, int x, int yFrom,
             int yTo, int z) {
-        TownBlock targetBlock = getBlock(world_dimension,
-                ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
+        TownBlock targetBlock = getBlock(world_dimension, ChunkCoord
+                .getCoord(x), ChunkCoord.getCoord(z));
         if (targetBlock != null && targetBlock.settings.yCheckOn) {
             if (yTo < targetBlock.settings.yCheckFrom
                     || yFrom > targetBlock.settings.yCheckTo) {
