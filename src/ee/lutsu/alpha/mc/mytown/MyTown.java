@@ -12,10 +12,12 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommandManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet3Chat;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -364,9 +366,9 @@ public class MyTown {
         prop.comment = "How many blocks far does the local chat sound";
         ChatChannel.localChatDistance = prop.getInt(160);
 
-        prop = config.get("Chat", "MaxChatLength", 32767);
-        prop.comment = "How many characters can one chat packet contain. It's global.";
-        Packet3Chat.maxChatLength = prop.getInt(32767);
+        //prop = config.get("Chat", "MaxChatLength", 32767);
+        //prop.comment = "How many characters can one chat packet contain. It's global.";
+        //Packet3Chat.maxChatLength = prop.getInt(32767);
 
         prop = config.get("Chat", "DefaultChannel",
                 ChatChannel.defaultChannel.name);
@@ -490,4 +492,15 @@ public class MyTown {
         return set;
     }
 
+    public static void sendChatToPlayer(EntityPlayer entity, String msg){
+        ChatMessageComponent component = new ChatMessageComponent();
+        component.func_111079_a(msg);
+        entity.sendChatToPlayer(component);
+    }
+    
+    public static void sendChatToPlayer(ICommandSender sender, String msg){
+        ChatMessageComponent component = new ChatMessageComponent();
+        component.func_111079_a(msg);
+        sender.sendChatToPlayer(component);
+    }
 }

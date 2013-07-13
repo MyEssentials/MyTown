@@ -11,6 +11,7 @@ import com.sperion.forgeperms.ForgePerms;
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
@@ -44,13 +45,13 @@ public class CmdChat extends CommandBase {
 
         int sentTo = 0;
         if (res.town() == null) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatErrNotInTown.toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatErrNotInTown.toString());
             return null;
         } else {
             for (Resident r : res.town().residents()) {
                 if (r.isOnline()) // also sends to self
                 {
-                    r.onlinePlayer.sendChatToPlayer(formatted);
+                    MyTown.sendChatToPlayer(res.onlinePlayer, formatted);
 
                     if (r != res) {
                         sentTo++;
@@ -60,8 +61,7 @@ public class CmdChat extends CommandBase {
         }
 
         if (sentTo < 1) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatAloneInChannel
-                    .toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatAloneInChannel.toString());
         }
 
         return Term.ChatTownLogFormat.toString(res.town().name(), formatted);
@@ -73,18 +73,17 @@ public class CmdChat extends CommandBase {
 
         int sentTo = 0;
         if (res.town() == null) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatErrNotInTown.toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatErrNotInTown.toString());
             return null;
         } else if (res.town().nation() == null) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatErrNotInNation
-                    .toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatErrNotInNation.toString());
             return null;
         } else {
             for (Town t : res.town().nation().towns()) {
                 for (Resident r : t.residents()) {
                     if (r.isOnline()) // also sends to self
                     {
-                        r.onlinePlayer.sendChatToPlayer(formatted);
+                        MyTown.sendChatToPlayer(res.onlinePlayer, formatted);
 
                         if (r != res) {
                             sentTo++;
@@ -95,8 +94,7 @@ public class CmdChat extends CommandBase {
         }
 
         if (sentTo < 1) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatAloneInChannel
-                    .toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatAloneInChannel.toString());
         }
 
         return Term.ChatNationLogFormat.toString(res.town().nation().name(),
@@ -120,15 +118,14 @@ public class CmdChat extends CommandBase {
 
         int sentTo = 0;
         for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
-            ((EntityPlayer) obj).sendChatToPlayer(formatted);
+            MyTown.sendChatToPlayer((EntityPlayer)obj, formatted);
             if (obj != res.onlinePlayer) {
                 sentTo++;
             }
         }
 
         if (sentTo < 1) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatAloneInChannel
-                    .toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatAloneInChannel.toString());
         }
 
         return formatted;
@@ -143,8 +140,7 @@ public class CmdChat extends CommandBase {
                 res.onlinePlayer.posZ, formatted, null);
 
         if (sentTo < 2) {
-            res.onlinePlayer.sendChatToPlayer(Term.ChatAloneInChannel
-                    .toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatAloneInChannel.toString());
         }
 
         return formatted;
@@ -159,7 +155,7 @@ public class CmdChat extends CommandBase {
             EntityPlayer pl = (EntityPlayer) obj;
             if (pl != except && pl.dimension == dim
                     && pl.getDistanceSq(posX, posY, posZ) <= dsqr) {
-                pl.sendChatToPlayer(msg);
+                MyTown.sendChatToPlayer(pl, msg);
                 sentTo++;
             }
         }

@@ -5,6 +5,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 import com.sperion.forgeperms.ForgePerms;
 
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.Term;
 
 public class PayHandler {
@@ -92,12 +93,8 @@ public class PayHandler {
             return;
         }
 
-        owner.onlinePlayer.sendChatToPlayer(Term.PayByHandNotify.toString(
-                requestedItem.stackSize, requestedItem.getDisplayName(),
-                requestedItem.getItem().itemID
-                        + (requestedItem.getItemDamage() != 0 ? ":"
-                                + requestedItem.getItemDamage() : "")));
-        owner.onlinePlayer.sendChatToPlayer(Term.PayByHandNotify2.toString());
+        MyTown.sendChatToPlayer(owner.onlinePlayer, Term.PayByHandNotify.toString(requestedItem.stackSize, requestedItem.getDisplayName(), requestedItem.getItem().itemID + (requestedItem.getItemDamage() != 0 ? ":" + requestedItem.getItemDamage() : "")));
+        MyTown.sendChatToPlayer(owner.onlinePlayer, Term.PayByHandNotify2.toString());
     }
 
     public interface IDone {

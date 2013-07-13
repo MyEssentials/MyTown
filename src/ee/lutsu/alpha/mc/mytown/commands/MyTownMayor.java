@@ -13,6 +13,7 @@ import com.sperion.forgeperms.ForgePerms;
 import ee.lutsu.alpha.mc.mytown.Assert;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
@@ -98,36 +99,21 @@ public class MyTownMayor {
                 || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
             if (args.length < 2) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatGroupCommand(
-                        Term.CommandHelp.toString(), Term.CommandHelpMayor
-                                .toString(), Term.CommandHelpMayorDesc
-                                .toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatGroupCommand(Term.CommandHelp.toString(), Term.CommandHelpMayor.toString(), Term.CommandHelpMayorDesc.toString(), color));
             } else if (args[1].equalsIgnoreCase(Term.CommandHelpMayor
                     .toString())) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdAssistant.toString(),
-                        Term.TownCmdAssistantArgs.toString(),
-                        Term.TownCmdAssistantDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdMayor
-                        .toString(), Term.TownCmdMayorArgs.toString(),
-                        Term.TownCmdMayorDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRename
-                        .toString(), Term.TownCmdRenameArgs.toString(),
-                        Term.TownCmdRenameDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdDelete
-                        .toString(), "", Term.TownCmdDeleteDesc.toString(),
-                        color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdAssistant.toString(), Term.TownCmdAssistantArgs.toString(), Term.TownCmdAssistantDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdMayor.toString(), Term.TownCmdMayorArgs.toString(), Term.TownCmdMayorDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdRename.toString(), Term.TownCmdRenameArgs.toString(), Term.TownCmdRenameDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdDelete.toString(), "", Term.TownCmdDeleteDesc.toString(), color));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAssistant.toString())) {
             Assert.Perm(cs, "mytown.cmd.assistant");
             handled = true;
 
             if (args.length != 3) {
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdAssistant.toString(),
-                        Term.TownCmdAssistantArgs.toString(),
-                        Term.TownCmdAssistantDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdAssistant.toString(), Term.TownCmdAssistantArgs.toString(), Term.TownCmdAssistantDesc.toString(), color));
             } else {
                 String cmd = args[1];
                 String name = args[2];
@@ -173,10 +159,7 @@ public class MyTownMayor {
                             Term.TownPlayerDemotedFromAssistant.toString(r
                                     .name()));
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdAssistant.toString(),
-                            Term.TownCmdAssistantArgs.toString(),
-                            Term.TownCmdAssistantDesc.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdAssistant.toString(), Term.TownCmdAssistantArgs.toString(), Term.TownCmdAssistantDesc.toString(), color));
                 }
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdMayor.toString())) {
@@ -184,9 +167,7 @@ public class MyTownMayor {
             handled = true;
 
             if (args.length != 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdMayor
-                        .toString(), Term.TownCmdMayorArgs.toString(),
-                        Term.TownCmdMayorDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdMayor.toString(), Term.TownCmdMayorArgs.toString(), Term.TownCmdMayorDesc.toString(), color));
             } else {
                 String name = args[1];
 
@@ -229,10 +210,10 @@ public class MyTownMayor {
                 String msg = Term.TownBroadcastDeleted.toString(name);
                 for (Object obj : MinecraftServer.getServer()
                         .getConfigurationManager().playerEntityList) {
-                    ((EntityPlayer) obj).sendChatToPlayer(msg);
+                    MyTown.sendChatToPlayer((EntityPlayer)obj, msg);
                 }
             } else {
-                cs.sendChatToPlayer(Term.TownCmdDeleteAction.toString());
+                MyTown.sendChatToPlayer(cs, Term.TownCmdDeleteAction.toString());
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdRename.toString())) {
             Assert.Perm(cs, "mytown.cmd.rename");
@@ -243,9 +224,7 @@ public class MyTownMayor {
                 res.town().sendNotification(Level.INFO,
                         Term.TownRenamed.toString(res.town().name()));
             } else {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRename
-                        .toString(), Term.TownCmdRenameArgs.toString(),
-                        Term.TownCmdRenameDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdRename.toString(), Term.TownCmdRenameArgs.toString(), Term.TownCmdRenameDesc.toString(), color));
             }
         }
 

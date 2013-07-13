@@ -102,15 +102,9 @@ public class MyTownResident {
                     && (args[0].equals("?") || args[0]
                             .equalsIgnoreCase(Term.CommandHelp.toString()))) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdLeave
-                        .toString(), "", Term.TownCmdLeaveDesc.toString(),
-                        color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdOnline
-                        .toString(), "", Term.TownCmdOnlineDesc.toString(),
-                        color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPerm
-                        .toString(), Term.TownCmdPermArgs.toString(),
-                        Term.TownCmdPermDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdLeave.toString(), "", Term.TownCmdLeaveDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdOnline.toString(), "", Term.TownCmdOnlineDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
             } else if (args[0].equalsIgnoreCase(Term.TownCmdLeave.toString())) {
                 Assert.Perm(cs, "mytown.cmd.leave");
                 handled = true;
@@ -143,15 +137,12 @@ public class MyTownResident {
                     sb.append(Formatter.formatResidentName(r));
                 }
 
-                cs.sendChatToPlayer(Term.TownPlayersOnlineStart.toString(sb
-                        .toString()));
+                MyTown.sendChatToPlayer(cs, Term.TownPlayersOnlineStart.toString(sb.toString()));
             } else if (args[0].equalsIgnoreCase(Term.TownCmdPerm.toString())) {
                 handled = true;
                 if (args.length < 2) {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdPerm.toString(), Term.TownCmdPermArgs
-                                    .toString(), Term.TownCmdPermDesc
-                                    .toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
+                    //cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
                     return true;
                 }
 
@@ -161,11 +152,7 @@ public class MyTownResident {
                                 .toString())
                         && !node.equalsIgnoreCase(Term.TownCmdPermArgsPlot
                                 .toString())) {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdPerm.toString(), Term.TownCmdPermArgs
-                                    .toString(), Term.TownCmdPermDesc
-                                    .toString(), color));
-                    return true;
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
                 }
 
                 if (args.length < 3) // show
@@ -191,10 +178,7 @@ public class MyTownResident {
                         flushPermissions(cs, res, node,
                                 args.length > 3 ? args[3] : null);
                     } else {
-                        cs.sendChatToPlayer(Formatter.formatCommand(
-                                Term.TownCmdPerm.toString(),
-                                Term.TownCmdPermArgs.toString(),
-                                Term.TownCmdPermDesc.toString(), color));
+                        MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
                     }
                 }
             }
@@ -271,8 +255,7 @@ public class MyTownResident {
         }
 
         set.forceChildsToInherit(perm);
-        sender.sendChatToPlayer(Term.PermForced.toString(node, perm == null
-                || perm.equals("") ? "all" : perm));
+        MyTown.sendChatToPlayer(sender, Term.PermForced.toString(node, perm == null || perm.equals("") ? "all" : perm));
     }
 
     private static void setPermissions(ICommandSender sender, Resident res,
@@ -295,6 +278,6 @@ public class MyTownResident {
         set.setValue(key, val);
 
         showPermissions(sender, res, node);
-        sender.sendChatToPlayer(Term.PermSetDone.toString(key, node));
+        MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));
     }
 }

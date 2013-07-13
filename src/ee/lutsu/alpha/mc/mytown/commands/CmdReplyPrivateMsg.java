@@ -11,6 +11,8 @@ import net.minecraft.server.MinecraftServer;
 
 import com.sperion.forgeperms.ForgePerms;
 
+import ee.lutsu.alpha.mc.mytown.MyTown;
+
 public class CmdReplyPrivateMsg extends CommandBase {
     @Override
     public List getCommandAliases() {
@@ -30,8 +32,6 @@ public class CmdReplyPrivateMsg extends CommandBase {
                     p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
         }
         return false;
-        // return cs instanceof EntityPlayer &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.reply");
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CmdReplyPrivateMsg extends CommandBase {
         EntityPlayer pl = CmdPrivateMsg.lastMessages.get(cs);
 
         if (pl == null) {
-            cs.sendChatToPlayer("§4Noone to reply to");
+            MyTown.sendChatToPlayer(cs, "§4Noone to reply to");
         } else {
             if (arg.length > 0) {
                 CmdPrivateMsg.sendChat((EntityPlayer) cs, pl, func_82360_a(cs,
@@ -59,5 +59,11 @@ public class CmdReplyPrivateMsg extends CommandBase {
             String[] par2ArrayOfStr) {
         return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer
                 .getServer().getAllUsernames());
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender icommandsender) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

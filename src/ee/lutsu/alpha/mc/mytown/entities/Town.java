@@ -444,7 +444,7 @@ public class Town {
                 continue;
             }
 
-            r.onlinePlayer.sendChatToPlayer(formatted);
+            MyTown.sendChatToPlayer(r.onlinePlayer, formatted);
         }
     }
 
@@ -555,20 +555,16 @@ public class Town {
             }
         }
 
-        pl.sendChatToPlayer(Term.TownStatusName.toString(townColor, t.name()));
-
-        pl.sendChatToPlayer(Term.TownStatusGeneral.toString(t.blocks().size(),
-                String.valueOf(t.totalBlocks()), t.nation() == null ? "none"
-                        : t.nation().name()));
+        MyTown.sendChatToPlayer(pl, Term.TownStatusName.toString(townColor, t.name()));
+        MyTown.sendChatToPlayer(pl, Term.TownStatusGeneral.toString(t.blocks().size(), String.valueOf(t.totalBlocks()), t.nation() == null ? "none" : t.nation().name()));
+        
         if (blocks_list.length() > 0) {
-            pl.sendChatToPlayer(blocks_list.toString());
+            MyTown.sendChatToPlayer(pl, blocks_list.toString());
         }
-
-        pl.sendChatToPlayer(Term.TownStatusMayor.toString(mayors.toString()));
-        pl.sendChatToPlayer(Term.TownStatusAssistants.toString(assistants
-                .toString()));
-        pl.sendChatToPlayer(Term.TownStatusResidents.toString(residents
-                .toString()));
+        
+        MyTown.sendChatToPlayer(pl, Term.TownStatusMayor.toString(mayors.toString()));
+        MyTown.sendChatToPlayer(pl, Term.TownStatusAssistants.toString(assistants.toString()));
+        MyTown.sendChatToPlayer(pl, Term.TownStatusResidents.toString(residents.toString()));
     }
 
     public void notifyPlayerLoggedOn(Resident r) {

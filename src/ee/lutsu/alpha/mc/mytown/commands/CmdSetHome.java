@@ -13,6 +13,7 @@ import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Cost;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
@@ -36,8 +37,6 @@ public class CmdSetHome extends CommandBase {
                     p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
         }
         return false;
-        // return cs instanceof EntityPlayerMP &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.sethome");
     }
 
     @Override
@@ -81,21 +80,18 @@ public class CmdSetHome extends CommandBase {
                         }
                     }, (Object) args);
         } catch (NoAccessException ex) {
-            cs.sendChatToPlayer(ex.toString());
+            MyTown.sendChatToPlayer(cs, ex.toString());
         } catch (CommandException ex) {
-            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING,
-                    ex.errorCode.toString(ex.args)));
+            MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING,ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
             Log.log(Level.WARNING, String.format(
                     "Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 
     public static void setHome(Resident res, EntityPlayerMP pl, String[] args) {
         res.home.set(args.length == 0 ? null : args[0], pl);
-        pl.sendChatToPlayer(args.length == 0 ? Term.HomeCmdHomeSet.toString()
-                : Term.HomeCmdHome2Set.toString(args[0]));
+        MyTown.sendChatToPlayer(pl, args.length == 0 ? Term.HomeCmdHomeSet.toString() : Term.HomeCmdHome2Set.toString(args[0]));
     }
 }

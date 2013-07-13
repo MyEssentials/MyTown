@@ -11,6 +11,7 @@ import com.google.common.base.Joiner;
 
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Term;
 
@@ -203,7 +204,7 @@ public class Nation {
                     continue;
                 }
 
-                r.onlinePlayer.sendChatToPlayer(formatted);
+                MyTown.sendChatToPlayer(r.onlinePlayer, formatted);
             }
         }
     }
@@ -230,12 +231,9 @@ public class Nation {
             }
         }
 
-        pl.sendChatToPlayer(Term.NationStatusName.toString(nationColor, n
-                .name()));
-
-        pl.sendChatToPlayer(Term.NationStatusGeneral.toString(b1, b2, m1));
-        pl.sendChatToPlayer(Term.NationStatusCapital
-                .toString(n.capital() != null ? n.capital().name() : "?"));
-        pl.sendChatToPlayer(Term.NationStatusTowns.toString(tNames));
+        MyTown.sendChatToPlayer(pl, Term.NationStatusName.toString(nationColor, n.name()));
+        MyTown.sendChatToPlayer(pl, Term.NationStatusGeneral.toString(b1, b2, m1));
+        MyTown.sendChatToPlayer(pl, Term.NationStatusCapital.toString(n.capital() != null ? n.capital().name() : "?"));
+        MyTown.sendChatToPlayer(pl, Term.NationStatusTowns.toString(tNames));
     }
 }

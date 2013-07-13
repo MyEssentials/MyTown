@@ -10,6 +10,7 @@ import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.CommandException;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.Term;
 
 /**
@@ -234,8 +235,7 @@ public class TownSettingCollection {
     }
 
     public void show(ICommandSender cs, String title, String node, boolean all) {
-        cs.sendChatToPlayer(String.format("§6-- §ePermissions for %s§6 --",
-                title));
+        MyTown.sendChatToPlayer(cs, String.format("§6-- §ePermissions for %s§6 --", title));
 
         for (TownSetting set : settings) {
             if (!isWild || set.wildValue != null) {
@@ -246,10 +246,7 @@ public class TownSettingCollection {
                                 p.worldObj.provider.getDimensionName(),
                                 "mytown.cmd.perm.set." + node + "."
                                         + set.getSerializationKey())) {
-                    cs.sendChatToPlayer(String.format("§a%s §2[%s] : %s%s", set
-                            .getName(), set.getSerializationKey(),
-                            set.value == null ? "§d" : "§c", set
-                                    .getVisualValue()));
+                    MyTown.sendChatToPlayer(cs, String.format("§a%s §2[%s] : %s%s", set.getName(), set.getSerializationKey(), set.value == null ? "§d" : "§c", set.getVisualValue()));
                 }
             }
         }

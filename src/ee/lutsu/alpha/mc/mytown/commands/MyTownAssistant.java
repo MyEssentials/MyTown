@@ -16,6 +16,7 @@ import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Cost;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
@@ -107,31 +108,17 @@ public class MyTownAssistant {
         if (args[0].equals("?")
                 || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
             if (args.length < 2) {
-                cs.sendChatToPlayer(Formatter.formatGroupCommand(
-                        Term.CommandHelp.toString(), Term.CommandHelpAssistant
-                                .toString(), Term.CommandHelpAssistantDesc
-                                .toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatGroupCommand(Term.CommandHelp.toString(), Term.CommandHelpAssistant.toString(), Term.CommandHelpAssistantDesc.toString(), color));
+                //cs.sendChatToPlayer(Formatter.formatGroupCommand(Term.CommandHelp.toString(), Term.CommandHelpAssistant.toString(), Term.CommandHelpAssistantDesc.toString(), color));
                 handled = true;
             } else if (args[1].equalsIgnoreCase(Term.CommandHelpAssistant
                     .toString())) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdClaim
-                        .toString(), Term.TownCmdClaimArgs.toString(),
-                        Term.TownCmdClaimDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdUnclaim
-                        .toString(), Term.TownCmdUnclaimArgs.toString(),
-                        Term.TownCmdUnclaimDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdInvite
-                        .toString(), Term.TownCmdInviteArgs.toString(),
-                        Term.TownCmdInviteDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdKick
-                        .toString(), Term.TownCmdKickArgs.toString(),
-                        Term.TownCmdKickDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(
-                        Term.TownCmdSetSpawn.toString(), "",
-                        Term.TownCmdSetSpawnDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPlot
-                        .toString(), Term.TownCmdPlotArgs.toString(),
-                        Term.TownCmdPlotDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdClaim.toString(), Term.TownCmdClaimArgs.toString(), Term.TownCmdClaimDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdUnclaim.toString(), Term.TownCmdUnclaimArgs.toString(), Term.TownCmdUnclaimDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdInvite.toString(), Term.TownCmdInviteArgs.toString(), Term.TownCmdInviteDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdKick.toString(), Term.TownCmdKickArgs.toString(),Term.TownCmdKickDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdSetSpawn.toString(), "", Term.TownCmdSetSpawnDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPlot.toString(), Term.TownCmdPlotArgs.toString(), Term.TownCmdPlotDesc.toString(), color));
                 handled = true;
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdClaim.toString())) {
@@ -187,12 +174,9 @@ public class MyTownAssistant {
                 }
             }
 
-            cs.sendChatToPlayer(Term.TownBlocksClaimedDisclaimer.toString(
-                    requestedBlocks, ableToClaim, alreadyOwn));
+            MyTown.sendChatToPlayer(cs, Term.TownBlocksClaimedDisclaimer.toString(requestedBlocks, ableToClaim, alreadyOwn));
             if (firstError != null) {
-                cs.sendChatToPlayer(Term.TownBlocksClaimedDisclaimer2
-                        .toString(firstError.errorCode
-                                .toString(firstError.args)));
+                MyTown.sendChatToPlayer(cs, Term.TownBlocksClaimedDisclaimer2.toString(firstError.errorCode.toString(firstError.args)));
             }
 
             if (blocks.size() > 0) {
@@ -229,11 +213,8 @@ public class MyTownAssistant {
                                     }
                                 }
 
-                                res.checkLocation(); // emulate that the player
-                                                     // just entered it
-                                res.onlinePlayer
-                                        .sendChatToPlayer(Term.TownBlocksClaimed
-                                                .toString(nr, sb.toString()));
+                                res.checkLocation(); // emulate that the player just entered it
+                                MyTown.sendChatToPlayer(res.onlinePlayer, Term.TownBlocksClaimed.toString(nr, sb.toString()));
                             }
                         }, blocks);
             }
@@ -274,7 +255,7 @@ public class MyTownAssistant {
                     blocks.add(b);
 
                     if (b == res.town().spawnBlock) {
-                        cs.sendChatToPlayer(Term.TownSpawnReset.toString());
+                        MyTown.sendChatToPlayer(cs, Term.TownSpawnReset.toString());
                     }
 
                     nr++;
@@ -290,16 +271,13 @@ public class MyTownAssistant {
 
             // emulate that the player just entered it
             res.checkLocation();
-            cs.sendChatToPlayer(Term.TownBlocksUnclaimed.toString(nr, sb
-                    .toString()));
+            MyTown.sendChatToPlayer(cs, Term.TownBlocksUnclaimed.toString(nr, sb.toString()));
         } else if (args[0].equalsIgnoreCase(Term.TownCmdInvite.toString())) {
             Assert.Perm(cs, "mytown.cmd.invite");
             handled = true;
 
             if (args.length < 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdInvite
-                        .toString(), Term.TownCmdInviteArgs.toString(),
-                        Term.TownCmdInviteDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdInvite.toString(), Term.TownCmdInviteArgs.toString(), Term.TownCmdInviteDesc.toString(), color));
             } else {
                 Resident target = MyTownDatasource.instance
                         .getResident(args[1]);
@@ -324,19 +302,15 @@ public class MyTownAssistant {
 
                 target.inviteActiveFrom = res.town();
 
-                target.onlinePlayer.sendChatToPlayer(Term.TownInvitation
-                        .toString(res.name(), res.town().name()));
-                cs.sendChatToPlayer(Term.TownInvitedPlayer.toString(target
-                        .name()));
+                MyTown.sendChatToPlayer(target.onlinePlayer, Term.TownInvitation.toString(res.name(), res.town().name()));
+                MyTown.sendChatToPlayer(cs, Term.TownInvitedPlayer.toString(target.name()));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdKick.toString())) {
             Assert.Perm(cs, "mytown.cmd.kick");
             handled = true;
 
             if (args.length < 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdKick
-                        .toString(), Term.TownCmdKickArgs.toString(),
-                        Term.TownCmdKickDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdKick.toString(), Term.TownCmdKickArgs.toString(), Term.TownCmdKickDesc.toString(), color));
             } else {
                 Resident target = MyTownDatasource.instance
                         .getResident(args[1]);
@@ -371,9 +345,7 @@ public class MyTownAssistant {
             handled = true;
 
             if (args.length < 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPlot
-                        .toString(), Term.TownCmdPlotArgs.toString(),
-                        Term.TownCmdPlotDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPlot.toString(), Term.TownCmdPlotArgs.toString(), Term.TownCmdPlotDesc.toString(), color));
             } else {
                 int radius_rec = 0;
                 if (args.length > 3) {
@@ -434,10 +406,9 @@ public class MyTownAssistant {
                 }
 
                 if (target != null) {
-                    cs.sendChatToPlayer(Term.TownPlotAssigned.toString(target
-                            .name()));
+                    MyTown.sendChatToPlayer(cs, Term.TownPlotAssigned.toString(target.name()));
                 } else {
-                    cs.sendChatToPlayer(Term.TownPlotUnAssigned.toString());
+                    MyTown.sendChatToPlayer(cs, Term.TownPlotUnAssigned.toString());
                 }
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdSetSpawn.toString())) {
@@ -460,7 +431,7 @@ public class MyTownAssistant {
             res.town().setSpawn(b, vec, res.onlinePlayer.rotationPitch,
                     res.onlinePlayer.rotationYaw);
 
-            cs.sendChatToPlayer(Term.TownSpawnSet.toString());
+            MyTown.sendChatToPlayer(cs, Term.TownSpawnSet.toString());
         }
 
         return handled;

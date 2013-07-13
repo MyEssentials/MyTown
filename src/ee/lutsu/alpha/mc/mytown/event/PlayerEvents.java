@@ -150,20 +150,9 @@ public class PlayerEvents implements IPlayerTracker {
             ItemStack itemstack = ev.entityPlayer.getHeldItem();
             Item item = itemstack == null ? null : itemstack.getItem();
 
-            if (ev.entityPlayer.getHeldItem() == null/*
-                                                      * || !(ev.entityPlayer.
-                                                      * getHeldItem().getItem()
-                                                      * instanceof ItemBlock)
-                                                      */) {
+            if (ev.entityPlayer.getHeldItem() == null) {
                 perm = Permissions.Access;
             }
-
-            /*
-             * if (item != null && (item instanceof ItemBow || item instanceof
-             * ItemEgg || item instanceof ItemPotion || item instanceof
-             * ItemFishingRod || item instanceof ItemExpBottle || item
-             * instanceof ItemEnderEye)) perm = Permissions.Build;
-             */
 
             // placing a block
             if (ev.face != -1 && perm == Permissions.Build && item != null
@@ -206,11 +195,9 @@ public class PlayerEvents implements IPlayerTracker {
             r.onlinePlayer.stopUsingItem();
             ev.setCanceled(true);
             if (perm == Permissions.Access) {
-                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotAccessHere
-                        .toString());
+                MyTown.sendChatToPlayer(ev.entityPlayer, Term.ErrPermCannotAccessHere.toString());
             } else {
-                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotBuildHere
-                        .toString());
+                MyTown.sendChatToPlayer(ev.entityPlayer, Term.ErrPermCannotAccessHere.toString());
             }
         }
     }
@@ -226,8 +213,7 @@ public class PlayerEvents implements IPlayerTracker {
         if (!r.canInteract(ev.item)) {
             long time = System.currentTimeMillis();
             if (time > r.pickupWarningCooldown) {
-                ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotPickup
-                        .toString());
+                MyTown.sendChatToPlayer(ev.entityPlayer, Term.ErrPermCannotPickup.toString());
                 r.pickupWarningCooldown = time + Resident.pickupSpamCooldown;
             }
             ev.setCanceled(true);
@@ -243,8 +229,7 @@ public class PlayerEvents implements IPlayerTracker {
         Resident attacker = source().getOrMakeResident(ev.entityPlayer);
 
         if (!attacker.canAttack(ev.target)) {
-            ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotAttack
-                    .toString());
+            MyTown.sendChatToPlayer(ev.entityPlayer, Term.ErrPermCannotAttack.toString());
             ev.setCanceled(true);
         }
     }
@@ -264,13 +249,6 @@ public class PlayerEvents implements IPlayerTracker {
                     || ev.source.getSourceOfDamage() != null
                     && !t.canBeAttackedBy(ev.source.getSourceOfDamage())) {
                 ev.setCanceled(true);
-                // spamming
-                /*
-                 * Log.info(String.format(
-                 * "%s is attacking %s whos in a protected area",
-                 * ev.source.getEntity() != null ? ev.source.getEntity() :
-                 * ev.source.getSourceOfDamage(), t.onlinePlayer));
-                 */
             }
         }
 
@@ -295,8 +273,7 @@ public class PlayerEvents implements IPlayerTracker {
         }
 
         if (!attacker.canAttack(target)) {
-            attacker.onlinePlayer.sendChatToPlayer(Term.ErrPermCannotAttack
-                    .toString());
+            MyTown.sendChatToPlayer(attacker.onlinePlayer, Term.ErrPermCannotAttack.toString());
             ev.setCanceled(true);
             return;
         }
@@ -311,8 +288,7 @@ public class PlayerEvents implements IPlayerTracker {
         Resident r = source().getOrMakeResident(ev.entityPlayer);
 
         if (!r.canInteract(ev.target)) {
-            ev.entityPlayer.sendChatToPlayer(Term.ErrPermCannotInteract
-                    .toString());
+            MyTown.sendChatToPlayer(ev.entityPlayer, Term.ErrPermCannotInteract.toString());
             ev.setCanceled(true);
         }
     }

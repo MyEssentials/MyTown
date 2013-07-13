@@ -12,6 +12,7 @@ import ee.lutsu.alpha.mc.mytown.Assert;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Cost;
 import ee.lutsu.alpha.mc.mytown.Formatter;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
@@ -90,14 +91,13 @@ public class MyTownEveryone {
                 && (args[0].equals("?") || args[0]
                         .equalsIgnoreCase(Term.CommandHelp.toString()))) {
             handled = true;
-            cs.sendChatToPlayer(Term.LineSeperator.toString());
+
+            MyTown.sendChatToPlayer(cs, Term.LineSeperator.toString());
 
             if (args.length > 1) {
-                cs.sendChatToPlayer(Term.CommandHelpStartSub.toString(args[1]
-                        .substring(0, 1).toUpperCase()
-                        + args[1].substring(1).toLowerCase()));
+                MyTown.sendChatToPlayer(cs, Term.CommandHelpStartSub.toString(args[1].substring(0, 1).toUpperCase() + args[1].substring(1).toLowerCase()));
             } else {
-                cs.sendChatToPlayer(Term.CommandHelpStart.toString());
+                MyTown.sendChatToPlayer(cs, Term.CommandHelpStart.toString());
             }
         }
 
@@ -112,24 +112,13 @@ public class MyTownEveryone {
                     && (args[0].equals("?") || args[0]
                             .equalsIgnoreCase(Term.CommandHelp.toString()))) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdMap
-                        .toString(), Term.TownCmdMapArgs.toString(),
-                        Term.TownCmdMapDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdInfo
-                        .toString(), Term.TownCmdInfoArgs.toString(),
-                        Term.TownCmdInfoDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter
-                        .formatCommand(Term.TownCmdList.toString(), "",
-                                Term.TownCmdListDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRes
-                        .toString(), Term.TownCmdResArgs.toString(),
-                        Term.TownCmdResDesc.toString(), null));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdFriend
-                        .toString(), Term.TownCmdFriendArgs.toString(),
-                        Term.TownCmdFriendDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdSpawn
-                        .toString(), Term.TownCmdSpawnArgs.toString(),
-                        Term.TownCmdSpawnDesc.toString(), color));
+
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdMap.toString(), Term.TownCmdMapArgs.toString(), Term.TownCmdMapDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdList.toString(), "", Term.TownCmdListDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdRes.toString(), Term.TownCmdResArgs.toString(),Term.TownCmdResDesc.toString(), null));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdFriend.toString(), Term.TownCmdFriendArgs.toString(), Term.TownCmdFriendDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdSpawn.toString(), Term.TownCmdSpawnArgs.toString(), Term.TownCmdSpawnDesc.toString(), color));
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdMap.toString())) {
                 Assert.Perm(cs, "mytown.cmd.map");
@@ -152,7 +141,7 @@ public class MyTownEveryone {
 
                     String msg = res.mapMode ? Term.PlayerMapModeOn.toString()
                             : Term.PlayerMapModeOff.toString();
-                    cs.sendChatToPlayer(msg);
+                    MyTown.sendChatToPlayer(cs, msg);
                 } else {
                     res.sendLocationMap(res.onlinePlayer.dimension,
                             res.onlinePlayer.chunkCoordX,
@@ -172,10 +161,7 @@ public class MyTownEveryone {
 
                     t.sendTownInfo(cs, res.shouldShowTownBlocks());
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs
-                                    .toString(), Term.TownCmdInfoDesc
-                                    .toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), color));
                 }
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdFriend.toString())) {
@@ -207,10 +193,7 @@ public class MyTownEveryone {
                     }
                     res.sendInfoTo(cs, res.shouldShowPlayerLocation());
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdFriend.toString(),
-                            Term.TownCmdFriendArgs.toString(),
-                            Term.TownCmdFriendDesc.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdFriend.toString(), Term.TownCmdFriendArgs.toString(), Term.TownCmdFriendDesc.toString(), color));
                 }
             } else if (args.length > 0
                     && args[0].equals(Term.TownCmdSpawn.toString())) {
@@ -258,14 +241,9 @@ public class MyTownEveryone {
                     && (args[0].equals("?") || args[0]
                             .equalsIgnoreCase(Term.CommandHelp.toString()))) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdInfo
-                        .toString(), Term.TownCmdInfoArgs.toString(),
-                        Term.TownCmdInfoDesc.toString(), null));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdList
-                        .toString(), "", Term.TownCmdListDesc.toString(), null));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRes
-                        .toString(), Term.TownCmdResArgs.toString(),
-                        Term.TownCmdResDesc.toString(), null));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), null));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdList.toString(), "", Term.TownCmdListDesc.toString(), null));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdRes.toString(), Term.TownCmdResArgs.toString(), Term.TownCmdResDesc.toString(), null));
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdInfo.toString())) {
                 Assert.Perm(cs, "mytown.cmd.info");
@@ -280,10 +258,7 @@ public class MyTownEveryone {
 
                     t.sendTownInfo(cs, true);
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs
-                                    .toString(), Term.TownCmdInfoDesc
-                                    .toString(), null));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), null));
                 }
             }
         }
@@ -323,7 +298,7 @@ public class MyTownEveryone {
             }
 
             if (sb.length() > 0) {
-                cs.sendChatToPlayer(sb.toString());
+                MyTown.sendChatToPlayer(cs, sb.toString());
             }
         } else if (args.length > 0
                 && args[0].equals(Term.TownCmdRes.toString())) {
@@ -337,7 +312,7 @@ public class MyTownEveryone {
             } else if (args.length == 2) {
                 Resident r = MyTownDatasource.instance.getResident(args[1]);
                 if (r == null) {
-                    cs.sendChatToPlayer(Term.TownErrPlayerNotFound.toString());
+                    MyTown.sendChatToPlayer(cs, Term.TownErrPlayerNotFound.toString());
                 } else {
                     r.sendInfoTo(
                             cs,
@@ -347,9 +322,7 @@ public class MyTownEveryone {
                                     : true);
                 }
             } else {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdRes
-                        .toString(), Term.TownCmdResArgs.toString(),
-                        Term.TownCmdResDesc.toString(), null));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdRes.toString(), Term.TownCmdResArgs.toString(), Term.TownCmdResDesc.toString(), null));
             }
         }
 

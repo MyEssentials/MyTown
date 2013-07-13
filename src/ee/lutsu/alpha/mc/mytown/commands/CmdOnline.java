@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
@@ -41,8 +42,6 @@ public class CmdOnline extends CommandBase {
         Log.log(Level.INFO, "%s failed to use node %s", sender
                 .getCommandSenderName(), "mytown.ecmd.online");
         return false;
-        // return MyTown.instance.perms.canAccess(par1ICommandSender,
-        // "mytown.ecmd.online");
     }
 
     @Override
@@ -71,6 +70,12 @@ public class CmdOnline extends CommandBase {
             sb.append(n);
         }
 
-        cs.sendChatToPlayer(sb.toString());
+        MyTown.sendChatToPlayer(cs, sb.toString());
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender icommandsender) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

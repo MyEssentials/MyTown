@@ -13,6 +13,7 @@ import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
@@ -36,8 +37,6 @@ public class CmdHomes extends CommandBase {
                             "mytown.ecmd.homes");
         }
         return false;
-        // return cs instanceof EntityPlayerMP &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.homes");
     }
 
     @Override
@@ -53,21 +52,17 @@ public class CmdHomes extends CommandBase {
 
         try {
             if (!res.home.hasHomes()) {
-                cs.sendChatToPlayer(Term.HomeCmdNoHomes.toString());
+                MyTown.sendChatToPlayer(cs, Term.HomeCmdNoHomes.toString());
             } else {
                 if (args.length == 1 && args[0].equalsIgnoreCase("loc")) {
-                    cs.sendChatToPlayer(Term.HomeCmdHomesTitle.toString(""));
-                    if (SavedHomeList.defaultIsBed
-                            && pl.getBedLocation() != null) {
+                    MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesTitle.toString());
+                    if (SavedHomeList.defaultIsBed && pl.getBedLocation() != null) {
                         SavedHome s = SavedHome.fromBed(pl);
-                        cs.sendChatToPlayer(Term.HomeCmdHomesUnaccessibleItem2
-                                .toString("default", s.dim, (int) s.x,
-                                        (int) s.y, (int) s.z));
+                        MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesUnaccessibleItem2.toString("default", s.dim, (int) s.x, (int) s.y, (int) s.z));
                     }
 
                     for (SavedHome h : res.home) {
-                        cs.sendChatToPlayer(Term.HomeCmdHomesItem2.toString(
-                                h.name, h.dim, (int) h.x, (int) h.y, (int) h.z));
+                        MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesItem2.toString(h.name, h.dim, (int) h.x, (int) h.y, (int) h.z));
                     }
                 } else {
                     List<String> items = Lists.newArrayList();
@@ -81,15 +76,12 @@ public class CmdHomes extends CommandBase {
                         items.add(Term.HomeCmdHomesItem.toString(h.name));
                     }
 
-                    cs.sendChatToPlayer(Term.HomeCmdHomesTitle.toString(Joiner
-                            .on(", ").join(items)));
+                    MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesTitle.toString(Joiner.on(", ").join(items)));
                 }
             }
         } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format(
-                    "Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+            MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 }

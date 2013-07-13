@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
@@ -37,19 +38,18 @@ public class CmdChannel extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender var1, String[] var2) {
-        if (!(var1 instanceof EntityPlayer)) {
+    public void processCommand(ICommandSender sender, String[] var2) {
+        if (!(sender instanceof EntityPlayer)) {
             return;
         }
 
         Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) var1);
+                .getOrMakeResident((EntityPlayer) sender);
         if (var2.length != 1) {
-            var1.sendChatToPlayer(Term.ChatListStart.toString());
+            MyTown.sendChatToPlayer(sender, Term.ChatListStart.toString());
             for (ChatChannel c : ChatChannel.values()) {
                 if (c.enabled) {
-                    var1.sendChatToPlayer(Term.ChatListEntry.toString(c.color,
-                            c.name, c.color, c.abbrevation));
+                    MyTown.sendChatToPlayer(sender, Term.ChatListEntry.toString(c.color, c.name, c.color, c.abbrevation));
                 }
             }
         } else {
@@ -62,8 +62,7 @@ public class CmdChannel extends CommandBase {
                     res.onlinePlayer.username,
                     res.onlinePlayer.worldObj.provider.getDimensionName(),
                     "mytown.chat.focus." + ch.name.toLowerCase())) {
-                var1.sendChatToPlayer("§4You cannot focus to " + ch.name
-                        + " channel");
+                MyTown.sendChatToPlayer(sender, "§4You cannot focus to " + ch.name + " channel");
                 return;
             }
 
@@ -71,11 +70,9 @@ public class CmdChannel extends CommandBase {
 
             if (ch != res.activeChannel) {
                 res.setActiveChannel(ch);
-                var1.sendChatToPlayer(Term.ChatSwitch.toString(ch.color,
-                        ch.abbrevation, ch.color, ch.name));
+                MyTown.sendChatToPlayer(sender, Term.ChatSwitch.toString(ch.color,ch.abbrevation, ch.color, ch.name));
             } else {
-                var1.sendChatToPlayer(Term.ChatSwitchAlreadyIn.toString(
-                        ch.color, ch.abbrevation, ch.color, ch.name));
+                MyTown.sendChatToPlayer(sender, Term.ChatSwitchAlreadyIn.toString(ch.color, ch.abbrevation, ch.color, ch.name));
             }
         }
     }

@@ -12,6 +12,7 @@ import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Cost;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
@@ -61,21 +62,17 @@ public class MyTownNonResident {
         if (args.length < 1 || args.length == 1 && args[0].equals("?")
                 || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
             handled = true;
-            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew
-                    .toString(), Term.TownCmdNewArgs.toString(),
-                    Term.TownCmdNewDesc.toString(), color));
-            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdAccept
-                    .toString(), "", Term.TownCmdAcceptDesc.toString(), color));
-            cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdDeny
-                    .toString(), "", Term.TownCmdDenyDesc.toString(), color));
+            MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), color));
+            MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdAccept.toString(), "", Term.TownCmdAcceptDesc.toString(), color));
+            MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdDeny.toString(), "", Term.TownCmdDenyDesc.toString(), color));
+            MyTown.sendChatToPlayer(cs, "");
+            
         } else if (args[0].equalsIgnoreCase(Term.TownCmdNew.toString())) {
             Assert.Perm(cs, "mytown.cmd.new.dim" + res.onlinePlayer.dimension);
             handled = true;
 
             if (args.length < 2 || args.length > 2) {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNew
-                        .toString(), Term.TownCmdNewArgs.toString(),
-                        Term.TownCmdNewDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), color));
             } else {
                 TownBlock home = MyTownDatasource.instance.getOrMakeBlock(
                         res.onlinePlayer.dimension,
@@ -115,7 +112,7 @@ public class MyTownNonResident {
                                         .toString(res.name(), t.name());
                                 for (Object obj : MinecraftServer.getServer()
                                         .getConfigurationManager().playerEntityList) {
-                                    ((EntityPlayer) obj).sendChatToPlayer(msg);
+                                    MyTown.sendChatToPlayer((EntityPlayer)obj, msg);
                                 }
 
                                 t.sendTownInfo(res.onlinePlayer, res
@@ -149,8 +146,7 @@ public class MyTownNonResident {
 
             res.inviteActiveFrom = null;
 
-            res.onlinePlayer.sendChatToPlayer(Term.TownPlayerDeniedInvitation
-                    .toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.TownPlayerDeniedInvitation.toString());
         }
 
         return handled;

@@ -4,7 +4,7 @@
 	<property file="build.properties" prefix="build"/>
 	<property name="src" location="src"/>
 	<property name="release" location="../../release"/>
-	<property name="mcp" location="../../mcp-1.5.x"/>
+	<property name="mcp" location="../../mcp-1.6.x/mcp"/>
 
 	<target name="clean">
 		<delete file="${mcp}/src/minecraft/mcmod.info" />
@@ -19,7 +19,10 @@
 
 	<target name="prep">
 		<copy todir="${mcp}/src/minecraft">
-			<fileset dir="../forgeperms/src" />
+			<fileset dir="../forgeperms-1.6.x/src" />
+		</copy>
+		<delete file="${mcp}/src/minecraft/mcmod.info" />
+		<copy todir="${mcp}/src/minecraft">
 			<fileset dir="${src}" />
 		</copy>
 	</target>

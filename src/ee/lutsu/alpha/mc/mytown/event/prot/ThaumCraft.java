@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.Item;
@@ -90,7 +90,7 @@ public class ThaumCraft extends ProtBase {
     public String update(Entity e) throws Exception {
         if (clAlumentum.isInstance(e)) {
             EntityThrowable t = (EntityThrowable) e;
-            EntityLiving owner = t.getThrower();
+            EntityLivingBase owner = t.getThrower();
 
             if (owner == null || !(owner instanceof EntityPlayer)) {
                 return "No owner or is not a player";

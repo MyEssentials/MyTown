@@ -147,7 +147,7 @@ public class ProtectionEvents implements ITickHandler {
                                 lastCheck.getClass().getSimpleName(),
                                 pl.username, pl.dimension, (int) pl.posX,
                                 (int) pl.posY, (int) pl.posZ, sTool, kill));
-                pl.sendChatToPlayer("§4You cannot use that here - " + kill);
+                MyTown.sendChatToPlayer(pl, "§4You cannot use that here - " + kill);
                 return false;
             }
         } catch (Exception er) {
@@ -214,9 +214,7 @@ public class ProtectionEvents implements ITickHandler {
                                             (int) lastOwner.onlinePlayer.posY,
                                             (int) lastOwner.onlinePlayer.posZ,
                                             e.toString(), kill));
-                            lastOwner.onlinePlayer
-                                    .sendChatToPlayer("§4You cannot use that here - "
-                                            + kill);
+                            MyTown.sendChatToPlayer(lastOwner.onlinePlayer, "§4You cannot use that here - " + kill);
                         } else {
                             Log.severe(String.format(
                                     "Player %s tried to bypass using %s - %s",
@@ -272,9 +270,7 @@ public class ProtectionEvents implements ITickHandler {
                                             (int) lastOwner.onlinePlayer.posY,
                                             (int) lastOwner.onlinePlayer.posZ,
                                             block, kill));
-                            lastOwner.onlinePlayer
-                                    .sendChatToPlayer("§4You cannot use that here - "
-                                            + kill);
+                            MyTown.sendChatToPlayer(lastOwner.onlinePlayer, "§4You cannot use that here - " + kill);
                         } else {
                             Log.severe(String.format(
                                     "Player %s tried to bypass using %s - %s",

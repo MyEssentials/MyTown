@@ -10,6 +10,7 @@ import net.minecraft.world.WorldServer;
 import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 
 public class CmdSetSpawn extends CommandBase {
     @Override
@@ -25,9 +26,6 @@ public class CmdSetSpawn extends CommandBase {
                     p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
         }
         return false;
-        // return cs instanceof EntityPlayer &&
-        // (MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.setspawn") ||
-        // MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase()));
     }
 
     @Override
@@ -45,7 +43,7 @@ public class CmdSetSpawn extends CommandBase {
         } else {
             dim = pl.dimension;
             if (dim != 0) {
-                cs.sendChatToPlayer("Cannot set spawn to this dimension without explicitly setting it using /setspawn <dim> [<x> <y> <z>]");
+                MyTown.sendChatToPlayer(pl, "Cannot set spawn to this dimension without explicitly setting it using /setspawn <dim> [<x> <y> <z>]");
                 return;
             }
         }
@@ -69,8 +67,7 @@ public class CmdSetSpawn extends CommandBase {
         Log.warning(String.format(
                 "Server spawn for dimension %s set to %s,%s,%s by %s", dim, x,
                 y, z, cs.getCommandSenderName()));
-        cs.sendChatToPlayer(String.format(
-                "Server spawn for dimension %s set to %s,%s,%s", dim, x, y, z));
+        MyTown.sendChatToPlayer(pl, String.format("Server spawn for dimension %s set to %s,%s,%s", dim, x, y, z));
     }
 
     private double getDouble(ICommandSender par1ICommandSender, double par2,

@@ -12,6 +12,7 @@ import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Cost;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.PayHandler;
@@ -32,8 +33,6 @@ public class CmdHome extends CommandBase {
                     p.worldObj.provider.getDimensionName(), "mytown.ecmd.home");
         }
         return false;
-        // return cs instanceof EntityPlayerMP &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.home");
     }
 
     @Override
@@ -61,22 +60,25 @@ public class CmdHome extends CommandBase {
                     }, h);
 
         } catch (CommandException ex) {
-            cs.sendChatToPlayer(Formatter.commandError(Level.WARNING,
-                    ex.errorCode.toString(ex.args)));
+            MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING,ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format(
-                    "Command execution error by %s", cs), ex);
-            cs.sendChatToPlayer(Formatter.commandError(Level.SEVERE, ex
-                    .toString()));
+            Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+            MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
         }
     }
 
     public static void teleport(Resident res, SavedHome h) {
         if (Cost.HomeTeleport.item != null
                 && Resident.teleportToHomeWaitSeconds > 0) {
-            res.onlinePlayer.sendChatToPlayer(Term.HomeCmdDontMove.toString());
+            MyTown.sendChatToPlayer(res.onlinePlayer, Term.HomeCmdDontMove.toString());
         }
 
         res.asyncStartSpawnTeleport(h);
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender icommandsender) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

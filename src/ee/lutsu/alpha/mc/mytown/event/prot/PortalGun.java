@@ -53,8 +53,7 @@ public class PortalGun extends ProtBase {
         Vec3 currPos = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
         Vec3 nextPos = Vec3.createVectorHelper(e.posX + e.motionX, e.posY
                 + e.motionY, e.posZ + e.motionZ);
-        MovingObjectPosition collision = e.worldObj.rayTraceBlocks(currPos,
-                nextPos);
+        MovingObjectPosition collision = e.worldObj.clip(currPos,nextPos);
 
         // Not trying to make a portal yet
         if (collision == null) {

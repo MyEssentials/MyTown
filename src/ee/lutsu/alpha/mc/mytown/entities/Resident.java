@@ -170,10 +170,6 @@ public class Resident {
     }
 
     public boolean shouldShowTownBlocks() {
-        // return Permissions.canAccess(this, "mytown.adm.showblocks");
-        // return
-        // ForgePerms.getPermissionsHandler().canAccess(this.onlinePlayer,
-        // "mytown.adm.showblocks");
         return ForgePerms.getPermissionsHandler().canAccess(this.name(),
                 onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.showblocks");
@@ -422,7 +418,7 @@ public class Resident {
         StringBuilder sb = new StringBuilder();
         String c;
 
-        onlinePlayer.sendChatToPlayer(Term.TownMapHead.toString());
+        MyTown.sendChatToPlayer(onlinePlayer, Term.TownMapHead.toString());
         for (int z = cz - heightRad; z <= cz + heightRad; z++) {
             sb.setLength(0);
             for (int x = cx - widthRad; x <= cx + widthRad; x++) {
@@ -444,7 +440,7 @@ public class Resident {
 
                 sb.append(c);
             }
-            onlinePlayer.sendChatToPlayer(sb.toString());
+            MyTown.sendChatToPlayer(onlinePlayer, sb.toString());
         }
     }
 
@@ -512,7 +508,7 @@ public class Resident {
 
         if (block == null && location != null) {
             // entered wild
-            onlinePlayer.sendChatToPlayer(Term.PlayerEnteredWild.toString());
+            MyTown.sendChatToPlayer(onlinePlayer, Term.PlayerEnteredWild.toString());
             location = null;
             location2 = null;
             checkYMovement = null;
@@ -522,8 +518,7 @@ public class Resident {
                     TownSettingCollection.Permissions.Enter)) {
                 beingBounced = true;
                 try {
-                    onlinePlayer.sendChatToPlayer(Term.TownYouCannotEnter
-                            .toString(block.town().name()));
+                    MyTown.sendChatToPlayer(onlinePlayer, Term.TownYouCannotEnter.toString(block.town().name()));
                     bounceBack();
 
                     pX = ChunkCoord.getCoord(onlinePlayer.posX);
@@ -554,26 +549,18 @@ public class Resident {
                 if (block.owner() != location2 || block.town() != location) {
                     if (block.town() != location) {
                         if (block.town() == town()) {
-                            onlinePlayer
-                                    .sendChatToPlayer(Term.PlayerEnteredOwnTown
-                                            .toString(block.town().name()));
+                            MyTown.sendChatToPlayer(onlinePlayer, Term.PlayerEnteredOwnTown.toString(block.town().name()));
                         } else {
-                            onlinePlayer
-                                    .sendChatToPlayer(Term.PlayerEnteredTown
-                                            .toString(block.town().name()));
+                            MyTown.sendChatToPlayer(onlinePlayer, Term.PlayerEnteredTown.toString(block.town().name()));
                         }
                     }
 
                     if (block.owner() == this) {
-                        onlinePlayer.sendChatToPlayer(Term.PlayerEnteredOwnPlot
-                                .toString(block.owner().name()));
+                        MyTown.sendChatToPlayer(onlinePlayer, Term.PlayerEnteredOwnPlot.toString(block.owner().name()));
                     } else if (block.owner() != null) {
-                        onlinePlayer.sendChatToPlayer(Term.PlayerEnteredOwnPlot
-                                .toString(block.owner().name()));
+                        MyTown.sendChatToPlayer(onlinePlayer, Term.PlayerEnteredOwnPlot.toString(block.owner().name()));
                     } else {
-                        onlinePlayer
-                                .sendChatToPlayer(Term.PlayerEnteredUnclaimedPlot
-                                        .toString());
+                        MyTown.sendChatToPlayer(onlinePlayer, Term.PlayerEnteredUnclaimedPlot.toString());
                     }
 
                     location = block.town();
@@ -651,7 +638,7 @@ public class Resident {
                 pl.setLocationAndAngles(c.posX + 0.5F, c.posY + 0.1F,
                         c.posZ + 0.5F, 0.0F, 0.0F);
             } else {
-                pl.sendChatToPlayer(Term.NoBedMessage.toString());
+                MyTown.sendChatToPlayer(pl, Term.NoBedMessage.toString());
                 WorldInfo info = world.getWorldInfo();
                 pl.setLocationAndAngles(info.getSpawnX() + 0.5F, info
                         .getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
@@ -739,9 +726,7 @@ public class Resident {
                 if (!WorldBorder.instance.isWithinArea(onlinePlayer)) {
                     beingBounced = true;
                     try {
-                        onlinePlayer
-                                .sendChatToPlayer(Term.OutofBorderCannotEnter
-                                        .toString());
+                        MyTown.sendChatToPlayer(onlinePlayer, Term.OutofBorderCannotEnter.toString());
                         bounceBack();
 
                         if (!WorldBorder.instance.isWithinArea(onlinePlayer)) {
@@ -838,28 +823,21 @@ public class Resident {
         String sFriends = Joiner.on("§2, ").join(fnames);
         String sFriends2 = Joiner.on("§2, ").join(fnames2);
 
-        cs.sendChatToPlayer(Term.ResStatusName.toString(Formatter
-                .formatResidentName(this)));
+        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusName.toString(Formatter.formatResidentName(this)));
 
         if (adminInfo && isOnline()) {
-            cs.sendChatToPlayer(Term.ResStatusLocation.toString(
-                    location != null ? location.name() : "wild",
-                    onlinePlayer.dimension, (int) onlinePlayer.posX,
-                    (int) onlinePlayer.posY, (int) onlinePlayer.posZ));
+            MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusLocation.toString(location != null ? location.name() : "wild", onlinePlayer.dimension, (int) onlinePlayer.posX, (int) onlinePlayer.posY, (int) onlinePlayer.posZ));
         }
 
-        cs.sendChatToPlayer(Term.ResStatusGeneral1.toString(format
-                .format(createdOn)));
-        cs.sendChatToPlayer(Term.ResStatusGeneral2
-                .toString(isOnline() ? "online" : format.format(lastLoginOn)));
-        cs.sendChatToPlayer(Term.ResStatusTown.toString(town == null ? "none"
-                : town().name(), town == null ? "Loner" : rank.toString()));
-
+        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusGeneral1.toString(format.format(createdOn)));
+        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusGeneral2.toString(isOnline() ? "online" : format.format(lastLoginOn)));
+        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusTown.toString(town == null ? "none": town().name(), town == null ? "Loner" : rank.toString()));
+        
         if (fnames.size() > 0) {
-            cs.sendChatToPlayer(Term.ResStatusFriends.toString(sFriends));
+            MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusFriends.toString());
         }
         if (fnames2.size() > 0) {
-            cs.sendChatToPlayer(Term.ResStatusFriends2.toString(sFriends2));
+            MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusFriends2.toString());
         }
 
     }
@@ -921,10 +899,8 @@ public class Resident {
                             : Term.SpawnCmdTeleportNearStarted).toString(
                             name(), (int) Math.ceil(takesTime / 1000)),
                     onlinePlayer);
-            onlinePlayer
-                    .sendChatToPlayer((home != null ? Term.HomeCmdTeleportStarted
-                            : Term.SpawnCmdTeleportStarted).toString((int) Math
-                            .ceil(takesTime / 1000)));
+
+            MyTown.sendChatToPlayer(onlinePlayer, (home != null ? Term.HomeCmdTeleportStarted : Term.SpawnCmdTeleportStarted).toString((int) Math.ceil(takesTime / 1000)));
         }
     }
 
@@ -935,7 +911,7 @@ public class Resident {
         }
 
         teleportToSpawnStamp = 0;
-        onlinePlayer.sendChatToPlayer(Term.SpawnCmdTeleportReset.toString());
+        MyTown.sendChatToPlayer(onlinePlayer, Term.SpawnCmdTeleportReset.toString());
     }
 
     private void asyncEndSpawnTeleport() // time out, move it
@@ -952,7 +928,7 @@ public class Resident {
             sendToServerSpawn();
         }
 
-        onlinePlayer.sendChatToPlayer(Term.SpawnCmdTeleportEnded.toString());
+        MyTown.sendChatToPlayer(onlinePlayer, Term.SpawnCmdTeleportEnded.toString());
     }
 
     public boolean canBeAttackedBy(Entity e) {

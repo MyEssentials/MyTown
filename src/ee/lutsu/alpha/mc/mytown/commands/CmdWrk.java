@@ -9,6 +9,7 @@ import net.minecraft.world.EnumGameType;
 import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.ext.Mffs;
 
@@ -26,8 +27,6 @@ public class CmdWrk extends CommandBase {
                     p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
         }
         return false;
-        // return cs instanceof EntityPlayer &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.wrk");
     }
 
     @Override
@@ -38,8 +37,7 @@ public class CmdWrk extends CommandBase {
 
         if (args.length > 0 && args[0].equalsIgnoreCase("clip")) {
             pl.noClip = !pl.noClip;
-            pl.sendChatToPlayer("NoClip is now "
-                    + (pl.noClip ? "active" : "deactive"));
+            MyTown.sendChatToPlayer(pl, "NoClip is now " + (pl.noClip ? "active" : "deactive"));
 
             return;
         }
@@ -57,7 +55,7 @@ public class CmdWrk extends CommandBase {
             if (Mffs.check()) {
                 Mffs.removeAdminBypass(name);
                 Log.info("User " + name + " removed from MFFS bypass");
-                pl.sendChatToPlayer("Removed from MFFS bypass");
+                MyTown.sendChatToPlayer(pl, "Removed from MFFS bypass");
             }
 
             if (mode != EnumGameType.SURVIVAL) {
@@ -74,12 +72,18 @@ public class CmdWrk extends CommandBase {
             if (Mffs.check()) {
                 Mffs.grantAdminBypass(name);
                 Log.info("User " + name + " added to MFFS bypass");
-                pl.sendChatToPlayer("Granted MFFS bypass");
+                MyTown.sendChatToPlayer(pl, "Granted MFFS bypass");
             }
 
             if (mode != EnumGameType.CREATIVE) {
                 pl.setGameType(EnumGameType.CREATIVE);
             }
         }
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender icommandsender) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -76,4 +76,10 @@ public class CmdGamemode extends CommandBase {
                 : EnumGameType.ADVENTURE : EnumGameType.CREATIVE
                 : EnumGameType.SURVIVAL;
     }
+
+    @Override
+    public String getCommandUsage(ICommandSender icommandsender) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

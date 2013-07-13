@@ -12,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import ee.lutsu.alpha.mc.mytown.Assert;
 import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
@@ -135,24 +136,14 @@ public class MyTownNation {
                     && (args.length < 1 || !args[0]
                             .equalsIgnoreCase(Term.TownCmdNation.toString()))) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatGroupCommand(
-                        Term.CommandHelp.toString(), Term.CommandHelpNation
-                                .toString(), Term.CommandHelpNationDesc
-                                .toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatGroupCommand(Term.CommandHelp.toString(), Term.CommandHelpNation.toString(), Term.CommandHelpNationDesc.toString(), color));
             } else if (args[0].equalsIgnoreCase(Term.TownCmdNation.toString())
                     && args.length < 2
                     || args[1].equalsIgnoreCase(Term.CommandHelpNation
                             .toString())) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
-                        .toString()
-                        + " " + Term.TownCmdNationInfo.toString(),
-                        Term.TownCmdNationInfoArgs.toString(),
-                        Term.TownCmdNationInfoDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
-                        .toString()
-                        + " " + Term.TownCmdNationList.toString(), "",
-                        Term.TownCmdNationListDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationInfo.toString(), Term.TownCmdNationInfoArgs.toString(), Term.TownCmdNationInfoDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationList.toString(), "", Term.TownCmdNationListDesc.toString(), color));
             }
         } else if (args.length > 1
                 && args[0].equalsIgnoreCase(Term.TownCmdNation.toString())
@@ -178,11 +169,7 @@ public class MyTownNation {
 
                 n.sendNationInfo(cs);
             } else {
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
-                        .toString()
-                        + " " + Term.TownCmdNationInfo.toString(),
-                        Term.TownCmdNationInfoArgs.toString(),
-                        Term.TownCmdNationInfoDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationInfo.toString(), Term.TownCmdNationInfoArgs.toString(), Term.TownCmdNationInfoDesc.toString(), color));
             }
         } else if (args.length > 1
                 && args[0].equalsIgnoreCase(Term.TownCmdNation.toString())
@@ -221,7 +208,7 @@ public class MyTownNation {
             }
 
             if (sb.length() > 0) {
-                cs.sendChatToPlayer(sb.toString());
+                MyTown.sendChatToPlayer(cs, sb.toString());
             }
         }
 
@@ -261,17 +248,9 @@ public class MyTownNation {
                         || args[1].equalsIgnoreCase(Term.CommandHelpNation
                                 .toString())) {
                     handled = true;
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdNation.toString() + " "
-                                    + Term.TownCmdNationNew.toString(),
-                            Term.TownCmdNationNewArgs.toString(),
-                            Term.TownCmdNationNewDesc.toString(), color));
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdAccept.toString(), "",
-                            Term.TownCmdAcceptDesc2.toString(), color));
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdDeny.toString(), "",
-                            Term.TownCmdDenyDesc2.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationNew.toString(), Term.TownCmdNationNewArgs.toString(), Term.TownCmdNationNewDesc.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdAccept.toString(), "", Term.TownCmdAcceptDesc2.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdDeny.toString(), "", Term.TownCmdDenyDesc2.toString(), color));
                 }
             } else if (args[0].equalsIgnoreCase(Term.TownCmdAccept.toString())) {
                 Assert.Perm(cs, "mytown.cmd.nationaccept");
@@ -297,9 +276,8 @@ public class MyTownNation {
                 }
 
                 town.pendingNationInvitation = null;
-
-                cs.sendChatToPlayer(Term.NationPlayerDeniedInvitation
-                        .toString());
+                MyTown.sendChatToPlayer(cs, Term.NationPlayerDeniedInvitation.toString());
+                //cs.sendChatToPlayer(Term.NationPlayerDeniedInvitation.toString());
             } else if (!args[0].equalsIgnoreCase(Term.TownCmdNation.toString())) {
                 return handled;
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationNew
@@ -315,16 +293,12 @@ public class MyTownNation {
                             .name(), n.name());
                     for (Object obj : MinecraftServer.getServer()
                             .getConfigurationManager().playerEntityList) {
-                        ((EntityPlayer) obj).sendChatToPlayer(msg);
+                        MyTown.sendChatToPlayer((EntityPlayer)obj, msg);
                     }
 
                     town.sendTownInfo(cs, res.shouldShowTownBlocks());
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdNation.toString() + " "
-                                    + Term.TownCmdNationNew.toString(),
-                            Term.TownCmdNationNewArgs.toString(),
-                            Term.TownCmdNationNewDesc.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationNew.toString(), Term.TownCmdNationNewArgs.toString(), Term.TownCmdNationNewDesc.toString(), color));
                 }
             }
         } else if (nation.capital() == res.town()) // capitol city - invite,
@@ -338,22 +312,22 @@ public class MyTownNation {
                     || args[1].equalsIgnoreCase(Term.CommandHelpNation
                             .toString())) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation
                         .toString()
                         + " " + Term.TownCmdNationInvite.toString(),
                         Term.TownCmdNationInviteArgs.toString(),
                         Term.TownCmdNationInviteDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation
                         .toString()
                         + " " + Term.TownCmdNationKick.toString(),
                         Term.TownCmdNationKickArgs.toString(),
                         Term.TownCmdNationKickDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation
                         .toString()
                         + " " + Term.TownCmdNationTransfer.toString(),
                         Term.TownCmdNationTransferArgs.toString(),
                         Term.TownCmdNationTransferDesc.toString(), color));
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation
                         .toString()
                         + " " + Term.TownCmdNationDel.toString(), "",
                         Term.TownCmdNationDelDesc.toString(), color));
@@ -379,25 +353,17 @@ public class MyTownNation {
                     for (Resident r : t.residents()) {
                         if (r.rank() == Rank.Mayor && r.isOnline()) {
                             mayorOnline = true;
-                            r.onlinePlayer
-                                    .sendChatToPlayer(Term.NationInvitation
-                                            .toString(res.name(), nation.name()));
-                            cs.sendChatToPlayer(Term.NationInvitedPlayer
-                                    .toString(r.name(), t.name()));
+                            MyTown.sendChatToPlayer(r.onlinePlayer, Term.NationInvitation.toString(res.name(), nation.name()));
+                            MyTown.sendChatToPlayer(cs, Term.NationInvitedPlayer.toString(r.name(), t.name()));
                         }
                     }
                     if (mayorOnline) {
                         t.pendingNationInvitation = nation;
                     } else {
-                        cs.sendChatToPlayer(Term.TownErrNationNoMayorOnline
-                                .toString(t.name()));
+                        MyTown.sendChatToPlayer(cs, Term.TownErrNationNoMayorOnline.toString(t.name()));
                     }
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdNation.toString() + " "
-                                    + Term.TownCmdNationKick.toString(),
-                            Term.TownCmdNationKickArgs.toString(),
-                            Term.TownCmdNationKickDesc.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationKick.toString(), Term.TownCmdNationKickArgs.toString(), Term.TownCmdNationKickDesc.toString(), color));
                 }
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationKick
                     .toString())) {
@@ -425,14 +391,9 @@ public class MyTownNation {
                     t.sendNotification(Level.INFO, Term.NationLeft
                             .toString(nation.name()));
 
-                    cs.sendChatToPlayer(Term.TownKickedFromNation.toString(t
-                            .name()));
+                    MyTown.sendChatToPlayer(cs, Term.TownKickedFromNation.toString(t.name()));
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdNation.toString() + " "
-                                    + Term.TownCmdNationTransfer.toString(),
-                            Term.TownCmdNationTransferArgs.toString(),
-                            Term.TownCmdNationTransferDesc.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationTransfer.toString(), Term.TownCmdNationTransferArgs.toString(), Term.TownCmdNationTransferDesc.toString(), color));
                 }
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationTransfer
                     .toString())) {
@@ -460,14 +421,9 @@ public class MyTownNation {
                     t.sendNotification(Level.INFO, Term.NationNowCapital
                             .toString(nation.name()));
 
-                    cs.sendChatToPlayer(Term.NationCapitalTransfered.toString(t
-                            .name()));
+                    MyTown.sendChatToPlayer(cs, Term.NationCapitalTransfered.toString(t.name()));
                 } else {
-                    cs.sendChatToPlayer(Formatter.formatCommand(
-                            Term.TownCmdNation.toString() + " "
-                                    + Term.TownCmdNationInvite.toString(),
-                            Term.TownCmdNationInviteArgs.toString(),
-                            Term.TownCmdNationInviteDesc.toString(), color));
+                    MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationInvite.toString(), Term.TownCmdNationInviteArgs.toString(), Term.TownCmdNationInviteDesc.toString(), color));
                 }
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationDel
                     .toString())) {
@@ -481,13 +437,12 @@ public class MyTownNation {
                             .name());
                     for (Object obj : MinecraftServer.getServer()
                             .getConfigurationManager().playerEntityList) {
-                        ((EntityPlayer) obj).sendChatToPlayer(msg);
+                        MyTown.sendChatToPlayer((EntityPlayer)obj, msg);
                     }
 
                     town.sendTownInfo(cs, res.shouldShowTownBlocks());
                 } else {
-                    cs.sendChatToPlayer(Term.NationDeleteConfirmation
-                            .toString());
+                    MyTown.sendChatToPlayer(cs, Term.NationDeleteConfirmation.toString());
                 }
             }
         } else // member town - leave
@@ -500,10 +455,7 @@ public class MyTownNation {
                     || args[1].equalsIgnoreCase(Term.CommandHelpNation
                             .toString())) {
                 handled = true;
-                cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdNation
-                        .toString()
-                        + " " + Term.TownCmdNationLeave.toString(), "",
-                        Term.TownCmdNationLeaveDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdNation.toString() + " " + Term.TownCmdNationLeave.toString(), "",Term.TownCmdNationLeaveDesc.toString(), color));
             } else if (!args[0].equalsIgnoreCase(Term.TownCmdNation.toString())) {
                 return handled;
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationLeave

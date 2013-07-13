@@ -34,4 +34,10 @@ public class CmdSpawn extends CommandBase {
 
         res.asyncStartSpawnTeleport(null);
     }
+
+    @Override
+    public String getCommandUsage(ICommandSender icommandsender) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

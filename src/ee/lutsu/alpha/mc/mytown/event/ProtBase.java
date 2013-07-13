@@ -91,7 +91,7 @@ public abstract class ProtBase {
                 e.posY, e.posZ);
         Vec3 var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(
                 e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
-        MovingObjectPosition var3 = e.worldObj.rayTraceBlocks(var16, var2);
+        MovingObjectPosition var3 = e.worldObj.clip(var16, var2);
         var16 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY,
                 e.posZ);
         var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX,
