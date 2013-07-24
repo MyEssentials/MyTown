@@ -20,6 +20,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.DimensionManager;
 
 import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
@@ -171,25 +172,29 @@ public class Resident {
 
     public boolean shouldShowTownBlocks() {
         return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(prevDimension).getDimensionName(),
+                //onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.showblocks");
     }
 
     public boolean shouldShowPlayerLocation() {
         return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(prevDimension).getDimensionName(),
+                //onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.showlocation");
     }
 
     public boolean canByPassCheck(TownSettingCollection.Permissions level) {
         return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(prevDimension).getDimensionName(),
+                //onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass." + level.toString().toLowerCase());
     }
 
     public boolean pvpBypass() {
         return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(prevDimension).getDimensionName(),
+                //onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass.pvp");
     }
 
@@ -885,7 +890,9 @@ public class Resident {
 
         System.currentTimeMillis();
         long takesTime = ForgePerms.getPermissionsHandler().canAccess(
-                this.name(), onlinePlayer.worldObj.provider.getDimensionName(),
+                this.name(),
+                DimensionManager.getProvider(prevDimension).getDimensionName(),
+                //onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass.teleportwait") ? 0
                 : home != null ? teleportToHomeWaitSeconds * 1000
                         : teleportToSpawnWaitSeconds * 1000;

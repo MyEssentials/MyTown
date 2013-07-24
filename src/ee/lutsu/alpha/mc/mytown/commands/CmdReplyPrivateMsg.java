@@ -29,7 +29,7 @@ public class CmdReplyPrivateMsg extends CommandBase {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
             return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.reply");
         }
         return false;
     }

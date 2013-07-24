@@ -16,7 +16,7 @@ public class CmdTeleport extends CommandServerTp {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
             return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+                    p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.tp");
         }
         return false;
         // return (cs instanceof MinecraftServer) || (cs instanceof EntityPlayer

@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.DimensionManager;
 
 import com.sperion.forgeperms.ForgePerms;
 
@@ -202,27 +203,32 @@ public class Town {
         }
 
         if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+                //mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.32")) {
             return 32;
         }
         if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+                //mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.16")) {
             return 16;
         }
         if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+                //mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.8")) {
             return 8;
         }
         if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+                //mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.4")) {
             return 4;
         }
         if (ForgePerms.getPermissionsHandler().canAccess(mayor.name(),
-                mayor.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(mayor.prevDimension).getDimensionName(),
+                //mayor.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.mayor.blocks.2")) {
             return 2;
         }
@@ -236,22 +242,26 @@ public class Town {
         }
 
         if (ForgePerms.getPermissionsHandler().canAccess(res.name(),
-                res.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+                //res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.10")) {
             return 10;
         }
         if (ForgePerms.getPermissionsHandler().canAccess(res.name(),
-                res.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+                //res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.8")) {
             return 8;
         }
         if (ForgePerms.getPermissionsHandler().canAccess(res.name(),
-                res.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+                //res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.4")) {
             return 4;
         }
         if (ForgePerms.getPermissionsHandler().canAccess(res.name(),
-                res.onlinePlayer.worldObj.provider.getDimensionName(),
+                DimensionManager.getProvider(res.prevDimension).getDimensionName(),
+                //res.onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.resident.blocksmulti.2")) {
             return 2;
         }

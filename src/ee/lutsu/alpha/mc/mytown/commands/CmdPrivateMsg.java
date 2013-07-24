@@ -31,7 +31,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
             return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
         }
         return false;
     }

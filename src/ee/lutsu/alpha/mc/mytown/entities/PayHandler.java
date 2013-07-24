@@ -1,6 +1,7 @@
 package ee.lutsu.alpha.mc.mytown.entities;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import com.sperion.forgeperms.ForgePerms;
@@ -77,8 +78,8 @@ public class PayHandler {
                 || ForgePerms.getPermissionsHandler()
                         .canAccess(
                                 owner.name(),
-                                owner.onlinePlayer.worldObj.provider
-                                        .getDimensionName(),
+                                DimensionManager.getProvider(owner.prevDimension).getDimensionName(),
+                                //owner.onlinePlayer.worldObj.provider.getDimensionName(),
                                 "mytown.cost.bypass." + action)) {
             purchaseComplete();
         } else {
