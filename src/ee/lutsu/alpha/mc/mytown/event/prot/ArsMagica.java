@@ -68,16 +68,14 @@ public class ArsMagica extends ProtBase {
             EntitySpellProjectile o = (EntitySpellProjectile) e;
             Entity owner = o.shootingEntity;
 
+            if (clEntityLightMage.isInstance(owner) || clEntityDarkMage.isInstance(owner)) {
+                return null;
+            }
             if (owner == null) {
                 return "No owner or is not a player";
             }
-            if (clEntityLightMage.isInstance(owner)
-                    || clEntityDarkMage.isInstance(owner)) {
-                return null;
-            }
 
-            Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance
-                    .getResident((EntityPlayer) owner);
+            Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) owner);
 
             int x = (int) (o.posX + o.motionX);
             int y = (int) (o.posY + o.motionY);

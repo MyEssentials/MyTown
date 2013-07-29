@@ -198,10 +198,8 @@ public class Resident {
                 "mytown.adm.bypass.pvp");
     }
 
-    public boolean canInteract(int chunkX, int chunkZ,
-            TownSettingCollection.Permissions askedFor) {
-        TownBlock block = MyTownDatasource.instance.getBlock(
-                onlinePlayer.dimension, chunkX, chunkZ);
+    public boolean canInteract(int chunkX, int chunkZ, TownSettingCollection.Permissions askedFor) {
+        TownBlock block = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, chunkX, chunkZ);
 
         return canInteract(block, askedFor);
     }
@@ -273,8 +271,7 @@ public class Resident {
         return canInteract(targetBlock, askedFor);
     }
 
-    public boolean canInteract(int dimension, int x, int y, int z,
-            TownSettingCollection.Permissions askedFor) {
+    public boolean canInteract(int dimension, int x, int y, int z, TownSettingCollection.Permissions askedFor) {
         TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
                 dimension, x, y, z);
         if (targetBlock == null || targetBlock.town() == null) {
