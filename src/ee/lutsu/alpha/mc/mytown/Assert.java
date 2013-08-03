@@ -6,12 +6,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import com.sperion.forgeperms.ForgePerms;
 
 public class Assert {
-    public static void Perm(ICommandSender cs, String node)
-            throws NoAccessException {
+    public static void Perm(ICommandSender cs, String node) throws NoAccessException {
         EntityPlayer p = (EntityPlayer) cs;
-        if (!ForgePerms.getPermissionsHandler().canAccess(p.username,
-                p.worldObj.provider.getDimensionName(), node)) {
-            throw new NoAccessException(cs, node);
+        String[] nodes = node.split("\\|");
+        for(String n : nodes){
+            if (ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), n.trim())) {
+                return;
+            }
         }
+        
+        throw new NoAccessException(cs, node);
     }
 }

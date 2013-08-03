@@ -16,9 +16,7 @@ public class NoAccessException extends Exception {
 
     @Override
     public String toString() {
-        return Formatter
-                .dollarToColorPrefix(getCustomizedMessage(Term.ErrCannotAccessCommand
-                        .toString()));
+        return Formatter.dollarToColorPrefix(Term.ErrCannotAccessCommand.toString());
     }
 
     private String getCustomizedMessage(String def) {

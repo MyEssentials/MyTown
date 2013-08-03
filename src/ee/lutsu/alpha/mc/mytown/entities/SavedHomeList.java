@@ -84,8 +84,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
         boolean newHome = getHomeName(name) == null;
 
         if (newHome) {
-            Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.new_"
-                    + String.valueOf(size() + 1));
+            Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.new_" + String.valueOf(size() + 1));
         }
 
         if (defaultIsBed && name == null) // bed

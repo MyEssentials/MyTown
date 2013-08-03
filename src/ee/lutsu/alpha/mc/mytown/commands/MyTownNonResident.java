@@ -68,7 +68,7 @@ public class MyTownNonResident {
             MyTown.sendChatToPlayer(cs, "");
             
         } else if (args[0].equalsIgnoreCase(Term.TownCmdNew.toString())) {
-            Assert.Perm(cs, "mytown.cmd.new.dim" + res.onlinePlayer.dimension);
+            Assert.Perm(cs, "mytown.cmd.new.dim" + res.onlinePlayer.dimension + " | mytown.cmd.new.* | mytown.cmd.*");
             handled = true;
 
             if (args.length < 2 || args.length > 2) {
@@ -121,7 +121,7 @@ public class MyTownNonResident {
                         }, args, home);
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAccept.toString())) {
-            Assert.Perm(cs, "mytown.cmd.accept");
+            Assert.Perm(cs, "mytown.cmd.accept | mytown.cmd.*");
             handled = true;
 
             if (res.inviteActiveFrom == null) {
@@ -136,7 +136,7 @@ public class MyTownNonResident {
                     Term.TownPlayerJoinedTown.toString(res.name()));
             res.inviteActiveFrom = null;
         } else if (args[0].equalsIgnoreCase(Term.TownCmdDeny.toString())) {
-            Assert.Perm(cs, "mytown.cmd.deny");
+            Assert.Perm(cs, "mytown.cmd.deny | mytown.cmd.*");
             handled = true;
 
             if (res.inviteActiveFrom == null) {

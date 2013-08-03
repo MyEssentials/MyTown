@@ -240,12 +240,7 @@ public class TownSettingCollection {
         for (TownSetting set : settings) {
             if (!isWild || set.wildValue != null) {
                 EntityPlayer p = (EntityPlayer) cs;
-                if (all
-                        || ForgePerms.getPermissionsHandler().canAccess(
-                                p.username,
-                                p.worldObj.provider.getDimensionName(),
-                                "mytown.cmd.perm.set." + node + "."
-                                        + set.getSerializationKey())) {
+                if (all || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getSerializationKey()) || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set.*")) {
                     MyTown.sendChatToPlayer(cs, String.format("§a%s §2[%s] : %s%s", set.getName(), set.getSerializationKey(), set.value == null ? "§d" : "§c", set.getVisualValue()));
                 }
             }
