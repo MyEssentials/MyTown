@@ -8,12 +8,7 @@ import com.sperion.forgeperms.ForgePerms;
 public class Assert {
     public static void Perm(ICommandSender cs, String node) throws NoAccessException {
         EntityPlayer p = (EntityPlayer) cs;
-        String[] nodes = node.split("\\|");
-        for(String n : nodes){
-            if (ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), n.trim())) {
-                return;
-            }
-        }
+        ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), node);
         
         throw new NoAccessException(cs, node);
     }

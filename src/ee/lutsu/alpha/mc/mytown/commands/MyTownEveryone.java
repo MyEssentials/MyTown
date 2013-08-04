@@ -121,7 +121,7 @@ public class MyTownEveryone {
                 MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdSpawn.toString(), Term.TownCmdSpawnArgs.toString(), Term.TownCmdSpawnDesc.toString(), color));
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdMap.toString())) {
-                Assert.Perm(cs, "mytown.cmd.map | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.map");
                 handled = true;
 
                 if (args.length > 1) {
@@ -149,7 +149,7 @@ public class MyTownEveryone {
                 }
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdInfo.toString())) {
-                Assert.Perm(cs, "mytown.cmd.info | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.info");
                 handled = true;
 
                 if (args.length == 2) {
@@ -165,7 +165,7 @@ public class MyTownEveryone {
                 }
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdFriend.toString())) {
-                Assert.Perm(cs, "mytown.cmd.friend | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.friend");
                 handled = true;
 
                 if (args.length == 3) {
@@ -179,16 +179,11 @@ public class MyTownEveryone {
                     if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd
                             .toString())) {
                         if (!res.addFriend(target)) {
-                            throw new CommandException(
-                                    Term.ErrPlayerAlreadyInFriendList, res
-                                            .name());
+                            throw new CommandException(Term.ErrPlayerAlreadyInFriendList, target.name());
                         }
-                    } else if (cmd
-                            .equalsIgnoreCase(Term.TownCmdFriendArgsRemove
-                                    .toString())) {
+                    } else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
                         if (!res.removeFriend(target)) {
-                            throw new CommandException(
-                                    Term.ErrPlayerNotInFriendList, res.name());
+                            throw new CommandException(Term.ErrPlayerNotInFriendList, target.name());
                         }
                     }
                     res.sendInfoTo(cs, res.shouldShowPlayerLocation());
@@ -220,10 +215,10 @@ public class MyTownEveryone {
 
                 ItemStack cost = null;
                 if (target == res.town()) {
-                    Assert.Perm(cs, "mytown.cmd.spawn.own | mytown.cmd.*");
+                    Assert.Perm(cs, "mytown.cmd.spawn.own");
                     cost = Cost.TownSpawnTeleportOwn.item;
                 } else {
-                    Assert.Perm(cs, "mytown.cmd.spawn.other | mytown.cmd.*");
+                    Assert.Perm(cs, "mytown.cmd.spawn.other");
                     cost = Cost.TownSpawnTeleportOther.item;
                 }
 
@@ -246,7 +241,7 @@ public class MyTownEveryone {
                 MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdRes.toString(), Term.TownCmdResArgs.toString(), Term.TownCmdResDesc.toString(), null));
             } else if (args.length > 0
                     && args[0].equalsIgnoreCase(Term.TownCmdInfo.toString())) {
-                Assert.Perm(cs, "mytown.cmd.info | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.info");
                 handled = true;
 
                 if (args.length == 2) {
@@ -264,7 +259,7 @@ public class MyTownEveryone {
         }
 
         if (args.length > 0 && args[0].equals(Term.TownCmdList.toString())) {
-            Assert.Perm(cs, "mytown.cmd.list | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.list");
             handled = true;
 
             ArrayList<Town> sorted = new ArrayList<Town>(
@@ -302,7 +297,7 @@ public class MyTownEveryone {
             }
         } else if (args.length > 0
                 && args[0].equals(Term.TownCmdRes.toString())) {
-            Assert.Perm(cs, "mytown.cmd.res | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.res");
             handled = true;
 
             if (args.length == 1 && cs instanceof EntityPlayer) {

@@ -148,7 +148,7 @@ public class MyTownNation {
         } else if (args.length > 1
                 && args[0].equalsIgnoreCase(Term.TownCmdNation.toString())
                 && args[1].equalsIgnoreCase(Term.TownCmdNationInfo.toString())) {
-            Assert.Perm(cs, "mytown.cmd.nationinfo | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.nationinfo");
             handled = true;
 
             if (args.length < 3 && cs instanceof EntityPlayer) {
@@ -174,7 +174,7 @@ public class MyTownNation {
         } else if (args.length > 1
                 && args[0].equalsIgnoreCase(Term.TownCmdNation.toString())
                 && args[1].equalsIgnoreCase(Term.TownCmdNationList.toString())) {
-            Assert.Perm(cs, "mytown.cmd.nationlist | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.nationlist");
             handled = true;
 
             ArrayList<Nation> sorted = new ArrayList<Nation>(
@@ -253,7 +253,7 @@ public class MyTownNation {
                     MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdDeny.toString(), "", Term.TownCmdDenyDesc2.toString(), color));
                 }
             } else if (args[0].equalsIgnoreCase(Term.TownCmdAccept.toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationaccept | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationaccept");
                 handled = true;
 
                 if (town.pendingNationInvitation == null) {
@@ -267,7 +267,7 @@ public class MyTownNation {
                 n.sendNotification(Level.INFO, Term.NationTownJoinedNation
                         .toString(town.name()));
             } else if (args[0].equalsIgnoreCase(Term.TownCmdDeny.toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationdeny | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationdeny");
                 handled = true;
 
                 if (town.pendingNationInvitation == null) {
@@ -282,7 +282,7 @@ public class MyTownNation {
                 return handled;
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationNew
                     .toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationnew | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationnew");
                 handled = true;
 
                 if (args.length == 3) {
@@ -335,7 +335,7 @@ public class MyTownNation {
                 return handled;
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationInvite
                     .toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationinvite | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationinvite");
                 handled = true;
 
                 if (args.length == 3) {
@@ -367,7 +367,7 @@ public class MyTownNation {
                 }
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationKick
                     .toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationkick | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationkick");
                 handled = true;
 
                 if (args.length == 3) {
@@ -397,7 +397,7 @@ public class MyTownNation {
                 }
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationTransfer
                     .toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationtransfer | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationtransfer");
                 handled = true;
 
                 if (args.length == 3) {
@@ -427,7 +427,7 @@ public class MyTownNation {
                 }
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationDel
                     .toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationdelete | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationdelete");
                 handled = true;
 
                 if (args.length == 3 && args[2].equalsIgnoreCase("yes")) {
@@ -460,7 +460,7 @@ public class MyTownNation {
                 return handled;
             } else if (args[1].equalsIgnoreCase(Term.TownCmdNationLeave
                     .toString())) {
-                Assert.Perm(cs, "mytown.cmd.nationleave | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.nationleave");
                 handled = true;
 
                 nation.removeTown(town);

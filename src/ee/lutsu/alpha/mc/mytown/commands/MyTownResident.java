@@ -92,7 +92,7 @@ public class MyTownResident {
         boolean handled = false;
         String color = "2";
         if (args.length < 1) {
-            Assert.Perm(cs, "mytown.cmd.info | mytown.cmd.*");
+            Assert.Perm(cs, "mytown.cmd.info");
             handled = true;
 
             res.town().sendTownInfo(res.onlinePlayer,
@@ -106,7 +106,7 @@ public class MyTownResident {
                 MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdOnline.toString(), "", Term.TownCmdOnlineDesc.toString(), color));
                 MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
             } else if (args[0].equalsIgnoreCase(Term.TownCmdLeave.toString())) {
-                Assert.Perm(cs, "mytown.cmd.leave | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.leave");
                 handled = true;
 
                 if (res.rank() == Rank.Mayor) {
@@ -119,7 +119,7 @@ public class MyTownResident {
                         .name()));
                 t.removeResident(res);
             } else if (args[0].equalsIgnoreCase(Term.TownCmdOnline.toString())) {
-                Assert.Perm(cs, "mytown.cmd.online | mytown.cmd.*");
+                Assert.Perm(cs, "mytown.cmd.online");
                 handled = true;
 
                 Town t = res.town();
@@ -157,16 +157,16 @@ public class MyTownResident {
 
                 if (args.length < 3) // show
                 {
-                    Assert.Perm(cs, "mytown.cmd.perm.show." + node + " | mytown.cmd.*");
+                    Assert.Perm(cs, "mytown.cmd.perm.show." + node);
                     showPermissions(cs, res, node);
                 } else {
                     String action = args[2];
                     if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 3) {
-                        Assert.Perm(cs, "mytown.cmd.perm.set." + node + "." + args[3] + " | mytown.cmd.*");
+                        Assert.Perm(cs, "mytown.cmd.perm.set." + node + "." + args[3]);
 
                         setPermissions(cs, res, node, args[3], args.length > 4 ? args[4] : null);
                     } else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {
-                        Assert.Perm(cs, "mytown.cmd.perm.force." + node + "." + (args.length > 3 ? args[3] : "all") + " | mytown.cmd.*");
+                        Assert.Perm(cs, "mytown.cmd.perm.force." + node + "." + (args.length > 3 ? args[3] : "all"));
 
                         flushPermissions(cs, res, node, args.length > 3 ? args[3] : null);
                     } else {
