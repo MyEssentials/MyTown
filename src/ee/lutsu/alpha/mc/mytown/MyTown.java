@@ -70,11 +70,10 @@ public class MyTown {
     public static String CONFIG_FOLDER = "config/MyTown/";
     public static String LIB_FOLDER = CONFIG_FOLDER + "lib/";
     public static String CONFIG_FILE = CONFIG_FOLDER + "MyTown.cfg";
+    public static API mytownAPI = new APIHandler();
 
-    public TownSettingCollection serverWildSettings = new TownSettingCollection(
-            true, true);
-    public TownSettingCollection serverSettings = new TownSettingCollection(
-            true, false);
+    public TownSettingCollection serverWildSettings = new TownSettingCollection(true, true);
+    public TownSettingCollection serverSettings = new TownSettingCollection(true, false);
     public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
     public LinkedList<ItemIdRange> carts = null;
     public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
