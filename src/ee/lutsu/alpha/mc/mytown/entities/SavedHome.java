@@ -69,7 +69,6 @@ public class SavedHome {
     }
 
     public String serialize() {
-        return String.format("%s/%s/%s/%s/%s/%s/%s", name, dim, x, y, z, look1,
-                look2);
+        return String.format("%s/%s/%s/%s/%s/%s/%s", name, dim, x, y, z, look1, look2);
     }
 }

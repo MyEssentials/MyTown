@@ -8,28 +8,21 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class Utils {
-    public static MovingObjectPosition getMovingObjectPositionFromPlayer(
-            World world, EntityPlayer player, boolean hitLiquid) {
+    public static MovingObjectPosition getMovingObjectPositionFromPlayer(World world, EntityPlayer player, boolean hitLiquid) {
         double distance = 5.0D;
         if (player instanceof EntityPlayerMP) {
-            distance = ((EntityPlayerMP) player).theItemInWorldManager
-                    .getBlockReachDistance();
+            distance = ((EntityPlayerMP) player).theItemInWorldManager.getBlockReachDistance();
         }
 
-        return getMovingObjectPositionFromPlayer(world, player, hitLiquid,
-                distance);
+        return getMovingObjectPositionFromPlayer(world, player, hitLiquid, distance);
     }
 
-    public static MovingObjectPosition getMovingObjectPositionFromPlayer(
-            World world, EntityPlayer player, boolean hitLiquid, double distance) {
+    public static MovingObjectPosition getMovingObjectPositionFromPlayer(World world, EntityPlayer player, boolean hitLiquid, double distance) {
         float var4 = 1.0F;
-        float var5 = player.prevRotationPitch
-                + (player.rotationPitch - player.prevRotationPitch) * var4;
-        float var6 = player.prevRotationYaw
-                + (player.rotationYaw - player.prevRotationYaw) * var4;
+        float var5 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * var4;
+        float var6 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * var4;
         double var7 = player.prevPosX + (player.posX - player.prevPosX) * var4;
-        double var9 = player.prevPosY + (player.posY - player.prevPosY) * var4
-                + 1.62D - player.yOffset;
+        double var9 = player.prevPosY + (player.posY - player.prevPosY) * var4 + 1.62D - player.yOffset;
         double var11 = player.prevPosZ + (player.posZ - player.prevPosZ) * var4;
         Vec3 var13 = world.getWorldVec3Pool().getVecFromPool(var7, var9, var11);
         float var14 = MathHelper.cos(-var6 * 0.017453292F - (float) Math.PI);
@@ -38,8 +31,7 @@ public class Utils {
         float var17 = MathHelper.sin(-var5 * 0.017453292F);
         float var18 = var15 * var16;
         float var20 = var14 * var16;
-        Vec3 var23 = var13.addVector(var18 * distance, var17 * distance, var20
-                * distance);
+        Vec3 var23 = var13.addVector(var18 * distance, var17 * distance, var20 * distance);
         return world.rayTraceBlocks_do_do(var13, var23, hitLiquid, !hitLiquid);
     }
 }

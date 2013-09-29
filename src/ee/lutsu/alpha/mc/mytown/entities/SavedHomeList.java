@@ -49,8 +49,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
     public SavedHome get(String name) {
         if (defaultIsBed && name == null) {
             if (!owner.isOnline()) {
-                throw new RuntimeException(Term.HomeCmdOwnerNotOnline
-                        .toString());
+                throw new RuntimeException(Term.HomeCmdOwnerNotOnline.toString());
             }
 
             return SavedHome.fromBed((EntityPlayerMP) owner.onlinePlayer); // bed
@@ -75,8 +74,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
         return name.replace('/', '_').replace('|', '_').replace(' ', '_');
     }
 
-    public void assertSetHome(String name, Entity pos) throws CommandException,
-            NoAccessException {
+    public void assertSetHome(String name, Entity pos) throws CommandException, NoAccessException {
         if (!owner.isOnline()) {
             throw new CommandException(Term.HomeCmdOwnerNotOnline);
         }
@@ -89,8 +87,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 
         if (defaultIsBed && name == null) // bed
         {
-            if (pos.dimension != pos.worldObj.provider
-                    .getRespawnDimension((EntityPlayerMP) owner.onlinePlayer)) {
+            if (pos.dimension != pos.worldObj.provider.getRespawnDimension((EntityPlayerMP) owner.onlinePlayer)) {
                 throw new CommandException(Term.HomeCmdDimNotSpawnDim);
             }
         } else if (!newHome) {
@@ -100,8 +97,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 
     public void set(String name, Entity pos) {
         if (defaultIsBed && name == null) {
-            owner.onlinePlayer.setSpawnChunk(new ChunkCoordinates(
-                    (int) pos.posX, (int) pos.posY, (int) pos.posZ), true);
+            owner.onlinePlayer.setSpawnChunk(new ChunkCoordinates((int) pos.posX, (int) pos.posY, (int) pos.posZ), true);
         } else {
             SavedHome h = get(name);
             if (h == null) {
@@ -135,8 +131,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
             return true;
         }
 
-        if (defaultIsBed && owner.isOnline()
-                && owner.onlinePlayer.getBedLocation() != null) {
+        if (defaultIsBed && owner.isOnline() && owner.onlinePlayer.getBedLocation() != null) {
             return true;
         }
 

@@ -21,9 +21,7 @@ public class OldTownRemover extends TickBase {
 
     @Override
     public void run() throws Exception {
-        List<Town> towns = source().getOldTowns(
-                System.currentTimeMillis() - (long) daysOld * 24 * 60 * 60
-                        * 1000, plotDaysAddition);
+        List<Town> towns = source().getOldTowns(System.currentTimeMillis() - (long) daysOld * 24 * 60 * 60 * 1000, plotDaysAddition);
 
         for (Town t : towns) {
             boolean exit = false;
@@ -43,24 +41,16 @@ public class OldTownRemover extends TickBase {
                 if (t.nation() != null) {
                     if (t.nation().capital() == t) {
                         if (t.nation().towns().size() > 1) {
-                            Town newCapitol = t.nation().towns().get(
-                                    t.nation().towns().indexOf(t) == 0 ? 1 : 0);
-                            Log.info(String
-                                    .format("[OldTownRemover]Moving capitol of %s to %s",
-                                            t.nation().name(), newCapitol
-                                                    .name()));
+                            Town newCapitol = t.nation().towns().get(t.nation().towns().indexOf(t) == 0 ? 1 : 0);
+                            Log.info(String.format("[OldTownRemover]Moving capitol of %s to %s", t.nation().name(), newCapitol.name()));
                             t.nation().setCapital(newCapitol);
                             t.nation().removeTown(t);
                         } else {
-                            Log.info(String.format(
-                                    "[OldTownRemover]Deleting nation %s", t
-                                            .nation().name()));
+                            Log.info(String.format("[OldTownRemover]Deleting nation %s", t.nation().name()));
                             t.nation().delete();
                         }
                     } else {
-                        Log.info(String
-                                .format("[OldTownRemover]Removing town %s from nation %s",
-                                        t.name(), t.nation().name()));
+                        Log.info(String.format("[OldTownRemover]Removing town %s from nation %s", t.name(), t.nation().name()));
                         t.nation().removeTown(t);
                     }
                 }
@@ -76,27 +66,11 @@ public class OldTownRemover extends TickBase {
 
     @Override
     public void loadConfig() throws Exception {
-        daysOld = MyTown.instance.config
-                .get("TickHandlers.OldTownRemover", "DaysAtleastOld", 7,
-                        "Delete towns where members haven't logged in for this amount of days")
-                .getInt();
-        plotDaysAddition = MyTown.instance.config.get(
-                "TickHandlers.OldTownRemover", "PlotDaysAddition",
-                plotDaysAddition,
-                "Each plot of the town adds extra safe time for the town")
-                .getDouble(plotDaysAddition);
-        enabled = MyTown.instance.config.get("TickHandlers.OldTownRemover",
-                "Enabled", false, "Feature enabled?").getBoolean(false);
-        timeout = MyTown.instance.config
-                .get("TickHandlers.OldTownRemover", "WorkerTimeoutTicks",
-                        20 * 60,
-                        "How often should the worker check for old towns? Default 1min - 1200 ticks")
-                .getInt();
-        safeTowns = MyTown.instance.config
-                .get("TickHandlers.OldTownRemover", "SafeTownList",
-                        "Spawn,Server",
-                        "Town name comma seperated list which are exempt from this feature")
-                .getString().split(",");
+        daysOld = MyTown.instance.config.get("TickHandlers.OldTownRemover", "DaysAtleastOld", 7, "Delete towns where members haven't logged in for this amount of days").getInt();
+        plotDaysAddition = MyTown.instance.config.get("TickHandlers.OldTownRemover", "PlotDaysAddition", plotDaysAddition, "Each plot of the town adds extra safe time for the town").getDouble(plotDaysAddition);
+        enabled = MyTown.instance.config.get("TickHandlers.OldTownRemover", "Enabled", false, "Feature enabled?").getBoolean(false);
+        timeout = MyTown.instance.config.get("TickHandlers.OldTownRemover", "WorkerTimeoutTicks", 20 * 60, "How often should the worker check for old towns? Default 1min - 1200 ticks").getInt();
+        safeTowns = MyTown.instance.config.get("TickHandlers.OldTownRemover", "SafeTownList", "Spawn,Server", "Town name comma seperated list which are exempt from this feature").getString().split(",");
 
         if (timeout <= 0) {
             throw new Exception("WorkerTimeoutTicks cannot be at or below 0");

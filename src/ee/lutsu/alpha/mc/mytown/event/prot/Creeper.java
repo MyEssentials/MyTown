@@ -19,11 +19,9 @@ public class Creeper extends ProtBase {
     public void load() throws Exception {
         // un-obfuscated
         if (EntityCreeper.class.getSimpleName().equals("EntityCreeper")) {
-            fTimeSinceIgnited = EntityCreeper.class
-                    .getDeclaredField("field_70833_d");
+            fTimeSinceIgnited = EntityCreeper.class.getDeclaredField("field_70833_d");
             fFuseTime = EntityCreeper.class.getDeclaredField("field_82225_f");
-            fExplosionRadius = EntityCreeper.class
-                    .getDeclaredField("field_82226_g");
+            fExplosionRadius = EntityCreeper.class.getDeclaredField("field_82226_g");
         }
         /*
          * field_70833_d,timeSinceIgnited,2,The amount of time since the creeper
@@ -75,19 +73,12 @@ public class Creeper extends ProtBase {
             }
 
             if (timeSinceIgnited >= fuseTime) {
-                int radius = explosionRadius
-                        + (creeper.getPowered() ? explosionRadius : 0) + 2; // 2
-                                                                            // for
-                                                                            // safety
+                int radius = explosionRadius + (creeper.getPowered() ? explosionRadius : 0) + 2; // 2
+                                                                                                 // for
+                                                                                                 // safety
 
-                if (canBlow(e.dimension, e.posX - radius, e.posY - radius,
-                        e.posY + radius, e.posZ - radius)
-                        && canBlow(e.dimension, e.posX - radius, e.posY
-                                - radius, e.posY + radius, e.posZ + radius)
-                        && canBlow(e.dimension, e.posX + radius, e.posY
-                                - radius, e.posY + radius, e.posZ - radius)
-                        && canBlow(e.dimension, e.posX + radius, e.posY
-                                - radius, e.posY + radius, e.posZ + radius)) {
+                if (canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius)
+                        && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
                     return null;
                 }
 
@@ -103,10 +94,8 @@ public class Creeper extends ProtBase {
         return null;
     }
 
-    private boolean canBlow(int dim, double x, double yFrom, double yTo,
-            double z) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord
-                .getCoord(x), ChunkCoord.getCoord(z));
+    private boolean canBlow(int dim, double x, double yFrom, double yTo, double z) {
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
                 b = b.getFirstFullSidingClockwise(b.town());

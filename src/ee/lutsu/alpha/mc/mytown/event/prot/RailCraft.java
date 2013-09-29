@@ -48,22 +48,14 @@ public class RailCraft extends ProtBase {
             int radius = (int) Math.ceil(cart.getBlastRadius()) + 2; // 2 for
                                                                      // safety
 
-            if (canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY
-                    + radius, e.posZ - radius)
-                    && canBlow(e.dimension, e.posX - radius, e.posY - radius,
-                            e.posY + radius, e.posZ + radius)
-                    && canBlow(e.dimension, e.posX + radius, e.posY - radius,
-                            e.posY + radius, e.posZ - radius)
-                    && canBlow(e.dimension, e.posX + radius, e.posY - radius,
-                            e.posY + radius, e.posZ + radius)) {
+            if (canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius)
+                    && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
                 return null;
             }
 
             return "TNT cart explosion disabled here";
         } else {
-            if ((int) e.posX == (int) e.prevPosX
-                    && (int) e.posY == (int) e.prevPosY
-                    && (int) e.posZ == (int) e.prevPosZ) {
+            if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
                 return null;
             }
 
@@ -72,14 +64,8 @@ public class RailCraft extends ProtBase {
             MathHelper.floor_double(getXAhead(e, e.posX, offset));
             MathHelper.floor_double(getZAhead(e, e.posZ, offset));
 
-            if (canRoam(e.dimension, e.posX - radius, e.posY - radius, e.posY
-                    + radius, e.posZ - radius)
-                    && canRoam(e.dimension, e.posX - radius, e.posY - radius,
-                            e.posY + radius, e.posZ + radius)
-                    && canRoam(e.dimension, e.posX + radius, e.posY - radius,
-                            e.posY + radius, e.posZ - radius)
-                    && canRoam(e.dimension, e.posX + radius, e.posY - radius,
-                            e.posY + radius, e.posZ + radius)) {
+            if (canRoam(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canRoam(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && canRoam(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius)
+                    && canRoam(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
                 return null;
             }
 
@@ -88,10 +74,8 @@ public class RailCraft extends ProtBase {
         }
     }
 
-    private boolean canRoam(int dim, double x, double yFrom, double yTo,
-            double z) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord
-                .getCoord(x), ChunkCoord.getCoord(z));
+    private boolean canRoam(int dim, double x, double yFrom, double yTo, double z) {
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
                 b = b.getFirstFullSidingClockwise(b.town());
@@ -105,20 +89,14 @@ public class RailCraft extends ProtBase {
         return b.settings.allowRailcraftBores;
     }
 
-    private void blockAction(EntityMinecart e) throws IllegalArgumentException,
-            IllegalAccessException {
+    private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {
         dropMinecart(e);
 
-        Log.severe(String.format(
-                "§4Stopped a railcraft bore found @ dim %s, %s,%s,%s",
-                e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ));
+        Log.severe(String.format("§4Stopped a railcraft bore found @ dim %s, %s,%s,%s", e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ));
 
-        String msg = String.format(
-                "A bore broke @ %s,%s,%s because it wasn't allowed there",
-                (int) e.posX, (int) e.posY, (int) e.posZ);
+        String msg = String.format("A bore broke @ %s,%s,%s because it wasn't allowed there", (int) e.posX, (int) e.posY, (int) e.posZ);
         String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);
-        CmdChat.sendChatToAround(e.dimension, e.posX, e.posY, e.posZ,
-                formatted, null);
+        CmdChat.sendChatToAround(e.dimension, e.posX, e.posY, e.posZ, formatted, null);
     }
 
     protected double getXAhead(Entity cart, double x, double offset) {
@@ -140,14 +118,11 @@ public class RailCraft extends ProtBase {
     }
 
     protected final ForgeDirection getFacing(Entity cart) {
-        return ForgeDirection.getOrientation(cart.getDataWatcher()
-                .getWatchableObjectByte(5));
+        return ForgeDirection.getOrientation(cart.getDataWatcher().getWatchableObjectByte(5));
     }
 
-    private boolean canBlow(int dim, double x, double yFrom, double yTo,
-            double z) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord
-                .getCoord(x), ChunkCoord.getCoord(z));
+    private boolean canBlow(int dim, double x, double yFrom, double yTo, double z) {
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
                 b = b.getFirstFullSidingClockwise(b.town());

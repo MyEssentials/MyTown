@@ -181,14 +181,9 @@ public abstract class Database {
         }
 
         // Connect to the database
-        connection = driver.connect("jdbc:"
-                + currentType.toString().toLowerCase() + ":"
-                + getDatabasePath(), properties);
+        connection = driver.connect("jdbc:" + currentType.toString().toLowerCase() + ":" + getDatabasePath(), properties);
         if (connection == null) {
-            throw new NullPointerException(
-                    "Connecting to database failed: unknown error - using jdbc:"
-                            + currentType.toString().toLowerCase() + ":"
-                            + getDatabasePath());
+            throw new NullPointerException("Connecting to database failed: unknown error - using jdbc:" + currentType.toString().toLowerCase() + ":" + getDatabasePath());
         }
 
         connected = true;
@@ -263,8 +258,7 @@ public abstract class Database {
      * @return
      * @throws SQLException
      */
-    public PreparedStatement prepare(String sql, boolean returnGeneratedKeys)
-            throws SQLException {
+    public PreparedStatement prepare(String sql, boolean returnGeneratedKeys) throws SQLException {
         if (connection == null) {
             throw new SQLException("No connection");
         }
@@ -273,9 +267,7 @@ public abstract class Database {
             return statementCache.get(sql);
         }
 
-        PreparedStatement preparedStatement = returnGeneratedKeys ? connection
-                .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
-                : connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = returnGeneratedKeys ? connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) : connection.prepareStatement(sql);
 
         statementCache.put(sql, preparedStatement);
 
@@ -289,8 +281,7 @@ public abstract class Database {
      * @param column
      */
     public boolean addColumn(String table, String column, String type) {
-        return executeUpdateNoException("ALTER TABLE " + table + " ADD "
-                + column + " " + type);
+        return executeUpdateNoException("ALTER TABLE " + table + " ADD " + column + " " + type);
     }
 
     /**
@@ -300,8 +291,7 @@ public abstract class Database {
      * @param column
      */
     public boolean dropColumn(String table, String column) {
-        return executeUpdateNoException("ALTER TABLE " + table
-                + " DROP COLUMN " + column);
+        return executeUpdateNoException("ALTER TABLE " + table + " DROP COLUMN " + column);
     }
 
     /**
@@ -311,8 +301,7 @@ public abstract class Database {
      * @param newName
      */
     public boolean renameTable(String table, String newName) {
-        return executeUpdateNoException("ALTER TABLE " + table + " RENAME TO "
-                + newName);
+        return executeUpdateNoException("ALTER TABLE " + table + " RENAME TO " + newName);
     }
 
     /**

@@ -15,17 +15,13 @@ public class ModularPowersuits extends ProtBase {
     public static ModularPowersuits instance = new ModularPowersuits();
 
     Class clEntityPlasmaBolt;
-    Field fEntityPlasmaBolt_shootingEntity, fEntityPlasmaBolt_explosiveness,
-            fEntityPlasmaBolt_size;
+    Field fEntityPlasmaBolt_shootingEntity, fEntityPlasmaBolt_explosiveness, fEntityPlasmaBolt_size;
 
     @Override
     public void load() throws Exception {
-        clEntityPlasmaBolt = Class
-                .forName("net.machinemuse.powersuits.entity.EntityPlasmaBolt");
-        fEntityPlasmaBolt_shootingEntity = clEntityPlasmaBolt
-                .getDeclaredField("shootingEntity");
-        fEntityPlasmaBolt_explosiveness = clEntityPlasmaBolt
-                .getDeclaredField("explosiveness");
+        clEntityPlasmaBolt = Class.forName("net.machinemuse.powersuits.entity.EntityPlasmaBolt");
+        fEntityPlasmaBolt_shootingEntity = clEntityPlasmaBolt.getDeclaredField("shootingEntity");
+        fEntityPlasmaBolt_explosiveness = clEntityPlasmaBolt.getDeclaredField("explosiveness");
         fEntityPlasmaBolt_size = clEntityPlasmaBolt.getDeclaredField("size");
     }
 
@@ -56,12 +52,10 @@ public class ModularPowersuits extends ProtBase {
             return "Allowed for players only";
         }
 
-        int radius = (int) Math.ceil(fEntityPlasmaBolt_size.getDouble(e)
-                / 50.0D * 3.0D * fEntityPlasmaBolt_explosiveness.getDouble(e)) + 2; // 2
-                                                                                    // for
-                                                                                    // safety
-        Resident res = ProtectionEvents.instance.lastOwner = Resident
-                .getOrMake((EntityPlayer) shooter);
+        int radius = (int) Math.ceil(fEntityPlasmaBolt_size.getDouble(e) / 50.0D * 3.0D * fEntityPlasmaBolt_explosiveness.getDouble(e)) + 2; // 2
+                                                                                                                                             // for
+                                                                                                                                             // safety
+        Resident res = ProtectionEvents.instance.lastOwner = Resident.getOrMake((EntityPlayer) shooter);
 
         int x1 = (int) e.posX - radius >> 4;
         int z1 = (int) e.posZ - radius >> 4;
@@ -71,9 +65,7 @@ public class ModularPowersuits extends ProtBase {
         boolean canBlow = true;
         for (int x = x1; x <= x2 && canBlow; x++) {
             for (int z = z1; z <= z2 && canBlow; z++) {
-                if (!res.canInteract(e.dimension, x << 4,
-                        (int) e.posY - radius, (int) e.posY + radius, z << 4,
-                        Permissions.Build)) {
+                if (!res.canInteract(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4, Permissions.Build)) {
                     canBlow = false;
                 }
             }

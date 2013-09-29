@@ -29,8 +29,7 @@ public class MyTownMayor {
             return list;
         }
 
-        Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) cs);
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs);
         if (res.town() == null || res.rank() != Rank.Mayor) {
             return list;
         }
@@ -40,24 +39,18 @@ public class MyTownMayor {
             list.add(Term.TownCmdMayor.toString());
             list.add(Term.TownCmdRename.toString());
             list.add(Term.TownCmdDelete.toString());
-        } else if (args.length == 2
-                && (args[0].equals("?") || args[0]
-                        .equalsIgnoreCase(Term.CommandHelp.toString()))) {
+        } else if (args.length == 2 && (args[0].equals("?") || args[0].equalsIgnoreCase(Term.CommandHelp.toString()))) {
             list.add(Term.CommandHelpMayor.toString());
-        } else if (args.length == 2
-                && args[0].equalsIgnoreCase(Term.TownCmdAssistant.toString())) {
+        } else if (args.length == 2 && args[0].equalsIgnoreCase(Term.TownCmdAssistant.toString())) {
             list.add(Term.TownCmdAssistantArgs1.toString());
             list.add(Term.TownCmdAssistantArgs2.toString());
-        } else if (args.length == 3
-                && args[0].equalsIgnoreCase(Term.TownCmdAssistant.toString())) {
+        } else if (args.length == 3 && args[0].equalsIgnoreCase(Term.TownCmdAssistant.toString())) {
             String action = args[1];
             for (Resident r : res.town().residents()) {
-                if (action == Term.TownCmdAssistantArgs1.toString()
-                        && r.rank() != Rank.Resident) {
+                if (action == Term.TownCmdAssistantArgs1.toString() && r.rank() != Rank.Resident) {
                     continue;
                 }
-                if (action == Term.TownCmdAssistantArgs2.toString()
-                        && r.rank() != Rank.Assistant) {
+                if (action == Term.TownCmdAssistantArgs2.toString() && r.rank() != Rank.Assistant) {
                     continue;
                 }
 
@@ -65,8 +58,7 @@ public class MyTownMayor {
                     list.add(r.name());
                 }
             }
-        } else if (args.length == 2
-                && args[0].equalsIgnoreCase(Term.TownCmdMayor.toString())) {
+        } else if (args.length == 2 && args[0].equalsIgnoreCase(Term.TownCmdMayor.toString())) {
             for (Resident r : res.town().residents()) {
                 if (r != res) {
                     list.add(r.name());
@@ -77,8 +69,7 @@ public class MyTownMayor {
         return list;
     }
 
-    public static boolean handleCommand(ICommandSender cs, String[] args)
-            throws CommandException, NoAccessException {
+    public static boolean handleCommand(ICommandSender cs, String[] args) throws CommandException, NoAccessException {
         if (args.length < 1) {
             return false;
         }
@@ -87,21 +78,18 @@ public class MyTownMayor {
             return false;
         }
 
-        Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) cs);
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs);
         if (res.town() == null || res.rank() != Rank.Mayor) {
             return false;
         }
 
         boolean handled = false;
         String color = "c";
-        if (args[0].equals("?")
-                || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
+        if (args[0].equals("?") || args[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
             if (args.length < 2) {
                 handled = true;
                 MyTown.sendChatToPlayer(cs, Formatter.formatGroupCommand(Term.CommandHelp.toString(), Term.CommandHelpMayor.toString(), Term.CommandHelpMayorDesc.toString(), color));
-            } else if (args[1].equalsIgnoreCase(Term.CommandHelpMayor
-                    .toString())) {
+            } else if (args[1].equalsIgnoreCase(Term.CommandHelpMayor.toString())) {
                 handled = true;
                 MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdAssistant.toString(), Term.TownCmdAssistantArgs.toString(), Term.TownCmdAssistantDesc.toString(), color));
                 MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdMayor.toString(), Term.TownCmdMayorArgs.toString(), Term.TownCmdMayorDesc.toString(), color));
@@ -132,32 +120,22 @@ public class MyTownMayor {
                 if (cmd.equalsIgnoreCase(Term.TownCmdAssistantArgs1.toString())) // add
                 {
                     if (r.rank() == Rank.Mayor) {
-                        throw new CommandException(
-                                Term.TownErrCannotUseThisDemoteMayor);
+                        throw new CommandException(Term.TownErrCannotUseThisDemoteMayor);
                     }
                     if (r.rank() == Rank.Assistant) {
-                        throw new CommandException(
-                                Term.TownErrPlayerIsAlreadyAssistant);
+                        throw new CommandException(Term.TownErrPlayerIsAlreadyAssistant);
                     }
 
                     res.town().setResidentRank(r, Rank.Assistant);
-                    res.town().sendNotification(
-                            Level.INFO,
-                            Term.TownPlayerPromotedToAssistant.toString(r
-                                    .name()));
-                } else if (cmd.equalsIgnoreCase(Term.TownCmdAssistantArgs2
-                        .toString())) // remove
+                    res.town().sendNotification(Level.INFO, Term.TownPlayerPromotedToAssistant.toString(r.name()));
+                } else if (cmd.equalsIgnoreCase(Term.TownCmdAssistantArgs2.toString())) // remove
                 {
                     if (r.rank() != Rank.Assistant) {
-                        throw new CommandException(
-                                Term.TownErrPlayerIsNotAssistant);
+                        throw new CommandException(Term.TownErrPlayerIsNotAssistant);
                     }
 
                     res.town().setResidentRank(r, Rank.Resident);
-                    res.town().sendNotification(
-                            Level.INFO,
-                            Term.TownPlayerDemotedFromAssistant.toString(r
-                                    .name()));
+                    res.town().sendNotification(Level.INFO, Term.TownPlayerDemotedFromAssistant.toString(r.name()));
                 } else {
                     MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdAssistant.toString(), Term.TownCmdAssistantArgs.toString(), Term.TownCmdAssistantDesc.toString(), color));
                 }
@@ -182,19 +160,14 @@ public class MyTownMayor {
                     throw new CommandException(Term.TownErrPlayerNotInYourTown);
                 }
 
-                if (!ForgePerms.getPermissionsHandler().canAccess(
-                        r.onlinePlayer.username,
-                        r.onlinePlayer.worldObj.provider.getDimensionName(),
-                        "mytown.cmd.new")) {
-                    throw new CommandException(
-                            Term.TownErrPlayerDoesntHaveAccessToTownManagement);
+                if (!ForgePerms.getPermissionsHandler().canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
+                    throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement);
                 }
 
                 res.town().setResidentRank(r, Rank.Mayor);
                 res.town().setResidentRank(res, Rank.Assistant);
 
-                res.town().sendNotification(Level.INFO,
-                        Term.TownPlayerPromotedToMayor.toString(r.name()));
+                res.town().sendNotification(Level.INFO, Term.TownPlayerPromotedToMayor.toString(r.name()));
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdDelete.toString())) {
             Assert.Perm(cs, "mytown.cmd.delete");
@@ -208,9 +181,8 @@ public class MyTownMayor {
                 res.checkLocation();
 
                 String msg = Term.TownBroadcastDeleted.toString(name);
-                for (Object obj : MinecraftServer.getServer()
-                        .getConfigurationManager().playerEntityList) {
-                    MyTown.sendChatToPlayer((EntityPlayer)obj, msg);
+                for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+                    MyTown.sendChatToPlayer((EntityPlayer) obj, msg);
                 }
             } else {
                 MyTown.sendChatToPlayer(cs, Term.TownCmdDeleteAction.toString());
@@ -221,8 +193,7 @@ public class MyTownMayor {
 
             if (args.length == 2) {
                 res.town().setTownName(args[1]);
-                res.town().sendNotification(Level.INFO,
-                        Term.TownRenamed.toString(res.town().name()));
+                res.town().sendNotification(Level.INFO, Term.TownRenamed.toString(res.town().name()));
             } else {
                 MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdRename.toString(), Term.TownCmdRenameArgs.toString(), Term.TownCmdRenameDesc.toString(), color));
             }

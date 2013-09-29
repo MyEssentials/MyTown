@@ -24,8 +24,7 @@ public class ItemIdRange {
     }
 
     public boolean equals(ItemStack item) {
-        return equals(item.itemID, item.isStackable() ? item.getItemDamage()
-                : 0);
+        return equals(item.itemID, item.isStackable() ? item.getItemDamage() : 0);
     }
 
     public boolean equals(int id, int subId) {
@@ -117,8 +116,7 @@ public class ItemIdRange {
         return parseList(lines, "-", false);
     }
 
-    public static LinkedList<ItemIdRange> parseList(List<String> lines,
-            String separator, boolean square) {
+    public static LinkedList<ItemIdRange> parseList(List<String> lines, String separator, boolean square) {
         LinkedList<ItemIdRange> ret = new LinkedList<ItemIdRange>();
 
         if (lines != null && lines.size() > 0) {

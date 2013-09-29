@@ -34,11 +34,9 @@ public class WorldBorder extends TickBase {
         enabled = false;
         limits.clear();
 
-        boolean willBeEnabled = MyTown.instance.config.get("worldborder",
-                "enabled", true, "Module enabled?").getBoolean(true);
+        boolean willBeEnabled = MyTown.instance.config.get("worldborder", "enabled", true, "Module enabled?").getBoolean(true);
 
-        ConfigCategory cat = MyTown.instance.config
-                .getCategory("worldborder.limits");
+        ConfigCategory cat = MyTown.instance.config.getCategory("worldborder.limits");
         cat.setComment("Dimensional limits. S:Limit<n>=<dim>, <type>, <radius>. Type is either circle or square\nExample: S:Limit1=0, circle, 50000");
 
         for (Property p : cat.values()) {
@@ -63,23 +61,15 @@ public class WorldBorder extends TickBase {
     }
 
     public void continueGeneratingChunks() {
-        genenabled = MyTown.instance.config.get("worldborder",
-                "chunk-generator-enabled", false, "Generate blocks?")
-                .getBoolean(false);
-        multithreaded = MyTown.instance.config
-                .get("worldborder",
-                        "chunk-generator-multithreaded",
-                        false,
-                        "Multithreaded chunk generation. Usable only by threadsafe servers. Expect crashes from modded worlds.")
-                .getBoolean(false);
+        genenabled = MyTown.instance.config.get("worldborder", "chunk-generator-enabled", false, "Generate blocks?").getBoolean(false);
+        multithreaded = MyTown.instance.config.get("worldborder", "chunk-generator-multithreaded", false, "Multithreaded chunk generation. Usable only by threadsafe servers. Expect crashes from modded worlds.").getBoolean(false);
 
         if (!genenabled) {
             return;
         }
 
         for (Entry<Integer, DimConfig> kv : limits.entrySet()) {
-            World w = MinecraftServer.getServer().worldServerForDimension(
-                    kv.getKey());
+            World w = MinecraftServer.getServer().worldServerForDimension(kv.getKey());
             if (w == null) {
                 continue;
             }
@@ -87,22 +77,10 @@ public class WorldBorder extends TickBase {
             int radiusTo = kv.getValue().radius / 16 + 6;
             boolean circle = kv.getValue().typeCircle;
 
-            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
-                    "worldborder.generator",
-                    "dim_" + kv.getKey() + "_0_radius", 0).getInt(), radiusTo,
-                    circle, 0));
-            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
-                    "worldborder.generator",
-                    "dim_" + kv.getKey() + "_1_radius", 0).getInt(), radiusTo,
-                    circle, 1));
-            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
-                    "worldborder.generator",
-                    "dim_" + kv.getKey() + "_2_radius", 0).getInt(), radiusTo,
-                    circle, 2));
-            generators.add(ChunkGen.start(w, MyTown.instance.config.get(
-                    "worldborder.generator",
-                    "dim_" + kv.getKey() + "_3_radius", 0).getInt(), radiusTo,
-                    circle, 3));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get("worldborder.generator", "dim_" + kv.getKey() + "_0_radius", 0).getInt(), radiusTo, circle, 0));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get("worldborder.generator", "dim_" + kv.getKey() + "_1_radius", 0).getInt(), radiusTo, circle, 1));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get("worldborder.generator", "dim_" + kv.getKey() + "_2_radius", 0).getInt(), radiusTo, circle, 2));
+            generators.add(ChunkGen.start(w, MyTown.instance.config.get("worldborder.generator", "dim_" + kv.getKey() + "_3_radius", 0).getInt(), radiusTo, circle, 3));
         }
 
         lastStamp = System.currentTimeMillis();
@@ -113,10 +91,7 @@ public class WorldBorder extends TickBase {
     }
 
     public void generatorReporting(ChunkGen gen, int radiusDone) {
-        MyTown.instance.config.get(
-                "worldborder.generator",
-                "dim_" + gen.w.provider.dimensionId + "_" + gen.sector
-                        + "_radius", 0).set(radiusDone + 1);
+        MyTown.instance.config.get("worldborder.generator", "dim_" + gen.w.provider.dimensionId + "_" + gen.sector + "_radius", 0).set(radiusDone + 1);
 
         if (System.currentTimeMillis() >= nextGenConfigSave) {
             nextGenConfigSave = System.currentTimeMillis() + 30 * 1000;
@@ -136,17 +111,12 @@ public class WorldBorder extends TickBase {
                 double tRemaining = (total - done) / speed;
                 int tRemH = (int) Math.floor(tRemaining / 60 / 60);
                 int tRemM = (int) Math.floor(tRemaining / 60 - tRemH * 60);
-                int tRemS = (int) Math.round(tRemaining - tRemH * 60 * 60
-                        - tRemM * 60);
+                int tRemS = (int) Math.round(tRemaining - tRemH * 60 * 60 - tRemM * 60);
 
-                sEx = String.format(", %.2f c/s, %s remaining", speed,
-                        (tRemH > 0 ? tRemH + "h " : "")
-                                + (tRemM > 0 || tRemH > 0 ? tRemM + "m " : "")
-                                + tRemS + "s");
+                sEx = String.format(", %.2f c/s, %s remaining", speed, (tRemH > 0 ? tRemH + "h " : "") + (tRemM > 0 || tRemH > 0 ? tRemM + "m " : "") + tRemS + "s");
             }
 
-            Log.info("[WorldBorder] %s of %s chunks done - %s%%%s", done,
-                    total, (int) prc, sEx);
+            Log.info("[WorldBorder] %s of %s chunks done - %s%%%s", done, total, (int) prc, sEx);
 
             lastDone = done;
             lastStamp = System.currentTimeMillis();
@@ -164,14 +134,11 @@ public class WorldBorder extends TickBase {
             if (done) {
                 Log.info("[WorldBorder] All done. Disabled in config.");
 
-                ConfigCategory cat = MyTown.instance.config
-                        .getCategory("worldborder.generator");
+                ConfigCategory cat = MyTown.instance.config.getCategory("worldborder.generator");
                 cat.clear();
 
                 genenabled = false;
-                MyTown.instance.config.get("worldborder",
-                        "chunk-generator-enabled", false, "Generate blocks?")
-                        .set(false);
+                MyTown.instance.config.get("worldborder", "chunk-generator-enabled", false, "Generate blocks?").set(false);
                 MyTown.instance.config.save();
             }
         }
@@ -208,10 +175,7 @@ public class WorldBorder extends TickBase {
             throw ex;
         } finally {
             for (ChunkGen g : generators) {
-                MyTown.instance.config.get(
-                        "worldborder.generator",
-                        "dim_" + g.w.provider.dimensionId + "_" + g.sector
-                                + "_radius", 0).set(g.lastSuccessfulRadius + 1);
+                MyTown.instance.config.get("worldborder.generator", "dim_" + g.w.provider.dimensionId + "_" + g.sector + "_radius", 0).set(g.lastSuccessfulRadius + 1);
             }
 
             MyTown.instance.config.save();
@@ -231,32 +195,26 @@ public class WorldBorder extends TickBase {
 
         public Thread runThread;
 
-        protected ChunkGen(World w, int radiusFrom, int radiusTo,
-                boolean circle, int sector) {
+        protected ChunkGen(World w, int radiusFrom, int radiusTo, boolean circle, int sector) {
             this.w = w;
             this.radiusFrom = radiusFrom;
             this.radiusTo = radiusTo;
             this.circle = circle;
             this.sector = sector;
 
-            int smallRound = radiusFrom <= 0 ? 0 : (radiusFrom * 2 + 1)
-                    * (radiusFrom * 2 + 1);
-            int bigRound = radiusTo <= 0 ? 1 : (radiusTo * 2 + 1)
-                    * (radiusTo * 2 + 1);
+            int smallRound = radiusFrom <= 0 ? 0 : (radiusFrom * 2 + 1) * (radiusFrom * 2 + 1);
+            int bigRound = radiusTo <= 0 ? 1 : (radiusTo * 2 + 1) * (radiusTo * 2 + 1);
 
             lastSuccessfulRadius = radiusFrom - 1;
             blocksDone = smallRound / 4;
             totalBlocks = bigRound / 4;
         }
 
-        public static ChunkGen start(World w, int radiusFrom, int radiusTo,
-                boolean circle, int sector) {
+        public static ChunkGen start(World w, int radiusFrom, int radiusTo, boolean circle, int sector) {
             ChunkGen gen = new ChunkGen(w, radiusFrom, radiusTo, circle, sector);
 
             if (WorldBorder.instance.multithreaded) {
-                gen.runThread = new Thread(gen, String.format(
-                        "MyTown Chunk generator dim %s sector %s",
-                        w.provider.dimensionId, sector));
+                gen.runThread = new Thread(gen, String.format("MyTown Chunk generator dim %s sector %s", w.provider.dimensionId, sector));
 
                 try {
                     gen.runThread.setPriority(Thread.MIN_PRIORITY);
@@ -333,8 +291,7 @@ public class WorldBorder extends TickBase {
                 provider.loadChunk(x, z);
 
                 if (provider instanceof ChunkProviderServer) {
-                    ((ChunkProviderServer) provider)
-                            .unloadChunksIfNotNearSpawn(x, z);
+                    ((ChunkProviderServer) provider).unloadChunksIfNotNearSpawn(x, z);
                 }
 
                 provider.unloadQueuedChunks();
@@ -344,8 +301,7 @@ public class WorldBorder extends TickBase {
         public void reportRoundDone(int radiusDone) {
             // int smallRound = radiusFrom <= 0 ? 0 : (radiusFrom * 2 + 1) *
             // (radiusFrom * 2 + 1);
-            int bigRound = radiusDone <= 0 ? 1 : (radiusDone * 2 + 1)
-                    * (radiusDone * 2 + 1);
+            int bigRound = radiusDone <= 0 ? 1 : (radiusDone * 2 + 1) * (radiusDone * 2 + 1);
 
             blocksDone = bigRound / 4;
             lastSuccessfulRadius = radiusDone;
@@ -374,11 +330,9 @@ public class WorldBorder extends TickBase {
 
         public boolean isWithinArea(Entity e) {
             if (typeCircle) {
-                return (int) e.posX * (int) e.posX + (int) e.posZ
-                        * (int) e.posZ <= sqrDist;
+                return (int) e.posX * (int) e.posX + (int) e.posZ * (int) e.posZ <= sqrDist;
             } else {
-                return e.posX <= radius && e.posX >= -radius
-                        && e.posZ <= radius && e.posZ >= -radius;
+                return e.posX <= radius && e.posX >= -radius && e.posZ <= radius && e.posZ >= -radius;
             }
         }
 

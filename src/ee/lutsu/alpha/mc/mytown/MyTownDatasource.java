@@ -2,7 +2,7 @@ package ee.lutsu.alpha.mc.mytown;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,25 +16,33 @@ import ee.lutsu.alpha.mc.mytown.sql.MyTownDB;
 public class MyTownDatasource extends MyTownDB {
     public static MyTownDatasource instance = new MyTownDatasource();
 
-    public HashSet<Resident> residents = new HashSet<Resident>();
-    public HashSet<Town> towns = new HashSet<Town>();
-    public HashSet<TownBlock> blocks = new HashSet<TownBlock>();
-    public HashSet<Nation> nations = new HashSet<Nation>();
+    public HashMap<String, Resident> residents = new HashMap<String, Resident>();
+    public HashMap<String, Town> towns = new HashMap<String, Town>();
+    public HashMap<String, TownBlock> blocks = new HashMap<String, TownBlock>();
+    public HashMap<String, Nation> nations = new HashMap<String, Nation>();
+
+    public static String getTownBlockKey(int dim, int x, int z) {
+        return dim + ";" + x + ";" + z;
+    }
+
+    public static String getTownBlockKey(TownBlock block) {
+        return block.worldDimension() + ";" + block.x() + ";" + block.z();
+    }
 
     public void init() throws Exception {
-        residents = new HashSet<Resident>();
-        towns = new HashSet<Town>();
-        blocks = new HashSet<TownBlock>();
-        nations = new HashSet<Nation>();
+        residents = new HashMap<String, Resident>();
+        towns = new HashMap<String, Town>();
+        blocks = new HashMap<String, TownBlock>();
+        nations = new HashMap<String, Nation>();
 
         dispose();
         connect();
         load();
 
-        towns.addAll(loadTowns());
-        residents.addAll(loadResidents()); // links to towns
+        towns.putAll(loadTowns());
+        residents.putAll(loadResidents()); // links to towns
 
-        for (Town t : towns) {
+        for (Town t : towns.values()) {
             for (TownBlock res : t.blocks()) {
                 if (res.owner_name != null) // map block owners
                 {
@@ -43,11 +51,12 @@ public class MyTownDatasource extends MyTownDB {
                     res.owner_name = null;
                 }
 
-                blocks.add(res); // add block to global list
+                blocks.put(getTownBlockKey(res), res); // add block to global
+                                                       // list
             }
         }
 
-        nations.addAll(loadNations());
+        nations.putAll(loadNations());
 
         addAllOnlinePlayers();
     }
@@ -60,49 +69,36 @@ public class MyTownDatasource extends MyTownDB {
     }
 
     public void addTown(Town t) {
-        towns.add(t);
+        towns.put(t.name().toLowerCase(), t);
     }
 
     public void addNation(Nation n) {
-        nations.add(n);
+        nations.put(n.name().toLowerCase(), n);
     }
 
     public TownBlock getOrMakeBlock(int world_dimension, int x, int z) {
-        for (TownBlock res : blocks) {
-            if (res.equals(world_dimension, x, z)) {
-                return res;
-            }
-        }
 
-        TownBlock res = new TownBlock(world_dimension, x, z);
-        blocks.add(res);
+        TownBlock res = blocks.get(getTownBlockKey(world_dimension, x, z));
+        if (res == null) {
+            res = new TownBlock(world_dimension, x, z);
+            blocks.put(getTownBlockKey(world_dimension, x, z), res);
+        }
         return res;
     }
 
     public TownBlock getBlock(int world_dimension, int x, int z) {
-        for (TownBlock res : blocks) {
-            if (res.equals(world_dimension, x, z)) {
-                return res;
-            }
-        }
-
-        return null;
+        return blocks.get(getTownBlockKey(world_dimension, x, z));
     }
 
-    public TownBlock getPermBlockAtCoord(int world_dimension, int x, int y,
-            int z) {
+    public TownBlock getPermBlockAtCoord(int world_dimension, int x, int y, int z) {
         return getPermBlockAtCoord(world_dimension, x, y, y, z);
     }
 
-    public TownBlock getPermBlockAtCoord(int world_dimension, int x, int yFrom,
-            int yTo, int z) {
-        TownBlock targetBlock = getBlock(world_dimension, ChunkCoord
-                .getCoord(x), ChunkCoord.getCoord(z));
+    public TownBlock getPermBlockAtCoord(int world_dimension, int x, int yFrom, int yTo, int z) {
+        TownBlock targetBlock = getBlock(world_dimension, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
         if (targetBlock != null && targetBlock.settings.yCheckOn) {
-            if (yTo < targetBlock.settings.yCheckFrom
-                    || yFrom > targetBlock.settings.yCheckTo) {
-                targetBlock = targetBlock
-                        .getFirstFullSidingClockwise(targetBlock.town());
+            if (yTo < targetBlock.settings.yCheckFrom || yFrom > targetBlock.settings.yCheckTo) {
+                targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
             }
         }
 
@@ -110,85 +106,64 @@ public class MyTownDatasource extends MyTownDB {
     }
 
     public Town getTown(String name) {
-        for (Town res : towns) {
-            if (res.name().equalsIgnoreCase(name)) {
-                return res;
-            }
-        }
-
-        return null;
+        return towns.get(name.toLowerCase());
     }
 
     @Override
     public Town getTown(int id) {
-        for (Town res : towns) {
+        for (Town res : towns.values()) {
             if (res.id() == id) {
                 return res;
             }
         }
-
         return null;
     }
 
     public Nation getNation(String name) {
-        for (Nation res : nations) {
-            if (res.name().equalsIgnoreCase(name)) {
-                return res;
-            }
-        }
-
-        return null;
+        return nations.get(name.toLowerCase());
     }
 
-    public Resident getOrMakeResident(EntityPlayer player) {
-        for (Resident res : residents) {
-            if (res.onlinePlayer == player) {
-                return res;
-            }
-        }
+    public synchronized Resident getOrMakeResident(EntityPlayer player) {
+        Resident res = residents.get(player.getEntityName().toLowerCase());
 
-        Resident r = getOrMakeResident(player.getEntityName());
-        r.onlinePlayer = player;
-        return r;
+        if (res == null) {
+            res = makeResident(player.getEntityName());
+        }
+        res.onlinePlayer = player;
+        return res;
     }
 
     public Resident getResident(EntityPlayer player) {
-        for (Resident res : residents) {
-            if (res.onlinePlayer == player) {
-                return res;
-            }
-        }
-
-        return null;
+        return residents.get(player.getEntityName().toLowerCase());
     }
 
-    public Resident getOrMakeResident(String name) // case sensitive
+    public Resident getOrMakeResident(String name) // case in-sensitive
     {
-        for (Resident res : residents) {
-            if (res.name().equals(name)) {
-                return res;
-            }
+        Resident res = residents.get(name.toLowerCase());
+
+        if (res == null) {
+            res = makeResident(name);
         }
 
+        return res;
+    }
+
+    private Resident makeResident(String name) {
         Resident res = new Resident(name);
-        residents.add(res);
+        residents.put(name.toLowerCase(), res);
+
         return res;
     }
 
     public Resident getResident(String name) // case in-sensitive
     {
-        for (Resident res : residents) {
-            if (res.name().equalsIgnoreCase(name)) {
-                return res;
-            }
-        }
-
-        return null;
+        Resident res = residents.get(name.toLowerCase());
+        return res;
     }
 
     public List<Resident> getOnlineResidents() {
         ArrayList<Resident> ret = new ArrayList<Resident>();
-        for (Resident res : residents) {
+        for (Resident res : residents.values()) {
             if (res.isOnline()) {
                 ret.add(res);
             }
@@ -207,7 +182,7 @@ public class MyTownDatasource extends MyTownDB {
 
     public void unloadBlock(TownBlock b) {
         b.settings.setParent(null);
-        blocks.remove(b);
+        blocks.remove(getTownBlockKey(b));
     }
 
     public void unloadResident(Resident r) {
@@ -219,7 +194,7 @@ public class MyTownDatasource extends MyTownDB {
     public int deleteAllTownBlocksInDimension(int dim) {
         int ret = 0;
         ArrayList<TownBlock> toRemove = new ArrayList<TownBlock>();
-        for (TownBlock res : blocks) {
+        for (TownBlock res : blocks.values()) {
             if (res.worldDimension() == dim) {
                 toRemove.add(res);
             }
@@ -246,9 +221,8 @@ public class MyTownDatasource extends MyTownDB {
     public List<Resident> getOldResidents(Date lastLoginTimeBelow) {
         ArrayList<Resident> players = new ArrayList<Resident>();
         synchronized (residents) {
-            for (Resident res : residents) {
-                if (res.town() != null && !res.isOnline()
-                        && res.lastLogin().compareTo(lastLoginTimeBelow) < 0) {
+            for (Resident res : residents.values()) {
+                if (res.town() != null && !res.isOnline() && res.lastLogin().compareTo(lastLoginTimeBelow) < 0) {
                     players.add(res);
                 }
             }
@@ -257,21 +231,16 @@ public class MyTownDatasource extends MyTownDB {
         return players;
     }
 
-    public List<Town> getOldTowns(long lastLoginTimeBelow,
-            double plotDaysAddition) {
+    public List<Town> getOldTowns(long lastLoginTimeBelow, double plotDaysAddition) {
         ArrayList<Town> towns = new ArrayList<Town>();
         synchronized (residents) {
-            for (Resident res : residents) {
-                Date last = new Date(lastLoginTimeBelow
-                        - (res.town() != null ? (int) (plotDaysAddition * res
-                                .town().blocks().size()) : 0));
-                if (res.town() != null && !res.isOnline()
-                        && res.lastLogin().compareTo(last) < 0) {
+            for (Resident res : residents.values()) {
+                Date last = new Date(lastLoginTimeBelow - (res.town() != null ? (int) (plotDaysAddition * res.town().blocks().size()) : 0));
+                if (res.town() != null && !res.isOnline() && res.lastLogin().compareTo(last) < 0) {
                     if (!towns.contains(res.town())) {
                         boolean allOld = true;
                         for (Resident r : res.town().residents()) {
-                            if (r.isOnline()
-                                    || r.lastLogin().compareTo(last) >= 0) {
+                            if (r.isOnline() || r.lastLogin().compareTo(last) >= 0) {
                                 allOld = false;
                                 break;
                             }

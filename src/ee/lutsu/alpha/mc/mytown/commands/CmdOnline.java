@@ -35,19 +35,15 @@ public class CmdOnline extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
         if (sender instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) sender;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(),
-                    "mytown.ecmd.online");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.online");
         }
-        Log.log(Level.INFO, "%s failed to use node %s", sender
-                .getCommandSenderName(), "mytown.ecmd.online");
+        Log.log(Level.INFO, "%s failed to use node %s", sender.getCommandSenderName(), "mytown.ecmd.online");
         return false;
     }
 
     @Override
     public void processCommand(ICommandSender cs, String[] args) {
-        ArrayList<Resident> sorted = new ArrayList<Resident>(
-                MyTownDatasource.instance.getOnlineResidents());
+        ArrayList<Resident> sorted = new ArrayList<Resident>(MyTownDatasource.instance.getOnlineResidents());
 
         Collections.sort(sorted, new Comparator<Resident>() {
             @Override

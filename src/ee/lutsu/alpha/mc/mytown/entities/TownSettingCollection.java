@@ -141,8 +141,7 @@ public class TownSettingCollection {
         for (TownSetting set : settings) {
             if (set.value == null) {
                 if (parent != null) {
-                    set.effectiveValue = parent.getEffValue(set
-                            .getSerializationKey());
+                    set.effectiveValue = parent.getEffValue(set.getSerializationKey());
                 }
             } else {
                 set.effectiveValue = set.value;
@@ -159,17 +158,14 @@ public class TownSettingCollection {
         }
 
         if (value != null && value.equals("?")) {
-            throw new CommandException(Term.ErrPermSupportedValues, set
-                    .getValueType(), set.getValueDescription());
+            throw new CommandException(Term.ErrPermSupportedValues, set.getValueType(), set.getValueDescription());
         }
 
         try {
             set.setValue(value);
         } catch (Exception e) {
-            String err = e.getClass().getSimpleName()
-                    + (e.toString() != null ? ": " + e.toString() : "");
-            throw new CommandException(Term.ErrPermSupportedValues, err, set
-                    .getValueDescription());
+            String err = e.getClass().getSimpleName() + (e.toString() != null ? ": " + e.toString() : "");
+            throw new CommandException(Term.ErrPermSupportedValues, err, set.getValueDescription());
         }
 
         refresh();
@@ -240,7 +236,8 @@ public class TownSettingCollection {
         for (TownSetting set : settings) {
             if (!isWild || set.wildValue != null) {
                 EntityPlayer p = (EntityPlayer) cs;
-                if (all || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getSerializationKey()) || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set.*")) {
+                if (all || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getSerializationKey())
+                        || ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set.*")) {
                     MyTown.sendChatToPlayer(cs, String.format("§a%s §2[%s] : %s%s", set.getName(), set.getSerializationKey(), set.value == null ? "§d" : "§c", set.getVisualValue()));
                 }
             }
@@ -319,51 +316,29 @@ public class TownSettingCollection {
 
         // label key default value wild value value limitation description value
         // conversion class
-        settings.add(new TownSetting("Town member rights", "town",
-                Permissions.Build, null, "choice:"
-                        + Permissions.getValuesDesc(), Permissions.class));
-        settings.add(new TownSetting("Nation member rights", "nation",
-                Permissions.Enter, null, "choice:"
-                        + Permissions.getValuesDesc(), Permissions.class));
-        settings.add(new TownSetting("Outsider rights", "out",
-                Permissions.Enter, Permissions.Build, "choice:"
-                        + Permissions.getValuesDesc(), Permissions.class));
-        settings.add(new TownSetting("Friend rights", "friend",
-                Permissions.Build, null, "choice:"
-                        + Permissions.getValuesDesc(), Permissions.class));
+        settings.add(new TownSetting("Town member rights", "town", Permissions.Build, null, "choice:" + Permissions.getValuesDesc(), Permissions.class));
+        settings.add(new TownSetting("Nation member rights", "nation", Permissions.Enter, null, "choice:" + Permissions.getValuesDesc(), Permissions.class));
+        settings.add(new TownSetting("Outsider rights", "out", Permissions.Enter, Permissions.Build, "choice:" + Permissions.getValuesDesc(), Permissions.class));
+        settings.add(new TownSetting("Friend rights", "friend", Permissions.Build, null, "choice:" + Permissions.getValuesDesc(), Permissions.class));
 
-        settings.add(new TownSetting("Allow cart interaction", "carts", false,
-                true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow stevescarts railers",
-                "steverailer", false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow stevescarts miners", "steveminer",
-                false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow railcraft bores", "rcbore", false,
-                true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow quarrys,filler,builders", "bc",
-                false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow computercraft turtles",
-                "ccturtles", false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow claiming next to", "closeclaim",
-                false, null, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow everyone to kill mobs", "killmobs",
-                true, null, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow cart interaction", "carts", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow stevescarts railers", "steverailer", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow stevescarts miners", "steveminer", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow railcraft bores", "rcbore", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow quarrys,filler,builders", "bc", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow computercraft turtles", "ccturtles", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow claiming next to", "closeclaim", false, null, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow everyone to kill mobs", "killmobs", true, null, "boolean:yes/no", boolean.class));
         // settings.add(new TownSetting("Allow PVP in town", "allowpvp", false,
         // null, "boolean:yes/no", boolean.class));
 
-        settings.add(new TownSetting("Disable creeper explosion", "creepoff",
-                false, false, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Disable TNT explosion", "tntoff", true,
-                false, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Disable mobs", "mobsoff", false, null,
-                "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Disable creeper explosion", "creepoff", false, false, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Disable TNT explosion", "tntoff", true, false, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Disable mobs", "mobsoff", false, null, "boolean:yes/no", boolean.class));
 
-        settings.add(new TownSetting("Height enabled", "yon", false, null,
-                "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Height check from", "yfrom", 0, null,
-                "int:0-255", int.class));
-        settings.add(new TownSetting("Height check to", "yto", 255, null,
-                "int:0-255, below [yfrom]", int.class));
+        settings.add(new TownSetting("Height enabled", "yon", false, null, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Height check from", "yfrom", 0, null, "int:0-255", int.class));
+        settings.add(new TownSetting("Height check to", "yto", 255, null, "int:0-255, below [yfrom]", int.class));
 
         if (!isRoot) {
             clearValues();

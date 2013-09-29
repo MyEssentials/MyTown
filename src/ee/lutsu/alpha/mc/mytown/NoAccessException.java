@@ -27,8 +27,7 @@ public class NoAccessException extends Exception {
         while ((index = perm.lastIndexOf(".")) != -1) {
             perm = perm.substring(0, index);
 
-            message = ForgePerms.getPermissionsHandler().getOption(executor,
-                    "permission-denied-" + perm, null);
+            message = ForgePerms.getPermissionsHandler().getOption(executor, "permission-denied-" + perm, null);
             // TODO Permissions.getOption(executor, "permission-denied-" + perm,
             // null);
             if (message == null) {
@@ -40,8 +39,7 @@ public class NoAccessException extends Exception {
 
         // TODO message = Permissions.getOption(executor, "permission-denied",
         // null);
-        message = ForgePerms.getPermissionsHandler().getOption(executor,
-                "permission-denied", null);
+        message = ForgePerms.getPermissionsHandler().getOption(executor, "permission-denied", null);
         if (message != null) {
             return message;
         }

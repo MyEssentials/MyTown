@@ -20,8 +20,7 @@ public class CmdEmote extends CommandServerEmote {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.me");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.me");
         }
         return false;
     }
@@ -31,10 +30,8 @@ public class CmdEmote extends CommandServerEmote {
         if (!Formatter.formatChat || arg.length < 1) {
             super.processCommand(cs, arg);
         } else {
-            Resident res = MyTownDatasource.instance
-                    .getOrMakeResident((EntityPlayer) cs);
-            CmdChat.sendToChannel(res, func_82360_a(cs, arg, 0),
-                    res.activeChannel, true);
+            Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs);
+            CmdChat.sendToChannel(res, func_82360_a(cs, arg, 0), res.activeChannel, true);
         }
     }
 
@@ -44,9 +41,7 @@ public class CmdEmote extends CommandServerEmote {
      */
     @SuppressWarnings("rawtypes")
     @Override
-    public List addTabCompletionOptions(ICommandSender par1ICommandSender,
-            String[] par2ArrayOfStr) {
-        return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer
-                .getServer().getAllUsernames());
+    public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+        return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
     }
 }

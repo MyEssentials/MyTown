@@ -29,8 +29,7 @@ public class CmdHome extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.home");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.home");
         }
         return false;
     }
@@ -51,16 +50,15 @@ public class CmdHome extends CommandBase {
                 throw new CommandException(Term.HomeCmdNoHomeByName);
             }
 
-            res.pay.requestPayment("hometeleport", Cost.HomeTeleport.item,
-                    new PayHandler.IDone() {
-                        @Override
-                        public void run(Resident player, Object[] args) {
-                            teleport(player, (SavedHome) args[0]);
-                        }
-                    }, h);
+            res.pay.requestPayment("hometeleport", Cost.HomeTeleport.item, new PayHandler.IDone() {
+                @Override
+                public void run(Resident player, Object[] args) {
+                    teleport(player, (SavedHome) args[0]);
+                }
+            }, h);
 
         } catch (CommandException ex) {
-            MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING,ex.errorCode.toString(ex.args)));
+            MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
         } catch (Throwable ex) {
             Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
             MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
@@ -68,8 +66,7 @@ public class CmdHome extends CommandBase {
     }
 
     public static void teleport(Resident res, SavedHome h) {
-        if (Cost.HomeTeleport.item != null
-                && Resident.teleportToHomeWaitSeconds > 0) {
+        if (Cost.HomeTeleport.item != null && Resident.teleportToHomeWaitSeconds > 0) {
             MyTown.sendChatToPlayer(res.onlinePlayer, Term.HomeCmdDontMove.toString());
         }
 

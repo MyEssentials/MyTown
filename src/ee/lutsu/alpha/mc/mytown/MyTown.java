@@ -63,7 +63,7 @@ import ee.lutsu.alpha.mc.mytown.event.WorldEvents;
 import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 import ee.lutsu.alpha.mc.mytown.sql.Database;
 
-@Mod(modid = "MyTown", name = "My Town", version = "1.5.0.0")
+@Mod(modid = "MyTown", name = "My Town", version = "1.6.1.10")
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
 public class MyTown {
     public static String MOD_NAME = "MyTown";
@@ -125,8 +125,7 @@ public class MyTown {
         MinecraftForge.EVENT_BUS.register(events);
         GameRegistry.registerPlayerTracker(events);
         MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
-        TickRegistry
-                .registerTickHandler(ProtectionEvents.instance, Side.SERVER);
+        TickRegistry.registerTickHandler(ProtectionEvents.instance, Side.SERVER);
         TickRegistry.registerTickHandler(TickHandler.instance, Side.SERVER);
         MinecraftForge.EVENT_BUS.register(WorldEvents.instance);
 
@@ -134,9 +133,7 @@ public class MyTown {
             loadCommandsConfig(config);
             WorldBorder.instance.continueGeneratingChunks();
         } catch (Exception var8) {
-            FMLLog.log(Level.SEVERE, var8, MOD_NAME
-                    + " was unable to load it\'s configuration successfully",
-                    new Object[0]);
+            FMLLog.log(Level.SEVERE, var8, MOD_NAME + " was unable to load it\'s configuration successfully", new Object[0]);
             throw new RuntimeException(var8);
         } finally {
             config.save(); // re-save to add the missing configuration variables
@@ -146,8 +143,7 @@ public class MyTown {
     }
 
     @Mod.ServerStopping
-    public void serverStopping(FMLServerStoppingEvent ev)
-            throws InterruptedException {
+    public void serverStopping(FMLServerStoppingEvent ev) throws InterruptedException {
         WorldBorder.instance.stopGenerators();
     }
 
@@ -169,8 +165,7 @@ public class MyTown {
             TickHandler.instance.loadConfigs();
             WorldBorder.instance.loadConfig();
         } catch (Exception e) {
-            Log.severe(MOD_NAME
-                    + " was unable to load it\'s configuration successfully", e);
+            Log.severe(MOD_NAME + " was unable to load it\'s configuration successfully", e);
             throw new RuntimeException(e);
         } finally {
             config.save(); // re-save to add the missing configuration variables
@@ -196,8 +191,7 @@ public class MyTown {
         prop.comment = "Filename in config folder with the term translations";
 
         if (prop.getString() != null && !prop.getString().equals("")) {
-            TermTranslator.load(new File(CONFIG_FOLDER + prop.getString()),
-                    "custom", true);
+            TermTranslator.load(new File(CONFIG_FOLDER + prop.getString()), "custom", true);
         }
 
         prop = config.get("General", "NationAddsBlocks", 0);
@@ -211,6 +205,10 @@ public class MyTown {
         prop = config.get("General", "MinDistanceFromAnotherTown", 50);
         prop.comment = "How many blocks(chunks) apart have the town blocks be";
         Town.minDistanceFromOtherTown = prop.getInt(5);
+
+        prop = config.get("General", "AllowFarawayClaims", true);
+        prop.comment = "Whether players are allowed to claim chunks not connected to earlier ones";
+        Town.allowFarawayClaims = prop.getBoolean(true);
 
         prop = config.get("General", "AllowTownMemberPvp", false);
         prop.comment = "First check. Can one town member hit a member of the same town? Anywhere. Also called friendlyfire";
@@ -230,61 +228,33 @@ public class MyTown {
 
         Town.pvpSafeTowns = config.get("General", "PVPSafeTown", "Spawn,Server", "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.").getString().split(",");
 
-        prop = config
-                .get("General",
-                        "LeftClickAccessBlocks",
-                        "1000:2",
-                        "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
-        leftClickAccessBlocks = ItemIdRange.parseList(Arrays.asList(prop
-                .getString().split(";")));
+        prop = config.get("General", "LeftClickAccessBlocks", "1000:2", "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
+        leftClickAccessBlocks = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
 
-        Resident.teleportToSpawnWaitSeconds = config.get("General",
-                "SpawnTeleportTimeout", Resident.teleportToSpawnWaitSeconds,
-                "How many seconds the /spawn teleport takes").getInt();
-        Resident.teleportToHomeWaitSeconds = config.get("General",
-                "HomeTeleportTimeout", Resident.teleportToHomeWaitSeconds,
-                "How many seconds the /home teleport takes").getInt();
+        Resident.teleportToSpawnWaitSeconds = config.get("General", "SpawnTeleportTimeout", Resident.teleportToSpawnWaitSeconds, "How many seconds the /spawn teleport takes").getInt();
+        Resident.teleportToHomeWaitSeconds = config.get("General", "HomeTeleportTimeout", Resident.teleportToHomeWaitSeconds, "How many seconds the /home teleport takes").getInt();
 
-        SavedHomeList.defaultIsBed = config
-                .get("General",
-                        "DefaultHomeIsBed",
-                        SavedHomeList.defaultIsBed,
-                        "Are the /sethome and /home commands with no home name linked to the bed location?")
-                .getBoolean(SavedHomeList.defaultIsBed);
+        SavedHomeList.defaultIsBed = config.get("General", "DefaultHomeIsBed", SavedHomeList.defaultIsBed, "Are the /sethome and /home commands with no home name linked to the bed location?").getBoolean(SavedHomeList.defaultIsBed);
     }
 
     private void loadCostConfigs(Configuration config) {
         config.addCustomCategoryComment("cost", "MyTown item based economy");
-        config.addCustomCategoryComment(
-                "cost.list",
-                "Defines what and how much costs. Set the amount to 0 to disable the cost. Syntax: [amount]x[item id]:[sub id]");
+        config.addCustomCategoryComment("cost.list", "Defines what and how much costs. Set the amount to 0 to disable the cost. Syntax: [amount]x[item id]:[sub id]");
         for (Cost c : Cost.values()) {
-            c.item = getItemStackConfig(config, "cost.list", c.name(), c.item,
-                    c.description);
+            c.item = getItemStackConfig(config, "cost.list", c.name(), c.item, c.description);
         }
 
-        if (!config.get("cost", "Enabled", true,
-                "Enable the so called economy module?").getBoolean(true)) {
+        if (!config.get("cost", "Enabled", true, "Enable the so called economy module?").getBoolean(true)) {
             Cost.disable();
         }
 
-        Cost.homeSetNewAdditional = config
-                .get("cost",
-                        "HomeCostAdditionPerHome",
-                        Cost.homeSetNewAdditional,
-                        "How much of the /sethome cost item is requested more for every home the player has when the player is creating a new home location. Ex. with 2 homes = /sethome cost + this * 2")
-                .getInt();
+        Cost.homeSetNewAdditional = config.get("cost", "HomeCostAdditionPerHome", Cost.homeSetNewAdditional, "How much of the /sethome cost item is requested more for every home the player has when the player is creating a new home location. Ex. with 2 homes = /sethome cost + this * 2").getInt();
     }
 
-    private static ItemStack getItemStackConfig(Configuration config,
-            String cat, String node, ItemStack def, String comment) {
+    private static ItemStack getItemStackConfig(Configuration config, String cat, String node, ItemStack def, String comment) {
         String sDef = "";
         if (def != null) {
-            sDef = def.stackSize
-                    + "x"
-                    + def.itemID
-                    + (def.getItemDamage() != 0 ? ":" + def.getItemDamage()
-                            : "");
+            sDef = def.stackSize + "x" + def.itemID + (def.getItemDamage() != 0 ? ":" + def.getItemDamage() : "");
         }
 
         String v = config.get(cat, node, sDef, comment).getString();
@@ -308,8 +278,7 @@ public class MyTown {
 
         prop = config.get("Database", "Type", "SQLite");
         prop.comment = "Database type to connect to";
-        MyTownDatasource.instance.currentType = Database.Type.matchType(prop
-                .getString());
+        MyTownDatasource.instance.currentType = Database.Type.matchType(prop.getString());
 
         prop = config.get("Database", "Prefix", "");
         prop.comment = "Table name prefix to use. <pre>_towns etc..";
@@ -351,13 +320,11 @@ public class MyTown {
         prop.comment = "Emote format to be used";
         Term.EmoteFormat.defaultVal = prop.getString();
 
-        prop = config.get("Chat", "PrivMsgInFormat",
-                Term.PrivMsgFormatIn.defaultVal);
+        prop = config.get("Chat", "PrivMsgInFormat", Term.PrivMsgFormatIn.defaultVal);
         prop.comment = "Private message format to be used when receiving. Vars starting with $s mean sender";
         Term.PrivMsgFormatIn.defaultVal = prop.getString();
 
-        prop = config.get("Chat", "PrivMsgOutFormat",
-                Term.PrivMsgFormatOut.defaultVal);
+        prop = config.get("Chat", "PrivMsgOutFormat", Term.PrivMsgFormatOut.defaultVal);
         prop.comment = "Private message format to be used when sending. Vars starting with $s mean sender";
         Term.PrivMsgFormatOut.defaultVal = prop.getString();
 
@@ -365,59 +332,45 @@ public class MyTown {
         prop.comment = "How many blocks far does the local chat sound";
         ChatChannel.localChatDistance = prop.getInt(160);
 
-        //prop = config.get("Chat", "MaxChatLength", 32767);
-        //prop.comment = "How many characters can one chat packet contain. It's global.";
-        //Packet3Chat.maxChatLength = prop.getInt(32767);
+        // prop = config.get("Chat", "MaxChatLength", 32767);
+        // prop.comment =
+        // "How many characters can one chat packet contain. It's global.";
+        // Packet3Chat.maxChatLength = prop.getInt(32767);
 
-        prop = config.get("Chat", "DefaultChannel",
-                ChatChannel.defaultChannel.name);
+        prop = config.get("Chat", "DefaultChannel", ChatChannel.defaultChannel.name);
         prop.comment = "Default chat channel for newcomers";
         ChatChannel.defaultChannel = ChatChannel.parse(prop.getString());
 
         for (ChatChannel ch : ChatChannel.values()) {
             prop = config.get("Chat", "Channel_" + ch.toString(), "");
-            prop.comment = "<enabled>;<name>;<abbrevation>;<color>;<inlineswitch> like "
-                    + String.format("%s;%s;%s;%s", ch.enabled ? 1 : 0, ch.name,
-                            ch.abbrevation, ch.color);
+            prop.comment = "<enabled>;<name>;<abbrevation>;<color>;<inlineswitch> like " + String.format("%s;%s;%s;%s", ch.enabled ? 1 : 0, ch.name, ch.abbrevation, ch.color);
             ch.load(prop.getString());
         }
     }
 
     private void loadExtraProtectionConfig(Configuration config) {
-        ProtectionEvents.instance.enabled = config.get("ProtEx", "Enabled",
-                true, "Run the extra protections").getBoolean(true);
-        ProtectionEvents.instance.dynamicEnabling = config.get("ProtEx",
-                "DynamicEnabling", true,
-                "Load all modules for which mods are present").getBoolean(true);
+        ProtectionEvents.instance.enabled = config.get("ProtEx", "Enabled", true, "Run the extra protections").getBoolean(true);
+        ProtectionEvents.instance.dynamicEnabling = config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);
 
         if (ProtectionEvents.instance.dynamicEnabling) {
             config.getCategory("ProtEx").clear();
 
-            config.get("ProtEx", "Enabled", true, "Run the extra protections?")
-                    .set(ProtectionEvents.instance.enabled);
-            config.get("ProtEx", "DynamicEnabling", true,
-                    "Load all modules for which mods are present").set(
-                    ProtectionEvents.instance.dynamicEnabling);
+            config.get("ProtEx", "Enabled", true, "Run the extra protections?").set(ProtectionEvents.instance.enabled);
+            config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").set(ProtectionEvents.instance.dynamicEnabling);
         } else {
             for (ProtBase prot : ProtectionEvents.getProtections()) {
-                prot.enabled = config.get("ProtEx", prot.getMod(),
-                        prot.defaultEnabled(), prot.getComment()).getBoolean(
-                        false);
+                prot.enabled = config.get("ProtEx", prot.getMod(), prot.defaultEnabled(), prot.getComment()).getBoolean(false);
             }
         }
     }
 
     private void loadCommandsConfig(Configuration config) {
         Property prop;
-        ServerCommandManager mgr = (ServerCommandManager) MinecraftServer
-                .getServer().getCommandManager();
+        ServerCommandManager mgr = (ServerCommandManager) MinecraftServer.getServer().getCommandManager();
 
         for (CommandBase cmd : commands) {
-            prop = config.get("Commands", "Enable_" + cmd.getCommandName(),
-                    true);
-            prop.comment = String.format(
-                    "Should the %s [/%s] command be used?", cmd.getClass()
-                            .getSimpleName(), cmd.getCommandName());
+            prop = config.get("Commands", "Enable_" + cmd.getCommandName(), true);
+            prop.comment = String.format("Should the %s [/%s] command be used?", cmd.getClass().getSimpleName(), cmd.getCommandName());
 
             if (prop.getBoolean(true)) {
                 mgr.registerCommand(cmd);
@@ -434,8 +387,7 @@ public class MyTown {
         serverSettings.saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(TownSettingCollection sender, Object tag) {
-                MyTown.instance.config.get("ServerPerms", "Server", "").set(
-                        sender.serialize());
+                MyTown.instance.config.get("ServerPerms", "Server", "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
         };
@@ -446,8 +398,7 @@ public class MyTown {
         serverWildSettings.saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(TownSettingCollection sender, Object tag) {
-                MyTown.instance.config.get("WildPerms", "Server", "").set(
-                        sender.serialize());
+                MyTown.instance.config.get("WildPerms", "Server", "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
         };
@@ -466,8 +417,7 @@ public class MyTown {
     }
 
     public TownSettingCollection getWorldWildSettings(int w) {
-        for (Entry<Integer, TownSettingCollection> set : worldWildSettings
-                .entrySet()) {
+        for (Entry<Integer, TownSettingCollection> set : worldWildSettings.entrySet()) {
             if (set.getKey() == w) {
                 return set.getValue();
             }
@@ -480,8 +430,7 @@ public class MyTown {
             @Override
             public void save(TownSettingCollection sender, Object tag) {
                 int w = (Integer) tag;
-                MyTown.instance.config.get("WildPerms",
-                        "Dim_" + String.valueOf(w), "").set(sender.serialize());
+                MyTown.instance.config.get("WildPerms", "Dim_" + String.valueOf(w), "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
         };
@@ -491,13 +440,13 @@ public class MyTown {
         return set;
     }
 
-    public static void sendChatToPlayer(EntityPlayer entity, String msg){
+    public static void sendChatToPlayer(EntityPlayer entity, String msg) {
         ChatMessageComponent component = new ChatMessageComponent();
         component.func_111079_a(msg);
         entity.sendChatToPlayer(component);
     }
-    
-    public static void sendChatToPlayer(ICommandSender sender, String msg){
+
+    public static void sendChatToPlayer(ICommandSender sender, String msg) {
         ChatMessageComponent component = new ChatMessageComponent();
         component.func_111079_a(msg);
         sender.sendChatToPlayer(component);

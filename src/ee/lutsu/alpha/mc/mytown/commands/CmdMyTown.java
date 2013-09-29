@@ -34,8 +34,7 @@ public class CmdMyTown extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.cmd");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd");
         }
         return false;
         // return MyTown.instance.perms.canAccess(cs, "mytown.cmd");
@@ -128,8 +127,7 @@ public class CmdMyTown extends CommandBase {
         }
 
         if (ret.size() > 0) {
-            return CommandBase.getListOfStringsFromIterableMatchingLastWord(
-                    args, ret);
+            return CommandBase.getListOfStringsFromIterableMatchingLastWord(args, ret);
         }
 
         return null;

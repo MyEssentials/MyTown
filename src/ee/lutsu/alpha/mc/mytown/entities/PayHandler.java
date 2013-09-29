@@ -41,8 +41,7 @@ public class PayHandler {
         }
 
         ItemStack hand = owner.onlinePlayer.getHeldItem();
-        if (hand == null || hand.itemID != requestedItem.itemID
-                || hand.getItemDamage() != requestedItem.getItemDamage()) {
+        if (hand == null || hand.itemID != requestedItem.itemID || hand.getItemDamage() != requestedItem.getItemDamage()) {
             return false;
         }
 
@@ -68,19 +67,13 @@ public class PayHandler {
         }
     }
 
-    public void requestPayment(String action, ItemStack stack, IDone actor,
-            Object... args) {
+    public void requestPayment(String action, ItemStack stack, IDone actor, Object... args) {
         requestedItem = stack;
         doneHandler = actor;
         doneHandlerArgs = args;
-        if (stack == null
-                || stack.stackSize < 1
-                || ForgePerms.getPermissionsHandler()
-                        .canAccess(
-                                owner.name(),
-                                DimensionManager.getProvider(owner.prevDimension).getDimensionName(),
-                                //owner.onlinePlayer.worldObj.provider.getDimensionName(),
-                                "mytown.cost.bypass." + action)) {
+        if (stack == null || stack.stackSize < 1 || ForgePerms.getPermissionsHandler().canAccess(owner.name(), DimensionManager.getProvider(owner.prevDimension).getDimensionName(),
+        // owner.onlinePlayer.worldObj.provider.getDimensionName(),
+                "mytown.cost.bypass." + action)) {
             purchaseComplete();
         } else {
             timeUntil = System.currentTimeMillis() + timeToPaySec * 1000;

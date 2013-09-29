@@ -20,8 +20,7 @@ public class BuildCraft extends ProtBase {
     public List<TileEntity> checkedEntitys = new ArrayList<TileEntity>();
 
     Class clQuarry = null, clFiller, clBuilder, clBox;
-    Field fBoxQ, fBoxF, fBoxB, fmx, fmy, fmz, fxx, fxy, fxz, fBoxInit,
-            fQuarryOwner, fQuarryBuilderDone;
+    Field fBoxQ, fBoxF, fBoxB, fmx, fmy, fmz, fxx, fxy, fxz, fBoxInit, fQuarryOwner, fQuarryBuilderDone;
 
     @Override
     public void reload() {
@@ -126,13 +125,11 @@ public class BuildCraft extends ProtBase {
 
         for (int z = fz; z <= tz; z++) {
             for (int x = fx; x <= tx; x++) {
-                TownBlock block = MyTownDatasource.instance.getBlock(
-                        e.worldObj.provider.dimensionId, x, z);
+                TownBlock block = MyTownDatasource.instance.getBlock(e.worldObj.provider.dimensionId, x, z);
 
                 boolean allowed = false;
                 if (block == null || block.town() == null) {
-                    allowed = MyTown.instance
-                            .getWorldWildSettings(e.worldObj.provider.dimensionId).allowBuildcraftMiners;
+                    allowed = MyTown.instance.getWorldWildSettings(e.worldObj.provider.dimensionId).allowBuildcraftMiners;
                 } else if (owner != null) {
                     allowed = owner.canInteract(block, Permissions.Build);
                 } else {
@@ -142,15 +139,10 @@ public class BuildCraft extends ProtBase {
                 if (!allowed) {
                     ProtectionEvents.instance.lastOwner = owner;
 
-                    String b = block == null || block.town() == null ? "wild"
-                            : block.town().name()
-                                    + (block.owner() != null ? " owned by "
-                                            + block.ownerDisplay() : "");
-                    b = String.format("%s @ dim %s (%s,%s)", b,
-                            e.worldObj.provider.dimensionId, x, z);
+                    String b = block == null || block.town() == null ? "wild" : block.town().name() + (block.owner() != null ? " owned by " + block.ownerDisplay() : "");
+                    b = String.format("%s @ dim %s (%s,%s)", b, e.worldObj.provider.dimensionId, x, z);
 
-                    return "Region will hit " + b
-                            + " which doesn't allow buildcraft block breakers";
+                    return "Region will hit " + b + " which doesn't allow buildcraft block breakers";
                 }
             }
         }

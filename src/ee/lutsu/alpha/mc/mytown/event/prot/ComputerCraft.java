@@ -70,12 +70,8 @@ public class ComputerCraft extends ProtBase {
 
         int radius = 1;
         int dim = e.worldObj.provider.dimensionId;
-        if (canRoam(dim, e.xCoord - radius, e.yCoord, e.yCoord, e.zCoord)
-                && canRoam(dim, e.xCoord + radius, e.yCoord, e.yCoord, e.zCoord)
-                && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord - radius)
-                && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord + radius)
-                && canRoam(dim, e.xCoord, e.yCoord - radius, e.yCoord + radius,
-                        e.zCoord)) {
+        if (canRoam(dim, e.xCoord - radius, e.yCoord, e.yCoord, e.zCoord) && canRoam(dim, e.xCoord + radius, e.yCoord, e.yCoord, e.zCoord) && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord - radius) && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord + radius)
+                && canRoam(dim, e.xCoord, e.yCoord - radius, e.yCoord + radius, e.zCoord)) {
             return null;
         }
 
@@ -89,26 +85,18 @@ public class ComputerCraft extends ProtBase {
 
         ChunkCoordinates c = new ChunkCoordinates(e.xCoord, e.yCoord, e.zCoord);
         if (canScream(c)) {
-            Log.severe(String
-                    .format("§4Stopped a computercraft turtle found @ dim %s, %s,%s,%s",
-                            e.worldObj.provider.dimensionId, e.xCoord,
-                            e.yCoord, e.zCoord));
+            Log.severe(String.format("§4Stopped a computercraft turtle found @ dim %s, %s,%s,%s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord));
 
-            String msg = String
-                    .format("A turtle stopped @ %s,%s,%s because it wasn't allowed there",
-                            e.xCoord, e.yCoord, e.zCoord);
-            String formatted = Formatter.formatChatSystem(msg,
-                    ChatChannel.Local);
-            CmdChat.sendChatToAround(e.worldObj.provider.dimensionId, e.xCoord,
-                    e.yCoord, e.zCoord, formatted, null);
+            String msg = String.format("A turtle stopped @ %s,%s,%s because it wasn't allowed there", e.xCoord, e.yCoord, e.zCoord);
+            String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);
+            CmdChat.sendChatToAround(e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, formatted, null);
 
             anti_spam.put(c, System.currentTimeMillis() + 60000);
         }
     }
 
     private boolean canRoam(int dim, int x, int y, int y2, int z) {
-        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y,
-                y2, z);
+        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, y2, z);
 
         if (b == null || b.town() == null) {
             return MyTown.instance.getWorldWildSettings(dim).allowCCTurtles;
@@ -128,8 +116,7 @@ public class ComputerCraft extends ProtBase {
             anti_spam_counter = 0;
             long time = System.currentTimeMillis();
 
-            for (Iterator<Entry<ChunkCoordinates, Long>> it = anti_spam
-                    .entrySet().iterator(); it.hasNext();) {
+            for (Iterator<Entry<ChunkCoordinates, Long>> it = anti_spam.entrySet().iterator(); it.hasNext();) {
                 Entry<ChunkCoordinates, Long> kv = it.next();
                 if (kv.getValue() < time) {
                     it.remove();

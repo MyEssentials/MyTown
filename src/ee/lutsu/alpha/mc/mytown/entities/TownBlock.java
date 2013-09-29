@@ -36,8 +36,7 @@ public class TownBlock {
 
     public void setTown(Town val) {
         town = val;
-        settings.setParent(town == null ? null : owner != null ? owner.settings
-                : town.settings);
+        settings.setParent(town == null ? null : owner != null ? owner.settings : town.settings);
     }
 
     public void setOwner(Resident val) {
@@ -47,8 +46,7 @@ public class TownBlock {
 
     public void sqlSetOwner(Resident val) {
         owner = val;
-        settings.setParent(town == null ? null : owner != null ? owner.settings
-                : town.settings);
+        settings.setParent(town == null ? null : owner != null ? owner.settings : town.settings);
     }
 
     // extra
@@ -74,8 +72,7 @@ public class TownBlock {
             throw new RuntimeException("Error in block info : " + info);
         }
 
-        TownBlock t = new TownBlock(Integer.parseInt(splits[0]), Integer
-                .parseInt(splits[1]), Integer.parseInt(splits[2]));
+        TownBlock t = new TownBlock(Integer.parseInt(splits[0]), Integer.parseInt(splits[1]), Integer.parseInt(splits[2]));
 
         if (splits.length > 3) {
             t.owner_name = splits[3];
@@ -89,15 +86,11 @@ public class TownBlock {
 
     public String serialize() // don't use space
     {
-        return worldDimension() + ";" + String.valueOf(x()) + ";"
-                + String.valueOf(z()) + ";"
-                + (owner == null ? "" : owner.name()) + ";"
-                + settings.serialize();
+        return worldDimension() + ";" + String.valueOf(x()) + ";" + String.valueOf(z()) + ";" + (owner == null ? "" : owner.name()) + ";" + settings.serialize();
     }
 
     public boolean equals(TownBlock block) {
-        return chunkX == block.chunkX && chunkZ == block.chunkZ
-                && world_dimension == block.world_dimension;
+        return chunkX == block.chunkX && chunkZ == block.chunkZ && world_dimension == block.world_dimension;
     }
 
     public boolean equals(int dim, int x, int z) {
@@ -109,8 +102,7 @@ public class TownBlock {
             throw new RuntimeException("Cannot measure distance to ");
         }
 
-        return Math.abs((chunkX - b.chunkX) * (chunkX - b.chunkX)
-                + (chunkZ - b.chunkZ) * (chunkZ - b.chunkZ));
+        return Math.abs((chunkX - b.chunkX) * (chunkX - b.chunkX) + (chunkZ - b.chunkZ) * (chunkZ - b.chunkZ));
     }
 
     public void save() {
@@ -122,31 +114,23 @@ public class TownBlock {
     public TownBlock getFirstFullSidingClockwise(Town notForTown) {
         TownBlock b;
 
-        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX,
-                chunkZ - 1);
-        if (b != null && b.town != null && b.town != notForTown
-                && !b.settings.yCheckOn) {
+        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX, chunkZ - 1);
+        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
             return b;
         }
 
-        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX + 1,
-                chunkZ);
-        if (b != null && b.town != null && b.town != notForTown
-                && !b.settings.yCheckOn) {
+        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX + 1, chunkZ);
+        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
             return b;
         }
 
-        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX,
-                chunkZ + 1);
-        if (b != null && b.town != null && b.town != notForTown
-                && !b.settings.yCheckOn) {
+        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX, chunkZ + 1);
+        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
             return b;
         }
 
-        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX - 1,
-                chunkZ);
-        if (b != null && b.town != null && b.town != notForTown
-                && !b.settings.yCheckOn) {
+        b = MyTownDatasource.instance.getBlock(world_dimension, chunkX - 1, chunkZ);
+        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
             return b;
         }
 

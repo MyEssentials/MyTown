@@ -40,8 +40,7 @@ public class CmdChat extends CommandBase {
     }
 
     public static String sendTownChat(Resident res, String msg, boolean emote) {
-        String formatted = Formatter.formatChat(res, msg, ChatChannel.Town,
-                emote);
+        String formatted = Formatter.formatChat(res, msg, ChatChannel.Town, emote);
 
         int sentTo = 0;
         if (res.town() == null) {
@@ -68,8 +67,7 @@ public class CmdChat extends CommandBase {
     }
 
     public static String sendNationChat(Resident res, String msg, boolean emote) {
-        String formatted = Formatter.formatChat(res, msg, ChatChannel.Nation,
-                emote);
+        String formatted = Formatter.formatChat(res, msg, ChatChannel.Nation, emote);
 
         int sentTo = 0;
         if (res.town() == null) {
@@ -97,20 +95,15 @@ public class CmdChat extends CommandBase {
             MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatAloneInChannel.toString());
         }
 
-        return Term.ChatNationLogFormat.toString(res.town().nation().name(),
-                formatted);
+        return Term.ChatNationLogFormat.toString(res.town().nation().name(), formatted);
     }
 
     public static String sendGlobalChat(Resident res, String msg) {
         return sendGlobalChat(res, msg, ChatChannel.Global, false);
     }
 
-    public static String sendGlobalChat(Resident res, String msg,
-            ChatChannel ch, boolean emote) {
-        if (!ForgePerms.getPermissionsHandler().canAccess(
-                res.onlinePlayer.username,
-                res.onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.chat.allowcaps")) {
+    public static String sendGlobalChat(Resident res, String msg, ChatChannel ch, boolean emote) {
+        if (!ForgePerms.getPermissionsHandler().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
             msg = msg.toLowerCase();
         }
 
@@ -118,7 +111,7 @@ public class CmdChat extends CommandBase {
 
         int sentTo = 0;
         for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
-            MyTown.sendChatToPlayer((EntityPlayer)obj, formatted);
+            MyTown.sendChatToPlayer((EntityPlayer) obj, formatted);
             if (obj != res.onlinePlayer) {
                 sentTo++;
             }
@@ -132,12 +125,9 @@ public class CmdChat extends CommandBase {
     }
 
     public static String sendLocalChat(Resident res, String msg, boolean emote) {
-        String formatted = Formatter.formatChat(res, msg, ChatChannel.Local,
-                emote);
+        String formatted = Formatter.formatChat(res, msg, ChatChannel.Local, emote);
 
-        int sentTo = sendChatToAround(res.onlinePlayer.dimension,
-                res.onlinePlayer.posX, res.onlinePlayer.posY,
-                res.onlinePlayer.posZ, formatted, null);
+        int sentTo = sendChatToAround(res.onlinePlayer.dimension, res.onlinePlayer.posX, res.onlinePlayer.posY, res.onlinePlayer.posZ, formatted, null);
 
         if (sentTo < 2) {
             MyTown.sendChatToPlayer(res.onlinePlayer, Term.ChatAloneInChannel.toString());
@@ -146,15 +136,12 @@ public class CmdChat extends CommandBase {
         return formatted;
     }
 
-    public static int sendChatToAround(int dim, double posX, double posY,
-            double posZ, String msg, EntityPlayer except) {
+    public static int sendChatToAround(int dim, double posX, double posY, double posZ, String msg, EntityPlayer except) {
         int sentTo = 0;
-        int dsqr = ChatChannel.localChatDistance
-                * ChatChannel.localChatDistance;
+        int dsqr = ChatChannel.localChatDistance * ChatChannel.localChatDistance;
         for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
             EntityPlayer pl = (EntityPlayer) obj;
-            if (pl != except && pl.dimension == dim
-                    && pl.getDistanceSq(posX, posY, posZ) <= dsqr) {
+            if (pl != except && pl.dimension == dim && pl.getDistanceSq(posX, posY, posZ) <= dsqr) {
                 MyTown.sendChatToPlayer(pl, msg);
                 sentTo++;
             }
@@ -162,8 +149,7 @@ public class CmdChat extends CommandBase {
         return sentTo;
     }
 
-    public static void sendToChannelFromDirectTalk(Resident sender, String msg,
-            ChatChannel channel, boolean emote) {
+    public static void sendToChannelFromDirectTalk(Resident sender, String msg, ChatChannel channel, boolean emote) {
         if (msg == null || msg.trim().length() < 1) {
             return;
         }
@@ -171,8 +157,7 @@ public class CmdChat extends CommandBase {
         msg = msg.trim();
         boolean quickChatHit = false;
         for (ChatChannel c : ChatChannel.values()) {
-            if (c.inLineSwitch != null && !c.inLineSwitch.equals("")
-                    && msg.startsWith(c.inLineSwitch)) {
+            if (c.inLineSwitch != null && !c.inLineSwitch.equals("") && msg.startsWith(c.inLineSwitch)) {
                 channel = c;
                 msg = msg.substring(c.inLineSwitch.length());
                 quickChatHit = true;
@@ -180,22 +165,18 @@ public class CmdChat extends CommandBase {
             }
         }
 
-        if (quickChatHit
-                || !CmdPrivateMsg.chatLock.containsKey(sender.onlinePlayer)) {
+        if (quickChatHit || !CmdPrivateMsg.chatLock.containsKey(sender.onlinePlayer)) {
             sendToChannel(sender, msg.trim(), channel, emote);
         } else {
-            CmdPrivateMsg.sendChat(sender.onlinePlayer, CmdPrivateMsg.chatLock
-                    .get(sender.onlinePlayer), msg);
+            CmdPrivateMsg.sendChat(sender.onlinePlayer, CmdPrivateMsg.chatLock.get(sender.onlinePlayer), msg);
         }
     }
 
-    public static void sendToChannel(Resident sender, String msg,
-            ChatChannel channel) {
+    public static void sendToChannel(Resident sender, String msg, ChatChannel channel) {
         sendToChannel(sender, msg, channel, false);
     }
 
-    public static void sendToChannel(Resident sender, String msg,
-            ChatChannel channel, boolean emote) {
+    public static void sendToChannel(Resident sender, String msg, ChatChannel channel, boolean emote) {
         if (msg == null || msg.trim().length() < 1) {
             return;
         }
@@ -204,10 +185,7 @@ public class CmdChat extends CommandBase {
             return;
         }
 
-        if (ForgePerms.getPermissionsHandler().canAccess(
-                sender.onlinePlayer.username,
-                sender.onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.chat.allowcolors")) {
+        if (ForgePerms.getPermissionsHandler().canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
             msg = Formatter.dollarToColorPrefix(msg);
         }
 
@@ -231,8 +209,7 @@ public class CmdChat extends CommandBase {
     @Override
     public void processCommand(ICommandSender var1, String[] var2) {
         String msg = Joiner.on(' ').join(var2);
-        Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) var1);
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) var1);
 
         sendToChannel(res, msg, channel);
     }

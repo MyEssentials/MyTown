@@ -21,8 +21,7 @@ import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 
 public class CmdPrivateMsg extends CommandServerMessage {
-    public static Map<EntityPlayer, EntityPlayer> lastMessages = Maps
-            .newHashMap();
+    public static Map<EntityPlayer, EntityPlayer> lastMessages = Maps.newHashMap();
     public static Map<EntityPlayer, EntityPlayer> chatLock = Maps.newHashMap();
     public static List<ICommandSender> snoopers = Lists.newArrayList();
 
@@ -30,8 +29,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
         }
         return false;
     }
@@ -45,11 +43,10 @@ public class CmdPrivateMsg extends CommandServerMessage {
                 throw new PlayerNotFoundException();
             }
 
-            if (arg.length > 1){ // send chat
-                String msg = func_82361_a(cs, arg, 1,
-                        !(cs instanceof EntityPlayer));
+            if (arg.length > 1) { // send chat
+                String msg = func_82361_a(cs, arg, 1, !(cs instanceof EntityPlayer));
                 sendChat((EntityPlayer) cs, target, msg);
-            } else{ // lock mode
+            } else { // lock mode
                 lockChatWithNotify((EntityPlayer) cs, target);
             }
         } else if (chatLock.get(cs) != null) {
@@ -67,8 +64,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
         }
     }
 
-    public static void lockChatWithNotify(EntityPlayer sender,
-            EntityPlayer target) {
+    public static void lockChatWithNotify(EntityPlayer sender, EntityPlayer target) {
         chatLock.put(sender, target);
         MyTown.sendChatToPlayer(sender, "§dNow chatting with " + Resident.getOrMake(target).formattedName());
     }
@@ -90,8 +86,8 @@ public class CmdPrivateMsg extends CommandServerMessage {
 
         if (!Formatter.formatChat) {
             StringTranslate strTranslate = new StringTranslate();
-            MyTown.sendChatToPlayer(sender, "\u00a77\u00a7o"+ strTranslate.translateKeyFormat("commands.message.display.outgoing", new Object[] {target.getCommandSenderName(), msg }));
-            MyTown.sendChatToPlayer(target, "\u00a77\u00a7o"+ strTranslate.translateKeyFormat("commands.message.display.incoming", new Object[] {sender.getCommandSenderName(), msg }));
+            MyTown.sendChatToPlayer(sender, "\u00a77\u00a7o" + strTranslate.translateKeyFormat("commands.message.display.outgoing", new Object[] { target.getCommandSenderName(), msg }));
+            MyTown.sendChatToPlayer(target, "\u00a77\u00a7o" + strTranslate.translateKeyFormat("commands.message.display.incoming", new Object[] { sender.getCommandSenderName(), msg }));
         } else {
             MyTown.sendChatToPlayer(sender, Formatter.formatPrivMsg(Resident.getOrMake(sender), Resident.getOrMake(target), msg, true));
             MyTown.sendChatToPlayer(target, Formatter.formatPrivMsg(Resident.getOrMake(sender), Resident.getOrMake(target), msg, false));

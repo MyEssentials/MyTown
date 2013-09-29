@@ -71,8 +71,7 @@ public class Table {
      * @param Set
      *            as auto increment?
      */
-    public void add(String name, String type, boolean primary,
-            boolean autoIncrement) {
+    public void add(String name, String type, boolean primary, boolean autoIncrement) {
         Column x = new Column(name);
         x.setType(type);
         x.setPrimary(primary);
@@ -105,8 +104,7 @@ public class Table {
                 buffer.append("PRIMARY KEY ");
             }
 
-            if (column.shouldAutoIncrement()
-                    && database.getType() == Type.MySQL) {
+            if (column.shouldAutoIncrement() && database.getType() == Type.MySQL) {
                 buffer.append("AUTO_INCREMENT ");
             }
 

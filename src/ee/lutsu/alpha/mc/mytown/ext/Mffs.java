@@ -19,8 +19,7 @@ public class Mffs {
         if (checked == 0) {
             try {
                 for (ModContainer cont : Loader.instance().getModList()) {
-                    if (cont.getModId().equalsIgnoreCase(
-                            "ModularForceFieldSystem")) {
+                    if (cont.getModId().equalsIgnoreCase("ModularForceFieldSystem")) {
                         mod = cont.getMod();
                         fAdmin = mod.getClass().getDeclaredField("Admin");
                         break;

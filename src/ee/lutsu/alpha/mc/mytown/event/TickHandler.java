@@ -13,17 +13,14 @@ public class TickHandler implements ITickHandler {
     public static TickHandler instance = new TickHandler();
     public long tick = 0;
 
-    public TickBase[] handlers = new TickBase[] { new OldTownRemover(),
-            new OldResidentRemover(), WorldBorder.instance };
+    public TickBase[] handlers = new TickBase[] { new OldTownRemover(), new OldResidentRemover(), WorldBorder.instance };
 
     public void loadConfigs() {
         for (TickBase t : handlers) {
             try {
                 t.loadConfig();
             } catch (Exception e) {
-                throw new RuntimeException("Tick handler '" + t.name()
-                        + "' config loading failed. Reason: " + e.getMessage(),
-                        e);
+                throw new RuntimeException("Tick handler '" + t.name() + "' config loading failed. Reason: " + e.getMessage(), e);
             }
         }
     }

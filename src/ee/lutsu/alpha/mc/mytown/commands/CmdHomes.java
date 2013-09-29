@@ -31,18 +31,14 @@ public class CmdHomes extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler()
-                    .canAccess(p.username,
-                            p.worldObj.provider.getDimensionName(),
-                            "mytown.ecmd.homes");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.homes");
         }
         return false;
     }
 
     @Override
     public String getCommandUsage(ICommandSender cs) {
-        return getCommandName()
-                + " [loc] - Shows the player homes [with location]";
+        return getCommandName() + " [loc] - Shows the player homes [with location]";
     }
 
     @Override
@@ -66,10 +62,8 @@ public class CmdHomes extends CommandBase {
                     }
                 } else {
                     List<String> items = Lists.newArrayList();
-                    if (SavedHomeList.defaultIsBed
-                            && pl.getBedLocation() != null) {
-                        items.add(Term.HomeCmdHomesUnaccessibleItem
-                                .toString("default"));
+                    if (SavedHomeList.defaultIsBed && pl.getBedLocation() != null) {
+                        items.add(Term.HomeCmdHomesUnaccessibleItem.toString("default"));
                     }
 
                     for (SavedHome h : res.home) {

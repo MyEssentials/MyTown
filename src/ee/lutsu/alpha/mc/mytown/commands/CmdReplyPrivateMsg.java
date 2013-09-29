@@ -28,8 +28,7 @@ public class CmdReplyPrivateMsg extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username,
-                    p.worldObj.provider.getDimensionName(), "mytown.ecmd.reply");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.reply");
         }
         return false;
     }
@@ -42,8 +41,7 @@ public class CmdReplyPrivateMsg extends CommandBase {
             MyTown.sendChatToPlayer(cs, "§4Noone to reply to");
         } else {
             if (arg.length > 0) {
-                CmdPrivateMsg.sendChat((EntityPlayer) cs, pl, func_82360_a(cs,
-                        arg, 0));
+                CmdPrivateMsg.sendChat((EntityPlayer) cs, pl, func_82360_a(cs, arg, 0));
             } else {
                 CmdPrivateMsg.lockChatWithNotify((EntityPlayer) cs, pl);
             }
@@ -55,10 +53,8 @@ public class CmdReplyPrivateMsg extends CommandBase {
      * completion options.
      */
     @Override
-    public List addTabCompletionOptions(ICommandSender par1ICommandSender,
-            String[] par2ArrayOfStr) {
-        return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer
-                .getServer().getAllUsernames());
+    public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+        return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
     }
 
     @Override

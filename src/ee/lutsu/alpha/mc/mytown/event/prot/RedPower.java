@@ -21,8 +21,7 @@ public class RedPower extends ProtBase {
 
     @Override
     public void load() throws Exception {
-        clTileFrameMoving = Class
-                .forName("com.eloraam.redpower.machine.TileFrameMoving");
+        clTileFrameMoving = Class.forName("com.eloraam.redpower.machine.TileFrameMoving");
         fMotorX = clTileFrameMoving.getDeclaredField("motorX");
         fMotorY = clTileFrameMoving.getDeclaredField("motorY");
         fMotorZ = clTileFrameMoving.getDeclaredField("motorZ");
@@ -53,8 +52,7 @@ public class RedPower extends ProtBase {
             return null;
         }
 
-        Log.severe(String.format("Entity %s tried to bypass using %s", e
-                .toString(), s));
+        Log.severe(String.format("Entity %s tried to bypass using %s", e.toString(), s));
 
         TileEntity motor = e.worldObj.getBlockTileEntity(mx, my, mz);
 
@@ -65,8 +63,7 @@ public class RedPower extends ProtBase {
         return null;
     }
 
-    private String updateSub(TileEntity e, int mx, int my, int mz)
-            throws Exception {
+    private String updateSub(TileEntity e, int mx, int my, int mz) throws Exception {
 
         /*
          * TileEntity motor = e.worldObj.getBlockTileEntity(mx, my, mz); if
@@ -77,14 +74,10 @@ public class RedPower extends ProtBase {
         // Log.info(String.format("moving - %s,%s,%s dir %s motor %s", e.xCoord,
         // e.yCoord, e.zCoord, dir, motor.toString()));
         // get plot owner
-        TownBlock motorPlot = MyTownDatasource.instance.getBlock(
-                e.worldObj.provider.dimensionId, ChunkCoord.getCoord(mx),
-                ChunkCoord.getCoord(mz));
+        TownBlock motorPlot = MyTownDatasource.instance.getBlock(e.worldObj.provider.dimensionId, ChunkCoord.getCoord(mx), ChunkCoord.getCoord(mz));
         if (motorPlot != null && motorPlot.settings.yCheckOn) {
-            if (my < motorPlot.settings.yCheckFrom
-                    || my > motorPlot.settings.yCheckTo) {
-                motorPlot = motorPlot.getFirstFullSidingClockwise(motorPlot
-                        .town());
+            if (my < motorPlot.settings.yCheckFrom || my > motorPlot.settings.yCheckTo) {
+                motorPlot = motorPlot.getFirstFullSidingClockwise(motorPlot.town());
             }
         }
 
@@ -101,14 +94,8 @@ public class RedPower extends ProtBase {
             actor = MyTownDatasource.instance.getOrMakeResident("#redpower#");
         }
 
-        if (!actor.canInteract(e.worldObj.provider.dimensionId, e.xCoord,
-                e.yCoord, e.zCoord, Permissions.Build)) {
-            return String
-                    .format("Redpower frame at Dim %s (%s,%s,%s), motor at Dim %s (%s,%s,%s) failed. Actor: %s",
-                            e.worldObj.provider.dimensionId, e.xCoord,
-                            e.yCoord, e.zCoord,
-                            e.worldObj.provider.dimensionId, mx, my, mz, actor
-                                    .name());
+        if (!actor.canInteract(e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, Permissions.Build)) {
+            return String.format("Redpower frame at Dim %s (%s,%s,%s), motor at Dim %s (%s,%s,%s) failed. Actor: %s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, e.worldObj.provider.dimensionId, mx, my, mz, actor.name());
         }
 
         return null;

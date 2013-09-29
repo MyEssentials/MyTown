@@ -76,10 +76,9 @@ public class Nation {
             throw new CommandException(Term.TownErrNationNameCannotBeEmpty);
         }
 
-        for (Nation n : MyTownDatasource.instance.nations) {
-            if (n != this && n.name.equalsIgnoreCase(name)) {
-                throw new CommandException(Term.TownErrNationNameInUse);
-            }
+        Nation n = MyTownDatasource.instance.nations.get(name.toLowerCase());
+        if (n != null && n != this) {
+            throw new CommandException(Term.TownErrNationNameInUse);
         }
     }
 
@@ -141,20 +140,17 @@ public class Nation {
             return 0;
         }
 
-        return nationAddsBlocksPerResident * forTown.residents().size()
-                + extraBlocks + nationAddsBlocks;
+        return nationAddsBlocksPerResident * forTown.residents().size() + extraBlocks + nationAddsBlocks;
     }
 
-    public static Nation sqlLoad(int id, String name, int capital,
-            String pTowns, String extra) {
+    public static Nation sqlLoad(int id, String name, int capital, String pTowns, String extra) {
         Nation n = new Nation();
         n.id = id;
         n.name = name;
 
         if (pTowns != null && pTowns.trim().length() > 0) {
             for (String town : pTowns.trim().split(";")) {
-                Town t = MyTownDatasource.instance.getTown(Integer
-                        .parseInt(town));
+                Town t = MyTownDatasource.instance.getTown(Integer.parseInt(town));
 
                 if (t != null) {
                     t.setNation(n);
@@ -224,8 +220,7 @@ public class Nation {
 
         String nationColor = "§2";
         if (pl instanceof EntityPlayer) {
-            Resident target = MyTownDatasource.instance
-                    .getOrMakeResident((EntityPlayer) pl);
+            Resident target = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) pl);
             if (target.town() == null || target.town().nation() != n) {
                 nationColor = "§4";
             }

@@ -50,8 +50,7 @@ public class Resident {
          */
         public static Rank parse(String rank) {
             for (Rank type : values()) {
-                if (type.toString().toLowerCase()
-                        .startsWith(rank.toLowerCase())) {
+                if (type.toString().toLowerCase().startsWith(rank.toLowerCase())) {
                     return type;
                 }
             }
@@ -171,30 +170,26 @@ public class Resident {
     }
 
     public boolean shouldShowTownBlocks() {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                DimensionManager.getProvider(prevDimension).getDimensionName(),
-                //onlinePlayer.worldObj.provider.getDimensionName(),
+        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.showblocks");
     }
 
     public boolean shouldShowPlayerLocation() {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                DimensionManager.getProvider(prevDimension).getDimensionName(),
-                //onlinePlayer.worldObj.provider.getDimensionName(),
+        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.showlocation");
     }
 
     public boolean canByPassCheck(TownSettingCollection.Permissions level) {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                DimensionManager.getProvider(prevDimension).getDimensionName(),
-                //onlinePlayer.worldObj.provider.getDimensionName(),
+        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass." + level.toString().toLowerCase());
     }
 
     public boolean pvpBypass() {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(),
-                DimensionManager.getProvider(prevDimension).getDimensionName(),
-                //onlinePlayer.worldObj.provider.getDimensionName(),
+        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass.pvp");
     }
 
@@ -204,8 +199,7 @@ public class Resident {
         return canInteract(block, askedFor);
     }
 
-    public boolean canInteract(TownBlock block,
-            TownSettingCollection.Permissions askedFor) {
+    public boolean canInteract(TownBlock block, TownSettingCollection.Permissions askedFor) {
         boolean b = canInteractSub(block, askedFor);
         if (!b && canByPassCheck(askedFor)) {
             b = true;
@@ -214,15 +208,12 @@ public class Resident {
         return b;
     }
 
-    private boolean canInteractSub(TownBlock block,
-            TownSettingCollection.Permissions askedFor) {
+    private boolean canInteractSub(TownBlock block, TownSettingCollection.Permissions askedFor) {
         if (block == null || block.town() == null) {
-            return MyTown.instance.getWorldWildSettings(onlinePlayer.dimension).outsiderRights
-                    .compareTo(askedFor) >= 0;
+            return MyTown.instance.getWorldWildSettings(onlinePlayer.dimension).outsiderRights.compareTo(askedFor) >= 0;
         }
 
-        if (block.owner() == this || block.town() == town()
-                && rank() != Rank.Resident) {
+        if (block.owner() == this || block.town() == town() && rank() != Rank.Resident) {
             return true;
         }
 
@@ -234,70 +225,55 @@ public class Resident {
             return block.settings.townMemberRights.compareTo(askedFor) >= 0;
         }
 
-        if (town() != null && town().nation() != null
-                && town().nation() == block.town().nation()) {
+        if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
             return block.settings.nationMemberRights.compareTo(askedFor) >= 0;
         }
 
         return block.settings.outsiderRights.compareTo(askedFor) >= 0;
     }
 
-    public boolean canInteract(TownBlock targetBlock, int y,
-            TownSettingCollection.Permissions askedFor) {
+    public boolean canInteract(TownBlock targetBlock, int y, TownSettingCollection.Permissions askedFor) {
         if (targetBlock == null || targetBlock.town() == null) {
             return canInteract(null, askedFor);
         }
 
         if (targetBlock.settings.yCheckOn) {
-            if (y < targetBlock.settings.yCheckFrom
-                    || y > targetBlock.settings.yCheckTo) {
-                targetBlock = targetBlock
-                        .getFirstFullSidingClockwise(targetBlock.town());
+            if (y < targetBlock.settings.yCheckFrom || y > targetBlock.settings.yCheckTo) {
+                targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
             }
         }
 
         return canInteract(targetBlock, askedFor);
     }
 
-    public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z,
-            TownSettingCollection.Permissions askedFor) {
-        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
-                dimension, x, yFrom, yTo, z);
+    public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z, TownSettingCollection.Permissions askedFor) {
+        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, yFrom, yTo, z);
         if (targetBlock == null || targetBlock.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights
-                    .compareTo(askedFor) >= 0;
+            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights.compareTo(askedFor) >= 0;
         }
 
         return canInteract(targetBlock, askedFor);
     }
 
     public boolean canInteract(int dimension, int x, int y, int z, TownSettingCollection.Permissions askedFor) {
-        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
-                dimension, x, y, z);
+        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, y, z);
         if (targetBlock == null || targetBlock.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights
-                    .compareTo(askedFor) >= 0;
+            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights.compareTo(askedFor) >= 0;
         }
 
         return canInteract(targetBlock, askedFor);
     }
 
-    public boolean canInteract(int x, int y, int z,
-            TownSettingCollection.Permissions askedFor) {
+    public boolean canInteract(int x, int y, int z, TownSettingCollection.Permissions askedFor) {
         return canInteract(onlinePlayer.dimension, x, y, z, askedFor);
     }
 
     public boolean canInteract(Entity e) {
-        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(
-                e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
+        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
 
         if (e instanceof EntityMinecart) {
             if ((e.riddenByEntity == null || e.riddenByEntity == onlinePlayer)
-                    && (targetBlock != null && targetBlock.town() != null
-                            && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock
-                            .town() == null)
-                            && MyTown.instance
-                                    .getWorldWildSettings(e.dimension).allowCartInteraction)) {
+                    && (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).allowCartInteraction)) {
                 return true;
             }
         }
@@ -329,11 +305,9 @@ public class Resident {
                 return true;
             }
 
-            TownBlock targetBlock = MyTownDatasource.instance.getBlock(
-                    onlinePlayer.dimension, e.chunkCoordX, e.chunkCoordZ);
+            TownBlock targetBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, e.chunkCoordX, e.chunkCoordZ);
 
-            if (Town.pvpSafeTowns != null && targetBlock != null
-                    && targetBlock.town() != null) {
+            if (Town.pvpSafeTowns != null && targetBlock != null && targetBlock.town() != null) {
                 for (String s : Town.pvpSafeTowns) {
                     if (targetBlock.town().name().equals(s)) {
                         Log.log(Level.INFO, "Found safe town: %s", s);
@@ -343,10 +317,7 @@ public class Resident {
             }
 
             // disable friendly fire
-            if (!allowMemberToMemberPvp
-                    && town() != null
-                    && MyTownDatasource.instance.getOrMakeResident(
-                            (EntityPlayer) e).town() == town()) {
+            if (!allowMemberToMemberPvp && town() != null && MyTownDatasource.instance.getOrMakeResident((EntityPlayer) e).town() == town()) {
                 return false;
             }
 
@@ -357,60 +328,44 @@ public class Resident {
             if (targetBlock != null && targetBlock.town() != null) {
                 if (targetBlock.settings.yCheckOn) {
                     int y = (int) e.posY;
-                    if (y < targetBlock.settings.yCheckFrom
-                            || y > targetBlock.settings.yCheckTo) {
-                        targetBlock = targetBlock
-                                .getFirstFullSidingClockwise(targetBlock.town());
+                    if (y < targetBlock.settings.yCheckFrom || y > targetBlock.settings.yCheckTo) {
+                        targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
                     }
                 }
 
                 if (targetBlock != null) {
-                    return Town.allowMemberToForeignPvp
-                            && town() == targetBlock.town();
+                    return Town.allowMemberToForeignPvp && town() == targetBlock.town();
                 }
             }
-            TownBlock sourceBlock = MyTownDatasource.instance.getBlock(
-                    onlinePlayer.dimension, onlinePlayer.chunkCoordX,
-                    onlinePlayer.chunkCoordZ);
+            TownBlock sourceBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, onlinePlayer.chunkCoordX, onlinePlayer.chunkCoordZ);
             if (sourceBlock != null && sourceBlock.town() != null) {
                 if (sourceBlock.settings.yCheckOn) {
                     int y = (int) e.posY;
-                    if (y < sourceBlock.settings.yCheckFrom
-                            || y > sourceBlock.settings.yCheckTo) {
-                        sourceBlock = sourceBlock
-                                .getFirstFullSidingClockwise(sourceBlock.town());
+                    if (y < sourceBlock.settings.yCheckFrom || y > sourceBlock.settings.yCheckTo) {
+                        sourceBlock = sourceBlock.getFirstFullSidingClockwise(sourceBlock.town());
                     }
                 }
 
                 if (sourceBlock != null) {
-                    return Town.allowMemberToForeignPvp
-                            && town() == sourceBlock.town();
+                    return Town.allowMemberToForeignPvp && town() == sourceBlock.town();
                 }
             }
 
             return true;
         } else {
-            TownBlock targetBlock = MyTownDatasource.instance
-                    .getPermBlockAtCoord(e.dimension, (int) e.posX,
-                            (int) e.posY, (int) e.posZ);
+            TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
 
             if (e instanceof EntityMinecart) {
-                if (targetBlock != null
-                        && targetBlock.town() != null
-                        && targetBlock.settings.allowCartInteraction
-                        || (targetBlock == null || targetBlock.town() == null)
-                        && MyTown.instance.getWorldWildSettings(e.dimension).allowCartInteraction) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).allowCartInteraction) {
                     return true;
                 }
             } else if (e instanceof IMob) {
-                if (targetBlock != null && targetBlock.town() != null
-                        && targetBlock.settings.allowKillingMobsByNonResidents) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowKillingMobsByNonResidents) {
                     return true;
                 }
             }
 
-            return canInteract(targetBlock,
-                    TownSettingCollection.Permissions.Build);
+            return canInteract(targetBlock, TownSettingCollection.Permissions.Build);
         }
     }
 
@@ -447,20 +402,16 @@ public class Resident {
     }
 
     public String prefix() {
-        String w = onlinePlayer != null ? String
-                .valueOf(onlinePlayer.dimension) : null;
+        String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
         return ForgePerms.getPermissionsHandler().getPrefix(name(), w);
     }
 
     public String postfix() {
-        String w = onlinePlayer != null ? String
-                .valueOf(onlinePlayer.dimension) : null;
+        String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
         return ForgePerms.getPermissionsHandler().getPostfix(name(), w);
     }
 
-    public static Resident loadFromDB(int id, String name, Town town, Rank r,
-            ChatChannel c, Date created, Date lastLogin, String extra,
-            String home) {
+    public static Resident loadFromDB(int id, String name, Town town, Rank r, ChatChannel c, Date created, Date lastLogin, String extra, String home) {
         Resident res = new Resident();
         res.name = name;
         res.id = id;
@@ -516,8 +467,7 @@ public class Resident {
             checkYMovement = null;
         } else if (block != null && block.town() != null) {
             // entered town or another town
-            if (!canInteract(block, (int) onlinePlayer.posY,
-                    TownSettingCollection.Permissions.Enter)) {
+            if (!canInteract(block, (int) onlinePlayer.posY, TownSettingCollection.Permissions.Enter)) {
                 beingBounced = true;
                 try {
                     MyTown.sendChatToPlayer(onlinePlayer, Term.TownYouCannotEnter.toString(block.town().name()));
@@ -526,19 +476,10 @@ public class Resident {
                     pX = ChunkCoord.getCoord(onlinePlayer.posX);
                     pZ = ChunkCoord.getCoord(onlinePlayer.posZ);
 
-                    TownBlock block2 = source.getBlock(onlinePlayer.dimension,
-                            pX, pZ);
-                    if (block2 != null
-                            && block2.town() != null
-                            && !canInteract(block2, (int) onlinePlayer.posY,
-                                    TownSettingCollection.Permissions.Enter)) {
+                    TownBlock block2 = source.getBlock(onlinePlayer.dimension, pX, pZ);
+                    if (block2 != null && block2.town() != null && !canInteract(block2, (int) onlinePlayer.posY, TownSettingCollection.Permissions.Enter)) {
                         // bounce failed, send to spawn
-                        Log.warning(String
-                                .format("Player %s is inside a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.",
-                                        name(), block2.town().name(),
-                                        onlinePlayer.dimension,
-                                        onlinePlayer.posX, onlinePlayer.posY,
-                                        onlinePlayer.posZ));
+                        Log.warning(String.format("Player %s is inside a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", name(), block2.town().name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ));
 
                         respawnPlayer();
                     }
@@ -579,9 +520,7 @@ public class Resident {
 
         if (onlinePlayer instanceof EntityPlayerMP) {
             if (onlinePlayer.dimension != prevDimension) {
-                MinecraftServer.getServer().getConfigurationManager()
-                        .transferPlayerToDimension(
-                                (EntityPlayerMP) onlinePlayer, prevDimension);
+                MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) onlinePlayer, prevDimension);
             }
 
             if (onlinePlayer.ridingEntity != null) {
@@ -600,8 +539,7 @@ public class Resident {
                 // onlinePlayer.mountEntity(e); // unomunts
             }
 
-            ((EntityPlayerMP) onlinePlayer).playerNetServerHandler
-                    .setPlayerLocation(prevX, prevY, prevZ, prevYaw, prevPitch);
+            ((EntityPlayerMP) onlinePlayer).playerNetServerHandler.setPlayerLocation(prevX, prevY, prevZ, prevYaw, prevPitch);
         } else {
             throw new RuntimeException("Cannot bounce non multiplayer players");
         }
@@ -621,50 +559,40 @@ public class Resident {
 
         if (h == null) {
             if (pl.dimension != pl.worldObj.provider.getRespawnDimension(pl)) {
-                MinecraftServer.getServer().getConfigurationManager()
-                        .transferPlayerToDimension(pl,
-                                pl.worldObj.provider.getRespawnDimension(pl));
+                MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, pl.worldObj.provider.getRespawnDimension(pl));
             }
 
-            world = MinecraftServer.getServer().worldServerForDimension(
-                    pl.dimension);
+            world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
             ChunkCoordinates c = pl.getBedLocation();
             boolean forcedSpawn = pl.isSpawnForced();
 
             if (c != null) {
-                c = EntityPlayer
-                        .verifyRespawnCoordinates(world, c, forcedSpawn);
+                c = EntityPlayer.verifyRespawnCoordinates(world, c, forcedSpawn);
             }
 
             if (c != null) {
-                pl.setLocationAndAngles(c.posX + 0.5F, c.posY + 0.1F,
-                        c.posZ + 0.5F, 0.0F, 0.0F);
+                pl.setLocationAndAngles(c.posX + 0.5F, c.posY + 0.1F, c.posZ + 0.5F, 0.0F, 0.0F);
             } else {
                 MyTown.sendChatToPlayer(pl, Term.NoBedMessage.toString());
                 WorldInfo info = world.getWorldInfo();
-                pl.setLocationAndAngles(info.getSpawnX() + 0.5F, info
-                        .getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
+                pl.setLocationAndAngles(info.getSpawnX() + 0.5F, info.getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
             }
         } else {
             if (pl.dimension != h.dim) {
-                MinecraftServer.getServer().getConfigurationManager()
-                        .transferPlayerToDimension(pl, h.dim);
+                MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, h.dim);
             }
 
-            world = MinecraftServer.getServer().worldServerForDimension(
-                    pl.dimension);
+            world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
             pl.setLocationAndAngles(h.x, h.y, h.z, h.look1, h.look2);
         }
 
-        world.theChunkProviderServer.loadChunk((int) pl.posX >> 4,
-                (int) pl.posZ >> 4);
+        world.theChunkProviderServer.loadChunk((int) pl.posX >> 4, (int) pl.posZ >> 4);
 
         while (!world.getCollidingBoundingBoxes(pl, pl.boundingBox).isEmpty()) {
             pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
         }
 
-        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ,
-                pl.rotationYaw, pl.rotationPitch);
+        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
     }
 
     public void sendToTownSpawn(Town t) {
@@ -679,13 +607,11 @@ public class Resident {
         EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
 
         if (pl.dimension != t.getSpawnDimension()) {
-            MinecraftServer.getServer().getConfigurationManager()
-                    .transferPlayerToDimension(pl, t.getSpawnDimension());
+            MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, t.getSpawnDimension());
         }
 
         Vec3 pos = t.getSpawn();
-        pl.playerNetServerHandler.setPlayerLocation(pos.xCoord, pos.yCoord,
-                pos.zCoord, t.getSpawnEye2(), t.getSpawnEye1());
+        pl.playerNetServerHandler.setPlayerLocation(pos.xCoord, pos.yCoord, pos.zCoord, t.getSpawnEye2(), t.getSpawnEye1());
     }
 
     public void sendToServerSpawn() {
@@ -696,25 +622,20 @@ public class Resident {
         EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
 
         if (pl.dimension != 0) {
-            MinecraftServer.getServer().getConfigurationManager()
-                    .transferPlayerToDimension(pl, 0);
+            MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, 0);
         }
 
-        WorldServer world = MinecraftServer.getServer()
-                .worldServerForDimension(pl.dimension);
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
         WorldInfo info = world.getWorldInfo();
-        pl.setLocationAndAngles(info.getSpawnX() + 0.5F,
-                info.getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
+        pl.setLocationAndAngles(info.getSpawnX() + 0.5F, info.getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
 
-        world.theChunkProviderServer.loadChunk((int) pl.posX >> 4,
-                (int) pl.posZ >> 4);
+        world.theChunkProviderServer.loadChunk((int) pl.posX >> 4, (int) pl.posZ >> 4);
 
         while (!world.getCollidingBoundingBoxes(pl, pl.boundingBox).isEmpty()) {
             pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
         }
 
-        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ,
-                pl.rotationYaw, pl.rotationPitch);
+        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
     }
 
     public void save() {
@@ -723,8 +644,7 @@ public class Resident {
 
     public void checkWorldBorderLocation() {
         if (WorldBorder.instance.enabled) {
-            if ((int) onlinePlayer.posX != (int) prevX
-                    || (int) onlinePlayer.posZ != (int) prevZ) {
+            if ((int) onlinePlayer.posX != (int) prevX || (int) onlinePlayer.posZ != (int) prevZ) {
                 if (!WorldBorder.instance.isWithinArea(onlinePlayer)) {
                     beingBounced = true;
                     try {
@@ -733,12 +653,7 @@ public class Resident {
 
                         if (!WorldBorder.instance.isWithinArea(onlinePlayer)) {
                             // bounce failed, send to spawn
-                            Log.warning(String
-                                    .format("Player %s is over the edge of the world %s (%s, %s, %s). Sending to spawn.",
-                                            name(), onlinePlayer.dimension,
-                                            onlinePlayer.posX,
-                                            onlinePlayer.posY,
-                                            onlinePlayer.posZ));
+                            Log.warning(String.format("Player %s is over the edge of the world %s (%s, %s, %s). Sending to spawn.", name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ));
 
                             respawnPlayer();
                         }
@@ -761,9 +676,7 @@ public class Resident {
         if (teleportToSpawnStamp != 0) {
             if (teleportToSpawnStamp <= System.currentTimeMillis()) {
                 asyncEndSpawnTeleport();
-            } else if ((int) onlinePlayer.posX != (int) prevX
-                    || (int) onlinePlayer.posZ != (int) prevZ
-                    || (int) onlinePlayer.posY != (int) prevY) {
+            } else if ((int) onlinePlayer.posX != (int) prevX || (int) onlinePlayer.posZ != (int) prevZ || (int) onlinePlayer.posY != (int) prevY) {
                 asyncResetSpawnTeleport();
             }
         }
@@ -781,8 +694,7 @@ public class Resident {
             int pcX = ChunkCoord.getCoord(prevX);
             int pcZ = ChunkCoord.getCoord(prevZ);
 
-            if (prevDimension != onlinePlayer.dimension || cX != pcX
-                    || cZ != pcZ) {
+            if (prevDimension != onlinePlayer.dimension || cX != pcX || cZ != pcZ) {
                 checkYMovement = null;
                 checkLocation();
 
@@ -816,7 +728,7 @@ public class Resident {
             fnames.add(Formatter.formatResidentName(r));
         }
 
-        for (Resident r : MyTownDatasource.instance.residents) {
+        for (Resident r : MyTownDatasource.instance.residents.values()) {
             if (r.friends.contains(this)) {
                 fnames2.add(Formatter.formatResidentName(r));
             }
@@ -833,8 +745,8 @@ public class Resident {
 
         MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusGeneral1.toString(format.format(createdOn)));
         MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusGeneral2.toString(isOnline() ? "online" : format.format(lastLoginOn)));
-        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusTown.toString(town == null ? "none": town().name(), town == null ? "Loner" : rank.toString()));
-        
+        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusTown.toString(town == null ? "none" : town().name(), town == null ? "Loner" : rank.toString()));
+
         if (fnames.size() > 0) {
             MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusFriends.toString());
         }
@@ -886,23 +798,14 @@ public class Resident {
         teleportTargetHome = home;
 
         System.currentTimeMillis();
-        long takesTime = ForgePerms.getPermissionsHandler().canAccess(
-                this.name(),
-                DimensionManager.getProvider(prevDimension).getDimensionName(),
-                //onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.adm.bypass.teleportwait") ? 0
-                : home != null ? teleportToHomeWaitSeconds * 1000
-                        : teleportToSpawnWaitSeconds * 1000;
+        long takesTime = ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        // onlinePlayer.worldObj.provider.getDimensionName(),
+                "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
 
         teleportToSpawnStamp = System.currentTimeMillis() + takesTime;
 
         if (takesTime > 0) {
-            CmdChat.sendChatToAround(onlinePlayer.dimension, onlinePlayer.posX,
-                    onlinePlayer.posY, onlinePlayer.posZ,
-                    (home != null ? Term.HomeCmdTeleportNearStarted
-                            : Term.SpawnCmdTeleportNearStarted).toString(
-                            name(), (int) Math.ceil(takesTime / 1000)),
-                    onlinePlayer);
+            CmdChat.sendChatToAround(onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ, (home != null ? Term.HomeCmdTeleportNearStarted : Term.SpawnCmdTeleportNearStarted).toString(name(), (int) Math.ceil(takesTime / 1000)), onlinePlayer);
 
             MyTown.sendChatToPlayer(onlinePlayer, (home != null ? Term.HomeCmdTeleportStarted : Term.SpawnCmdTeleportStarted).toString((int) Math.ceil(takesTime / 1000)));
         }
@@ -939,10 +842,7 @@ public class Resident {
         if (e instanceof EntityGolem) // player controlled entities
         {
             // are we in our own town?
-            TownBlock targetBlock = MyTownDatasource.instance
-                    .getPermBlockAtCoord(onlinePlayer.dimension,
-                            (int) onlinePlayer.posX, (int) onlinePlayer.posY,
-                            (int) onlinePlayer.posZ);
+            TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(onlinePlayer.dimension, (int) onlinePlayer.posX, (int) onlinePlayer.posY, (int) onlinePlayer.posZ);
             if (targetBlock != null && targetBlock.town() != null) {
                 return Town.allowFullPvp || town() != targetBlock.town();
             }

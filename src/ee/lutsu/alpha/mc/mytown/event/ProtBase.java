@@ -43,8 +43,7 @@ public abstract class ProtBase {
         return false;
     }
 
-    public String update(Resident r, Item tool, ItemStack item)
-            throws Exception {
+    public String update(Resident r, Item tool, ItemStack item) throws Exception {
         throw new Exception("Protection doesn't support Players");
     }
 
@@ -64,10 +63,8 @@ public abstract class ProtBase {
         return false;
     }
 
-    public static Resident getActorFromLocation(int dim, int x, int y, int z,
-            String defaultActor) {
-        TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(dim, x,
-                y, z);
+    public static Resident getActorFromLocation(int dim, int x, int y, int z, String defaultActor) {
+        TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, z);
 
         Resident actor = null;
         if (block != null && block.town() != null) {
@@ -85,27 +82,19 @@ public abstract class ProtBase {
         return actor;
     }
 
-    public static MovingObjectPosition getThrowableHitOnNextTick(
-            EntityThrowable e) {
-        Vec3 var16 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX,
-                e.posY, e.posZ);
-        Vec3 var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(
-                e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+    public static MovingObjectPosition getThrowableHitOnNextTick(EntityThrowable e) {
+        Vec3 var16 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY, e.posZ);
+        Vec3 var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
         MovingObjectPosition var3 = e.worldObj.clip(var16, var2);
-        var16 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY,
-                e.posZ);
-        var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX,
-                e.posY + e.motionY, e.posZ + e.motionZ);
+        var16 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY, e.posZ);
+        var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
 
         if (var3 != null) {
-            var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(
-                    var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
+            var2 = e.worldObj.getWorldVec3Pool().getVecFromPool(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
         }
 
         Entity var4 = null;
-        List<?> var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e,
-                e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(
-                        1.0D, 1.0D, 1.0D));
+        List<?> var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e, e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(1.0D, 1.0D, 1.0D));
         double var6 = 0.0D;
         // EntityLiving var8 = e.getThrower();
 
@@ -114,10 +103,8 @@ public abstract class ProtBase {
 
             if (var10.canBeCollidedWith()) {
                 float var11 = 0.3F;
-                AxisAlignedBB var12 = var10.boundingBox.expand(var11, var11,
-                        var11);
-                MovingObjectPosition var13 = var12.calculateIntercept(var16,
-                        var2);
+                AxisAlignedBB var12 = var10.boundingBox.expand(var11, var11, var11);
+                MovingObjectPosition var13 = var12.calculateIntercept(var16, var2);
 
                 if (var13 != null) {
                     double var14 = var16.distanceTo(var13.hitVec);
@@ -135,9 +122,7 @@ public abstract class ProtBase {
         }
 
         if (var3 != null) {
-            if (var3.typeOfHit == EnumMovingObjectType.TILE
-                    && e.worldObj.getBlockId(var3.blockX, var3.blockY,
-                            var3.blockZ) == Block.portal.blockID) {
+            if (var3.typeOfHit == EnumMovingObjectType.TILE && e.worldObj.getBlockId(var3.blockX, var3.blockY, var3.blockZ) == Block.portal.blockID) {
                 return null;
             } else {
                 return var3;

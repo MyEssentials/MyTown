@@ -29,14 +29,11 @@ public class SteveCarts extends ProtBase {
         clSteveCart = Class.forName("vswe.stevescarts.Carts.MinecartModular");
         fWorkModules = clSteveCart.getDeclaredField("workModules");
 
-        Class c = Class
-                .forName("vswe.stevescarts.Modules.Workers.ModuleWorker");
+        Class c = Class.forName("vswe.stevescarts.Modules.Workers.ModuleWorker");
         mGetNextblock = c.getDeclaredMethod("getNextblock");
 
-        clRailer = Class
-                .forName("vswe.stevescarts.Modules.Workers.ModuleRailer");
-        clMiner = Class
-                .forName("vswe.stevescarts.Modules.Workers.Tools.ModuleTool");
+        clRailer = Class.forName("vswe.stevescarts.Modules.Workers.ModuleRailer");
+        clMiner = Class.forName("vswe.stevescarts.Modules.Workers.Tools.ModuleTool");
     }
 
     @Override
@@ -51,9 +48,7 @@ public class SteveCarts extends ProtBase {
 
     @Override
     public String update(Entity e) throws Exception {
-        if ((int) e.posX == (int) e.prevPosX
-                && (int) e.posY == (int) e.prevPosY
-                && (int) e.posZ == (int) e.prevPosZ) {
+        if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
             return null;
         }
 
@@ -82,13 +77,11 @@ public class SteveCarts extends ProtBase {
         }
 
         Vec3 next = (Vec3) mGetNextblock.invoke(module);
-        MyTownDatasource.instance.getBlock(e.dimension, ChunkCoord
-                .getCoord(next.xCoord), ChunkCoord.getCoord(next.zCoord));
+        MyTownDatasource.instance.getBlock(e.dimension, ChunkCoord.getCoord(next.xCoord), ChunkCoord.getCoord(next.zCoord));
 
         if (railerModules.size() > 0) // railer
         {
-            if (!canRoam(e.dimension, next.xCoord, next.yCoord - 1,
-                    next.yCoord + 1, next.zCoord, false)) {
+            if (!canRoam(e.dimension, next.xCoord, next.yCoord - 1, next.yCoord + 1, next.zCoord, false)) {
                 blockAction((EntityMinecart) e);
                 return null;
             }
@@ -99,14 +92,8 @@ public class SteveCarts extends ProtBase {
             int radius = 3 + 1;
             int y = (int) next.yCoord + 2;
 
-            if (!canRoam(e.dimension, next.xCoord - radius, y - radius, y
-                    + radius, next.zCoord - radius, true)
-                    || !canRoam(e.dimension, next.xCoord - radius, y - radius,
-                            y + radius, next.zCoord + radius, true)
-                    || !canRoam(e.dimension, next.xCoord + radius, y - radius,
-                            y + radius, next.zCoord - radius, true)
-                    || !canRoam(e.dimension, next.xCoord + radius, y - radius,
-                            y + radius, next.zCoord + radius, true)) {
+            if (!canRoam(e.dimension, next.xCoord - radius, y - radius, y + radius, next.zCoord - radius, true) || !canRoam(e.dimension, next.xCoord - radius, y - radius, y + radius, next.zCoord + radius, true)
+                    || !canRoam(e.dimension, next.xCoord + radius, y - radius, y + radius, next.zCoord - radius, true) || !canRoam(e.dimension, next.xCoord + radius, y - radius, y + radius, next.zCoord + radius, true)) {
                 blockAction((EntityMinecart) e);
                 return null;
             }
@@ -115,10 +102,8 @@ public class SteveCarts extends ProtBase {
         return null;
     }
 
-    private boolean canRoam(int dim, double x, double yFrom, double yTo,
-            double z, boolean miner) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord
-                .getCoord(x), ChunkCoord.getCoord(z));
+    private boolean canRoam(int dim, double x, double yFrom, double yTo, double z, boolean miner) {
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
                 b = b.getFirstFullSidingClockwise(b.town());
@@ -126,30 +111,20 @@ public class SteveCarts extends ProtBase {
         }
 
         if (b == null || b.town() == null) {
-            return miner
-                    && MyTown.instance.getWorldWildSettings(dim).allowStevecartsMiners
-                    || !miner
-                    && MyTown.instance.getWorldWildSettings(dim).allowStevecartsRailers;
+            return miner && MyTown.instance.getWorldWildSettings(dim).allowStevecartsMiners || !miner && MyTown.instance.getWorldWildSettings(dim).allowStevecartsRailers;
         }
 
-        return miner && b.settings.allowStevecartsMiners || !miner
-                && b.settings.allowStevecartsRailers;
+        return miner && b.settings.allowStevecartsMiners || !miner && b.settings.allowStevecartsRailers;
     }
 
-    private void blockAction(EntityMinecart e) throws IllegalArgumentException,
-            IllegalAccessException {
+    private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {
         dropMinecart(e);
 
-        Log.severe(String.format(
-                "§4Stopped a steve cart found @ dim %s, %s,%s,%s", e.dimension,
-                (int) e.posX, (int) e.posY, (int) e.posZ));
+        Log.severe(String.format("§4Stopped a steve cart found @ dim %s, %s,%s,%s", e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ));
 
-        String msg = String
-                .format("A steve cart broke @ %s,%s,%s because it wasn't allowed there",
-                        (int) e.posX, (int) e.posY, (int) e.posZ);
+        String msg = String.format("A steve cart broke @ %s,%s,%s because it wasn't allowed there", (int) e.posX, (int) e.posY, (int) e.posZ);
         String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);
-        CmdChat.sendChatToAround(e.dimension, e.posX, e.posY, e.posZ,
-                formatted, null);
+        CmdChat.sendChatToAround(e.dimension, e.posX, e.posY, e.posZ, formatted, null);
     }
 
     @Override

@@ -1,9 +1,7 @@
 package ee.lutsu.alpha.mc.mytown;
 
 public enum ChatChannel {
-    Global("Global", "G", "§f"), Town("Town", "TC", "§a"), Nation("Nation",
-            "NC", "§2"), Local("Local", "L", "§e"), Trade("Trade", "TR", "§7"), Help(
-            "Help", "H", "§b"), ;
+    Global("Global", "G", "§f"), Town("Town", "TC", "§a"), Nation("Nation", "NC", "§2"), Local("Local", "L", "§e"), Trade("Trade", "TR", "§7"), Help("Help", "H", "§b"), ;
 
     public String name;
     public String abbrevation;
@@ -22,9 +20,7 @@ public enum ChatChannel {
 
     public static ChatChannel parse(String ch) {
         for (ChatChannel type : values()) {
-            if (type.toString().equalsIgnoreCase(ch)
-                    || type.name.equalsIgnoreCase(ch)
-                    || type.abbrevation.equalsIgnoreCase(ch)) {
+            if (type.toString().equalsIgnoreCase(ch) || type.name.equalsIgnoreCase(ch) || type.abbrevation.equalsIgnoreCase(ch)) {
                 return type;
             }
         }

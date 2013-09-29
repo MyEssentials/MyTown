@@ -35,19 +35,13 @@ public class SingleBlockTools extends ProtBase {
     }
 
     private boolean isCritical(Item e) {
-        if (e instanceof ItemBucket
-                || e instanceof ItemBoat
-                || e.getClass().getSimpleName().equalsIgnoreCase(
-                        "ItemChestTransporter")) {
+        if (e instanceof ItemBucket || e instanceof ItemBoat || e.getClass().getSimpleName().equalsIgnoreCase("ItemChestTransporter")) {
             return true;
         }
 
         Method m = null;
         try {
-            m = e.getClass().getDeclaredMethod("onItemUseFirst",
-                    ItemStack.class, EntityPlayer.class, World.class,
-                    int.class, int.class, int.class, int.class, float.class,
-                    float.class, float.class);
+            m = e.getClass().getDeclaredMethod("onItemUseFirst", ItemStack.class, EntityPlayer.class, World.class, int.class, int.class, int.class, int.class, float.class, float.class, float.class);
         } catch (NoSuchMethodException e1) {} catch (NoClassDefFoundError e1) {
             // Log.warning("Cannot check the item " + e.getClass().toString() +
             // " for right click usage.");
@@ -58,8 +52,7 @@ public class SingleBlockTools extends ProtBase {
     }
 
     @Override
-    public String update(Resident res, Item tool, ItemStack item)
-            throws Exception {
+    public String update(Resident res, Item tool, ItemStack item) throws Exception {
         boolean liquid = false;
 
         if (tool instanceof ItemBucket) {
@@ -68,12 +61,10 @@ public class SingleBlockTools extends ProtBase {
             liquid = true;
         }
 
-        MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(
-                res.onlinePlayer.worldObj, res.onlinePlayer, liquid);
+        MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, liquid);
 
         if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-            if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ,
-                    Permissions.Build)) {
+            if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
                 return "Cannot build here";
             }
         } else if (pos != null && pos.typeOfHit == EnumMovingObjectType.ENTITY) {

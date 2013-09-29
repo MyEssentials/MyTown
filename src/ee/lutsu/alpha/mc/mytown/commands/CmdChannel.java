@@ -43,8 +43,7 @@ public class CmdChannel extends CommandBase {
             return;
         }
 
-        Resident res = MyTownDatasource.instance
-                .getOrMakeResident((EntityPlayer) sender);
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
         if (var2.length != 1) {
             MyTown.sendChatToPlayer(sender, Term.ChatListStart.toString());
             for (ChatChannel c : ChatChannel.values()) {
@@ -58,10 +57,7 @@ public class CmdChannel extends CommandBase {
                 ch = ChatChannel.defaultChannel;
             }
 
-            if (!ForgePerms.getPermissionsHandler().canAccess(
-                    res.onlinePlayer.username,
-                    res.onlinePlayer.worldObj.provider.getDimensionName(),
-                    "mytown.chat.focus." + ch.name.toLowerCase())) {
+            if (!ForgePerms.getPermissionsHandler().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
                 MyTown.sendChatToPlayer(sender, "§4You cannot focus to " + ch.name + " channel");
                 return;
             }
@@ -70,7 +66,7 @@ public class CmdChannel extends CommandBase {
 
             if (ch != res.activeChannel) {
                 res.setActiveChannel(ch);
-                MyTown.sendChatToPlayer(sender, Term.ChatSwitch.toString(ch.color,ch.abbrevation, ch.color, ch.name));
+                MyTown.sendChatToPlayer(sender, Term.ChatSwitch.toString(ch.color, ch.abbrevation, ch.color, ch.name));
             } else {
                 MyTown.sendChatToPlayer(sender, Term.ChatSwitchAlreadyIn.toString(ch.color, ch.abbrevation, ch.color, ch.name));
             }

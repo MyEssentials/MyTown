@@ -19,7 +19,7 @@
 
 	<target name="prep">
 		<copy todir="${mcp}/src/minecraft">
-			<fileset dir="../forgeperms-1.6.x/src" />
+			<fileset dir="../ForgePerms/src" />
 		</copy>
 		<delete file="${mcp}/src/minecraft/mcmod.info" />
 		<copy todir="${mcp}/src/minecraft">

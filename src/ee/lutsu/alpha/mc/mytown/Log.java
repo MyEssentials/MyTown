@@ -6,8 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Log {
-    private static final Pattern color_pattern = Pattern
-            .compile("(?i)§([0-9A-FK-OR])");
+    private static final Pattern color_pattern = Pattern.compile("(?i)§([0-9A-FK-OR])");
     public static Logger mclog = Logger.getLogger("Minecraft");
     public static boolean isUnix = isUnix();
 
@@ -28,13 +27,11 @@ public class Log {
     }
 
     public static void log(Level l, String msg, Object... paras) {
-        mclog.log(l, consoleColors(String.format("§7[§a%s§7]%s",
-                MyTown.MOD_NAME, String.format(msg, paras))));
+        mclog.log(l, consoleColors(String.format("§7[§a%s§7]%s", MyTown.MOD_NAME, String.format(msg, paras))));
     }
 
     public static void log(Level l, String msg, Throwable t, Object... paras) {
-        mclog.log(l, consoleColors(String.format("§7[§a%s§7]%s",
-                MyTown.MOD_NAME, String.format(msg, paras))), t);
+        mclog.log(l, consoleColors(String.format("§7[§a%s§7]%s", MyTown.MOD_NAME, String.format(msg, paras))), t);
     }
 
     public static void direct(String msg) {
@@ -88,8 +85,7 @@ public class Log {
 
     public static boolean isUnix() {
         String OS = System.getProperty("os.name").toLowerCase();
-        return OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0
-                || OS.indexOf("aix") > 0;
+        return OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0;
     }
 
 }

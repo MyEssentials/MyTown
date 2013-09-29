@@ -11,8 +11,7 @@ public class WorldEvents {
     @ForgeSubscribe
     public void worldUnload(Unload ev) {
         // So we don't hold the reference and the CG can clean this up
-        TownSettingCollection set = MyTown.instance.worldWildSettings
-                .get(ev.world);
+        TownSettingCollection set = MyTown.instance.worldWildSettings.get(ev.world);
         if (set == null) {
             return;
         }

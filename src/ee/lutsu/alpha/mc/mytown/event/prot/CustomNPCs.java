@@ -17,8 +17,7 @@ public class CustomNPCs {
             list.add(Class.forName(name));
         } catch (Throwable t) {
             if (debug) {
-                Log.warning(String.format("Cannot load %s for Custom NPCs",
-                        name));
+                Log.warning(String.format("Cannot load %s for Custom NPCs", name));
             }
         }
     }

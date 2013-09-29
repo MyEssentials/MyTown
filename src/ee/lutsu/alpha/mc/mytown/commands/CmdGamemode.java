@@ -20,10 +20,7 @@ public class CmdGamemode extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler()
-                    .canAccess(p.username,
-                            p.worldObj.provider.getDimensionName(),
-                            "mytown.adm.cmd.gm");
+            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.gm");
         }
         return false;
         // return cs instanceof MinecraftServer || (cs instanceof EntityPlayer
@@ -40,40 +37,30 @@ public class CmdGamemode extends CommandBase {
             pl = getCommandSenderAsPlayer(cs);
         }
 
-        EnumGameType mode = pl.theItemInWorldManager.getGameType() == EnumGameType.SURVIVAL ? EnumGameType.CREATIVE
-                : EnumGameType.SURVIVAL;
+        EnumGameType mode = pl.theItemInWorldManager.getGameType() == EnumGameType.SURVIVAL ? EnumGameType.CREATIVE : EnumGameType.SURVIVAL;
         if (args.length > 0) {
             mode = getGameModeFromCommand(cs, args[0]);
         }
 
         pl.setGameType(mode);
         pl.fallDistance = 0.0F;
-        String var5 = StatCollector.translateToLocal("gameMode."
-                + mode.getName());
+        String var5 = StatCollector.translateToLocal("gameMode." + mode.getName());
 
         if (pl != cs) {
-            notifyAdmins(cs, 1, "commands.gamemode.success.other",
-                    new Object[] { pl.getEntityName(), var5 });
+            notifyAdmins(cs, 1, "commands.gamemode.success.other", new Object[] { pl.getEntityName(), var5 });
         } else {
-            notifyAdmins(cs, 1, "commands.gamemode.success.self",
-                    new Object[] { var5 });
+            notifyAdmins(cs, 1, "commands.gamemode.success.self", new Object[] { var5 });
         }
     }
 
     /**
      * Gets the Game Mode specified in the command.
      */
-    protected EnumGameType getGameModeFromCommand(
-            ICommandSender par1ICommandSender, String par2Str) {
-        return !par2Str.equalsIgnoreCase(EnumGameType.SURVIVAL.getName())
-                && !par2Str.equalsIgnoreCase("s") ? !par2Str
-                .equalsIgnoreCase(EnumGameType.CREATIVE.getName())
-                && !par2Str.equalsIgnoreCase("c") ? !par2Str
-                .equalsIgnoreCase(EnumGameType.ADVENTURE.getName())
-                && !par2Str.equalsIgnoreCase("a") ? WorldSettings
-                .getGameTypeById(parseIntBounded(par1ICommandSender, par2Str,
-                        0, EnumGameType.values().length - 2))
-                : EnumGameType.ADVENTURE : EnumGameType.CREATIVE
+    protected EnumGameType getGameModeFromCommand(ICommandSender par1ICommandSender, String par2Str) {
+        return !par2Str.equalsIgnoreCase(EnumGameType.SURVIVAL.getName()) && !par2Str.equalsIgnoreCase("s") ? !par2Str.equalsIgnoreCase(EnumGameType.CREATIVE.getName()) && !par2Str.equalsIgnoreCase("c") ? !par2Str.equalsIgnoreCase(EnumGameType.ADVENTURE.getName()) && !par2Str.equalsIgnoreCase("a") ? WorldSettings
+                .getGameTypeById(parseIntBounded(par1ICommandSender, par2Str, 0, EnumGameType.values().length - 2))
+                : EnumGameType.ADVENTURE
+                : EnumGameType.CREATIVE
                 : EnumGameType.SURVIVAL;
     }
 

@@ -21,8 +21,7 @@ public class IndustrialCraft extends ProtBase {
     public static IndustrialCraft instance = new IndustrialCraft();
 
     // tnts
-    Class clDynamite = null, clStickyDynamite, clNuke, clITNT,
-            clEntityIC2Explosive;
+    Class clDynamite = null, clStickyDynamite, clNuke, clITNT, clEntityIC2Explosive;
     Field fFuse1, fFuse2;
 
     // laser
@@ -36,8 +35,7 @@ public class IndustrialCraft extends ProtBase {
         clStickyDynamite = Class.forName("ic2.core.block.EntityStickyDynamite");
         clNuke = Class.forName("ic2.core.block.EntityNuke");
         clITNT = Class.forName("ic2.core.block.EntityItnt");
-        clEntityIC2Explosive = Class
-                .forName("ic2.core.block.EntityIC2Explosive");
+        clEntityIC2Explosive = Class.forName("ic2.core.block.EntityIC2Explosive");
 
         fFuse1 = clEntityIC2Explosive.getDeclaredField("fuse");
         fFuse2 = clDynamite.getDeclaredField("fuse");
@@ -59,8 +57,7 @@ public class IndustrialCraft extends ProtBase {
     @Override
     public boolean isEntityInstance(Entity e) {
         Class c = e.getClass();
-        return c == clLaser || c == clDynamite || c == clStickyDynamite
-                || clEntityIC2Explosive.isInstance(e);
+        return c == clLaser || c == clDynamite || c == clStickyDynamite || clEntityIC2Explosive.isInstance(e);
     }
 
     @Override
@@ -89,25 +86,14 @@ public class IndustrialCraft extends ProtBase {
                 return "no owner";
             }
 
-            Resident res = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance
-                    .getOrMakeResident(owner);
+            Resident res = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getOrMakeResident(owner);
 
             if (range < 1.0F || power <= 0.0F || blockBreaks <= 0) {
                 if (explosive) {
                     int x = (int) e.posX, y = (int) e.posY, z = (int) e.posZ;
 
-                    if (!res.canInteract(x - explosionRadius, y
-                            - explosionRadius, y + explosionRadius, z
-                            - explosionRadius, Permissions.Build)
-                            || !res.canInteract(x - explosionRadius, y
-                                    - explosionRadius, y + explosionRadius, z
-                                    + explosionRadius, Permissions.Build)
-                            || !res.canInteract(x + explosionRadius, y
-                                    - explosionRadius, y + explosionRadius, z
-                                    - explosionRadius, Permissions.Build)
-                            || !res.canInteract(x + explosionRadius, y
-                                    - explosionRadius, y + explosionRadius, z
-                                    + explosionRadius, Permissions.Build)) {
+                    if (!res.canInteract(x - explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(x - explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)
+                            || !res.canInteract(x + explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(x + explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)) {
                         return "Explosion would hit a protected town";
                     }
                 }
@@ -117,37 +103,28 @@ public class IndustrialCraft extends ProtBase {
             ticksInAir++;
 
             Vec3 var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
-            Vec3 var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY
-                    + e.motionY, e.posZ + e.motionZ);
-            MovingObjectPosition var3 = e.worldObj.rayTraceBlocks_do_do(var1,
-                    var2, false, true);
+            Vec3 var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+            MovingObjectPosition var3 = e.worldObj.rayTraceBlocks_do_do(var1, var2, false, true);
             var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
 
             if (var3 != null) {
-                var2 = Vec3.createVectorHelper(var3.hitVec.xCoord,
-                        var3.hitVec.yCoord, var3.hitVec.zCoord);
+                var2 = Vec3.createVectorHelper(var3.hitVec.xCoord, var3.hitVec.yCoord, var3.hitVec.zCoord);
             } else {
-                var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY
-                        + e.motionY, e.posZ + e.motionZ);
+                var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
             }
 
             Entity var4 = null;
-            List var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e,
-                    e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ)
-                            .expand(1.0D, 1.0D, 1.0D));
+            List var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e, e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
             int var8;
 
             for (var8 = 0; var8 < var5.size(); ++var8) {
                 Entity var9 = (Entity) var5.get(var8);
 
-                if (var9.canBeCollidedWith()
-                        && (var9 != owner || ticksInAir >= 5)) {
+                if (var9.canBeCollidedWith() && (var9 != owner || ticksInAir >= 5)) {
                     float var10 = 0.3F;
-                    AxisAlignedBB var11 = var9.boundingBox.expand(var10, var10,
-                            var10);
-                    MovingObjectPosition var12 = var11.calculateIntercept(var1,
-                            var2);
+                    AxisAlignedBB var11 = var9.boundingBox.expand(var10, var10, var10);
+                    MovingObjectPosition var12 = var11.calculateIntercept(var1, var2);
 
                     if (var12 != null) {
                         double var13 = var1.distanceTo(var12.hitVec);
@@ -165,11 +142,7 @@ public class IndustrialCraft extends ProtBase {
             }
 
             if (var3 != null) {
-                if (var3.typeOfHit == EnumMovingObjectType.ENTITY
-                        && !res.canAttack(var3.entityHit)
-                        || var3.typeOfHit == EnumMovingObjectType.TILE
-                        && !res.canInteract(var3.blockX, var3.blockY,
-                                var3.blockZ, Permissions.Build)) {
+                if (var3.typeOfHit == EnumMovingObjectType.ENTITY && !res.canAttack(var3.entityHit) || var3.typeOfHit == EnumMovingObjectType.TILE && !res.canInteract(var3.blockX, var3.blockY, var3.blockZ, Permissions.Build)) {
                     return "Target in MyTown protected area";
                 }
 
@@ -187,18 +160,8 @@ public class IndustrialCraft extends ProtBase {
                         z = var3.blockZ;
                     }
 
-                    if (!res.canInteract(x - explosionRadius, y
-                            - explosionRadius, y + explosionRadius, z
-                            - explosionRadius, Permissions.Build)
-                            || !res.canInteract(x - explosionRadius, y
-                                    - explosionRadius, y + explosionRadius, z
-                                    + explosionRadius, Permissions.Build)
-                            || !res.canInteract(x + explosionRadius, y
-                                    - explosionRadius, y + explosionRadius, z
-                                    - explosionRadius, Permissions.Build)
-                            || !res.canInteract(x + explosionRadius, y
-                                    - explosionRadius, y + explosionRadius, z
-                                    + explosionRadius, Permissions.Build)) {
+                    if (!res.canInteract(x - explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(x - explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)
+                            || !res.canInteract(x + explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(x + explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)) {
                         return "Explosion would hit a protected town";
                     }
                 }
@@ -231,8 +194,7 @@ public class IndustrialCraft extends ProtBase {
             boolean canBlow = true;
             for (int x = x1; x <= x2 && canBlow; x++) {
                 for (int z = z1; z <= z2 && canBlow; z++) {
-                    if (!canBlow(e.dimension, x << 4, (int) e.posY - radius,
-                            (int) e.posY + radius, z << 4)) {
+                    if (!canBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
                         canBlow = false;
                     }
                 }
@@ -243,8 +205,7 @@ public class IndustrialCraft extends ProtBase {
     }
 
     private boolean canBlow(int dim, int x, int yFrom, int yTo, int z) {
-        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x,
-                yFrom, yTo, z);
+        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, yFrom, yTo, z);
 
         if (b == null || b.town() == null) {
             return !MyTown.instance.getWorldWildSettings(dim).disableTNT;

@@ -42,8 +42,7 @@ public class TNT extends ProtBase {
         boolean canBlow = true;
         for (int x = x1; x <= x2 && canBlow; x++) {
             for (int z = z1; z <= z2 && canBlow; z++) {
-                if (!canBlow(e.dimension, x << 4, (int) e.posY - radius,
-                        (int) e.posY + radius, z << 4)) {
+                if (!canBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
                     canBlow = false;
                 }
             }
@@ -53,8 +52,7 @@ public class TNT extends ProtBase {
     }
 
     private boolean canBlow(int dim, int x, int yFrom, int yTo, int z) {
-        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x,
-                yFrom, yTo, z);
+        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, yFrom, yTo, z);
 
         if (b == null || b.town() == null) {
             return !MyTown.instance.getWorldWildSettings(dim).disableTNT;

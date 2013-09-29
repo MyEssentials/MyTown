@@ -10,10 +10,8 @@ import net.minecraftforge.common.Configuration.UnicodeInputStreamReader;
 public class TermTranslator {
     public static String defaultEncoding = "UTF-8";
 
-    public static void load(File file, String language, boolean activate)
-            throws IOException {
-        UnicodeInputStreamReader input = new UnicodeInputStreamReader(
-                new FileInputStream(file), defaultEncoding);
+    public static void load(File file, String language, boolean activate) throws IOException {
+        UnicodeInputStreamReader input = new UnicodeInputStreamReader(new FileInputStream(file), defaultEncoding);
 
         BufferedReader r = new BufferedReader(input);
         try {
