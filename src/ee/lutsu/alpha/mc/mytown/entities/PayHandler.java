@@ -1,8 +1,6 @@
 package ee.lutsu.alpha.mc.mytown.entities;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.event.ForgeEventFactory;
 
 import com.sperion.forgeperms.ForgePerms;
 
@@ -29,7 +27,7 @@ public class PayHandler {
 
         requestedItem = null;
     }
-
+    
     public boolean tryPayByHand() {
         if (requestedItem == null) {
             return false;
@@ -39,26 +37,14 @@ public class PayHandler {
             requestedItem = null;
             return false;
         }
-
-        ItemStack hand = owner.onlinePlayer.getHeldItem();
-        if (hand == null || hand.itemID != requestedItem.itemID || hand.getItemDamage() != requestedItem.getItemDamage()) {
-            return false;
+        
+        if (ForgePerms.getEconomyManager().withdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
+            purchaseComplete();
+            return true;
         }
-
-        if (hand.stackSize < requestedItem.stackSize) {
-            return false;
-        }
-
-        hand.stackSize -= requestedItem.stackSize;
-        if (hand.stackSize <= 0) {
-            ForgeEventFactory.onPlayerDestroyItem(owner.onlinePlayer, hand);
-        }
-
-        purchaseComplete();
-
-        return true;
+        return false;
     }
-
+    
     private void purchaseComplete() {
         requestedItem = null;
 
@@ -71,14 +57,17 @@ public class PayHandler {
         requestedItem = stack;
         doneHandler = actor;
         doneHandlerArgs = args;
-        if (stack == null || stack.stackSize < 1 || ForgePerms.getPermissionsHandler().canAccess(owner.name(), DimensionManager.getProvider(owner.prevDimension).getDimensionName(),
-        // owner.onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.cost.bypass." + action)) {
+        if (stack == null || stack.stackSize < 1 || ForgePerms.getPermissionManager().canAccess(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cost.bypass." + action)) {
             purchaseComplete();
         } else {
-            timeUntil = System.currentTimeMillis() + timeToPaySec * 1000;
-
-            notifyUser();
+            if (ForgePerms.getEconomyManager().rightClickToPay()){
+                timeUntil = System.currentTimeMillis() + timeToPaySec * 1000;
+                notifyUser();
+            } else{
+                if (ForgePerms.getEconomyManager().withdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
+                    purchaseComplete();
+                }
+            }
         }
     }
 

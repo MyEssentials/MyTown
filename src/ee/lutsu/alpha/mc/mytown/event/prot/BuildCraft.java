@@ -19,7 +19,7 @@ public class BuildCraft extends ProtBase {
     public static BuildCraft instance = new BuildCraft();
     public List<TileEntity> checkedEntitys = new ArrayList<TileEntity>();
 
-    Class clQuarry = null, clFiller, clBuilder, clBox;
+    Class<?> clQuarry = null, clFiller, clBuilder, clBox;
     Field fBoxQ, fBoxF, fBoxB, fmx, fmy, fmz, fxx, fxy, fxz, fBoxInit, fQuarryOwner, fQuarryBuilderDone;
 
     @Override
@@ -57,7 +57,7 @@ public class BuildCraft extends ProtBase {
 
     @Override
     public boolean isEntityInstance(TileEntity e) {
-        Class c = e.getClass();
+        Class<?> c = e.getClass();
 
         return c == clQuarry || c == clFiller || c == clBuilder;
     }
@@ -81,7 +81,7 @@ public class BuildCraft extends ProtBase {
 
     private String updateSub(TileEntity e) throws Exception {
         Object box = null;
-        Class clazz = e.getClass();
+        Class<?> clazz = e.getClass();
 
         if (clazz == clQuarry) {
             box = fBoxQ.get(e);

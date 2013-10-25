@@ -20,7 +20,7 @@ import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 public class ComputerCraft extends ProtBase {
     public static ComputerCraft instance = new ComputerCraft();
 
-    Class clTurtle = null;
+    Class<?> clTurtle = null;
     Method mTerminate, mIsOn;
     Field fMoved, fClientState;
 

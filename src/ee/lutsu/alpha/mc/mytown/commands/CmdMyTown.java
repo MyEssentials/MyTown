@@ -26,7 +26,7 @@ public class CmdMyTown extends CommandBase {
     }
 
     @Override
-    public List getCommandAliases() {
+    public List<?> getCommandAliases() {
         return Arrays.asList(Term.TownCommandAliases.toString().split(" "));
     }
 
@@ -34,7 +34,7 @@ public class CmdMyTown extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd");
         }
         return false;
         // return MyTown.instance.perms.canAccess(cs, "mytown.cmd");
@@ -83,7 +83,7 @@ public class CmdMyTown extends CommandBase {
      * completion options.
      */
     @Override
-    public List addTabCompletionOptions(ICommandSender cs, String[] args) {
+    public List<?> addTabCompletionOptions(ICommandSender cs, String[] args) {
         if (args.length < 1) {
             return null;
         }

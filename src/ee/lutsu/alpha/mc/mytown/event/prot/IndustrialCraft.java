@@ -21,12 +21,12 @@ public class IndustrialCraft extends ProtBase {
     public static IndustrialCraft instance = new IndustrialCraft();
 
     // tnts
-    Class clDynamite = null, clStickyDynamite, clNuke, clITNT, clEntityIC2Explosive;
+    Class<?> clDynamite = null, clStickyDynamite, clNuke, clITNT, clEntityIC2Explosive;
     Field fFuse1, fFuse2;
 
     // laser
     public int explosionRadius = 6;
-    Class clLaser = null;
+    Class<?> clLaser = null;
     Field fTickInAir, fOwner, fExplosive, fRange, fPower, fBlockBreaks;
 
     @Override
@@ -56,7 +56,7 @@ public class IndustrialCraft extends ProtBase {
 
     @Override
     public boolean isEntityInstance(Entity e) {
-        Class c = e.getClass();
+        Class<?> c = e.getClass();
         return c == clLaser || c == clDynamite || c == clStickyDynamite || clEntityIC2Explosive.isInstance(e);
     }
 
@@ -66,7 +66,7 @@ public class IndustrialCraft extends ProtBase {
             return null;
         }
 
-        Class c = e.getClass();
+        Class<?> c = e.getClass();
         if (c == clLaser) {
             /*
              * if ((int)e.posX == (int)e.prevPosX && (int)e.posY ==
@@ -114,7 +114,7 @@ public class IndustrialCraft extends ProtBase {
             }
 
             Entity var4 = null;
-            List var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e, e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<?> var5 = e.worldObj.getEntitiesWithinAABBExcludingEntity(e, e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(1.0D, 1.0D, 1.0D));
             double var6 = 0.0D;
             int var8;
 

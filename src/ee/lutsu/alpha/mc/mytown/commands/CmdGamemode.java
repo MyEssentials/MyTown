@@ -1,6 +1,5 @@
 package ee.lutsu.alpha.mc.mytown.commands;
 
-//import ee.lutsu.alpha.mc.mytown.Permissions;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,12 +19,9 @@ public class CmdGamemode extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.gm");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.gm");
         }
         return false;
-        // return cs instanceof MinecraftServer || (cs instanceof EntityPlayer
-        // && (MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.gm") ||
-        // MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase())));
     }
 
     @Override

@@ -1,10 +1,10 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
+import mods.railcraft.common.api.carts.IExplosiveCart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
-import railcraft.common.api.carts.IExplosiveCart;
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.ChunkCoord;
 import ee.lutsu.alpha.mc.mytown.Formatter;
@@ -18,7 +18,7 @@ import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 public class RailCraft extends ProtBase {
     public static RailCraft instance = new RailCraft();
 
-    Class clCartTNT = null, clBore;
+    Class<?> clCartTNT = null, clBore;
 
     @Override
     public void load() throws Exception {

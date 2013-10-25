@@ -19,11 +19,9 @@ public class CmdSpawn extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.spawn");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.spawn");
         }
         return false;
-        // return cs instanceof EntityPlayerMP &&
-        // MyTown.instance.perms.canAccess(cs, "mytown.ecmd.spawn");
     }
 
     @Override

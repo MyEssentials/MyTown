@@ -34,7 +34,7 @@ public class CmdMyTownAdmin extends CommandBase {
     }
 
     @Override
-    public List getCommandAliases() {
+    public List<?> getCommandAliases() {
         return Arrays.asList(Term.TownAdmCommandAliases.toString().split(" "));
     }
 
@@ -42,7 +42,7 @@ public class CmdMyTownAdmin extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
         }
         return false;
     }
@@ -79,7 +79,7 @@ public class CmdMyTownAdmin extends CommandBase {
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdResetFocusedChannels.toString(), "", Term.TownadmCmdResetFocusedChannelsDesc.toString(), color));
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdSnoopPrivateChat.toString(), "", Term.TownadmCmdSnoopPrivateChatDesc.toString(), color));
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdReload.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reload")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reload")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -87,7 +87,7 @@ public class CmdMyTownAdmin extends CommandBase {
                 MyTown.instance.reload();
                 MyTown.sendChatToPlayer(cs, Term.TownadmModReloaded.toString());
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdResetFocusedChannels.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reschannels")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reschannels")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -101,7 +101,7 @@ public class CmdMyTownAdmin extends CommandBase {
                 }
                 MyTown.sendChatToPlayer(cs, String.format("§2Done. Resetted %s player channels to %s", i, ChatChannel.defaultChannel.name));
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdWipeDim.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.wipedim")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.wipedim")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -116,7 +116,7 @@ public class CmdMyTownAdmin extends CommandBase {
                     MyTown.sendChatToPlayer(cs, String.format("§2Done. Deleted %s town blocks", i));
                 }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdNew.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.new")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.new")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -129,7 +129,7 @@ public class CmdMyTownAdmin extends CommandBase {
                     MyTown.sendChatToPlayer(cs, Term.TownadmCreatedNewTown.toString(t.name(), r.name()));
                 }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdDelete.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.delete")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.delete")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -147,7 +147,7 @@ public class CmdMyTownAdmin extends CommandBase {
                     MyTown.sendChatToPlayer(cs, Term.TownadmDeletedTown.toString(t.name()));
                 }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdSet.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.set")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.set")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -178,7 +178,7 @@ public class CmdMyTownAdmin extends CommandBase {
                     MyTown.sendChatToPlayer(cs, Term.TownadmResidentsSet.toString());
                 }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdRem.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.rem")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.rem")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -200,7 +200,7 @@ public class CmdMyTownAdmin extends CommandBase {
                     MyTown.sendChatToPlayer(cs, Term.TownadmResidentsSet.toString());
                 }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdExtra.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.extra")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.extra")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -218,7 +218,7 @@ public class CmdMyTownAdmin extends CommandBase {
                     MyTown.sendChatToPlayer(cs, Term.TownadmExtraSet.toString());
                 }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdSnoopPrivateChat.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.snoop")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.snoop")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -230,7 +230,7 @@ public class CmdMyTownAdmin extends CommandBase {
 
                 MyTown.sendChatToPlayer(cs, "§aSnooping is now " + (done ? "§4off" : "§2on"));
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdExtraRes.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.extrares")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.extrares")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
@@ -270,7 +270,7 @@ public class CmdMyTownAdmin extends CommandBase {
 
                 if (var2.length < 3) // show
                 {
-                    if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.show." + node)) {
+                    if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.show." + node)) {
                         MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                         return;
                     }
@@ -278,13 +278,13 @@ public class CmdMyTownAdmin extends CommandBase {
                 } else {
                     String action = var2[2];
                     if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Set.toString()) && var2.length > 3) {
-                        if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.set." + node + "." + var2[3])) {
+                        if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.set." + node + "." + var2[3])) {
                             MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                             return;
                         }
                         setPermissions(cs, node, var2[3], var2.length > 4 ? var2[4] : null);
                     } else if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Force.toString())) {
-                        if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.force." + node)) {
+                        if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.force." + node)) {
                             MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                             return;
                         }
@@ -294,14 +294,57 @@ public class CmdMyTownAdmin extends CommandBase {
                         MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdPerm.toString(), Term.TownadmCmdPermArgs.toString(), Term.TownadmCmdPermDesc.toString(), color));
                     }
                 }
+            } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdUnclaim.toString())){
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.unclaim")) {
+                    MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
+                    return;
+                }
+                
+                int radius_rec = 0;
+                if (var2.length > 1){
+                    radius_rec = Integer.parseInt(var2[1]);
+                }
+                
+                Resident res = cs instanceof EntityPlayer ? MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs) : null;
+                if (res == null) {
+                    throw new CommandException(Term.ErrNotUsableByConsole);
+                }
+                
+                int cx = res.onlinePlayer.chunkCoordX;
+                int cz = res.onlinePlayer.chunkCoordZ;
+                int dim = res.onlinePlayer.dimension;
+
+                StringBuilder sb = new StringBuilder();
+                int nr = 0;
+
+                for (int z = cz - radius_rec; z <= cz + radius_rec; z++) {
+                    for (int x = cx - radius_rec; x <= cx + radius_rec; x++) {
+                        TownBlock b = MyTownDatasource.instance.getBlock(dim, x, z);
+                        if (b == null || b.town() != res.town()) {
+                            continue;
+                        }
+                        
+                        b.town().removeBlock(b);
+
+                        nr++;
+                        if (sb.length() > 0) {
+                            sb.append(", ");
+                        }
+                        sb.append(String.format("(%s,%s)", x, z));
+
+                    }
+                }
+                
+                // emulate that the player just entered it
+                res.checkLocation();
+                MyTown.sendChatToPlayer(cs, Term.TownBlocksUnclaimed.toString(nr, sb.toString()));
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdClaim.toString())) {
-                if (!ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.claim")) {
+                if (!ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.claim")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
                     return;
                 }
 
-                if (var2.length < 2) // /ta claim townname [playername]
-                                     // [x.y:x.y]
+                if (var2.length < 2) // /ta claim townname [playername] [x.y:x.y]
                 {
                     MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdClaim.toString(), Term.TownadmCmdClaimArgs.toString(), Term.TownadmCmdClaimDesc.toString(), color));
                     return;

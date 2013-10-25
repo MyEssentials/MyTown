@@ -16,7 +16,8 @@ public class RedPower extends ProtBase {
     public static RedPower instance = new RedPower();
     public int explosionRadius = 6;
 
-    private Class clTileFrameMoving = null, clTileMotor;
+    private Class<?> clTileFrameMoving = null, clTileMotor;
+    @SuppressWarnings("unused")
     private Field fMotorX, fMotorY, fMotorZ, fMoveDir;
 
     @Override

@@ -14,7 +14,7 @@ import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 public class ModularPowersuits extends ProtBase {
     public static ModularPowersuits instance = new ModularPowersuits();
 
-    Class clEntityPlasmaBolt;
+    Class<?> clEntityPlasmaBolt;
     Field fEntityPlasmaBolt_shootingEntity, fEntityPlasmaBolt_explosiveness, fEntityPlasmaBolt_size;
 
     @Override

@@ -53,7 +53,7 @@ public class MyTownResident {
         } else if (args.length == 5 && args[0].equalsIgnoreCase(Term.TownCmdPerm.toString()) && args[2].equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString())) {
             TownSetting s = MyTown.instance.serverSettings.getSetting(args[3]);
             if (s != null) {
-                Class c = s.getValueClass();
+                Class<?> c = s.getValueClass();
 
                 if (c == TownSettingCollection.Permissions.class) {
                     for (TownSettingCollection.Permissions p : TownSettingCollection.Permissions.values()) {

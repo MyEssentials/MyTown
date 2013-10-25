@@ -20,7 +20,7 @@ import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 public class SteveCarts extends ProtBase {
     public static SteveCarts instance = new SteveCarts();
 
-    Class clSteveCart = null, clRailer, clMiner;
+    Class<?> clSteveCart = null, clRailer, clMiner;
     Method mGetNextblock;
     Field fWorkModules;
 
@@ -29,7 +29,7 @@ public class SteveCarts extends ProtBase {
         clSteveCart = Class.forName("vswe.stevescarts.Carts.MinecartModular");
         fWorkModules = clSteveCart.getDeclaredField("workModules");
 
-        Class c = Class.forName("vswe.stevescarts.Modules.Workers.ModuleWorker");
+        Class<?> c = Class.forName("vswe.stevescarts.Modules.Workers.ModuleWorker");
         mGetNextblock = c.getDeclaredMethod("getNextblock");
 
         clRailer = Class.forName("vswe.stevescarts.Modules.Workers.ModuleRailer");
@@ -46,6 +46,7 @@ public class SteveCarts extends ProtBase {
         return e.getClass() == clSteveCart;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public String update(Entity e) throws Exception {
         if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
@@ -54,7 +55,7 @@ public class SteveCarts extends ProtBase {
 
         fWorkModules.setAccessible(true);
 
-        ArrayList modules = (ArrayList) fWorkModules.get(e);
+        ArrayList<Object> modules = (ArrayList<Object>) fWorkModules.get(e);
         ArrayList<Object> railerModules = new ArrayList<Object>();
         ArrayList<Object> minerModules = new ArrayList<Object>();
 

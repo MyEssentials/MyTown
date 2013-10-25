@@ -128,6 +128,8 @@ public enum Term {
 
     TownadmCmdClaim("claim"), TownadmCmdClaimArgs("townname [playername] [x.y:x.y[:dim]]"), TownadmCmdClaimDesc("Sets the current (or specified) plot to the town (and player)"),
 
+    TownadmCmdUnclaim("unclaim"), TownadmCmdUnclaimArgs("[rect X]"), TownadmCmdUnclaimDesc("Unclaims the plot"),
+
     TownadmCmdWipeDim("wipedim"), TownadmCmdWipeDimArgs("dimension_id"), TownadmCmdWipeDimDesc("Deletes all town blocks from the specified dimension id"),
 
     TownadmCmdResetFocusedChannels("reschannels"), TownadmCmdResetFocusedChannelsDesc("Reset the currently selected channel for all users to the default"),

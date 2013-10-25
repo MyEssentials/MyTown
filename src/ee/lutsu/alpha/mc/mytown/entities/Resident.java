@@ -170,25 +170,25 @@ public class Resident {
     }
 
     public boolean shouldShowTownBlocks() {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
         // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.showblocks");
     }
 
     public boolean shouldShowPlayerLocation() {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
         // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.showlocation");
     }
 
     public boolean canByPassCheck(TownSettingCollection.Permissions level) {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
         // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass." + level.toString().toLowerCase());
     }
 
     public boolean pvpBypass() {
-        return ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
         // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass.pvp");
     }
@@ -285,7 +285,7 @@ public class Resident {
         } else {
             boolean isNpc = false;
 
-            for (Class cl : ProtectionEvents.instance.getNPCClasses()) {
+            for (Class<?> cl : ProtectionEvents.instance.getNPCClasses()) {
                 if (cl.isInstance(e)) {
                     isNpc = true;
                 }
@@ -403,12 +403,12 @@ public class Resident {
 
     public String prefix() {
         String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
-        return ForgePerms.getPermissionsHandler().getPrefix(name(), w);
+        return ForgePerms.getChatManager().getPlayerPrefix(name(), w);
     }
 
     public String postfix() {
         String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
-        return ForgePerms.getPermissionsHandler().getPostfix(name(), w);
+        return ForgePerms.getChatManager().getPlayerSuffix(name(), w);
     }
 
     public static Resident loadFromDB(int id, String name, Town town, Rank r, ChatChannel c, Date created, Date lastLogin, String extra, String home) {
@@ -563,8 +563,8 @@ public class Resident {
             }
 
             world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
-            ChunkCoordinates c = pl.getBedLocation();
-            boolean forcedSpawn = pl.isSpawnForced();
+            ChunkCoordinates c = pl.getBedLocation(pl.dimension);
+            boolean forcedSpawn = pl.isSpawnForced(pl.dimension);
 
             if (c != null) {
                 c = EntityPlayer.verifyRespawnCoordinates(world, c, forcedSpawn);
@@ -734,8 +734,8 @@ public class Resident {
             }
         }
 
-        String sFriends = Joiner.on("§2, ").join(fnames);
-        String sFriends2 = Joiner.on("§2, ").join(fnames2);
+        Joiner.on("§2, ").join(fnames);
+        Joiner.on("§2, ").join(fnames2);
 
         MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusName.toString(Formatter.formatResidentName(this)));
 
@@ -798,7 +798,7 @@ public class Resident {
         teleportTargetHome = home;
 
         System.currentTimeMillis();
-        long takesTime = ForgePerms.getPermissionsHandler().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
+        long takesTime = ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
         // onlinePlayer.worldObj.provider.getDimensionName(),
                 "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
 

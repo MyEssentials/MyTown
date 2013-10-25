@@ -29,7 +29,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
         }
         return false;
     }
@@ -69,6 +69,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
         MyTown.sendChatToPlayer(sender, "§dNow chatting with " + Resident.getOrMake(target).formattedName());
     }
 
+    @SuppressWarnings("unused")
     public static void sendChat(EntityPlayer sender, EntityPlayer target, String msg) {
         if (sender == null || target == null || msg == null) {
             return;
@@ -76,7 +77,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
 
         lastMessages.put(target, sender);
 
-        if (ForgePerms.getPermissionsHandler().canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
+        if (ForgePerms.getPermissionManager().canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
             msg = Formatter.dollarToColorPrefix(msg);
         }
 

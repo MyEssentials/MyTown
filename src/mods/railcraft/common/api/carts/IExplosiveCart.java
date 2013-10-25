@@ -1,4 +1,4 @@
-package railcraft.common.api.carts;
+package mods.railcraft.common.api.carts;
 
 public abstract interface IExplosiveCart {
     public abstract void setPrimed(boolean paramBoolean);

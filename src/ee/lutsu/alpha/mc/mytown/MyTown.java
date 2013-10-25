@@ -24,6 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
@@ -107,13 +108,13 @@ public class MyTown {
         }
     }
 
-    @Mod.PreInit
+    @EventHandler
     public void preInit(FMLPreInitializationEvent ev) {
         addCommands();
         loadConfig();
     }
 
-    @Mod.ServerStarted
+    @EventHandler
     public void modsLoaded(FMLServerStartedEvent var1) {
         try {
             MyTownDatasource.instance.init();
@@ -142,7 +143,7 @@ public class MyTown {
         Log.info("Loaded");
     }
 
-    @Mod.ServerStopping
+    @EventHandler
     public void serverStopping(FMLServerStoppingEvent ev) throws InterruptedException {
         WorldBorder.instance.stopGenerators();
     }

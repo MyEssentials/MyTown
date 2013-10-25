@@ -28,7 +28,7 @@ public class ThaumCraft extends ProtBase {
     public static ThaumCraft instance = new ThaumCraft();
     public int explosionRadius = 6;
 
-    private Class clAlumentum = null, clTileArcaneBore, clEntityFrostShard, clItemWandFire, clItemWandExcavation, clItemWandLightning, clItemWandTrade;
+    private Class<?> clAlumentum = null, clTileArcaneBore, clEntityFrostShard, clItemWandFire, clItemWandExcavation, clItemWandLightning, clItemWandTrade;
     Field fBore_toDig, fBore_digX, fBore_digZ, fBore_digY;
     Field fFrostShard_shootingEntity;
 
@@ -169,7 +169,7 @@ public class ThaumCraft extends ProtBase {
         Vec3 vec3d = world.getWorldVec3Pool().getVecFromPool(p.posX, p.posY, p.posZ);
         Vec3 vec3d2 = vec3d.addVector(tvec.xCoord * range, tvec.yCoord * range, tvec.zCoord * range);
         float f1 = 1.0F;
-        List list = world.getEntitiesWithinAABBExcludingEntity(p, p.boundingBox.addCoord(tvec.xCoord * range, tvec.yCoord * range, tvec.zCoord * range).expand(f1, f1, f1));
+        List<?> list = world.getEntitiesWithinAABBExcludingEntity(p, p.boundingBox.addCoord(tvec.xCoord * range, tvec.yCoord * range, tvec.zCoord * range).expand(f1, f1, f1));
 
         ArrayList<Entity> l = new ArrayList<Entity>();
         for (int i = 0; i < list.size(); i++) {

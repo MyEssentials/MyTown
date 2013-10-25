@@ -9,10 +9,10 @@ public class TownSetting {
     public Object effectiveValue;
 
     private String valueDesc;
-    private Class instanceOf;
+    private Class<?> instanceOf;
     private String seriaKey;
 
-    public TownSetting(String name, String key, Object value, Object wildValue, String valueDesc, Class instanceOf) {
+    public TownSetting(String name, String key, Object value, Object wildValue, String valueDesc, Class<?> instanceOf) {
         this.name = name;
         seriaKey = key;
         this.value = value;
@@ -37,7 +37,7 @@ public class TownSetting {
         return instanceOf.getSimpleName();
     }
 
-    public Class getValueClass() {
+    public Class<?> getValueClass() {
         return instanceOf;
     }
 
@@ -77,6 +77,7 @@ public class TownSetting {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T effValue() {
         return (T) effectiveValue;
     }

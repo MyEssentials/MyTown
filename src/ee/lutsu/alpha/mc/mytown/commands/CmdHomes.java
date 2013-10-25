@@ -31,7 +31,7 @@ public class CmdHomes extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.homes");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.homes");
         }
         return false;
     }
@@ -52,7 +52,7 @@ public class CmdHomes extends CommandBase {
             } else {
                 if (args.length == 1 && args[0].equalsIgnoreCase("loc")) {
                     MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesTitle.toString());
-                    if (SavedHomeList.defaultIsBed && pl.getBedLocation() != null) {
+                    if (SavedHomeList.defaultIsBed && pl.getBedLocation(pl.dimension) != null) {
                         SavedHome s = SavedHome.fromBed(pl);
                         MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesUnaccessibleItem2.toString("default", s.dim, (int) s.x, (int) s.y, (int) s.z));
                     }
@@ -62,7 +62,7 @@ public class CmdHomes extends CommandBase {
                     }
                 } else {
                     List<String> items = Lists.newArrayList();
-                    if (SavedHomeList.defaultIsBed && pl.getBedLocation() != null) {
+                    if (SavedHomeList.defaultIsBed && pl.getBedLocation(pl.dimension) != null) {
                         items.add(Term.HomeCmdHomesUnaccessibleItem.toString("default"));
                     }
 

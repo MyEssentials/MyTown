@@ -1,9 +1,9 @@
 package ee.lutsu.alpha.mc.mytown;
 
-import ee.lutsu.alpha.mc.mytown.entities.Resident;
-import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import ee.lutsu.alpha.mc.mytown.entities.Resident;
+import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
 
 public class APIHandler extends API {
     @Override

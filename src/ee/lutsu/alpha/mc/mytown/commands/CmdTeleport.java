@@ -15,12 +15,9 @@ public class CmdTeleport extends CommandServerTp {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.tp");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.tp");
         }
         return false;
-        // return (cs instanceof MinecraftServer) || (cs instanceof EntityPlayer
-        // && (MyTown.instance.perms.canAccess(cs, "mytown.adm.cmd.tp") ||
-        // MinecraftServer.getServer().getConfigurationManager().getOps().contains(cs.getCommandSenderName().toLowerCase())));
     }
 
     @Override

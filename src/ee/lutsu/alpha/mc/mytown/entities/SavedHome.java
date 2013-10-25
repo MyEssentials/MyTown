@@ -51,7 +51,7 @@ public class SavedHome {
     }
 
     public static SavedHome fromBed(EntityPlayerMP entityFrom) {
-        ChunkCoordinates c = entityFrom.getBedLocation();
+        ChunkCoordinates c = entityFrom.getBedLocation(entityFrom.dimension);
         if (c == null) {
             return null;
         }

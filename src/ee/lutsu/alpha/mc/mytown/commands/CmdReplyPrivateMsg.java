@@ -15,7 +15,7 @@ import ee.lutsu.alpha.mc.mytown.MyTown;
 
 public class CmdReplyPrivateMsg extends CommandBase {
     @Override
-    public List getCommandAliases() {
+    public List<?> getCommandAliases() {
         return Arrays.asList(new String[] { "r" });
     }
 
@@ -28,7 +28,7 @@ public class CmdReplyPrivateMsg extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionsHandler().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.reply");
+            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.reply");
         }
         return false;
     }
@@ -53,7 +53,7 @@ public class CmdReplyPrivateMsg extends CommandBase {
      * completion options.
      */
     @Override
-    public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+    public List<?> addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
         return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
     }
 

@@ -14,7 +14,7 @@ import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 public class TrainCraft extends ProtBase {
     public static TrainCraft instance = new TrainCraft();
 
-    Class clEntityTracksBuilder;
+    Class<?> clEntityTracksBuilder;
 
     @Override
     public void load() throws Exception {

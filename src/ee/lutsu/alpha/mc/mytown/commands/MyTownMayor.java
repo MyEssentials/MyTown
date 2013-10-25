@@ -160,7 +160,7 @@ public class MyTownMayor {
                     throw new CommandException(Term.TownErrPlayerNotInYourTown);
                 }
 
-                if (!ForgePerms.getPermissionsHandler().canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
+                if (!ForgePerms.getPermissionManager().canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
                     throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement);
                 }
 

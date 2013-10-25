@@ -132,7 +132,7 @@ public class MyTownAssistant {
 
             CommandException firstError = null;
             int requestedBlocks = 0, ableToClaim = 0, alreadyOwn = 0;
-            boolean bypassFarawayRestriction = ForgePerms.getPermissionsHandler().canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.faraway");
+            boolean bypassFarawayRestriction = ForgePerms.getPermissionManager().canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.faraway");
             List<TownBlock> blocks = Lists.newArrayList();
 
             for (int z = cz - radius_rec; z <= cz + radius_rec; z++) {
@@ -184,7 +184,6 @@ public class MyTownAssistant {
                     }
                 }
                 blocks.removeAll(adjacentBlocks);
-                
 
                 // Not all blocks are immediatly adjacent, need to iterate
                 if (blocks.size() > 0) {
@@ -214,7 +213,7 @@ public class MyTownAssistant {
                 blocks = adjacentBlocks;
                 ableToClaim = blocks.size();
             }
-            
+
             MyTown.sendChatToPlayer(cs, Term.TownBlocksClaimedDisclaimer.toString(requestedBlocks, ableToClaim, alreadyOwn));
             if (firstError != null) {
                 MyTown.sendChatToPlayer(cs, Term.TownBlocksClaimedDisclaimer2.toString(firstError.errorCode.toString(firstError.args)));
@@ -229,6 +228,7 @@ public class MyTownAssistant {
                 }
 
                 res.pay.requestPayment("townclaimblock", request, new PayHandler.IDone() {
+                    @SuppressWarnings("unchecked")
                     @Override
                     public void run(Resident res, Object[] args) {
                         StringBuilder sb = new StringBuilder();

@@ -103,7 +103,7 @@ public class CmdChat extends CommandBase {
     }
 
     public static String sendGlobalChat(Resident res, String msg, ChatChannel ch, boolean emote) {
-        if (!ForgePerms.getPermissionsHandler().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
+        if (!ForgePerms.getPermissionManager().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
             msg = msg.toLowerCase();
         }
 
@@ -185,7 +185,7 @@ public class CmdChat extends CommandBase {
             return;
         }
 
-        if (ForgePerms.getPermissionsHandler().canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
+        if (ForgePerms.getPermissionManager().canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
             msg = Formatter.dollarToColorPrefix(msg);
         }
 

@@ -16,6 +16,7 @@ import ee.lutsu.alpha.mc.mytown.NoAccessException;
 import ee.lutsu.alpha.mc.mytown.Term;
 
 public class SavedHomeList extends ArrayList<SavedHome> {
+    private static final long serialVersionUID = 5008778401802591440L;
     public static boolean defaultIsBed = true;
     public Resident owner;
 
@@ -131,7 +132,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
             return true;
         }
 
-        if (defaultIsBed && owner.isOnline() && owner.onlinePlayer.getBedLocation() != null) {
+        if (defaultIsBed && owner.isOnline() && owner.onlinePlayer.getBedLocation(owner.onlinePlayer.dimension) != null) {
             return true;
         }
 

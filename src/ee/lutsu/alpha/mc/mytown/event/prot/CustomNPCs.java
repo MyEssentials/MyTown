@@ -7,11 +7,13 @@ import ee.lutsu.alpha.mc.mytown.Log;
 public class CustomNPCs {
     public static boolean debug = false;
 
+    @SuppressWarnings("rawtypes")
     public static void addNPCClasses(List<Class> list) throws Exception {
         addSub(list, "org.millenaire.common.MillVillager");
         addSub(list, "noppes.npcs.EntityNPCInterface");
     }
 
+    @SuppressWarnings("rawtypes")
     private static void addSub(List<Class> list, String name) {
         try {
             list.add(Class.forName(name));

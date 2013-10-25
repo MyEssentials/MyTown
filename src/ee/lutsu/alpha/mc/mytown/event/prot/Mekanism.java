@@ -13,7 +13,7 @@ public class Mekanism extends ProtBase {
 
     public float explosionRadius = 6;
 
-    Class clEntityObsidianTNT;
+    Class<?> clEntityObsidianTNT;
     Field fEntityObsidianTNT_Fuse, fMekanism_ObsidianTNTBlastRadius;
 
     @Override
