@@ -44,14 +44,14 @@ public class CmdTeleport extends CommandServerTp {
             if (arg.length != 2 && arg.length != 5) {
                 self = getCommandSenderAsPlayer(cs);
             } else {
-                self = func_82359_c(cs, arg[0]);
+                self = getPlayer(cs, arg[0]);
                 if (self == null) {
                     throw new PlayerNotFoundException();
                 }
             }
 
             if (arg.length == 1 || arg.length == 2) {
-                EntityPlayerMP targetPlayer = func_82359_c(cs, arg[arg.length - 1]);
+                EntityPlayerMP targetPlayer = getPlayer(cs, arg[arg.length - 1]);
 
                 if (targetPlayer == null) {
                     throw new PlayerNotFoundException();

@@ -88,7 +88,7 @@ public class Formatter {
         }
     }
 
-    public static String dollarToColorPrefix(String str) {
+    public static String applyColorCodes(String str) {
         if (str == null || str.equals("")) {
             return "";
         }

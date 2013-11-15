@@ -55,7 +55,7 @@ public class ThaumCraft extends ProtBase {
 
     @Override
     public boolean loaded() {
-        return clAlumentum != null;
+        return clAlumentum != null && clEntityFrostShard != null;
     }
 
     @Override

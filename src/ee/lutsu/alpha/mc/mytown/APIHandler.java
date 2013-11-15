@@ -36,4 +36,10 @@ public class APIHandler extends API {
         return res.canInteract(dimension, x, yFrom, yTo, z, TownSettingCollection.Permissions.Build);
     }
 
+    @Override
+    public boolean canBuild(EntityPlayer player, int dimension, int x, int y, int z) {
+        Resident res = MyTownDatasource.instance.getOrMakeResident(player);
+        Log.info("%s attempted to build in %s at (%s, %s, %s)", player.username, dimension, x, y, z);
+        return res.canInteract(dimension, x, y, z, TownSettingCollection.Permissions.Build);
+    }
 }

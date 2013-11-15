@@ -65,6 +65,7 @@ public class PayHandler {
                 notifyUser();
             } else{
                 if (ForgePerms.getEconomyManager().withdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
+                	MyTown.sendChatToPlayer(owner.onlinePlayer, "Took " + ForgePerms.getEconomyManager().format(requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize));
                     purchaseComplete();
                 }
             }

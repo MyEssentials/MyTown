@@ -12,5 +12,7 @@ public abstract class API {
 
     public abstract boolean canBuild(EntityPlayer player, int dimension, int x, int yFrom, int yTo, int z);
 
+    public abstract boolean canBuild(EntityPlayer player, int dimension, int x, int y, int z);
+
     public abstract boolean canAttack(EntityPlayer player, Entity e);
 }

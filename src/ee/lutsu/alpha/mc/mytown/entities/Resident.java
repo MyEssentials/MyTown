@@ -24,6 +24,7 @@ import net.minecraftforge.common.DimensionManager;
 
 import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
+import com.sperion.forgeperms.api.IChatManager;
 
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.ChunkCoord;
@@ -170,27 +171,19 @@ public class Resident {
     }
 
     public boolean shouldShowTownBlocks() {
-        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
-        // onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.adm.showblocks");
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.showblocks");
     }
 
     public boolean shouldShowPlayerLocation() {
-        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
-        // onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.adm.showlocation");
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.showlocation");
     }
 
     public boolean canByPassCheck(TownSettingCollection.Permissions level) {
-        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
-        // onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.adm.bypass." + level.toString().toLowerCase());
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass." + level.toString().toLowerCase());
     }
 
     public boolean pvpBypass() {
-        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
-        // onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.adm.bypass.pvp");
+        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.pvp");
     }
 
     public boolean canInteract(int chunkX, int chunkZ, TownSettingCollection.Permissions askedFor) {
@@ -403,12 +396,36 @@ public class Resident {
 
     public String prefix() {
         String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
-        return ForgePerms.getChatManager().getPlayerPrefix(name(), w);
+
+        String prefix;
+        IChatManager chatManager = ForgePerms.getChatManager();
+        if (chatManager == null){
+            Log.info("Chat Manager is null!");
+            return "";
+        } else{
+            prefix = chatManager.getPlayerPrefix(w, name());
+        }
+        if (prefix != null) {
+            prefix = Formatter.applyColorCodes(prefix);
+        }
+        return prefix;
     }
 
     public String postfix() {
         String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
-        return ForgePerms.getChatManager().getPlayerSuffix(name(), w);
+
+        String postfix;
+        IChatManager chatManager = ForgePerms.getChatManager();
+        if (chatManager == null){
+            Log.info("Chat Manager is null!");
+            return "";
+        } else{
+            postfix = chatManager.getPlayerSuffix(w, name());
+        }
+        if (postfix != null) {
+            postfix = Formatter.applyColorCodes(postfix);
+        }
+        return postfix;
     }
 
     public static Resident loadFromDB(int id, String name, Town town, Rank r, ChatChannel c, Date created, Date lastLogin, String extra, String home) {
@@ -737,21 +754,21 @@ public class Resident {
         Joiner.on("§2, ").join(fnames);
         Joiner.on("§2, ").join(fnames2);
 
-        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusName.toString(Formatter.formatResidentName(this)));
+        MyTown.sendChatToPlayer(cs, Term.ResStatusName.toString(Formatter.formatResidentName(this)));
 
         if (adminInfo && isOnline()) {
-            MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusLocation.toString(location != null ? location.name() : "wild", onlinePlayer.dimension, (int) onlinePlayer.posX, (int) onlinePlayer.posY, (int) onlinePlayer.posZ));
+            MyTown.sendChatToPlayer(cs, Term.ResStatusLocation.toString(location != null ? location.name() : "wild", onlinePlayer.dimension, (int) onlinePlayer.posX, (int) onlinePlayer.posY, (int) onlinePlayer.posZ));
         }
 
-        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusGeneral1.toString(format.format(createdOn)));
-        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusGeneral2.toString(isOnline() ? "online" : format.format(lastLoginOn)));
-        MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusTown.toString(town == null ? "none" : town().name(), town == null ? "Loner" : rank.toString()));
+        MyTown.sendChatToPlayer(cs, Term.ResStatusGeneral1.toString(format.format(createdOn)));
+        MyTown.sendChatToPlayer(cs, Term.ResStatusGeneral2.toString(isOnline() ? "online" : format.format(lastLoginOn)));
+        MyTown.sendChatToPlayer(cs, Term.ResStatusTown.toString(town == null ? "none" : town().name(), town == null ? "Loner" : rank.toString()));
 
         if (fnames.size() > 0) {
-            MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusFriends.toString());
+            MyTown.sendChatToPlayer(cs, Term.ResStatusFriends.toString());
         }
         if (fnames2.size() > 0) {
-            MyTown.sendChatToPlayer(onlinePlayer, Term.ResStatusFriends2.toString());
+            MyTown.sendChatToPlayer(cs, Term.ResStatusFriends2.toString());
         }
 
     }

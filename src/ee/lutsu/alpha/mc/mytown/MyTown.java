@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.ServerCommandManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
@@ -25,6 +24,7 @@ import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
@@ -56,6 +56,7 @@ import ee.lutsu.alpha.mc.mytown.entities.SavedHomeList;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
+import ee.lutsu.alpha.mc.mytown.event.NewProtectionEvents;
 import ee.lutsu.alpha.mc.mytown.event.PlayerEvents;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
@@ -79,7 +80,7 @@ public class MyTown {
     public LinkedList<ItemIdRange> carts = null;
     public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
 
-    @Mod.Instance("MyTown")
+    @Instance("MyTown")
     public static MyTown instance;
     public Configuration config = new Configuration(new File(CONFIG_FILE));
 
@@ -110,6 +111,7 @@ public class MyTown {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent ev) {
+        Log.init();
         addCommands();
         loadConfig();
     }
@@ -125,8 +127,12 @@ public class MyTown {
         PlayerEvents events = new PlayerEvents();
         MinecraftForge.EVENT_BUS.register(events);
         GameRegistry.registerPlayerTracker(events);
+        
         MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
         TickRegistry.registerTickHandler(ProtectionEvents.instance, Side.SERVER);
+        
+        //MinecraftForge.EVENT_BUS.register(new NewProtectionEvents());
+        
         TickRegistry.registerTickHandler(TickHandler.instance, Side.SERVER);
         MinecraftForge.EVENT_BUS.register(WorldEvents.instance);
 
@@ -188,54 +194,54 @@ public class MyTown {
     private void loadGeneralConfigs(Configuration config) throws IOException {
         Property prop;
 
-        prop = config.get("General", "Translations", "");
+        prop = config.get("general", "Translations", "");
         prop.comment = "Filename in config folder with the term translations";
 
         if (prop.getString() != null && !prop.getString().equals("")) {
             TermTranslator.load(new File(CONFIG_FOLDER + prop.getString()), "custom", true);
         }
 
-        prop = config.get("General", "NationAddsBlocks", 0);
+        prop = config.get("general", "NationAddsBlocks", 0);
         prop.comment = "How many town blocks the town gets for being in a nation";
         Nation.nationAddsBlocks = prop.getInt(0);
 
-        prop = config.get("General", "NationAddsBlocksPerResident", 0);
+        prop = config.get("general", "NationAddsBlocksPerResident", 0);
         prop.comment = "How many town blocks each resident gives if the town is in a nation";
         Nation.nationAddsBlocksPerResident = prop.getInt(0);
 
-        prop = config.get("General", "MinDistanceFromAnotherTown", 50);
+        prop = config.get("general", "MinDistanceFromAnotherTown", 50);
         prop.comment = "How many blocks(chunks) apart have the town blocks be";
         Town.minDistanceFromOtherTown = prop.getInt(5);
 
-        prop = config.get("General", "AllowFarawayClaims", true);
+        prop = config.get("general", "AllowFarawayClaims", true);
         prop.comment = "Whether players are allowed to claim chunks not connected to earlier ones";
         Town.allowFarawayClaims = prop.getBoolean(true);
 
-        prop = config.get("General", "AllowTownMemberPvp", false);
+        prop = config.get("general", "AllowTownMemberPvp", false);
         prop.comment = "First check. Can one town member hit a member of the same town? Anywhere. Also called friendlyfire";
         Resident.allowMemberToMemberPvp = prop.getBoolean(false);
 
-        prop = config.get("General", "AllowPvpInTown", false);
+        prop = config.get("general", "AllowPvpInTown", false);
         prop.comment = "Second check. Can anyone hit anyone in town? For PVP only. Does NOT turn friendly fire on";
         Town.allowFullPvp = prop.getBoolean(false);
 
-        prop = config.get("General", "AllowMemberKillNonMember", true);
+        prop = config.get("general", "AllowMemberKillNonMember", true);
         prop.comment = "Third check. Can a member of the town kill someone who doesn't belong to his town?";
         Town.allowMemberToForeignPvp = prop.getBoolean(true);
 
-        prop = config.get("General", "CartItemIds", "");
+        prop = config.get("general", "CartItemIds", "");
         prop.comment = "Defines the cart id's which can be placed on a rail with carts perm on. Includes all cart-types.";
         carts = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
 
-        Town.pvpSafeTowns = config.get("General", "PVPSafeTown", "Spawn,Server", "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.").getString().split(",");
+        Town.pvpSafeTowns = config.get("general", "PVPSafeTown", "Spawn,Server", "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.").getString().split(",");
 
-        prop = config.get("General", "LeftClickAccessBlocks", "1000:2", "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
+        prop = config.get("general", "LeftClickAccessBlocks", "1000:2", "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
         leftClickAccessBlocks = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
 
-        Resident.teleportToSpawnWaitSeconds = config.get("General", "SpawnTeleportTimeout", Resident.teleportToSpawnWaitSeconds, "How many seconds the /spawn teleport takes").getInt();
-        Resident.teleportToHomeWaitSeconds = config.get("General", "HomeTeleportTimeout", Resident.teleportToHomeWaitSeconds, "How many seconds the /home teleport takes").getInt();
+        Resident.teleportToSpawnWaitSeconds = config.get("general", "SpawnTeleportTimeout", Resident.teleportToSpawnWaitSeconds, "How many seconds the /spawn teleport takes").getInt();
+        Resident.teleportToHomeWaitSeconds = config.get("general", "HomeTeleportTimeout", Resident.teleportToHomeWaitSeconds, "How many seconds the /home teleport takes").getInt();
 
-        SavedHomeList.defaultIsBed = config.get("General", "DefaultHomeIsBed", SavedHomeList.defaultIsBed, "Are the /sethome and /home commands with no home name linked to the bed location?").getBoolean(SavedHomeList.defaultIsBed);
+        SavedHomeList.defaultIsBed = config.get("general", "DefaultHomeIsBed", SavedHomeList.defaultIsBed, "Are the /sethome and /home commands with no home name linked to the bed location?").getBoolean(SavedHomeList.defaultIsBed);
     }
 
     private void loadCostConfigs(Configuration config) {
@@ -277,31 +283,31 @@ public class MyTown {
     private void loadDatabaseConfigs(Configuration config) {
         Property prop;
 
-        prop = config.get("Database", "Type", "SQLite");
+        prop = config.get("database", "Type", "SQLite");
         prop.comment = "Database type to connect to";
         MyTownDatasource.instance.currentType = Database.Type.matchType(prop.getString());
 
-        prop = config.get("Database", "Prefix", "");
+        prop = config.get("database", "Prefix", "");
         prop.comment = "Table name prefix to use. <pre>_towns etc..";
         MyTownDatasource.instance.prefix = prop.getString();
 
-        prop = config.get("Database", "Username", "");
+        prop = config.get("database", "Username", "");
         prop.comment = "Username to use when connecting. Used by MySQL";
         MyTownDatasource.instance.username = prop.getString();
 
-        prop = config.get("Database", "Password", "");
+        prop = config.get("database", "Password", "");
         prop.comment = "Password to use when connecting. Used by MySQL";
         MyTownDatasource.instance.password = prop.getString();
 
-        prop = config.get("Database", "Host", "");
+        prop = config.get("database", "Host", "");
         prop.comment = "Hostname:Port of the db server. Used by MySQL";
         MyTownDatasource.instance.host = prop.getString();
 
-        prop = config.get("Database", "Database", "");
+        prop = config.get("database", "Database", "");
         prop.comment = "The database name. Used by MySQL";
         MyTownDatasource.instance.dbname = prop.getString();
 
-        prop = config.get("Database", "Path", CONFIG_FOLDER + "data.db");
+        prop = config.get("database", "Path", CONFIG_FOLDER + "data.db");
         prop.comment = "The database file path. Used by SQLite";
         MyTownDatasource.instance.dbpath = prop.getString();
     }
@@ -309,27 +315,27 @@ public class MyTown {
     private void loadChatConfigs(Configuration config) {
         Property prop;
 
-        prop = config.get("Chat", "FormatChat", true);
+        prop = config.get("chat", "FormatChat", true);
         prop.comment = "Should the chat be formatted";
         Formatter.formatChat = prop.getBoolean(true);
 
-        prop = config.get("Chat", "ChatFormat", Term.ChatFormat.defaultVal);
+        prop = config.get("chat", "ChatFormat", Term.ChatFormat.defaultVal);
         prop.comment = "Chat format to be used";
         Term.ChatFormat.defaultVal = prop.getString();
 
-        prop = config.get("Chat", "EmoteFormat", Term.EmoteFormat.defaultVal);
+        prop = config.get("chat", "EmoteFormat", Term.EmoteFormat.defaultVal);
         prop.comment = "Emote format to be used";
         Term.EmoteFormat.defaultVal = prop.getString();
 
-        prop = config.get("Chat", "PrivMsgInFormat", Term.PrivMsgFormatIn.defaultVal);
+        prop = config.get("chat", "PrivMsgInFormat", Term.PrivMsgFormatIn.defaultVal);
         prop.comment = "Private message format to be used when receiving. Vars starting with $s mean sender";
         Term.PrivMsgFormatIn.defaultVal = prop.getString();
 
-        prop = config.get("Chat", "PrivMsgOutFormat", Term.PrivMsgFormatOut.defaultVal);
+        prop = config.get("chat", "PrivMsgOutFormat", Term.PrivMsgFormatOut.defaultVal);
         prop.comment = "Private message format to be used when sending. Vars starting with $s mean sender";
         Term.PrivMsgFormatOut.defaultVal = prop.getString();
 
-        prop = config.get("Chat", "LocalDistance", 160);
+        prop = config.get("chat", "LocalDistance", 160);
         prop.comment = "How many blocks far does the local chat sound";
         ChatChannel.localChatDistance = prop.getInt(160);
 
@@ -338,29 +344,29 @@ public class MyTown {
         // "How many characters can one chat packet contain. It's global.";
         // Packet3Chat.maxChatLength = prop.getInt(32767);
 
-        prop = config.get("Chat", "DefaultChannel", ChatChannel.defaultChannel.name);
+        prop = config.get("chat", "DefaultChannel", ChatChannel.defaultChannel.name);
         prop.comment = "Default chat channel for newcomers";
         ChatChannel.defaultChannel = ChatChannel.parse(prop.getString());
 
         for (ChatChannel ch : ChatChannel.values()) {
-            prop = config.get("Chat", "Channel_" + ch.toString(), "");
+            prop = config.get("chat", "Channel_" + ch.toString(), "");
             prop.comment = "<enabled>;<name>;<abbrevation>;<color>;<inlineswitch> like " + String.format("%s;%s;%s;%s", ch.enabled ? 1 : 0, ch.name, ch.abbrevation, ch.color);
             ch.load(prop.getString());
         }
     }
 
     private void loadExtraProtectionConfig(Configuration config) {
-        ProtectionEvents.instance.enabled = config.get("ProtEx", "Enabled", true, "Run the extra protections").getBoolean(true);
-        ProtectionEvents.instance.dynamicEnabling = config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);
+        ProtectionEvents.instance.enabled = config.get("protex", "Enabled", true, "Run the extra protections").getBoolean(true);
+        ProtectionEvents.instance.dynamicEnabling = config.get("protex", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);
 
         if (ProtectionEvents.instance.dynamicEnabling) {
-            config.getCategory("ProtEx").clear();
+            config.getCategory("protex").clear();
 
-            config.get("ProtEx", "Enabled", true, "Run the extra protections?").set(ProtectionEvents.instance.enabled);
-            config.get("ProtEx", "DynamicEnabling", true, "Load all modules for which mods are present").set(ProtectionEvents.instance.dynamicEnabling);
+            config.get("protex", "Enabled", true, "Run the extra protections?").set(ProtectionEvents.instance.enabled);
+            config.get("protex", "DynamicEnabling", true, "Load all modules for which mods are present").set(ProtectionEvents.instance.dynamicEnabling);
         } else {
             for (ProtBase prot : ProtectionEvents.getProtections()) {
-                prot.enabled = config.get("ProtEx", prot.getMod(), prot.defaultEnabled(), prot.getComment()).getBoolean(false);
+                prot.enabled = config.get("protex", prot.getMod(), prot.defaultEnabled(), prot.getComment()).getBoolean(false);
             }
         }
     }
@@ -370,7 +376,7 @@ public class MyTown {
         ServerCommandManager mgr = (ServerCommandManager) MinecraftServer.getServer().getCommandManager();
 
         for (CommandBase cmd : commands) {
-            prop = config.get("Commands", "Enable_" + cmd.getCommandName(), true);
+            prop = config.get("commands", "Enable_" + cmd.getCommandName(), true);
             prop.comment = String.format("Should the %s [/%s] command be used?", cmd.getClass().getSimpleName(), cmd.getCommandName());
 
             if (prop.getBoolean(true)) {
@@ -382,29 +388,29 @@ public class MyTown {
     private void loadPerms(Configuration config) {
         Property prop;
 
-        prop = config.get("ServerPerms", "Server", "");
+        prop = config.get("serverperms", "Server", "");
         serverSettings.deserialize(prop.getString());
 
         serverSettings.saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(TownSettingCollection sender, Object tag) {
-                MyTown.instance.config.get("ServerPerms", "Server", "").set(sender.serialize());
+                MyTown.instance.config.get("serverperms", "Server", "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
         };
 
-        prop = config.get("WildPerms", "Server", "");
+        prop = config.get("wildperms", "Server", "");
         serverWildSettings.deserialize(prop.getString());
 
         serverWildSettings.saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(TownSettingCollection sender, Object tag) {
-                MyTown.instance.config.get("WildPerms", "Server", "").set(sender.serialize());
+                MyTown.instance.config.get("wildperms", "Server", "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
         };
 
-        ConfigCategory cat = config.getCategory("WildPerms");
+        ConfigCategory cat = config.getCategory("wildperms");
 
         for (Property p : cat.values()) {
             if (!p.getName().startsWith("Dim_")) {
@@ -431,7 +437,7 @@ public class MyTown {
             @Override
             public void save(TownSettingCollection sender, Object tag) {
                 int w = (Integer) tag;
-                MyTown.instance.config.get("WildPerms", "Dim_" + String.valueOf(w), "").set(sender.serialize());
+                MyTown.instance.config.get("wildperms", "Dim_" + String.valueOf(w), "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
         };
@@ -440,16 +446,12 @@ public class MyTown {
 
         return set;
     }
-
-    public static void sendChatToPlayer(EntityPlayer entity, String msg) {
-        ChatMessageComponent component = new ChatMessageComponent();
-        component.func_111079_a(msg);
-        entity.sendChatToPlayer(component);
-    }
-
+    
     public static void sendChatToPlayer(ICommandSender sender, String msg) {
-        ChatMessageComponent component = new ChatMessageComponent();
-        component.func_111079_a(msg);
-        sender.sendChatToPlayer(component);
+        if (sender instanceof MinecraftServer){
+            Log.info(msg);
+            return;
+        }
+        sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
     }
 }

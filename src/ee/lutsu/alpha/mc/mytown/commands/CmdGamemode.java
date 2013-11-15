@@ -28,7 +28,7 @@ public class CmdGamemode extends CommandBase {
     public void processCommand(ICommandSender cs, String[] args) {
         EntityPlayerMP pl = null;
         if (args.length > 1) {
-            pl = func_82359_c(cs, args[1]);
+            pl = getPlayer(cs, args[1]);
         } else {
             pl = getCommandSenderAsPlayer(cs);
         }

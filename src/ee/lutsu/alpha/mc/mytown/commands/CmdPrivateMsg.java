@@ -37,7 +37,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
     @Override
     public void processCommand(ICommandSender cs, String[] arg) {
         if (arg.length > 0) {
-            EntityPlayerMP target = func_82359_c(cs, arg[0]);
+            EntityPlayerMP target = getPlayer(cs, arg[0]);
 
             if (target == null) {
                 throw new PlayerNotFoundException();
@@ -78,7 +78,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
         lastMessages.put(target, sender);
 
         if (ForgePerms.getPermissionManager().canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
-            msg = Formatter.dollarToColorPrefix(msg);
+            msg = Formatter.applyColorCodes(msg);
         }
 
         for (ICommandSender cs : snoopers) {

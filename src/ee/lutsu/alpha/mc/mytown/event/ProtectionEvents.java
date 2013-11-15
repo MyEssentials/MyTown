@@ -65,22 +65,6 @@ public class ProtectionEvents implements ITickHandler {
         ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, RedPower.instance, ComputerCraft.instance, ArsMagica.instance, ThaumCraft.instance }));
     }
 
-    /*
-     * public static ProtBase[] entityProtections = new ProtBase[] {
-     * Creeper.instance, Mobs.instance, TNT.instance, ThaumCraft.instance,
-     * //ArsMagica.instance, PortalGun.instance, IndustrialCraft.instance,
-     * SteveCarts.instance, RailCraft.instance, TrainCraft.instance,
-     * Mekanism.instance, ModularPowersuits.instance };
-     * 
-     * public static ProtBase[] tileProtections = new ProtBase[] {
-     * BuildCraft.instance, RedPower.instance, ComputerCraft.instance,
-     * ThaumCraft.instance };
-     * 
-     * public static ProtBase[] toolProtections = new ProtBase[] {
-     * SingleBlockTools.instance, RangedTools.instance, ArsMagica.instance,
-     * ThaumCraft.instance };
-     */
-
     public static void addEntityProtection(ProtBase protection) {
         entityProtections.add(protection);
     }
@@ -128,7 +112,7 @@ public class ProtectionEvents implements ITickHandler {
             }
 
             if (kill != null) {
-                String sTool = String.format("[%s] %s", item.itemID + (item.isStackable() && item.getItemDamage() > 0 ? ":" + item.getItemDamage() : ""), tool.getLocalizedName(null));
+                String sTool = String.format("[%s] %s", item.itemID + (item.isStackable() && item.getItemDamage() > 0 ? ":" + item.getItemDamage() : ""), tool.getUnlocalizedName());
 
                 EntityPlayer pl = r.onlinePlayer;
                 Log.severe(String.format("[%s]Player %s tried to bypass at dim %d, %d,%d,%d using %s - %s", lastCheck.getClass().getSimpleName(), pl.username, pl.dimension, (int) pl.posX, (int) pl.posY, (int) pl.posZ, sTool, kill));
