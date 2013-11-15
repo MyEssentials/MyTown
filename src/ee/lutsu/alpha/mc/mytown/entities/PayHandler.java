@@ -38,7 +38,7 @@ public class PayHandler {
             return false;
         }
         
-        if (ForgePerms.getEconomyManager().withdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
+        if (ForgePerms.getEconomyManager().playerWithdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
             purchaseComplete();
             return true;
         }
@@ -64,7 +64,7 @@ public class PayHandler {
                 timeUntil = System.currentTimeMillis() + timeToPaySec * 1000;
                 notifyUser();
             } else{
-                if (ForgePerms.getEconomyManager().withdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
+                if (ForgePerms.getEconomyManager().playerWithdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)){
                 	MyTown.sendChatToPlayer(owner.onlinePlayer, "Took " + ForgePerms.getEconomyManager().format(requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize));
                     purchaseComplete();
                 }
