@@ -32,6 +32,7 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.world.BlockEvent;
 import cpw.mods.fml.common.IPlayerTracker;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
@@ -48,6 +49,21 @@ import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
 import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 
 public class PlayerEvents implements IPlayerTracker {
+    public static boolean disableAutoChatChannelUsage;
+    
+    @ForgeSubscribe(priority = EventPriority.HIGHEST)
+    public void blockBroken(BlockEvent.BreakEvent event){
+        EntityPlayer player = event.getPlayer();
+        if (player != null){
+            Resident res = MyTownDatasource.instance.getOrMakeResident(player);
+            if (!res.canInteract(event.world.provider.dimensionId, event.x, event.y, event.z, Permissions.Build)){
+                Log.info("%s tried to destroy a block", res.name());
+                MyTown.sendChatToPlayer(res.onlinePlayer, "Cannot destroy here");
+                event.setCanceled(true);
+            }
+        }
+    }
+
     @ForgeSubscribe(priority = EventPriority.HIGHEST)
     public void interact(PlayerInteractEvent ev) {
         if (ev.isCanceled()) {
@@ -332,10 +348,11 @@ public class PlayerEvents implements IPlayerTracker {
         if (ev.isCanceled() || ev.message == null || ev.message.trim().length() < 1 || !Formatter.formatChat) {
             return;
         }
-
-        ev.setCanceled(true);
-        Resident res = source().getOrMakeResident(ev.player);
-        CmdChat.sendToChannelFromDirectTalk(res, ev.message, res.activeChannel, false);
+        if (!disableAutoChatChannelUsage) {
+            ev.setCanceled(true);
+            Resident res = source().getOrMakeResident(ev.player);
+            CmdChat.sendToChannelFromDirectTalk(res, ev.message, res.activeChannel, false);
+        }
     }
 
     @ForgeSubscribe

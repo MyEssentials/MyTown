@@ -56,7 +56,6 @@ import ee.lutsu.alpha.mc.mytown.entities.SavedHomeList;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
-import ee.lutsu.alpha.mc.mytown.event.NewProtectionEvents;
 import ee.lutsu.alpha.mc.mytown.event.PlayerEvents;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
@@ -128,10 +127,8 @@ public class MyTown {
         MinecraftForge.EVENT_BUS.register(events);
         GameRegistry.registerPlayerTracker(events);
         
-        MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
-        TickRegistry.registerTickHandler(ProtectionEvents.instance, Side.SERVER);
-        
-        //MinecraftForge.EVENT_BUS.register(new NewProtectionEvents());
+        //MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
+        //TickRegistry.registerTickHandler(ProtectionEvents.instance, Side.SERVER);
         
         TickRegistry.registerTickHandler(TickHandler.instance, Side.SERVER);
         MinecraftForge.EVENT_BUS.register(WorldEvents.instance);
@@ -315,6 +312,17 @@ public class MyTown {
     private void loadChatConfigs(Configuration config) {
         Property prop;
 
+        prop = config.get("chat", "DisableAutomaticChannelUse", false);
+        prop.comment = "Setting this stops player messages from using the MyTown channel functionality.\n";
+        prop.comment += "Explicit call of channel commands (/g, /h, etc.) still works unless disabled separatedly";
+        PlayerEvents.disableAutoChatChannelUsage = prop.getBoolean(false);
+
+        prop = config.get("chat", "TextColoringPrefix", "$");
+        prop.comment = "This is the prefix used for color codes in chat. Default value $\n";
+        prop.comment += "When using with Bukkit plugins, it's recommended to change this to &";
+        Formatter.colorPrefix = prop.getString();
+        Formatter.generateColorPattern();
+
         prop = config.get("chat", "FormatChat", true);
         prop.comment = "Should the chat be formatted";
         Formatter.formatChat = prop.getBoolean(true);
@@ -339,10 +347,9 @@ public class MyTown {
         prop.comment = "How many blocks far does the local chat sound";
         ChatChannel.localChatDistance = prop.getInt(160);
 
-        // prop = config.get("Chat", "MaxChatLength", 32767);
-        // prop.comment =
-        // "How many characters can one chat packet contain. It's global.";
-        // Packet3Chat.maxChatLength = prop.getInt(32767);
+        //prop = config.get("chat", "MaxChatLength", 32767);
+        //prop.comment = "How many characters can one chat packet contain. It's global.";
+        //Packet3Chat.maxChatLength = prop.getInt(32767);
 
         prop = config.get("chat", "DefaultChannel", ChatChannel.defaultChannel.name);
         prop.comment = "Default chat channel for newcomers";
@@ -449,6 +456,7 @@ public class MyTown {
     
     public static void sendChatToPlayer(ICommandSender sender, String msg) {
         if (sender instanceof MinecraftServer){
+            Log.info("Sending msg...");
             Log.info(msg);
             return;
         }
