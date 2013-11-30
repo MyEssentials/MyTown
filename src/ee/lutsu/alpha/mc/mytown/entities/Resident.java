@@ -706,22 +706,6 @@ public class Resident {
         } else {
             checkWorldBorderLocation();
 
-            int cX = ChunkCoord.getCoord(onlinePlayer.posX);
-            int cZ = ChunkCoord.getCoord(onlinePlayer.posZ);
-            int pcX = ChunkCoord.getCoord(prevX);
-            int pcZ = ChunkCoord.getCoord(prevZ);
-
-            if (prevDimension != onlinePlayer.dimension || cX != pcX || cZ != pcZ) {
-                checkYMovement = null;
-                checkLocation();
-
-                if (mapMode) {
-                    sendLocationMap(onlinePlayer.dimension, cX, cZ);
-                }
-            } else if (checkYMovement != null && onlinePlayer.posY != prevY) {
-                checkLocation();
-            }
-
             prevDimension = onlinePlayer.dimension;
             prevX = onlinePlayer.posX;
             prevY = onlinePlayer.posY;
@@ -751,8 +735,8 @@ public class Resident {
             }
         }
 
-        Joiner.on("§2, ").join(fnames);
-        Joiner.on("§2, ").join(fnames2);
+        String sFriends = Joiner.on("§2, ").join(fnames);
+        String sFriends2 = Joiner.on("§2, ").join(fnames2);
 
         MyTown.sendChatToPlayer(cs, Term.ResStatusName.toString(Formatter.formatResidentName(this)));
 
@@ -765,10 +749,10 @@ public class Resident {
         MyTown.sendChatToPlayer(cs, Term.ResStatusTown.toString(town == null ? "none" : town().name(), town == null ? "Loner" : rank.toString()));
 
         if (fnames.size() > 0) {
-            MyTown.sendChatToPlayer(cs, Term.ResStatusFriends.toString());
+            MyTown.sendChatToPlayer(cs, Term.ResStatusFriends.toString(sFriends));
         }
         if (fnames2.size() > 0) {
-            MyTown.sendChatToPlayer(cs, Term.ResStatusFriends2.toString());
+            MyTown.sendChatToPlayer(cs, Term.ResStatusFriends2.toString(sFriends2));
         }
 
     }
@@ -815,9 +799,7 @@ public class Resident {
         teleportTargetHome = home;
 
         System.currentTimeMillis();
-        long takesTime = ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(),
-        // onlinePlayer.worldObj.provider.getDimensionName(),
-                "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
+        long takesTime = ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
 
         teleportToSpawnStamp = System.currentTimeMillis() + takesTime;
 
@@ -828,8 +810,7 @@ public class Resident {
         }
     }
 
-    private void asyncResetSpawnTeleport() // when the player moved
-    {
+    private void asyncResetSpawnTeleport(){ // when the player moved
         if (!isOnline()) {
             return;
         }
@@ -838,8 +819,7 @@ public class Resident {
         MyTown.sendChatToPlayer(onlinePlayer, Term.SpawnCmdTeleportReset.toString());
     }
 
-    private void asyncEndSpawnTeleport() // time out, move it
-    {
+    private void asyncEndSpawnTeleport(){ // time out, move it
         if (!isOnline()) {
             return;
         }

@@ -102,7 +102,7 @@ public class MyTownNonResident {
                             MyTown.sendChatToPlayer((EntityPlayer) obj, msg);
                         }
 
-                        t.sendTownInfo(res.onlinePlayer, res.shouldShowTownBlocks());
+                        t.sendTownInfo(res.onlinePlayer);
                     }
                 }, args, home);
             }

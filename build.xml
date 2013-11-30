@@ -1,86 +1,77 @@
 <?xml version="1.0" ?> 
 <project name="MyTown" default="build">
-
 	<property file="build.properties" prefix="build"/>
-	<property name="src" location="src"/>
-	<property name="release" location="../../release"/>
-	<property name="mcp" location="../../mcp-1.6.x/mcp"/>
+	<property file="environment.properties" prefix="environment"/>
 
 	<target name="clean">
-		<delete file="${mcp}/src/minecraft/mcmod.info" />
-		<delete dir="${mcp}/reobf/minecraft" />
-		<delete dir="${mcp}/src/minecraft/ee" />
-		<delete dir="${mcp}/src/minecraft/ru" />
-		<delete dir="${mcp}/src/minecraft/railcraft" />
-		<delete dir="${mcp}/src/minecraft/mithion" />
-		<delete dir="${mcp}/src/minecraft/com" />
-		<delete dir="${mcp}/src/minecraft/org" />
+		<delete file="${environment.mcp_location}/src/minecraft/mcmod.info" />
+		<delete dir="${environment.mcp_location}/src/minecraft/com/sperion" />
+		<delete dir="${environment.mcp_location}/src/minecraft/ee" />
+		<delete dir="${environment.mcp_location}/src/minecraft/ic2" />
+		<delete dir="${environment.mcp_location}/src/minecraft/mithion" />
+		<delete dir="${environment.mcp_location}/src/minecraft/mods" />
+		<delete dir="${environment.mcp_location}/reobf/minecraft" />
 	</target>
+
+    <target name="increment_build_number">
+        <propertyfile file="build.properties">
+            <entry key="build_number" type="int" operation="+" default="1" />
+        </propertyfile>
+    </target>
 
 	<target name="prep">
-		<copy todir="${mcp}/src/minecraft">
-			<fileset dir="../ForgePerms/src" />
-		</copy>
-		<delete file="${mcp}/src/minecraft/mcmod.info" />
-		<copy todir="${mcp}/src/minecraft">
-			<fileset dir="${src}" />
-		</copy>
+        <copy todir="${environment.mcp_location}/src/minecraft">
+            <fileset dir="${environment.base_location}/sources/ForgePerms/src/" excludes="**/mcmod.info" />
+        </copy>
+        <copy todir="${environment.mcp_location}/src/minecraft">
+            <fileset dir="${environment.source_location}/src/" />
+        </copy>
 	</target>
 
+    <target name="replace_tokens">
+        <replace dir="${environment.mcp_location}/src/minecraft/ee" token="@VERSION@" value="${build.mod_version}" />
+        <replace dir="${environment.mcp_location}/src/minecraft/ee" token="@BUILD_NUMBER@" value="${build.build_number}" />
+        <replace file="${environment.mcp_location}/src/minecraft/mcmod.info" token="@VERSION@" value="${build.mod_version}" />
+        <replace file="${environment.mcp_location}/src/minecraft/mcmod.info" token="@BUILD_NUMBER@" value="${build.build_number}" />
+    </target>
+
 	<target name="recompile">
-		<exec dir="${mcp}" executable="cmd" osfamily="windows">
+		<exec dir="${environment.mcp_location}" executable="cmd" osfamily="windows">
 			<arg line="/c recompile.bat" />
 		</exec>
-		<exec dir="${mcp}" executable="bash" osfamily="unix">
+		<exec dir="${environment.mcp_location}" executable="bash" osfamily="unix">
 			<arg line="recompile.sh" />
 		</exec>
 	</target>
 
 	<target name="reobfuscate">
-		<exec dir="${mcp}" executable="cmd" osfamily="windows">
+		<exec dir="${environment.mcp_location}" executable="cmd" osfamily="windows">
 			<arg line="/c reobfuscate_srg.bat" />
 		</exec>
-		<exec dir="${mcp}" executable="bash" osfamily="unix">
+		<exec dir="${environment.mcp_location}" executable="bash" osfamily="unix">
 			<arg line="reobfuscate_srg.sh" />
 		</exec>
 	</target>
 
-	<target name="build">
-		<!-- Prep for the build -->
-		<antcall target="clean" />
-		<antcall target="prep" />
-		<antcall target="recompile" />		
-		<antcall target="reobfuscate" />
+	<target name="build" depends="clean, prep, replace_tokens, recompile, reobfuscate">
+	    <mkdir dir="${environment.build_location}/MC ${build.minecraft_version}" />
+	    <jar destfile="${environment.build_location}/MC ${build.minecraft_version}/MyTown-${build.mod_version}.${build.build_number}.jar">
+            <fileset dir="${environment.mcp_location}/src/minecraft/" includes="mcmod.info" />
+            <fileset dir="${environment.mcp_location}/src/minecraft/" includes="pack.mcmeta" />
+            <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/com/**,**/org/**"/>
+	    </jar>
 
-		<!-- Build the jar -->
-		<mkdir dir="${release}/MyTown" />
-		<jar destfile="${release}/MyTown/MyTown.jar">
-			<fileset dir="${mcp}\src\minecraft\" includes="mcmod.info" />
-			<fileset dir="${mcp}\reobf\minecraft" />
-		</jar>
-
-		<!-- Clean up the mcpc-1.5.x source now that we are done -->
-		<antcall target="clean" />
+	    <antcall target="clean" />
 	</target>
 
-	<target name="release">
-		<!-- Prep for the build -->
-		<antcall target="clean" />
-		<antcall target="prep" />
-		<antcall target="recompile" />		
-		<antcall target="reobfuscate" />
-		
-		<delete dir="${mcp}/src/minecraft/com" />
-		<delete dir="${mcp}/src/minecraft/org" />
+	<target name="release" depends="clean, increment_build_number, prep, replace_tokens, recompile, reobfuscate">
+	    <mkdir dir="${environment.release_location}" />
+	    <jar destfile="${environment.release_location}/MyTown-${build.mod_version}.${build.build_number}.jar">
+            <fileset dir="${environment.mcp_location}/src/minecraft/" includes="mcmod.info" />
+            <fileset dir="${environment.mcp_location}/src/minecraft/" includes="pack.mcmeta" />
+            <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/com/**,**/org/**"/>
+	    </jar>
 
-		<!-- Build the jar -->
-		<mkdir dir="${release}/MyTown" />
-		<jar destfile="${release}/MyTown/MyTown.jar">
-			<fileset dir="${mcp}\src\minecraft\" includes="mcmod.info" />
-			<fileset dir="${mcp}\reobf\minecraft" />
-		</jar>
-
-		<!-- Clean up the mcpc-1.5.x source now that we are done -->
-		<antcall target="clean" />
+	    <antcall target="clean" />
 	</target>
 </project>

@@ -1,6 +1,8 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,21 +30,18 @@ public class ThaumCraft extends ProtBase {
     public static ThaumCraft instance = new ThaumCraft();
     public int explosionRadius = 6;
 
-    private Class<?> clAlumentum = null, clTileArcaneBore, clEntityFrostShard, clItemWandFire, clItemWandExcavation, clItemWandLightning, clItemWandTrade;
-    Field fBore_toDig, fBore_digX, fBore_digZ, fBore_digY;
-    Field fFrostShard_shootingEntity;
-
-    // boolean toDig = false; int digX = 0; int digZ = 0; int digY = 0;
+    private Class<?> clAlumentum = null, clTileArcaneBore, clEntityFrostShard, clItemWandCasting, clEntityPechBlast;
+    private Method mGetFocus;
+    private Field fBore_toDig, fBore_digX, fBore_digZ, fBore_digY, fFrostShard_shootingEntity;
 
     @Override
     public void load() throws Exception {
+        clItemWandCasting = Class.forName("thaumcraft.common.items.wands.ItemWandCasting");
+        mGetFocus = clItemWandCasting.getDeclaredMethod("getFocus", ItemStack.class);
+        
         clEntityFrostShard = Class.forName("thaumcraft.common.entities.projectile.EntityFrostShard");
+        clEntityPechBlast = Class.forName("thaumcraft.common.entities.projectile.EntityPechBlast");
         clAlumentum = Class.forName("thaumcraft.common.entities.projectile.EntityAlumentum");
-
-        clItemWandExcavation = Class.forName("thaumcraft.common.items.wands.ItemWandExcavation");
-        clItemWandFire = Class.forName("thaumcraft.common.items.wands.ItemWandFire");
-        clItemWandLightning = Class.forName("thaumcraft.common.items.wands.ItemWandLightning");
-        clItemWandTrade = Class.forName("thaumcraft.common.items.wands.ItemWandTrade");
 
         clTileArcaneBore = Class.forName("thaumcraft.common.tiles.TileArcaneBore");
         fBore_toDig = clTileArcaneBore.getDeclaredField("toDig");
@@ -60,17 +59,18 @@ public class ThaumCraft extends ProtBase {
 
     @Override
     public boolean isEntityInstance(Entity e) {
-        return clAlumentum.isInstance(e) || clEntityFrostShard.isInstance(e);
+        return clAlumentum.isInstance(e) || clEntityFrostShard.isInstance(e) || clEntityPechBlast.isInstance(e);
     }
 
     @Override
     public boolean isEntityInstance(TileEntity e) {
-        return e.getClass() == clTileArcaneBore;
+        return clTileArcaneBore.isInstance(e);
+        //return e.getClass() == clTileArcaneBore;
     }
 
     @Override
     public boolean isEntityInstance(Item e) {
-        return clItemWandExcavation.isInstance(e) || clItemWandFire.isInstance(e) || clItemWandLightning.isInstance(e) || clItemWandTrade.isInstance(e);
+        return clItemWandCasting.isInstance(e);
     }
 
     @Override
@@ -109,9 +109,23 @@ public class ThaumCraft extends ProtBase {
             int radius = 1;
             int dim = thrower.onlinePlayer.dimension;
 
-            if (!thrower.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build)
-                    || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+            if (!thrower.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
                 return "Cannot build here";
+            }
+        } else if (clEntityPechBlast.isInstance(e)){
+            EntityThrowable throwable = (EntityThrowable) e;
+            EntityLivingBase thrower = throwable.getThrower();
+            if (thrower == null || !(thrower instanceof EntityPlayer)) return "No owner";
+            Resident res = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) thrower);
+            
+            int x = (int) (e.posX + e.motionX);
+            int y = (int) (e.posY + e.motionY);
+            int z = (int) (e.posZ + e.motionZ);
+            int radius = 1;
+            int dim = res.onlinePlayer.dimension;
+
+            if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+                return "Cannot attack here";
             }
         }
 
@@ -120,69 +134,78 @@ public class ThaumCraft extends ProtBase {
 
     @Override
     public String update(Resident res, Item tool, ItemStack item) throws Exception {
-        if (clItemWandFire.isInstance(tool)) {
-            List<Entity> list = getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(17), res.onlinePlayer, 17);
-            for (Entity e : list) {
-                if (!res.canAttack(e)) {
-                    return "Cannot attack here";
+        if (clItemWandCasting.isInstance(tool)){
+            Object focus = mGetFocus.invoke(tool, item);
+            if (focus == null) return null;
+            String focusName = focus.getClass().getName();
+            
+            if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusFire")){
+                List<Entity> list = this.getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(17), res.onlinePlayer, 17);
+                
+                Log.info(list.toString());
+                
+                for (Entity e : list) {
+                    Log.info("%s attacked %s", res.name(), e.getClass().getSimpleName());
+                    if (!res.canAttack(e)) {
+                        return "Cannot attack here";
+                    }
                 }
-            }
-        } else if (clItemWandLightning.isInstance(tool)) {
-            List<Entity> list = getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(20), res.onlinePlayer, 20);
-            for (Entity e : list) {
-                if (!res.canAttack(e)) {
-                    return "Cannot attack here";
+            } else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusShock")){
+                List<Entity> list = this.getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(17), res.onlinePlayer, 20);
+                for (Entity e : list) {
+                    Log.info("%s attacked %s", res.name(), e.getClass().getSimpleName());
+                    if (!res.canAttack(e)) {
+                        return "Cannot attack here";
+                    }
                 }
-            }
-        } else if (clItemWandExcavation.isInstance(tool)) {
-            MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
-
-            if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-                if (!res.canInteract(res.onlinePlayer.dimension, pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
-                    return "Cannot build here";
-                }
-            }
-        } else if (clItemWandTrade.isInstance(tool)) {
-            if (!res.onlinePlayer.isSneaking()) {
+            } else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusExcavation")){
                 MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
 
                 if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-                    int x = pos.blockX;
-                    int y = pos.blockY;
-                    int z = pos.blockZ;
-                    int radius = 3;
-                    int dim = res.onlinePlayer.dimension;
-
-                    if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build)
-                            || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+                    if (!res.canInteract(res.onlinePlayer.dimension, pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
                         return "Cannot build here";
+                    }
+                }
+            } else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusTrade")){
+                if (!res.onlinePlayer.isSneaking()) {
+                    MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
+                    
+                    if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
+                        int x = pos.blockX;
+                        int y = pos.blockY;
+                        int z = pos.blockZ;
+                        int radius = 3;
+                        int dim = res.onlinePlayer.dimension;
+
+                        if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+                            return "Cannot build here";
+                        }
                     }
                 }
             }
         }
-
         return null;
     }
-
-    private List<Entity> getTargets(World world, Vec3 tvec, EntityPlayer p, double range) {
+    
+    private List<Entity>  getTargets(World world, Vec3 tvec, EntityPlayer p, double range) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Entity pointedEntity = null;
-        Vec3 vec3d = world.getWorldVec3Pool().getVecFromPool(p.posX, p.posY, p.posZ);
+        Vec3 vec3d = Vec3.fakePool.getVecFromPool(p.posX, p.posY, p.posZ);
         Vec3 vec3d2 = vec3d.addVector(tvec.xCoord * range, tvec.yCoord * range, tvec.zCoord * range);
         float f1 = 1.0F;
         List<?> list = world.getEntitiesWithinAABBExcludingEntity(p, p.boundingBox.addCoord(tvec.xCoord * range, tvec.yCoord * range, tvec.zCoord * range).expand(f1, f1, f1));
 
         ArrayList<Entity> l = new ArrayList<Entity>();
-        for (int i = 0; i < list.size(); i++) {
-            Entity entity = (Entity) list.get(i);
-            if (entity.canBeCollidedWith()) {
+        for (int i = 0; i < list.size(); i++){
+            Entity entity = (Entity)list.get(i);
+            if (entity.canBeCollidedWith()){
                 float f2 = Math.max(1.0F, entity.getCollisionBorderSize());
                 AxisAlignedBB axisalignedbb = entity.boundingBox.expand(f2, f2 * 1.25F, f2);
                 MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3d, vec3d2);
-
-                if (movingobjectposition != null) {
+                
+                if (movingobjectposition != null){
                     pointedEntity = entity;
-
-                    if (pointedEntity != null && p.canEntityBeSeen(pointedEntity)) {
+                    
+                    if ((pointedEntity != null) && (p.canEntityBeSeen(pointedEntity))){
                         l.add(pointedEntity);
                     }
                 }
@@ -215,7 +238,7 @@ public class ThaumCraft extends ProtBase {
 
     @Override
     public String getMod() {
-        return "ThaumCraft";
+        return "Thaumcraft4";
     }
 
     @Override

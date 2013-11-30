@@ -4,9 +4,9 @@
   "name": "MyTown",
   "description": "Adds the possibility to create towns in Minecraft server that protect the players
   and the player builds.",
-  "version": "1.6.1.13",
+  "version": "@VERSION@.@BUILD_NUMBER@",
   "mcversion": "1.6.1",
-  "url": "http://www.minecraftforum.net/topic/1650110-mytown-aperf-server-protection-and-performance-mods/",
+  "url": "http://www.minecraftforum.net/topic/1889473-",
   "updateUrl": "",
   "authors": [
     "AlphAest",

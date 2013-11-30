@@ -1,5 +1,7 @@
 package ee.lutsu.alpha.mc.mytown.event;
 
+import ic2.api.event.LaserEvent;
+
 import java.util.logging.Level;
 
 import net.minecraft.block.Block;
@@ -21,9 +23,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
@@ -32,12 +34,15 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import cpw.mods.fml.common.IPlayerTracker;
+import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
+import ee.lutsu.alpha.mc.mytown.NoAccessException;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.commands.CmdChat;
@@ -50,25 +55,79 @@ import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 
 public class PlayerEvents implements IPlayerTracker {
     public static boolean disableAutoChatChannelUsage;
+    public int explosionRadius = 6;  //IC2 Mining Laser explosion radius
     
-    @ForgeSubscribe(priority = EventPriority.HIGHEST)
-    public void blockBroken(BlockEvent.BreakEvent event){
-        EntityPlayer player = event.getPlayer();
-        if (player != null){
-            Resident res = MyTownDatasource.instance.getOrMakeResident(player);
-            if (!res.canInteract(event.world.provider.dimensionId, event.x, event.y, event.z, Permissions.Build)){
-                Log.info("%s tried to destroy a block", res.name());
-                MyTown.sendChatToPlayer(res.onlinePlayer, "Cannot destroy here");
-                event.setCanceled(true);
-            }
+    @ForgeSubscribe
+    public void laserHitEntity(LaserEvent.LaserHitsEntityEvent event){
+        if (event.isCanceled()) return;
+        if (event.owner == null || !(event.owner instanceof EntityPlayer)) return;
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.owner);
+        if (res == null) return;
+        if (!res.canAttack(event.hitentity)){
+            Log.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+            MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Target in MyTown protected area");
+            event.setCanceled(true);
+        }
+    }
+    
+    @ForgeSubscribe
+    public void laserHitBlock(LaserEvent.LaserHitsBlockEvent event){
+        if (event.isCanceled()) return;
+        if (event.owner == null || !(event.owner instanceof EntityPlayer)) return;
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer)event.owner);
+        if (res == null) return;
+        if (!res.canInteract(event.x, event.y, event.z, Permissions.Build)){
+            Log.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+            MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Target in MyTown protected area");
+            event.setCanceled(true);
         }
     }
 
-    @ForgeSubscribe(priority = EventPriority.HIGHEST)
-    public void interact(PlayerInteractEvent ev) {
-        if (ev.isCanceled()) {
+    @ForgeSubscribe
+    public void laserExplodes(LaserEvent.LaserExplodesEvent event){    
+        if (event.isCanceled()) return;    
+        if (event.owner == null || !(event.owner instanceof EntityPlayer)) return;
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.owner);
+        if (res == null) return;
+        
+        int x = (int) event.lasershot.posX, y = (int) event.lasershot.posY, z = (int) event.lasershot.posZ;
+
+        if (!res.canInteract(x, y, z, Permissions.Build)) {
+            event.setCanceled(true);
+            Log.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+            MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Target in MyTown protected area");
             return;
         }
+        
+        if (event.explosive) {  //Check if explosive, just incase
+            //Do a 4-corner check. Hopefully wont need much else to protect against Mining Laser explosions
+            if (!res.canInteract(x-explosionRadius, y, z-explosionRadius, Permissions.Build) || !res.canInteract(x-explosionRadius, y, z+explosionRadius, Permissions.Build) || !res.canInteract(x+explosionRadius, y, z-explosionRadius, Permissions.Build) || !res.canInteract(x+explosionRadius, y, z+explosionRadius, Permissions.Build)){
+                event.setCanceled(true);
+                Log.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Explosion would hit a protected town", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+                MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Explosion would hit a protected town");
+                return;
+            }
+        }
+    }
+    
+    @ForgeSubscribe
+    public void blockBroken(BlockEvent.BreakEvent event){
+        if (event.isCanceled()) return;
+        EntityPlayer player = event.getPlayer();
+        if (player == null) return;
+        Resident res = MyTownDatasource.instance.getOrMakeResident(player);
+        if (res == null) return;
+        
+        if (!res.canInteract(event.x, event.y, event.z, Permissions.Build)){
+            Log.severe("[BlockBreak]Player %s tried to bypass at dim %d, (%d,%d,%d) - Cannot destroy here", res.name(), player.dimension, player.posX, player.posY, player.posZ);
+            MyTown.sendChatToPlayer(res.onlinePlayer, "§4You cannot do that here - Cannot destroy here");
+            event.setCanceled(true);
+        }
+    }
+    
+    @ForgeSubscribe
+    public void interact(PlayerInteractEvent ev) {
+        if (ev.isCanceled()) return;
 
         Resident r = source().getOrMakeResident(ev.entityPlayer);
         if (ev.action == Action.RIGHT_CLICK_AIR || ev.action == Action.RIGHT_CLICK_BLOCK) {
@@ -167,12 +226,9 @@ public class PlayerEvents implements IPlayerTracker {
         }
 
         if (!r.canInteract(targetBlock, perm)) {
-            // Log.info("Permission denied %s %s", perm, action);
             // see if its a allowed block
             if (perm == Permissions.Build && action == Action.LEFT_CLICK_BLOCK) {
                 World w = ev.entityPlayer.worldObj;
-                // Log.info("Block is %s:%s", w.getBlockId(x, y, z),
-                // w.getBlockMetadata(x, y, z));
                 if (ItemIdRange.contains(MyTown.instance.leftClickAccessBlocks, w.getBlockId(x, y, z), w.getBlockMetadata(x, y, z))) {
                     perm = Permissions.Access;
                     if (r.canInteract(targetBlock, perm)) {
@@ -190,12 +246,10 @@ public class PlayerEvents implements IPlayerTracker {
             }
         }
     }
-
+    
     @ForgeSubscribe
     public void pickup(EntityItemPickupEvent ev) {
-        if (ev.isCanceled()) {
-            return;
-        }
+        if (ev.isCanceled()) return;
 
         Resident r = source().getOrMakeResident(ev.entityPlayer);
 
@@ -211,9 +265,7 @@ public class PlayerEvents implements IPlayerTracker {
 
     @ForgeSubscribe
     public void entityAttack(AttackEntityEvent ev) {
-        if (ev.isCanceled()) {
-            return;
-        }
+        if (ev.isCanceled()) return;
 
         Resident attacker = source().getOrMakeResident(ev.entityPlayer);
 
@@ -225,9 +277,7 @@ public class PlayerEvents implements IPlayerTracker {
 
     @ForgeSubscribe
     public void onLivingAttackEvent(LivingAttackEvent ev) {
-        if (ev.isCanceled() || ev.entity != null) {
-            return;
-        }
+        if (ev.isCanceled() || ev.entity != null) return;
 
         if (ev.entityLiving instanceof EntityPlayer) {
             Resident t = source().getOrMakeResident((EntityPlayer) ev.entityLiving);
@@ -262,9 +312,7 @@ public class PlayerEvents implements IPlayerTracker {
 
     @ForgeSubscribe
     public void entityInteract(EntityInteractEvent ev) {
-        if (ev.isCanceled()) {
-            return;
-        }
+        if (ev.isCanceled()) return;
 
         Resident r = source().getOrMakeResident(ev.entityPlayer);
 
@@ -276,9 +324,7 @@ public class PlayerEvents implements IPlayerTracker {
 
     @ForgeSubscribe
     public void minecartCollision(MinecartCollisionEvent ev) {
-        if (!(ev.collider instanceof EntityPlayer)) {
-            return;
-        }
+        if (!(ev.collider instanceof EntityPlayer)) return;
 
         Resident r = source().getOrMakeResident((EntityPlayer) ev.collider);
 
@@ -294,6 +340,15 @@ public class PlayerEvents implements IPlayerTracker {
             t.town().sendNotification(Level.WARNING, Term.MinecartMessedWith.toString());
         }
     }
+    
+    @ForgeSubscribe
+    public void entityEnterChunk(EntityEvent.EnteringChunk event){
+        if (event.isCanceled()) return;
+        if (event.entity == null || !(event.entity instanceof EntityPlayer)) return;
+        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.entity);
+        if (res == null) return;
+        res.checkLocation();
+    }
 
     private MyTownDatasource source() {
         return MyTownDatasource.instance;
@@ -302,28 +357,28 @@ public class PlayerEvents implements IPlayerTracker {
     @Override
     public void onPlayerLogin(EntityPlayer player) {
         // load the resident
-        Resident r = source().getOrMakeResident(player);
+        Resident res = source().getOrMakeResident(player);
 
         if (!WorldBorder.instance.isWithinArea(player)) {
-            Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.", r.name(), player.dimension, player.posX, player.posY, player.posZ));
-            r.respawnPlayer();
+            Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.", res.name(), player.dimension, player.posX, player.posY, player.posZ));
+            res.respawnPlayer();
         }
 
-        TownBlock t = source().getBlock(r.onlinePlayer.dimension, player.chunkCoordX, player.chunkCoordZ);
+        TownBlock t = source().getBlock(res.onlinePlayer.dimension, player.chunkCoordX, player.chunkCoordZ);
 
-        r.location = t != null && t.town() != null ? t.town() : null;
-        r.location2 = t != null && t.town() != null ? t.owner() : null;
+        res.location = t != null && t.town() != null ? t.town() : null;
+        res.location2 = t != null && t.town() != null ? t.owner() : null;
 
-        if (!r.canInteract(t, (int) player.posY, Permissions.Enter)) {
-            Log.warning(String.format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", r.name(), r.location.name(), player.dimension, player.posX, player.posY, player.posZ));
-            r.respawnPlayer();
+        if (!res.canInteract(t, (int) player.posY, Permissions.Enter)) {
+            Log.warning(String.format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", res.name(), res.location.name(), player.dimension, player.posX, player.posY, player.posZ));
+            res.respawnPlayer();
         }
 
-        if (r.town() != null) {
-            r.town().notifyPlayerLoggedOn(r);
+        if (res.town() != null) {
+            res.town().notifyPlayerLoggedOn(res);
         }
 
-        r.loggedIn();
+        res.loggedIn();
     }
 
     @Override
@@ -342,6 +397,21 @@ public class PlayerEvents implements IPlayerTracker {
 
     @Override
     public void onPlayerRespawn(EntityPlayer player) {}
+    
+    @ForgeSubscribe
+    public void playerSleepInBed(PlayerSleepInBedEvent ev){
+        Resident res = MyTownDatasource.instance.getOrMakeResident(ev.entityPlayer);
+        try {
+            res.home.assertSetHome("", ev.entityPlayer);
+        } catch (CommandException e) {
+            MyTown.sendChatToPlayer(ev.entityPlayer, Formatter.commandError(Level.WARNING, e.errorCode.toString(e.args)));
+        } catch (NoAccessException e) {
+            MyTown.sendChatToPlayer(ev.entityPlayer, e.toString());
+        } catch (Throwable ex) {
+            Log.log(Level.WARNING, String.format("Command execution error by %s", ev.entityPlayer), ex);
+            MyTown.sendChatToPlayer(ev.entityPlayer, Formatter.commandError(Level.SEVERE, ex.toString()));
+        }
+    }
 
     @ForgeSubscribe
     public void serverChat(ServerChatEvent ev) {

@@ -25,22 +25,23 @@ import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.entities.ItemIdRange;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
-import ee.lutsu.alpha.mc.mytown.event.prot.ArsMagica;
 import ee.lutsu.alpha.mc.mytown.event.prot.BuildCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.ComputerCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.Creeper;
 import ee.lutsu.alpha.mc.mytown.event.prot.CustomNPCs;
 import ee.lutsu.alpha.mc.mytown.event.prot.IndustrialCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.MFR;
 import ee.lutsu.alpha.mc.mytown.event.prot.Mekanism;
 import ee.lutsu.alpha.mc.mytown.event.prot.Mobs;
 import ee.lutsu.alpha.mc.mytown.event.prot.ModularPowersuits;
 import ee.lutsu.alpha.mc.mytown.event.prot.PortalGun;
 import ee.lutsu.alpha.mc.mytown.event.prot.RailCraft;
-import ee.lutsu.alpha.mc.mytown.event.prot.RedPower;
 import ee.lutsu.alpha.mc.mytown.event.prot.SteveCarts;
 import ee.lutsu.alpha.mc.mytown.event.prot.TNT;
 import ee.lutsu.alpha.mc.mytown.event.prot.ThaumCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.TinkersConstruct;
 import ee.lutsu.alpha.mc.mytown.event.prot.TrainCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.TwilightForest;
 
 public class ProtectionEvents implements ITickHandler {
     public static ArrayList<ProtBase> entityProtections = new ArrayList<ProtBase>();
@@ -59,10 +60,10 @@ public class ProtectionEvents implements ITickHandler {
     public boolean dynamicEnabling = true;
 
     public ProtectionEvents() {
-        ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, TNT.instance, ThaumCraft.instance, ArsMagica.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
-                ModularPowersuits.instance }));
-        ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, RedPower.instance, ComputerCraft.instance, ThaumCraft.instance }));
-        ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, RedPower.instance, ComputerCraft.instance, ArsMagica.instance, ThaumCraft.instance }));
+        ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
+                ModularPowersuits.instance, MFR.instance }));
+        ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance }));
+        ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance, TwilightForest.instance }));
     }
 
     public static void addEntityProtection(ProtBase protection) {
@@ -258,10 +259,6 @@ public class ProtectionEvents implements ITickHandler {
         set.addAll(entityProtections);
         set.addAll(tileProtections);
         set.addAll(toolProtections);
-
-        // set.addAll(Arrays.asList(entityProtections));
-        // set.addAll(Arrays.asList(tileProtections));
-        // set.addAll(Arrays.asList(toolProtections));
 
         return new ArrayList<ProtBase>(set);
     }

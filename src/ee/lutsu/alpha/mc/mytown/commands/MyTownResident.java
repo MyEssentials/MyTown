@@ -85,7 +85,7 @@ public class MyTownResident {
             Assert.Perm(cs, "mytown.cmd.info");
             handled = true;
 
-            res.town().sendTownInfo(res.onlinePlayer, res.shouldShowTownBlocks());
+            res.town().sendTownInfo(res.onlinePlayer);
         } else {
             if (args.length == 1 && (args[0].equals("?") || args[0].equalsIgnoreCase(Term.CommandHelp.toString()))) {
                 handled = true;

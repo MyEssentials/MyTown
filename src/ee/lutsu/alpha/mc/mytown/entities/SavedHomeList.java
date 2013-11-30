@@ -54,9 +54,9 @@ public class SavedHomeList extends ArrayList<SavedHome> {
             }
 
             return SavedHome.fromBed((EntityPlayerMP) owner.onlinePlayer); // bed
+        } else{
+            name = getHomeName(name);
         }
-
-        name = getHomeName(name);
 
         for (SavedHome a : this) {
             if (a.name.equalsIgnoreCase(name)) {
@@ -79,8 +79,8 @@ public class SavedHomeList extends ArrayList<SavedHome> {
         if (!owner.isOnline()) {
             throw new CommandException(Term.HomeCmdOwnerNotOnline);
         }
-
-        boolean newHome = getHomeName(name) == null;
+        
+        boolean newHome = !contains(getHomeName(name));
 
         if (newHome) {
             Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.new_" + String.valueOf(size() + 1));

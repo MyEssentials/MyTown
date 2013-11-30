@@ -14,6 +14,7 @@ import com.sperion.forgeperms.ForgePerms;
 
 import ee.lutsu.alpha.mc.mytown.ChatChannel;
 import ee.lutsu.alpha.mc.mytown.CommandException;
+import ee.lutsu.alpha.mc.mytown.Constants;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
@@ -68,7 +69,7 @@ public class CmdMyTownAdmin extends CommandBase {
             String color = "9";
             if (var2.length == 0 || var2[0].equals("?") || var2[0].equalsIgnoreCase(Term.CommandHelp.toString())) {
                 MyTown.sendChatToPlayer(cs, Term.LineSeperator.toString());
-
+                
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdNew.toString(), Term.TownadmCmdNewArgs.toString(), Term.TownadmCmdNewDesc.toString(), color));
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdDelete.toString(), Term.TownadmCmdDeleteArgs.toString(), Term.TownadmCmdDeleteDesc.toString(), color));
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdSet.toString(), Term.TownadmCmdSetArgs.toString(), Term.TownadmCmdSetDesc.toString(), color));
@@ -81,6 +82,13 @@ public class CmdMyTownAdmin extends CommandBase {
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdWipeDim.toString(), Term.TownadmCmdWipeDimArgs.toString(), Term.TownadmCmdWipeDimDesc.toString(), color));
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdResetFocusedChannels.toString(), "", Term.TownadmCmdResetFocusedChannelsDesc.toString(), color));
                 MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdSnoopPrivateChat.toString(), "", Term.TownadmCmdSnoopPrivateChatDesc.toString(), color));
+                MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdVersion.toString(), "", Term.TownadmCmdVersion.toString(), color));
+            } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdVersion.toString())){
+                if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.version")) {
+                    MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
+                    return;
+                }
+                MyTown.sendChatToPlayer(cs,String.format(Term.TownadmCmdVersionFormat.toString(), Constants.VERSION));
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdReload.toString())) {
                 if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reload")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());

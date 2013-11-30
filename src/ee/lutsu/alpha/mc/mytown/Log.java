@@ -33,11 +33,11 @@ public class Log {
     }
 
     public static void log(Level l, String msg, Object... paras) {
-        mytownLogger.log(l, consoleColors(String.format("§7[§a%s§7]%s", MyTown.MOD_NAME, String.format(msg, paras))));
+        mytownLogger.log(l, consoleColors(String.format("§7[§a%s§7]%s", Constants.MODNAME, String.format(msg, paras))));
     }
 
     public static void log(Level l, String msg, Throwable t, Object... paras) {
-        mytownLogger.log(l, consoleColors(String.format("§7[§a%s§7]%s", MyTown.MOD_NAME, String.format(msg, paras))), t);
+        mytownLogger.log(l, consoleColors(String.format("§7[§a%s§7]%s", Constants.MODNAME, String.format(msg, paras))), t);
     }
 
     public static void direct(String msg) {

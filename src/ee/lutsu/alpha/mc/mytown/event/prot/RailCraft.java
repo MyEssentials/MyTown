@@ -1,6 +1,6 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
-import mods.railcraft.common.api.carts.IExplosiveCart;
+import mods.railcraft.common.carts.IExplosiveCart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.MathHelper;

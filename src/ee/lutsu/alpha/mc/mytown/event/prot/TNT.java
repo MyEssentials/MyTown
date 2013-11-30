@@ -28,6 +28,7 @@ public class TNT extends ProtBase {
     @Override
     public String update(Entity e) throws Exception {
         EntityTNTPrimed tnt = (EntityTNTPrimed) e;
+        
         if (tnt.isDead || tnt.fuse > 1) {
             return null;
         }

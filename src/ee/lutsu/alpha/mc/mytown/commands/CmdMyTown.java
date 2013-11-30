@@ -37,7 +37,6 @@ public class CmdMyTown extends CommandBase {
             return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd");
         }
         return false;
-        // return MyTown.instance.perms.canAccess(cs, "mytown.cmd");
     }
 
     @Override

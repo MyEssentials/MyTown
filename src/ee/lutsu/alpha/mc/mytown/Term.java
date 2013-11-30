@@ -43,6 +43,8 @@ public enum Term {
     CommandHelpNation("nation"), CommandHelpNationDesc("Show the nation commands"),
 
     // all
+    TownCmdHere("here"), TownCmdHereDesc("Displays the info of the town your standing inside"),
+    
     TownCmdMap("map"), TownCmdMapArgs("[on|off]"), TownCmdMapDesc("Shows map or toggles map mode on/off"),
 
     TownCmdInfo("info"), TownCmdInfoArgs("townname"), TownCmdInfoDesc("Shows info about the town"),
@@ -112,6 +114,8 @@ public enum Term {
     TownCmdNationList("list"), TownCmdNationListStart("§aNations [%s]§f: %s"), TownCmdNationListEntry("%s[%s]"), TownCmdNationListDesc("Lists all nations"),
 
     // admin commands
+    TownadmCmdVersion("version"), TownadmCmdVersionDesc("Gets the version"), TownadmCmdVersionFormat("MyTown Version: %s"),
+    
     TownadmCmdReload("reload"), TownadmCmdReloadDesc("Reload the config, db and terms"),
 
     TownadmCmdNew("new"), TownadmCmdNewArgs("townname mayorname"), TownadmCmdNewDesc("Creates a new town"),

@@ -66,7 +66,7 @@ public class Formatter {
             return emote ? String.format("* %s %s", res.name(), line) : String.format("<%s> %s", res.name(), line);
         }
 
-        return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix());
+        return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix().replace("$town$", res.town().name()));
     }
 
     public static String formatChatSystem(String line, ChatChannel channel) {
@@ -107,6 +107,6 @@ public class Formatter {
             m = m.reset(s);
         }
 
-        return s + "§r";
+        return s;
     }
 }
