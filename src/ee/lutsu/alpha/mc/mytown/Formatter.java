@@ -64,9 +64,8 @@ public class Formatter {
     public static String formatChat(Resident res, String line, ChatChannel channel, boolean emote) {
         if (!formatChat) {
             return emote ? String.format("* %s %s", res.name(), line) : String.format("<%s> %s", res.name(), line);
-        }
-
-        return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix().replace("$town$", res.town().name()));
+        } 
+        return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix()).replace("$town$", (res.town()==null ? "" : res.town().name()));
     }
 
     public static String formatChatSystem(String line, ChatChannel channel) {
