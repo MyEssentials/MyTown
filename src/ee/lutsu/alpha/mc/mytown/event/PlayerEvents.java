@@ -34,15 +34,12 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import cpw.mods.fml.common.IPlayerTracker;
-import ee.lutsu.alpha.mc.mytown.CommandException;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.NoAccessException;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.commands.CmdChat;
@@ -397,21 +394,6 @@ public class PlayerEvents implements IPlayerTracker {
 
     @Override
     public void onPlayerRespawn(EntityPlayer player) {}
-    
-    @ForgeSubscribe
-    public void playerSleepInBed(PlayerSleepInBedEvent ev){
-        Resident res = MyTownDatasource.instance.getOrMakeResident(ev.entityPlayer);
-        try {
-            res.home.assertSetHome("", ev.entityPlayer);
-        } catch (CommandException e) {
-            MyTown.sendChatToPlayer(ev.entityPlayer, Formatter.commandError(Level.WARNING, e.errorCode.toString(e.args)));
-        } catch (NoAccessException e) {
-            MyTown.sendChatToPlayer(ev.entityPlayer, e.toString());
-        } catch (Throwable ex) {
-            Log.log(Level.WARNING, String.format("Command execution error by %s", ev.entityPlayer), ex);
-            MyTown.sendChatToPlayer(ev.entityPlayer, Formatter.commandError(Level.SEVERE, ex.toString()));
-        }
-    }
 
     @ForgeSubscribe
     public void serverChat(ServerChatEvent ev) {

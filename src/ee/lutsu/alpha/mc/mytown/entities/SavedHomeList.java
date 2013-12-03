@@ -80,7 +80,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
             throw new CommandException(Term.HomeCmdOwnerNotOnline);
         }
         
-        boolean newHome = !contains(getHomeName(name));
+        boolean newHome = getHomeName(name) == null;
 
         if (newHome) {
             Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.new_" + String.valueOf(size() + 1));
