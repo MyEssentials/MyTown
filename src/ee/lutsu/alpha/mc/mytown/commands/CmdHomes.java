@@ -52,7 +52,7 @@ public class CmdHomes extends CommandBase {
             } else {
                 if (args.length == 1 && args[0].equalsIgnoreCase("loc")) {
                     MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesTitle.toString());
-                    if (SavedHomeList.defaultIsBed && pl.getBedLocation(pl.dimension) != null) {
+                    if (SavedHomeList.defaultIsBed && pl.getBedLocation(pl.worldObj.provider.getRespawnDimension(pl)) != null) {
                         SavedHome s = SavedHome.fromBed(pl);
                         MyTown.sendChatToPlayer(cs, Term.HomeCmdHomesUnaccessibleItem2.toString("default", s.dim, (int) s.x, (int) s.y, (int) s.z));
                     }
