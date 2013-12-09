@@ -27,6 +27,7 @@ public class TinkersConstruct extends ProtBase {
     public String update(Resident res, Item tool, ItemStack item) throws Exception {
         if (clHammer.isInstance(tool) || clExcavator.isInstance(tool)) {
             MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
+            if (pos == null) return null;
             
             if (!res.canInteract((int) pos.blockX, (int) pos.blockY, (int) pos.blockZ, Permissions.Build)){
                 return "Cannot interact here";

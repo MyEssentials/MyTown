@@ -56,7 +56,7 @@ public class ProtectionEvents implements ITickHandler {
     public ArrayList<TileEntity> toRemoveTile = new ArrayList<TileEntity>();
     public boolean loaded = false;
     @SuppressWarnings("rawtypes")
-    private List<Class> npcClasses = null;
+	private List<Class> npcClasses = null;
     public boolean dynamicEnabling = true;
 
     public ProtectionEvents() {

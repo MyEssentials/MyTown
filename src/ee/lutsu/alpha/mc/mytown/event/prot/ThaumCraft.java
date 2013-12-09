@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -31,13 +32,14 @@ public class ThaumCraft extends ProtBase {
     public int explosionRadius = 6;
 
     private Class<?> clAlumentum = null, clTileArcaneBore, clEntityFrostShard, clItemWandCasting, clEntityPechBlast;
-    private Method mGetFocus;
+    private Method mGetFocus, mGetFocusPotency;
     private Field fBore_toDig, fBore_digX, fBore_digZ, fBore_digY, fFrostShard_shootingEntity;
 
     @Override
     public void load() throws Exception {
         clItemWandCasting = Class.forName("thaumcraft.common.items.wands.ItemWandCasting");
         mGetFocus = clItemWandCasting.getDeclaredMethod("getFocus", ItemStack.class);
+        mGetFocusPotency = clItemWandCasting.getDeclaredMethod("getFocusPotency", ItemStack.class);
         
         clEntityFrostShard = Class.forName("thaumcraft.common.entities.projectile.EntityFrostShard");
         clEntityPechBlast = Class.forName("thaumcraft.common.entities.projectile.EntityPechBlast");
@@ -182,6 +184,32 @@ public class ThaumCraft extends ProtBase {
                         }
                     }
                 }
+            } else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusPortableHole")){
+            	int potency = (int) mGetFocusPotency.invoke(tool, item);
+            	int maxdist = 33 + potency * 8;
+                MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, maxdist);
+                if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE){
+                    int x = pos.blockX;
+                    int y = pos.blockY;
+                    int z = pos.blockZ;
+                    int radius = 1;
+                    int dim = res.onlinePlayer.dimension;
+                    
+                    if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+                        return "Cannot build here";
+                    }
+                }
+            }
+            //Thaumic Tinkerer Foci
+            else if (focusName.equals("vazkii.tinkerer.common.item.foci.ItemFocusSmelt")){
+            	MovingObjectPosition pos = getTargetBlock(res.onlinePlayer.worldObj, res.onlinePlayer, false);
+                int x = pos.blockX;
+                int y = pos.blockY;
+                int z = pos.blockZ;
+                int dim = res.onlinePlayer.dimension;
+                if (!res.canInteract(dim, x , y, y, z, Permissions.Build)) {
+                    return "Cannot build here";
+                }
             }
         }
         return null;
@@ -214,6 +242,25 @@ public class ThaumCraft extends ProtBase {
 
         return l;
     }
+    
+    public static MovingObjectPosition getTargetBlock(World world, Entity entity, boolean par3){
+		float var4 = 1.0F;
+		float var5 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * var4;
+		float var6 = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * var4;
+		double var7 = entity.prevPosX + (entity.posX - entity.prevPosX) * var4;
+		double var9 = entity.prevPosY + (entity.posY - entity.prevPosY) * var4 + 1.62D - entity.yOffset;
+		double var11 = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * var4;
+		Vec3 var13 = world.getWorldVec3Pool().getVecFromPool(var7, var9, var11);
+		float var14 = MathHelper.cos(-var6 * 0.01745329F - 3.141593F);
+		float var15 = MathHelper.sin(-var6 * 0.01745329F - 3.141593F);
+		float var16 = -MathHelper.cos(-var5 * 0.01745329F);
+		float var17 = MathHelper.sin(-var5 * 0.01745329F);
+		float var18 = var15 * var16;
+		float var20 = var14 * var16;
+		double var21 = 10.0D;
+		Vec3 var23 = var13.addVector(var18 * var21, var17 * var21, var20 * var21);
+		return world.rayTraceBlocks_do_do(var13, var23, par3, !par3);
+    }
 
     @Override
     public String update(TileEntity e) throws Exception {
@@ -243,6 +290,6 @@ public class ThaumCraft extends ProtBase {
 
     @Override
     public String getComment() {
-        return "Build check: EntityAlumentum & ItemWandExcavation";
+        return "Build check: EntityAlumentum & Wand Foci";
     }
 }

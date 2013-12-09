@@ -185,12 +185,6 @@ public class MyTownDatasource extends MyTownDB {
         blocks.remove(getTownBlockKey(b));
     }
 
-    public void unloadResident(Resident r) {
-        /*
-         * if (r.onlinePlayer == null && r.town() == null) residents.remove(r);
-         */
-    }
-
     public int deleteAllTownBlocksInDimension(int dim) {
         int ret = 0;
         ArrayList<TownBlock> toRemove = new ArrayList<TownBlock>();

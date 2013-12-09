@@ -149,7 +149,7 @@ public enum Term {
 
     TownErrCmdUnknownArgument("Unknown argument: §4%s"), TownErrCmdNumberFormatException("The input isn't numerical"),
 
-    TownErrInvitationSelf("The fuck are you doing? Invite OTHERS"), TownErrInvitationAlreadyInYourTown("Hes in your town moron"), TownErrInvitationActive("The player has a pending invitation already"), TownErrInvitationInTown("The player is already in a town"),
+    TownErrInvitationSelf("What are you doing? Invite OTHERS"), TownErrInvitationAlreadyInYourTown("Hes in your town moron"), TownErrInvitationActive("The player has a pending invitation already"), TownErrInvitationInTown("The player is already in a town"),
 
     TownErrPlayerNotInYourTown("The player is not in your town"), TownErrPlayerDoesntHaveAccessToTownManagement("The player can't access town management by perm nodes"), TownErrCannotDoWithYourself("You cannot do this with yourself"), TownErrPlayerIsAlreadyMayor("The player is already a mayor"), TownErrPlayerIsAlreadyAssistant(
             "The player is already an assistant"), TownErrPlayerIsNotAssistant("The player isn't an assistant"), TownErrCannotUseThisDemoteMayor("Cannot use this to demote a mayor"),
