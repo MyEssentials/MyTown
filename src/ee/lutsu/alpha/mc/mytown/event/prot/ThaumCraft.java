@@ -185,7 +185,7 @@ public class ThaumCraft extends ProtBase {
                     }
                 }
             } else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusPortableHole")){
-            	int potency = (int) mGetFocusPotency.invoke(tool, item);
+            	int potency = (Integer) mGetFocusPotency.invoke(clItemWandCasting.cast(tool), item);
             	int maxdist = 33 + potency * 8;
                 MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, maxdist);
                 if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE){

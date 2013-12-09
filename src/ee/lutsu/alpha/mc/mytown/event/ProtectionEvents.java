@@ -91,6 +91,8 @@ public class ProtectionEvents implements ITickHandler {
             if (tool == null) {
                 return true;
             }
+            
+            Log.info("%s used %s", r.name(), tool.getClass().toString());
 
             // Always allow the usage of cart type items
             if (ItemIdRange.contains(MyTown.instance.carts, item)) {
