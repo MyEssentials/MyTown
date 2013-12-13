@@ -29,7 +29,9 @@ import ee.lutsu.alpha.mc.mytown.event.prot.BuildCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.ComputerCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.Creeper;
 import ee.lutsu.alpha.mc.mytown.event.prot.CustomNPCs;
+import ee.lutsu.alpha.mc.mytown.event.prot.FireBall;
 import ee.lutsu.alpha.mc.mytown.event.prot.IndustrialCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.LOTR;
 import ee.lutsu.alpha.mc.mytown.event.prot.MFR;
 import ee.lutsu.alpha.mc.mytown.event.prot.Mekanism;
 import ee.lutsu.alpha.mc.mytown.event.prot.Mobs;
@@ -39,6 +41,7 @@ import ee.lutsu.alpha.mc.mytown.event.prot.RailCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.SteveCarts;
 import ee.lutsu.alpha.mc.mytown.event.prot.TNT;
 import ee.lutsu.alpha.mc.mytown.event.prot.ThaumCraft;
+import ee.lutsu.alpha.mc.mytown.event.prot.TheMistsOfRioV;
 import ee.lutsu.alpha.mc.mytown.event.prot.TinkersConstruct;
 import ee.lutsu.alpha.mc.mytown.event.prot.TrainCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.TwilightForest;
@@ -60,8 +63,8 @@ public class ProtectionEvents implements ITickHandler {
     public boolean dynamicEnabling = true;
 
     public ProtectionEvents() {
-        ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
-                ModularPowersuits.instance, MFR.instance }));
+        ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, LOTR.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
+                ModularPowersuits.instance, MFR.instance, TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance }));
         ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance }));
         ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance, TwilightForest.instance }));
     }
