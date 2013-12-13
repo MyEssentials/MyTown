@@ -20,8 +20,7 @@ public enum Term {
     TownStatusName("§6--------[[ %s%s§6 ]]--------"), TownStatusGeneral("§2Town blocks: §b%s§2/§b%s §2Nation: §b%s"), TownStatusMayor("§2Mayor: §f%s"), TownStatusAssistants("§2Assistants: §f%s"), TownStatusResidents("§2Residents: §f%s"),
 
     // resident status
-    ResStatusName("§6--------[[ %s§6 ]]--------"), ResStatusLocation("§2Location: §b%s @ dim %s (%s,%s,%s)"), ResStatusGeneral1("§2Member from: §b%s"), ResStatusGeneral2("§2Last online: §b%s"), ResStatusTown("§2Member of: §b%s§2, §a%s"), ResStatusFriends("§2Friends: §f%s"), ResStatusFriends2(
-            "§2Friend of: §f%s"),
+    ResStatusName("§6--------[[ %s§6 ]]--------"), ResStatusLocation("§2Location: §b%s @ dim %s (%s,%s,%s)"), ResStatusGeneral1("§2Member from: §b%s"), ResStatusGeneral2("§2Last online: §b%s"), ResStatusTown("§2Member of: §b%s§2, §a%s"), ResStatusFriends("§2Friends: §f%s"), ResStatusFriends2("§2Friend of: §f%s"),
 
     // commands
     OnlineCommand("online"), OnlineCommandAliases(""), OnlineCmdListStart("§aOnline [%s]§f: %s"),

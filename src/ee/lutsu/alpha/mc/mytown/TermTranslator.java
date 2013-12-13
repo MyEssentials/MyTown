@@ -19,6 +19,7 @@ public class TermTranslator {
 
             while ((line = r.readLine()) != null) {
                 line = line.trim();
+                if (line.startsWith("//")) continue;
                 int p = line.indexOf("=");
                 if (p > 0) {
                     String sTerm = line.substring(0, p);
