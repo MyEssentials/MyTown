@@ -1,6 +1,7 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.entity.projectile.EntityWitherSkull;
@@ -22,15 +23,17 @@ public class FireBall extends ProtBase {
 
     @Override
     public boolean isEntityInstance(Entity e) {
-        return e instanceof EntityFireball;
+        return e instanceof EntityFireball || e instanceof EntityWither;
     }
 
     @Override
-    public String update(Entity e) throws Exception {       
+    public String update(Entity e) throws Exception {
     	int radius = 0;
 
     	if (e instanceof EntityWitherSkull || e instanceof EntityLargeFireball) {
     		radius = 1+1;
+    	} else if (e instanceof EntityWither && ((EntityWither)e).func_82212_n() > 0) {
+    		radius = 7 + 2;
     	}
     		
         int x = (int) (e.posX + e.motionX);
