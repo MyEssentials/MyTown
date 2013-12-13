@@ -267,6 +267,8 @@ public class TownSettingCollection {
     public int yCheckFrom;
     public int yCheckTo;
 
+    public boolean disableFireBall;
+
     protected void unnest(TownSetting set) {
         if (set.effectiveValue == null) {
             return; // wild has missing values
@@ -308,6 +310,8 @@ public class TownSettingCollection {
             yCheckFrom = set.getEffInt();
         } else if (set.getSerializationKey().equals("yto")) {
             yCheckTo = set.getEffInt();
+        } else if (set.getSerializationKey().equals("fireballoff")) {
+            disableFireBall = set.getEffBoolean();
         }
     }
 
@@ -339,6 +343,8 @@ public class TownSettingCollection {
         settings.add(new TownSetting("Height enabled", "yon", false, null, "boolean:yes/no", boolean.class));
         settings.add(new TownSetting("Height check from", "yfrom", 0, null, "int:0-255", int.class));
         settings.add(new TownSetting("Height check to", "yto", 255, null, "int:0-255, below [yfrom]", int.class));
+
+        settings.add(new TownSetting("Disable FireBall/Wither explosion", "fireballoff", true, false, "boolean:yes/no", boolean.class));
 
         if (!isRoot) {
             clearValues();
