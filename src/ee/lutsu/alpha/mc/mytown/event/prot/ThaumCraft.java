@@ -19,10 +19,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import ee.lutsu.alpha.mc.mytown.ChunkCoord;
 import ee.lutsu.alpha.mc.mytown.Log;
+import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
+import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
@@ -214,6 +217,41 @@ public class ThaumCraft extends ProtBase {
         }
         return null;
     }
+
+    @Override
+    public String update(TileEntity e) throws Exception {
+        if (clTileArcaneBore.isInstance(e)) {
+            fBore_toDig.setAccessible(true);
+            fBore_digX.setAccessible(true);
+            fBore_digY.setAccessible(true);
+            fBore_digZ.setAccessible(true);
+
+            if (fBore_toDig.getBoolean(e)) {
+                TownBlock b = MyTownDatasource.instance.getBlock(e.worldObj.provider.dimensionId, ChunkCoord.getCoord(fBore_digX.getInt(e)), ChunkCoord.getCoord(fBore_digZ.getInt(e)));
+                if (b == null){
+                	if (MyTown.instance.getWorldWildSettings(e.worldObj.provider.dimensionId).allowTCBores) return null;
+                    Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
+                    fBore_toDig.set(e, false);
+                } else{
+                	if (b.settings.allowTCBores) return null;
+                    Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
+                    fBore_toDig.set(e, false);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getMod() {
+        return "Thaumcraft4";
+    }
+
+    @Override
+    public String getComment() {
+        return "Build check: EntityAlumentum, Wand Foci, & Arcane Bore";
+    }
     
     private List<Entity>  getTargets(World world, Vec3 tvec, EntityPlayer p, double range) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Entity pointedEntity = null;
@@ -260,36 +298,5 @@ public class ThaumCraft extends ProtBase {
 		double var21 = 10.0D;
 		Vec3 var23 = var13.addVector(var18 * var21, var17 * var21, var20 * var21);
 		return world.rayTraceBlocks_do_do(var13, var23, par3, !par3);
-    }
-
-    @Override
-    public String update(TileEntity e) throws Exception {
-        if (clTileArcaneBore.isInstance(e)) {
-            fBore_toDig.setAccessible(true);
-            fBore_digX.setAccessible(true);
-            fBore_digY.setAccessible(true);
-            fBore_digZ.setAccessible(true);
-
-            if (fBore_toDig.getBoolean(e)) {
-                Resident actor = getActorFromLocation(e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, "#thaumcraft-bore#");
-                if (!actor.canInteract(e.worldObj.provider.dimensionId, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e), Permissions.Build)) {
-                    Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed. Actor: %s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e), actor.name()));
-
-                    fBore_toDig.set(e, false);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public String getMod() {
-        return "Thaumcraft4";
-    }
-
-    @Override
-    public String getComment() {
-        return "Build check: EntityAlumentum & Wand Foci";
     }
 }

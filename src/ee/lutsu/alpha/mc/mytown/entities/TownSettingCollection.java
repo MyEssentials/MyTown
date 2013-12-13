@@ -20,8 +20,11 @@ import ee.lutsu.alpha.mc.mytown.Term;
  */
 public class TownSettingCollection {
     public enum Permissions {
-        None, // First char has to be different
-        Enter, Loot, Access, Build;
+        None,   //First char has to be different
+        Enter,  //Anyone given Enter can only enter the town/claim
+        Loot,   //Anyone given Loot can Enter and pickup items
+        Access, //Anyone given Access can Enter, Loot, Attack, and Access chests, doors, buttons, etc
+        Build;  //Anyone given Build can do everything! (Be careful with this one ;))
 
         public String getShort() {
             return toString().substring(0, 1);
@@ -257,6 +260,7 @@ public class TownSettingCollection {
     public boolean allowBuildcraftMiners;
     public boolean allowClaimingNextTo;
     public boolean allowCCTurtles;
+    public boolean allowTCBores;
     public boolean allowKillingMobsByNonResidents;
 
     public boolean disableCreepers;
@@ -294,6 +298,8 @@ public class TownSettingCollection {
             allowClaimingNextTo = set.getEffBoolean();
         } else if (set.getSerializationKey().equals("ccturtles")) {
             allowCCTurtles = set.getEffBoolean();
+        } else if (set.getSerializationKey().equals("allowTCBores")){
+        	allowTCBores = set.getEffBoolean();
         } else if (set.getSerializationKey().equals("killmobs")) {
             allowKillingMobsByNonResidents = set.getEffBoolean();
         } else if (set.getSerializationKey().equals("creepoff")) {
@@ -322,15 +328,15 @@ public class TownSettingCollection {
         settings.add(new TownSetting("Friend rights", "friend", Permissions.Build, null, "choice:" + Permissions.getValuesDesc(), Permissions.class));
 
         settings.add(new TownSetting("Allow cart interaction", "carts", false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow stevescarts railers", "steverailer", false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow stevescarts miners", "steveminer", false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow railcraft bores", "rcbore", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow Stevescarts railers", "steverailer", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow Stevescarts miners", "steveminer", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow Railcraft bores", "rcbore", false, true, "boolean:yes/no", boolean.class));
         settings.add(new TownSetting("Allow quarrys,filler,builders", "bc", false, true, "boolean:yes/no", boolean.class));
-        settings.add(new TownSetting("Allow computercraft turtles", "ccturtles", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow Computercraft turtles", "ccturtles", false, true, "boolean:yes/no", boolean.class));
+        settings.add(new TownSetting("Allow Thaumcraft Arcane Bores", "tcbores", false, true, "boolean:yes/no", boolean.class));
         settings.add(new TownSetting("Allow claiming next to", "closeclaim", false, null, "boolean:yes/no", boolean.class));
         settings.add(new TownSetting("Allow everyone to kill mobs", "killmobs", true, null, "boolean:yes/no", boolean.class));
-        // settings.add(new TownSetting("Allow PVP in town", "allowpvp", false,
-        // null, "boolean:yes/no", boolean.class));
+        // settings.add(new TownSetting("Allow PVP in town", "allowpvp", false, null, "boolean:yes/no", boolean.class));
 
         settings.add(new TownSetting("Disable creeper explosion", "creepoff", false, false, "boolean:yes/no", boolean.class));
         settings.add(new TownSetting("Disable TNT explosion", "tntoff", true, false, "boolean:yes/no", boolean.class));
