@@ -68,7 +68,7 @@ public class Config extends Configuration {
         
         prop = get("general", "TermDumpFile", "");
         prop.comment = "Filename to dump the terms to (useful for a starting translation file)";
-        Term.dumpLangFile(Constants.CONFIG_FOLDER + prop.getString());
+        Term.dumpLangFile(prop.getString());
 
         prop = get("general", "Translations", "");
         prop.comment = "Filename in config folder with the term translations";

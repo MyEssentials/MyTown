@@ -283,10 +283,10 @@ public enum Term {
     
     public static void dumpLangFile(String filename){
     	BufferedWriter writer;
-    	if (filename == "" || filename.isEmpty()) return;
+    	if (filename.trim() == "" || filename.trim().isEmpty()) return;
     	Log.info("Dumping terms to %s", filename);
     	try {
-			FileWriter fw = new FileWriter(filename);
+			FileWriter fw = new FileWriter(Constants.CONFIG_FOLDER + filename);
 			writer = new BufferedWriter(fw);
 			writer.write("# Default terms used by MyTown");
 			writer.newLine();
