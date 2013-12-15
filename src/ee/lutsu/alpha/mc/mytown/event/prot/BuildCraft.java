@@ -38,7 +38,8 @@ public class BuildCraft extends ProtBase {
         fBoxQ = clQuarry.getField("box");
         fQuarryOwner = clQuarry.getField("placedBy");
         fQuarryBuilderDone = clQuarry.getField("builderDone");
-        fBoxF = clFiller.getField("box");
+        fBoxF = clFiller.getDeclaredField("box");
+        fBoxF.setAccessible(true);
         fBoxB = clBuilder.getField("box");
 
         fmx = clBox.getField("xMin");
