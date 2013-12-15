@@ -57,6 +57,14 @@ public class Config extends Configuration {
     
     private void loadGeneralConfigs() throws IOException {
         Property prop;
+
+        prop = get("general", "showTownLoginMessage", true);
+        prop.comment = "Whether to show the login message to town members when another member logins in";
+        Town.showTownLoginMessage = prop.getBoolean(true);
+        
+        prop = get("general", "showTownLogoutMessage", true);
+        prop.comment = "Whether to show the logout message to town members when another member logins out";
+        Town.showTownLogoutMessage = prop.getBoolean(true);
         
         prop = get("general", "TermDumpFile", "");
         prop.comment = "Filename to dump the terms to (useful for a starting translation file)";

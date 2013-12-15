@@ -28,6 +28,8 @@ public class Town {
     public static boolean allowFullPvp = false;
     public static boolean allowFarawayClaims = true;
     public static boolean allowMemberToForeignPvp = true;
+    public static boolean showTownLoginMessage = true;
+    public static boolean showTownLogoutMessage = true;
     public static String[] pvpSafeTowns = new String[0];
 
     private int id;
@@ -581,10 +583,12 @@ public class Town {
     }
 
     public void notifyPlayerLoggedOn(Resident r) {
+    	if (!Town.showTownLoginMessage) return;
         sendNotification(Level.INFO, Term.TownBroadcastLoggedIn.toString(r.name()));
     }
 
     public void notifyPlayerLoggedOff(Resident r) {
+    	if (!Town.showTownLogoutMessage) return;
         sendNotification(Level.INFO, Term.TownBroadcastLoggedOut.toString(r.name()));
     }
 }
