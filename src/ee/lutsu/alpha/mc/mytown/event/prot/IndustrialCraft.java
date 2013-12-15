@@ -21,8 +21,8 @@ public class IndustrialCraft extends ProtBase {
     public static IndustrialCraft instance = new IndustrialCraft();
 
     // tnts
-    Class<?> clDynamite = null, clStickyDynamite, clNuke, clITNT, clEntityIC2Explosive;
-    Field fFuse1, fFuse2;
+    Class<?> clDynamite = null, clStickyDynamite, clEntityIC2Explosive;
+    Field fFuse1, fFuse2, fExplosivePower;
 
     // laser
     public int explosionRadius = 6;
@@ -33,9 +33,8 @@ public class IndustrialCraft extends ProtBase {
     public void load() throws Exception {
         clDynamite = Class.forName("ic2.core.block.EntityDynamite");
         clStickyDynamite = Class.forName("ic2.core.block.EntityStickyDynamite");
-        clNuke = Class.forName("ic2.core.block.EntityNuke");
-        clITNT = Class.forName("ic2.core.block.EntityItnt");
         clEntityIC2Explosive = Class.forName("ic2.core.block.EntityIC2Explosive");
+        fExplosivePower = clEntityIC2Explosive.getDeclaredField("explosivePower");
 
         fFuse1 = clEntityIC2Explosive.getDeclaredField("fuse");
         fFuse2 = clDynamite.getDeclaredField("fuse");
@@ -169,15 +168,14 @@ public class IndustrialCraft extends ProtBase {
 
             return null;
         } else {
-            int radius = 6;
+            int radius = 1;
             int fuse = 0;
 
             if (c == clDynamite || c == clStickyDynamite) {
                 fuse = fFuse2.getInt(e);
-                radius = 1;
             } else {
                 fuse = fFuse1.getInt(e);
-                radius = clNuke.isInstance(e) ? 35 : 6;
+                radius = (Integer) fExplosivePower.get(e);
             }
 
             if (fuse > 1) {
