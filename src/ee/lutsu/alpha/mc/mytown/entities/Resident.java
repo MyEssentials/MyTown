@@ -210,7 +210,7 @@ public class Resident {
             return true;
         }
         
-        if (block.owner() == null && block.town().getFirstMayor().friends.contains(this)){
+        if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
         	return block.town().settings.friendRights.compareTo(askedFor) >= 0;
         }
 
