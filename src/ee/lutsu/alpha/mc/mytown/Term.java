@@ -1,5 +1,7 @@
 package ee.lutsu.alpha.mc.mytown;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.HashMap;
 
 public enum Term {
@@ -277,5 +279,24 @@ public enum Term {
         }
 
         terms.put(term, val);
+    }
+    
+    public static void dumpLangFile(String filename){
+    	BufferedWriter writer;
+    	if (filename == "" || filename.isEmpty()) return;
+    	Log.info("Dumping terms to %s", filename);
+    	try {
+			FileWriter fw = new FileWriter(filename);
+			writer = new BufferedWriter(fw);
+			writer.write("# Default terms used by MyTown");
+			writer.newLine();
+	    	for (Term t : Term.values()){
+	    		writer.append(t.fname() + "=" + t.defaultVal);
+	    		writer.newLine();
+	    	}
+	    	writer.close();
+		} catch (Exception e) {
+			Log.warning("Failed to dump the terms because %s", e.getMessage());
+		}
     }
 }

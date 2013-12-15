@@ -57,6 +57,10 @@ public class Config extends Configuration {
     
     private void loadGeneralConfigs() throws IOException {
         Property prop;
+        
+        prop = get("general", "TermDumpFile", "");
+        prop.comment = "Filename to dump the terms to (useful for a starting translation file)";
+        Term.dumpLangFile(Constants.CONFIG_FOLDER + prop.getString());
 
         prop = get("general", "Translations", "");
         prop.comment = "Filename in config folder with the term translations";
