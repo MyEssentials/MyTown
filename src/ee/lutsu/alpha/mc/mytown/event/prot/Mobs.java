@@ -1,6 +1,7 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,10 +40,11 @@ public class Mobs extends ProtBase {
         if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
             return null;
         }
-
-        EntityMob mob = (EntityMob) e;
+        
+        EntityLiving mob = (EntityLiving)e;
+        
         if (e.isEntityAlive()) {
-            if (!canBe(mob)) {
+            if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ)) {
                 // silent removal of the mob
                 ProtectionEvents.instance.toRemove.add(e);
                 return null;
@@ -57,17 +59,14 @@ public class Mobs extends ProtBase {
         if (!isEntityInstance(ev.entity)) {
             return;
         }
-
-        if (!canBe((EntityMob) ev.entity)) {
+        
+        EntityLiving mob = (EntityLiving) ev.entity;
+        if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ)) {
             ev.setCanceled(true);
         }
     }
 
-    private boolean canBe(EntityMob mob) {
-        return canBe2(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ);
-    }
-
-    private boolean canBe2(int dim, double x, double yFrom, double yTo, double z) {
+    private boolean canBe(int dim, double x, double yFrom, double yTo, double z) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.yCheckOn) {
             if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
