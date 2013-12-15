@@ -46,6 +46,8 @@ public class IndustrialCraft extends ProtBase {
         fRange = clLaser.getDeclaredField("range");
         fPower = clLaser.getDeclaredField("power");
         fBlockBreaks = clLaser.getDeclaredField("blockBreaks");
+        
+        //TODO: Add Nuclear Reactor protections
     }
 
     @Override
@@ -174,7 +176,7 @@ public class IndustrialCraft extends ProtBase {
                 fuse = fFuse2.getInt(e);
             } else {
                 fuse = fFuse1.getInt(e);
-                radius = (Integer) fExplosivePower.get(e);
+                radius = (int) Math.ceil(fExplosivePower.getFloat(e));
             }
 
             if (fuse > 1) {
