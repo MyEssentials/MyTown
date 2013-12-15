@@ -2,6 +2,7 @@ package ee.lutsu.alpha.mc.mytown.event.prot;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -30,7 +31,7 @@ public class Mobs extends ProtBase {
 
     @Override
     public boolean isEntityInstance(Entity e) {
-        return e instanceof EntityMob;
+        return e instanceof EntityMob || e instanceof EntitySlime;
     }
 
     @Override
