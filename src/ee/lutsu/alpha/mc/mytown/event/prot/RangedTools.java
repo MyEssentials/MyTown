@@ -29,11 +29,9 @@ public class RangedTools extends ProtBase {
         try {
             m = e.getClass().getDeclaredMethod("onUsingItemTick", ItemStack.class, EntityPlayer.class, int.class);
         } catch (NoSuchMethodException e1) {} catch (NoClassDefFoundError e1) {
-            // Log.warning("Cannot check the item " + e.getClass().toString() +
-            // " for right click usage.");
+            // Log.warning("Cannot check the item " + e.getClass().toString() + " for right click usage.");
             return true;
         } // cannot use reflection on this class!!
-
         return m != null;
     }
 

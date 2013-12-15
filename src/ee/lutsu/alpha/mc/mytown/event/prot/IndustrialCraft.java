@@ -74,8 +74,7 @@ public class IndustrialCraft extends ProtBase {
              * return null;
              */
             fTickInAir.setAccessible(true);
-            EntityPlayer owner = (EntityPlayer) fOwner.get(e); // actually
-                                                               // living
+            EntityPlayer owner = (EntityPlayer) fOwner.get(e); // actually living
             Integer ticksInAir = (Integer) fTickInAir.get(e);
             Boolean explosive = (Boolean) fExplosive.get(e);
             Float range = (Float) fRange.get(e);

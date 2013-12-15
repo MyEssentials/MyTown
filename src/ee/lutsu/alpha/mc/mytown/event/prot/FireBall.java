@@ -32,7 +32,7 @@ public class FireBall extends ProtBase {
 
     	if (e instanceof EntityWitherSkull || e instanceof EntityLargeFireball) {
     		radius = 1+1;
-    	} else if (e instanceof EntityWither && ((EntityWither)e).func_82212_n() > 0) {
+    	} else if (e instanceof EntityWither && ((EntityWither)e).getDataWatcher().getWatchableObjectInt(20) > 0) {
     		radius = 7 + 2;
     	}
     		

@@ -94,16 +94,13 @@ public class ProtectionEvents implements ITickHandler {
             if (tool == null) {
                 return true;
             }
-            
-            Log.info("%s used %s", r.name(), tool.getClass().toString());
 
             // Always allow the usage of cart type items
             if (ItemIdRange.contains(MyTown.instance.carts, item)) {
                 return true;
             }
 
-            // Log.info(String.format("Item click : %s %s %s", r.name(), item,
-            // tool.getClass()));
+            // Log.info(String.format("Item click : %s %s %s", r.name(), item, tool.getClass()));
 
             ProtBase lastCheck = null;
             kill = null;
@@ -284,7 +281,6 @@ public class ProtectionEvents implements ITickHandler {
                 } catch (Exception e) {
                     prot.enabled = false;
                     Log.info("§f[§1Prot§f]Module %s §4failed §fto load. (%s)", prot.getClass().getSimpleName(), e.getMessage());
-
                     if (!dynamicEnabling) {
                         throw new RuntimeException("ProtectionEvents cannot load " + prot.getClass().getSimpleName() + " class. Is " + prot.getMod() + " loaded?", e);
                     }

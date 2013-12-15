@@ -71,7 +71,6 @@ public class CmdOnline extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender icommandsender) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

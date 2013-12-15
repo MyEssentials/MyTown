@@ -95,7 +95,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
             Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.replace");
         }
     }
-
+    
     public void set(String name, Entity pos) {
         if (defaultIsBed && name == null) {
             owner.onlinePlayer.setSpawnChunk(new ChunkCoordinates((int) pos.posX, (int) pos.posY, (int) pos.posZ), true);
@@ -110,7 +110,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
             save();
         }
     }
-
+    
     public void delete(String name) throws CommandException {
         if (defaultIsBed && name == null) {
             throw new CommandException(Term.HomeCmdCannotDeleteBed);

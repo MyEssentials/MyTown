@@ -1,10 +1,12 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
@@ -15,11 +17,13 @@ public class TheMistsOfRioV extends ProtBase {
     public static TheMistsOfRioV instance = new TheMistsOfRioV();
     public int explosionRadius = 3 + 2;
 
-    private Class<?> clDarkMatter = null;
+    private Class<?> clDarkMatter = null, clEntityCustomArrow = null, clEntityPinkEssence = null;
 
     @Override
     public void load() throws Exception {
         clDarkMatter = Class.forName("sheenrox82.RioV.src.entity.projectile.EntityDarkMatter");
+        clEntityCustomArrow = Class.forName("sheenrox82.RioV.src.entity.projectile.EntityCustomArrow");
+        clEntityPinkEssence = Class.forName("sheenrox82.RioV.src.entity.projectile.EntityPinkEssence");
     }
 
     @Override
@@ -29,7 +33,7 @@ public class TheMistsOfRioV extends ProtBase {
 
     @Override
     public boolean isEntityInstance(Entity e) {
-        return clDarkMatter.isInstance(e);
+        return clDarkMatter.isInstance(e) || clEntityCustomArrow.isInstance(e) || clEntityPinkEssence.isInstance(e);
     }
 
     @Override
@@ -54,6 +58,46 @@ public class TheMistsOfRioV extends ProtBase {
                     || !thrower.canInteract(dim, x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
                 return "Explosion would hit a protected town";
             }
+        } else if (clEntityPinkEssence.isInstance(e)){
+            EntityThrowable t = (EntityThrowable) e;
+            EntityLivingBase owner = t.getThrower();
+
+            if (owner == null || !(owner instanceof EntityPlayer)) {
+                return "No owner or is not a player";
+            }
+
+            Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) owner);
+
+            Vec3 var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
+            Vec3 var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+            MovingObjectPosition mop = e.worldObj.rayTraceBlocks_do_do(var1, var2, false, true);
+            var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
+            
+            if (mop != null) {
+                if (mop.typeOfHit == EnumMovingObjectType.ENTITY && !thrower.canAttack(mop.entityHit)) {
+                    return "Target in MyTown protected area";
+                }
+            }
+        } else if (clEntityCustomArrow.isInstance(e)){
+            EntityThrowable t = (EntityThrowable) e;
+            EntityLivingBase owner = t.getThrower();
+
+            if (owner == null || !(owner instanceof EntityPlayer)) {
+                return "No owner or is not a player";
+            }
+
+            Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) owner);
+
+            Vec3 var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
+            Vec3 var2 = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+            MovingObjectPosition mop = e.worldObj.rayTraceBlocks_do_do(var1, var2, false, true);
+            var1 = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
+            
+            if (mop != null) {
+                if (mop.typeOfHit == EnumMovingObjectType.ENTITY && !thrower.canAttack(mop.entityHit)) {
+                    return "Target in MyTown protected area";
+                }
+            }
         }
 
         return null;
@@ -66,6 +110,6 @@ public class TheMistsOfRioV extends ProtBase {
 
     @Override
     public String getComment() {
-        return "Build check: EntityDarkMatter";
+        return "Build check: EntityDarkMatter. Attack Check: Custom arrows, GraviWand";
     }
 }

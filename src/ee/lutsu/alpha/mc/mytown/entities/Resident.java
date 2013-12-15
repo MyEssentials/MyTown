@@ -209,6 +209,10 @@ public class Resident {
         if (block.owner() == this || block.town() == town() && rank() != Rank.Resident) {
             return true;
         }
+        
+        if (block.owner() == null && block.town().getFirstMayor().friends.contains(this)){
+        	return block.town().settings.friendRights.compareTo(askedFor) >= 0;
+        }
 
         if (block.owner() != null && block.owner().friends.contains(this)) {
             return block.settings.friendRights.compareTo(askedFor) >= 0;
