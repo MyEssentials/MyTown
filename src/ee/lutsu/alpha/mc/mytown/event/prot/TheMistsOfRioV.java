@@ -7,6 +7,7 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import cpw.mods.fml.common.registry.IThrowableEntity;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
@@ -38,7 +39,6 @@ public class TheMistsOfRioV extends ProtBase {
 
     @Override
     public String update(Entity e) throws Exception {
-        
     	if (clDarkMatter.isInstance(e)) {
             EntityThrowable t = (EntityThrowable) e;
             EntityLivingBase owner = t.getThrower();
@@ -79,8 +79,8 @@ public class TheMistsOfRioV extends ProtBase {
                 }
             }
         } else if (clEntityCustomArrow.isInstance(e)){
-            EntityThrowable t = (EntityThrowable) e;
-            EntityLivingBase owner = t.getThrower();
+        	IThrowableEntity t = (IThrowableEntity) e;
+            EntityLivingBase owner = (EntityLivingBase) t.getThrower();
 
             if (owner == null || !(owner instanceof EntityPlayer)) {
                 return "No owner or is not a player";
