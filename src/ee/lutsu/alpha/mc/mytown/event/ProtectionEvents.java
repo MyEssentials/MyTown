@@ -42,6 +42,7 @@ import ee.lutsu.alpha.mc.mytown.event.prot.SteveCarts;
 import ee.lutsu.alpha.mc.mytown.event.prot.TNT;
 import ee.lutsu.alpha.mc.mytown.event.prot.ThaumCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.TheMistsOfRioV;
+import ee.lutsu.alpha.mc.mytown.event.prot.ThermalExpansion;
 import ee.lutsu.alpha.mc.mytown.event.prot.TinkersConstruct;
 import ee.lutsu.alpha.mc.mytown.event.prot.TrainCraft;
 import ee.lutsu.alpha.mc.mytown.event.prot.TwilightForest;
@@ -64,7 +65,7 @@ public class ProtectionEvents implements ITickHandler {
 
     public ProtectionEvents() {
         ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, LOTR.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
-                ModularPowersuits.instance, MFR.instance, TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance }));
+                ModularPowersuits.instance, MFR.instance, TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance, ThermalExpansion.instance }));
         ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance }));
         ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance, TwilightForest.instance }));
     }
