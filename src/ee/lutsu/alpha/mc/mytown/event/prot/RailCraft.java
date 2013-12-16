@@ -1,6 +1,6 @@
 package ee.lutsu.alpha.mc.mytown.event.prot;
 
-import mods.railcraft.common.carts.IExplosiveCart;
+import mods.railcraft.api.carts.IExplosiveCart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.MathHelper;
@@ -18,38 +18,36 @@ import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 public class RailCraft extends ProtBase {
     public static RailCraft instance = new RailCraft();
 
-    Class<?> clCartTNT = null, clBore;
+    Class<?> clBore;
 
     @Override
     public void load() throws Exception {
-        clCartTNT = Class.forName("mods.railcraft.common.carts.EntityCartTNT");
         clBore = Class.forName("mods.railcraft.common.carts.EntityTunnelBore");
+        //TODO: Add firestone protections
     }
 
     @Override
     public boolean loaded() {
-        return clCartTNT != null;
+    	return clBore != null;
     }
 
     @Override
     public boolean isEntityInstance(Entity e) {
-        return e.getClass() == clCartTNT || e.getClass() == clBore;
+        return e instanceof IExplosiveCart || e.getClass() == clBore;
     }
 
     @Override
     public String update(Entity e) throws Exception {
-        if (e.getClass() == clCartTNT) {
+        if (e instanceof IExplosiveCart) {
             IExplosiveCart cart = (IExplosiveCart) e;
 
-            if (e.isDead || !cart.isPrimed() || cart.getFuse() > 1) {
+            if (e.isDead || !cart.isPrimed()) {
                 return null;
             }
 
-            int radius = (int) Math.ceil(cart.getBlastRadius()) + 2; // 2 for
-                                                                     // safety
+            int radius = (int) Math.ceil(cart.getBlastRadius()) + 2; // 2 for safety
 
-            if (canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius)
-                    && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
+            if (canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
                 return null;
             }
 
