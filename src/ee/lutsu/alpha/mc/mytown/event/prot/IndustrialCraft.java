@@ -19,6 +19,9 @@ import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 
 public class IndustrialCraft extends ProtBase {
     public static IndustrialCraft instance = new IndustrialCraft();
+    // Core IC2
+//    Class<?> clIC2;
+//    float explosionPowerReactorMax;
 
     // tnts
     Class<?> clDynamite = null, clStickyDynamite, clEntityIC2Explosive;
@@ -28,9 +31,16 @@ public class IndustrialCraft extends ProtBase {
     public int explosionRadius = 6;
     Class<?> clLaser = null;
     Field fTickInAir, fOwner, fExplosive, fRange, fPower, fBlockBreaks;
+    
+    // Reactor
+//    Class<?> clIReactor, clTileEntityNuclearReactor;
+//    Method mGetHeat, mGetMaxHeat;
 
     @Override
     public void load() throws Exception {
+//    	clIC2 = Class.forName("ic2.core.IC2");
+//    	explosionPowerReactorMax = clIC2.getDeclaredField("explosionPowerReactorMax").getFloat(null);
+    	
         clDynamite = Class.forName("ic2.core.block.EntityDynamite");
         clStickyDynamite = Class.forName("ic2.core.block.EntityStickyDynamite");
         clEntityIC2Explosive = Class.forName("ic2.core.block.EntityIC2Explosive");
@@ -47,7 +57,9 @@ public class IndustrialCraft extends ProtBase {
         fPower = clLaser.getDeclaredField("power");
         fBlockBreaks = clLaser.getDeclaredField("blockBreaks");
         
-        //TODO: Add Nuclear Reactor protections
+//        clIReactor = Class.forName("ic2.api.reactor.IReactor");
+//        mGetHeat = clIReactor.getMethod("getHeat");
+//        mGetMaxHeat = clIReactor.getMethod("getMaxHeat");
     }
 
     @Override
@@ -57,9 +69,24 @@ public class IndustrialCraft extends ProtBase {
 
     @Override
     public boolean isEntityInstance(Entity e) {
-        Class<?> c = e.getClass();
-        return c == clLaser || c == clDynamite || c == clStickyDynamite || clEntityIC2Explosive.isInstance(e);
+        return clLaser.isInstance(e) || clDynamite.isInstance(e) || clStickyDynamite.isInstance(e) || clEntityIC2Explosive.isInstance(e);
     }
+    
+//    @Override
+//    public boolean isEntityInstance(TileEntity e){
+//    	return clIReactor.isInstance(e);
+//    }
+//    
+//    @Override
+//    public String update(TileEntity e) throws Exception{
+//    	if (explosionPowerReactorMax <= 0f) return null;
+//     	int heat = (Integer)mGetHeat.invoke(e);
+//     	if (heat < 4000) return null;
+//     	int maxHeat = (Integer)mGetMaxHeat.invoke(e);
+//     	float power = heat/maxHeat;
+//     	if (power >= 1.0F) return null;
+//     	return "Reactor explosion would be inside MyTown protected area";
+//    }
 
     @Override
     public String update(Entity e) throws Exception {
@@ -67,13 +94,7 @@ public class IndustrialCraft extends ProtBase {
             return null;
         }
 
-        Class<?> c = e.getClass();
-        if (c == clLaser) {
-            /*
-             * if ((int)e.posX == (int)e.prevPosX && (int)e.posY ==
-             * (int)e.prevPosY && (int)e.posZ == (int)e.prevPosZ) // didn't move
-             * return null;
-             */
+        if (clLaser.isInstance(e)) {
             fTickInAir.setAccessible(true);
             EntityPlayer owner = (EntityPlayer) fOwner.get(e); // actually living
             Integer ticksInAir = (Integer) fTickInAir.get(e);
@@ -172,7 +193,7 @@ public class IndustrialCraft extends ProtBase {
             int radius = 1;
             int fuse = 0;
 
-            if (c == clDynamite || c == clStickyDynamite) {
+            if (clDynamite.isInstance(e) || clStickyDynamite.isInstance(e)) {
                 fuse = fFuse2.getInt(e);
             } else {
                 fuse = fFuse1.getInt(e);
