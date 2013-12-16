@@ -23,7 +23,7 @@ import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 public class ModularPowersuits extends ProtBase {
     public static ModularPowersuits instance = new ModularPowersuits();
 
-    Class<?> clEntityPlasmaBolt, clEntitySpinningBlade, clEntityLuxCapacitor, clItemPowerFist, clMuseItemUtils, clMusePlayerUtils;
+    Class<?> clEntityPlasmaBolt, clEntitySpinningBlade, clEntityLuxCapacitor, clItemPowerFist, clModuleManager, clMusePlayerUtils;
     Field fEntityPlasmaBolt_shootingEntity, fEntityPlasmaBolt_explosiveness, fEntityPlasmaBolt_size, fEntitySpinningBlade_shootingEntity;
     Method mItemHasActiveModule, mDoCustomRayTrace;
 
@@ -40,8 +40,8 @@ public class ModularPowersuits extends ProtBase {
         clEntityLuxCapacitor = Class.forName("net.machinemuse.powersuits.entity.EntityLuxCapacitor");
 
         clItemPowerFist = Class.forName("net.machinemuse.powersuits.item.ItemPowerFist");
-        clMuseItemUtils = Class.forName("net.machinemuse.utils.MuseItemUtils");
-        mItemHasActiveModule = clMuseItemUtils.getDeclaredMethod("itemHasActiveModule", ItemStack.class, String.class);
+        clModuleManager = Class.forName("net.machinemuse.utils.ModuleManager");
+        mItemHasActiveModule = clModuleManager.getDeclaredMethod("itemHasActiveModule", ItemStack.class, String.class);
 
         clMusePlayerUtils = Class.forName("net.machinemuse.utils.MusePlayerUtils");
         mDoCustomRayTrace = clMusePlayerUtils.getDeclaredMethod("doCustomRayTrace", World.class, EntityPlayer.class, boolean.class, double.class);
