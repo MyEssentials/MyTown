@@ -83,7 +83,7 @@ public class TheMistsOfRioV extends ProtBase {
             EntityLivingBase owner = (EntityLivingBase) t.getThrower();
 
             if (owner == null || !(owner instanceof EntityPlayer)) {
-                return "No owner or is not a player";
+                return null;  //Allow NPCs to use the Custom Arrows
             }
 
             Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) owner);
