@@ -1,4 +1,4 @@
-This is the release branch. If you want to development branch check here https://github.com/legobear154/MyTown/tree/dev
+This is the development branch. If you want to release branch check here https://github.com/legobear154/MyTown
 
 MyTown
 ======
