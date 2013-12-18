@@ -34,8 +34,8 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-import net.minecraftforge.event.world.BlockEvent;
 import cpw.mods.fml.common.IPlayerTracker;
+import ee.lutsu.alpha.mc.mytown.ChunkCoord;
 import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
@@ -104,21 +104,6 @@ public class PlayerEvents implements IPlayerTracker {
                 MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Explosion would hit a protected town");
                 return;
             }
-        }
-    }
-    
-    @ForgeSubscribe
-    public void blockBroken(BlockEvent.BreakEvent event){
-        if (event.isCanceled()) return;
-        EntityPlayer player = event.getPlayer();
-        if (player == null) return;
-        Resident res = MyTownDatasource.instance.getOrMakeResident(player);
-        if (res == null) return;
-        
-        if (!res.canInteract(event.x, event.y, event.z, Permissions.Build)){
-            Log.severe("[BlockBreak]Player %s tried to bypass at dim %d, (%d,%d,%d) - Cannot destroy here", res.name(), player.dimension, (int)player.posX, (int)player.posY, (int)player.posZ);
-            MyTown.sendChatToPlayer(res.onlinePlayer, "§4You cannot do that here - Cannot destroy here");
-            event.setCanceled(true);
         }
     }
     
@@ -345,6 +330,8 @@ public class PlayerEvents implements IPlayerTracker {
         Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.entity);
         if (res == null) return;
         res.checkLocation();
+        if (res.mapMode)
+        	res.sendLocationMap(res.onlinePlayer.dimension, ChunkCoord.getCoord(res.onlinePlayer.posX), ChunkCoord.getCoord(res.onlinePlayer.posX));
     }
 
     private MyTownDatasource source() {

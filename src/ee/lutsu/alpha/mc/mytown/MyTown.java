@@ -84,6 +84,18 @@ public class MyTown {
         MinecraftForge.EVENT_BUS.register(events);
         GameRegistry.registerPlayerTracker(events);
         
+        try {
+			Class.forName("net.minecraftforge.event.world.BlockEvent.BreakEvent");
+			MinecraftForge.EVENT_BUS.register(Class.forName("ee.lutsu.alpha.mc.mytown.event.ExtraEvents").newInstance());  //A sort of compat for older versions of Forge that don't contain all the events
+			Log.info("ExtraEvents loaded");
+		} catch (ClassNotFoundException e) {
+			Log.warning("BlockBreak event missing, no worries though!");
+		} catch (InstantiationException e){
+			Log.warning("BlockBreak event missing, no worries though!");
+		} catch (IllegalAccessException e){
+			Log.warning("BlockBreak event missing, no worries though!");
+        }
+        
         MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
         TickRegistry.registerTickHandler(ProtectionEvents.instance, Side.SERVER);
         
