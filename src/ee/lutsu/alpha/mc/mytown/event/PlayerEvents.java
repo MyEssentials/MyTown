@@ -331,7 +331,7 @@ public class PlayerEvents implements IPlayerTracker {
         if (res == null) return;
         res.checkLocation();
         if (res.mapMode)
-        	res.sendLocationMap(res.onlinePlayer.dimension, ChunkCoord.getCoord(res.onlinePlayer.posX), ChunkCoord.getCoord(res.onlinePlayer.posX));
+        	res.sendLocationMap(res.onlinePlayer.dimension, ChunkCoord.getCoord(res.onlinePlayer.posX), ChunkCoord.getCoord(res.onlinePlayer.posZ));
     }
 
     private MyTownDatasource source() {
