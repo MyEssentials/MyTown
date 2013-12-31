@@ -53,10 +53,10 @@ public class FireBall extends ProtBase {
 		TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, z);
 	
 		if (b == null || b.town() == null) {
-			return !MyTown.instance.getWorldWildSettings(dim).disableFireBall;
+			return !MyTown.instance.getWorldWildSettings(dim).getSetting("fireballoff").getValue(Boolean.class);
 		}
 	
-		return !b.settings.disableFireBall;
+		return !b.coreSettings.getSetting("fireballoff").getValue(Boolean.class);
 	}
 
     @Override

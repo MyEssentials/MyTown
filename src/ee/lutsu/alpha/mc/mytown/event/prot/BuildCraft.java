@@ -130,11 +130,11 @@ public class BuildCraft extends ProtBase {
 
                 boolean allowed = false;
                 if (block == null || block.town() == null) {
-                    allowed = MyTown.instance.getWorldWildSettings(e.worldObj.provider.dimensionId).allowBuildcraftMiners;
+                    allowed = MyTown.instance.getWorldWildSettings(e.worldObj.provider.dimensionId).getSetting("bc").getValue(Boolean.class);
                 } else if (owner != null) {
                     allowed = owner.canInteract(block, Permissions.Build);
                 } else {
-                    allowed = block.settings.allowBuildcraftMiners;
+                    allowed = block.coreSettings.getSetting("bc").getValue(Boolean.class);
                 }
 
                 if (!allowed) {

@@ -82,9 +82,7 @@ public class Creeper extends ProtBase {
                     return null;
                 }
 
-                creeper.setCreeperState(-1); // this will the pause the fuse,
-                                             // making it jump from fuseTime-1
-                                             // to fuseTime
+                creeper.setCreeperState(-1); // this will the pause the fuse, making it jump from fuseTime-1 to fuseTime
                 // because the fuse check is before the fuse update
 
                 // return "creeper explosion";
@@ -96,17 +94,17 @@ public class Creeper extends ProtBase {
 
     private boolean canBlow(int dim, double x, double yFrom, double yTo, double z) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.yCheckOn) {
-            if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
+        if (b != null && b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < b.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > b.coreSettings.getSetting("yto").getValue(Integer.class)) {
                 b = b.getFirstFullSidingClockwise(b.town());
             }
         }
 
         if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).disableCreepers;
+            return !MyTown.instance.getWorldWildSettings(dim).getSetting("creepoff").getValue(Boolean.class);
         }
 
-        return !b.settings.disableCreepers;
+        return !b.coreSettings.getSetting("creepoff").getValue(Boolean.class);
     }
 
     @Override

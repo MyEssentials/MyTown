@@ -18,6 +18,12 @@ import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.NoAccessException;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
+import ee.lutsu.alpha.mc.mytown.commands.subcommands.MyTownAssistant;
+import ee.lutsu.alpha.mc.mytown.commands.subcommands.MyTownEveryone;
+import ee.lutsu.alpha.mc.mytown.commands.subcommands.MyTownMayor;
+import ee.lutsu.alpha.mc.mytown.commands.subcommands.MyTownNation;
+import ee.lutsu.alpha.mc.mytown.commands.subcommands.MyTownNonResident;
+import ee.lutsu.alpha.mc.mytown.commands.subcommands.MyTownResident;
 
 public class CmdMyTown extends CommandBase {
     @Override
@@ -34,7 +40,7 @@ public class CmdMyTown extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd");
+            return ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.cmd");
         }
         return false;
     }

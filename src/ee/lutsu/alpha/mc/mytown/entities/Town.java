@@ -20,7 +20,8 @@ import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident.Rank;
-import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
+//import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection.ISettingsSaveHandler;
 
 public class Town {
     public static int minDistanceFromOtherTown = 5;
@@ -34,6 +35,7 @@ public class Town {
 
     private int id;
     private String name;
+    private String oldName;
     private int extraBlocks;
     private List<Resident> residents = new ArrayList<Resident>();
     private List<TownBlock> blocks;
@@ -48,6 +50,10 @@ public class Town {
 
     public String name() {
         return name;
+    }
+    
+    public String oldName(){
+    	return oldName;
     }
 
     public int id() {
@@ -87,7 +93,11 @@ public class Town {
         nation = n;
     } // used internally only
 
-    public TownSettingCollection settings = new TownSettingCollection();
+    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
+    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
+    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
+    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
+    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
 
     public int getSpawnDimension() {
         return spawnDimension;
@@ -152,7 +162,11 @@ public class Town {
             blocks.add(home);
         }
 
-        setSettings();
+        setSettings(coreSettings);
+        setSettings(outSettings);
+        setSettings(townSettings);
+        setSettings(friendSettings);
+        setSettings(nationSettings);
         MyTownDatasource.instance.addTown(this);
         save(); // has town id now
         creator.save();
@@ -167,7 +181,11 @@ public class Town {
         extraBlocks = pExtraBlocks;
         blocks = pBlocks;
 
-        setSettings();
+        setSettings(coreSettings);
+        setSettings(outSettings);
+        setSettings(townSettings);
+        setSettings(friendSettings);
+        setSettings(nationSettings);
         deserializeExtra(extra);
 
         for (TownBlock res : blocks) {
@@ -175,12 +193,12 @@ public class Town {
         }
     }
 
-    private void setSettings() {
+    private void setSettings(SettingCollection settings) {
         settings.tag = this;
         settings.setParent(MyTown.instance.serverSettings);
         settings.saveHandler = new ISettingsSaveHandler() {
             @Override
-            public void save(TownSettingCollection sender, Object tag) {
+            public void save(SettingCollection sender, Object tag) {
                 Town r = (Town) tag;
                 r.save();
             }
@@ -271,7 +289,8 @@ public class Town {
 
     public void setTownName(String newName) throws CommandException {
         canSetName(newName, this);
-
+        
+        oldName = name;
         name = newName;
         save();
     }
@@ -294,7 +313,7 @@ public class Town {
 
         int sqr = minDistanceFromOtherTown * minDistanceFromOtherTown;
         for (TownBlock b : MyTownDatasource.instance.blocks.values()) {
-            if (b != block && b.town() != null && b.town() != self && b.worldDimension() == block.worldDimension() && (b.town().nation() == null || self != null && b.town().nation() != self.nation()) && block.squaredDistanceTo(b) <= sqr && !b.settings.allowClaimingNextTo) {
+            if (b != block && b.town() != null && b.town() != self && b.worldDimension() == block.worldDimension() && (b.town().nation() == null || self != null && b.town().nation() != self.nation()) && block.squaredDistanceTo(b) <= sqr && !b.coreSettings.getSetting("closeclaim").getValue(Boolean.class)) {
                 throw new CommandException(Term.TownErrBlockTooCloseToAnotherTown);
             }
         }
@@ -448,7 +467,12 @@ public class Town {
         }
         blocks.clear();
 
-        settings.unlinkAllDown();
+        coreSettings.unlinkAllDown();
+        outSettings.unlinkAllDown();
+        townSettings.unlinkAllDown();
+        friendSettings.unlinkAllDown();
+        nationSettings.unlinkAllDown();
+        
         MyTownDatasource.instance.deleteTown(this); // sets resident town to 0
         MyTownDatasource.instance.unloadTown(this);
     }
@@ -469,13 +493,17 @@ public class Town {
     }
 
     public String serializeExtra() {
-        return settings.serialize() + ";" + (spawnLocation == null ? "" : spawnDimension + "/" + spawnLocation.xCoord + "/" + spawnLocation.yCoord + "/" + spawnLocation.zCoord + "/" + spawnEye1 + "/" + spawnEye2);
+        return coreSettings.serialize() + ";" + outSettings.serialize() + ";" + townSettings.serialize() + ";" + friendSettings.serialize() + ";" + nationSettings.serialize() + ";" + (spawnLocation == null ? "" : spawnDimension + "/" + spawnLocation.xCoord + "/" + spawnLocation.yCoord + "/" + spawnLocation.zCoord + "/" + spawnEye1 + "/" + spawnEye2);
     }
 
     public void deserializeExtra(String val) {
         String[] parts = val.split(";");
         if (parts.length > 0) {
-            settings.deserialize(parts[0]);
+        	coreSettings.deserialize(parts[0]);
+        	outSettings.deserialize(parts[0]);
+        	townSettings.deserialize(parts[0]);
+        	friendSettings.deserialize(parts[0]);
+        	nationSettings.deserialize(parts[0]);
         }
 
         if (parts.length > 1 && parts[1].trim().length() > 0) {

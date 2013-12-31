@@ -12,7 +12,7 @@ public class Assert {
             return;
         }
         EntityPlayer p = (EntityPlayer) cs;
-        if (ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
+        if (ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), node)) {
             return;
         }
         throw new NoAccessException(cs, node);

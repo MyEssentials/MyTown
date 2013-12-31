@@ -1,4 +1,4 @@
-package ee.lutsu.alpha.mc.mytown.commands;
+package ee.lutsu.alpha.mc.mytown.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -173,7 +173,7 @@ public class MyTownEveryone {
                 } else {
                     MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdFriend.toString(), Term.TownCmdFriendArgs.toString(), Term.TownCmdFriendDesc.toString(), color));
                 }
-            } else if (args.length > 0 && args[0].equals(Term.TownCmdSpawn.toString())) {  //TODO Add cooldown/cast time to /t spawn
+            } else if (args.length > 0 && args[0].equals(Term.TownCmdSpawn.toString())) {
                 handled = true;
                 Town target = null;
                 if (args.length < 2) {
@@ -206,7 +206,7 @@ public class MyTownEveryone {
                 res.pay.requestPayment(target == res.town() ? "townspawntpown" : "townspawntpother", cost, new PayHandler.IDone() {
                     @Override
                     public void run(Resident player, Object[] args) {
-                        player.sendToTownSpawn((Town) args[0]);
+                    	player.asyncStartTownTeleport((Town) args[0]);
                     }
                 }, target);
             }

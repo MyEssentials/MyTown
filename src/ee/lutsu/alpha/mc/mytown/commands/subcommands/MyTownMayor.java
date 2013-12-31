@@ -1,4 +1,4 @@
-package ee.lutsu.alpha.mc.mytown.commands;
+package ee.lutsu.alpha.mc.mytown.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +160,7 @@ public class MyTownMayor {
                     throw new CommandException(Term.TownErrPlayerNotInYourTown);
                 }
 
-                if (!ForgePerms.getPermissionManager().canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
+                if (!ForgePerms.getPermissionManager().canAccess(r.onlinePlayer.getCommandSenderName(), r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
                     throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement);
                 }
 

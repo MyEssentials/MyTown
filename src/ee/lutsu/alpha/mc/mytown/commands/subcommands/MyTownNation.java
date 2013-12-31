@@ -1,4 +1,4 @@
-package ee.lutsu.alpha.mc.mytown.commands;
+package ee.lutsu.alpha.mc.mytown.commands.subcommands;
 
 import java.util.ArrayList;
 import java.util.Collections;

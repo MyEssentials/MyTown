@@ -15,7 +15,7 @@ public class CmdTeleport extends CommandServerTp {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.tp");
+            return ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.tp");
         }
         return false;
     }
@@ -60,9 +60,9 @@ public class CmdTeleport extends CommandServerTp {
                 if (targetPlayer.worldObj != self.worldObj) {
                     MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(self, targetPlayer.dimension);
                 }
-
-                self.playerNetServerHandler.setPlayerLocation(targetPlayer.posX, targetPlayer.posY, targetPlayer.posZ, targetPlayer.rotationYaw, targetPlayer.rotationPitch);
-                notifyAdmins(cs, "commands.tp.success", new Object[] { self.getEntityName(), targetPlayer.getEntityName() });
+                
+                self.setPosition(targetPlayer.posX, targetPlayer.posY, targetPlayer.posZ);
+                notifyAdmins(cs, "commands.tp.success", new Object[] { self.getCommandSenderName(), targetPlayer.getCommandSenderName() });
             } else if (self.worldObj != null) {
                 int dim = arg.length > 3 ? Integer.parseInt(arg[arg.length - 4]) : self.dimension;
 
@@ -74,9 +74,9 @@ public class CmdTeleport extends CommandServerTp {
                 if (self.dimension != dim) {
                     MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(self, dim);
                 }
-
-                self.playerNetServerHandler.setPlayerLocation(var5, var7, var9, self.rotationYaw, self.rotationPitch);
-                notifyAdmins(cs, "commands.tp.success.coordinates", new Object[] { self.getEntityName(), Double.valueOf(var5), Double.valueOf(var7), Double.valueOf(var9) });
+                
+                self.setPosition(var5, var7, var9);
+                notifyAdmins(cs, "commands.tp.success.coordinates", new Object[] { self.getCommandSenderName(), Double.valueOf(var5), Double.valueOf(var7), Double.valueOf(var9) });
             }
         }
     }

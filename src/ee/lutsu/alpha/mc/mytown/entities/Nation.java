@@ -22,11 +22,16 @@ public class Nation {
     private List<Town> towns = new ArrayList<Town>();
     private int id = 0;
     private String name;
+    private String oldName;
     private Town capital;
     private int extraBlocks = 0;
 
     public String name() {
         return name;
+    }
+    
+    public String oldName(){
+    	return oldName;
     }
 
     public Town capital() {
@@ -131,6 +136,7 @@ public class Nation {
 
     public void setName(String v) throws CommandException {
         checkName(v);
+        oldName = name;
         name = v;
         save();
     }

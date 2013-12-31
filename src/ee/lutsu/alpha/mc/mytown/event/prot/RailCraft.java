@@ -11,6 +11,7 @@ import ee.lutsu.alpha.mc.mytown.Formatter;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
+import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.commands.CmdChat;
 import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
@@ -47,7 +48,7 @@ public class RailCraft extends ProtBase {
 
             int radius = (int) Math.ceil(cart.getBlastRadius()) + 2; // 2 for safety
 
-            if (canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
+            if (Utils.canTNTBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canTNTBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && Utils.canTNTBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canTNTBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
                 return null;
             }
 
@@ -74,17 +75,17 @@ public class RailCraft extends ProtBase {
 
     private boolean canRoam(int dim, double x, double yFrom, double yTo, double z) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.yCheckOn) {
-            if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
+        if (b != null && b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < b.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > b.coreSettings.getSetting("yto").getValue(Integer.class)) {
                 b = b.getFirstFullSidingClockwise(b.town());
             }
         }
 
         if (b == null || b.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dim).allowRailcraftBores;
+            return MyTown.instance.getWorldWildSettings(dim).getSetting("rcbore").getValue(Boolean.class);
         }
 
-        return b.settings.allowRailcraftBores;
+        return b.coreSettings.getSetting("rcbore").getValue(Boolean.class);
     }
 
     private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {
@@ -117,21 +118,6 @@ public class RailCraft extends ProtBase {
 
     protected final ForgeDirection getFacing(Entity cart) {
         return ForgeDirection.getOrientation(cart.getDataWatcher().getWatchableObjectByte(5));
-    }
-
-    private boolean canBlow(int dim, double x, double yFrom, double yTo, double z) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.yCheckOn) {
-            if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
-                b = b.getFirstFullSidingClockwise(b.town());
-            }
-        }
-
-        if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).disableTNT;
-        }
-
-        return !b.settings.disableTNT;
     }
 
     @Override

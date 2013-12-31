@@ -4,9 +4,7 @@ import java.lang.reflect.Method;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import ee.lutsu.alpha.mc.mytown.MyTown;
-import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
+import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 
 public class LOTR extends ProtBase {
@@ -52,23 +50,13 @@ public class LOTR extends ProtBase {
         boolean canBlow = true;
         for (int x = x1; x <= x2 && canBlow; x++) {
             for (int z = z1; z <= z2 && canBlow; z++) {
-                if (!canBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
+                if (!Utils.canTNTBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
                     canBlow = false;
                 }
             }
         }
 
         return canBlow ? null : "TNT explosion disabled here";
-    }
-
-    private boolean canBlow(int dim, int x, int yFrom, int yTo, int z) {
-        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, yFrom, yTo, z);
-
-        if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).disableTNT;
-        }
-
-        return !b.settings.disableTNT;
     }
 
     @Override

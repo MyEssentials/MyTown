@@ -19,7 +19,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import ee.lutsu.alpha.mc.mytown.ChunkCoord;
 import ee.lutsu.alpha.mc.mytown.Log;
 import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
@@ -227,13 +226,13 @@ public class ThaumCraft extends ProtBase {
             fBore_digZ.setAccessible(true);
 
             if (fBore_toDig.getBoolean(e)) {
-                TownBlock b = MyTownDatasource.instance.getBlock(e.worldObj.provider.dimensionId, ChunkCoord.getCoord(fBore_digX.getInt(e)), ChunkCoord.getCoord(fBore_digZ.getInt(e)));
+            	TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(e.worldObj.provider.dimensionId, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e));
                 if (b == null){
-                	if (MyTown.instance.getWorldWildSettings(e.worldObj.provider.dimensionId).allowTCBores) return null;
+                	if (MyTown.instance.getWorldWildSettings(e.worldObj.provider.dimensionId).getSetting("tcbores").getValue(Boolean.class)) return null;
                     Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
                     fBore_toDig.set(e, false);
                 } else{
-                	if (b.settings.allowTCBores) return null;
+                	if (b.coreSettings.getSetting("tcbores").getValue(Boolean.class)) return null;
                     Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
                     fBore_toDig.set(e, false);
                 }

@@ -29,7 +29,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
+            return ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
         }
         return false;
     }
@@ -77,7 +77,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
 
         lastMessages.put(target, sender);
 
-        if (ForgePerms.getPermissionManager().canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
+        if (ForgePerms.getPermissionManager().canAccess(sender.getCommandSenderName(), sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
             msg = Formatter.applyColorCodes(msg);
         }
 

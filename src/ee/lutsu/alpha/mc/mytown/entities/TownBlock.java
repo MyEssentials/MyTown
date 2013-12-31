@@ -1,6 +1,7 @@
 package ee.lutsu.alpha.mc.mytown.entities;
 
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection.ISettingsSaveHandler;
 
 public class TownBlock {
     private int world_dimension;
@@ -36,7 +37,11 @@ public class TownBlock {
 
     public void setTown(Town val) {
         town = val;
-        settings.setParent(town == null ? null : owner != null ? owner.settings : town.settings);
+        coreSettings.setParent(town == null ? null : owner != null ? owner.coreSettings : town.coreSettings);
+        townSettings.setParent(town == null ? null : owner != null ? owner.townSettings : town.townSettings);
+        friendSettings.setParent(town == null ? null : owner != null ? owner.friendSettings : town.friendSettings);
+        outSettings.setParent(town == null ? null : owner != null ? owner.outSettings : town.outSettings);
+        nationSettings.setParent(town == null ? null : owner != null ? owner.nationSettings : town.nationSettings);
     }
 
     public void setOwner(Resident val) {
@@ -46,24 +51,41 @@ public class TownBlock {
 
     public void sqlSetOwner(Resident val) {
         owner = val;
-        settings.setParent(town == null ? null : owner != null ? owner.settings : town.settings);
+        coreSettings.setParent(town == null ? null : owner != null ? owner.coreSettings : town.coreSettings);
+        townSettings.setParent(town == null ? null : owner != null ? owner.townSettings : town.townSettings);
+        friendSettings.setParent(town == null ? null : owner != null ? owner.friendSettings : town.friendSettings);
+        outSettings.setParent(town == null ? null : owner != null ? owner.outSettings : town.outSettings);
+        nationSettings.setParent(town == null ? null : owner != null ? owner.nationSettings : town.nationSettings);
     }
 
     // extra
-    public TownSettingCollection settings = new TownSettingCollection();
+    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
+    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
+    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
+    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
+    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
 
     public TownBlock(int pWorld, int x, int z) {
         world_dimension = pWorld;
         chunkX = x;
         chunkZ = z;
 
-        settings.tag = this;
-        settings.saveHandler = new TownSettingCollection.ISettingsSaveHandler() {
+        coreSettings.tag = this;
+        townSettings.tag = this;
+        friendSettings.tag = this;
+        outSettings.tag = this;
+        nationSettings.tag = this;
+        ISettingsSaveHandler saveHandler = new ISettingsSaveHandler() {
             @Override
-            public void save(TownSettingCollection sender, Object tag) {
+            public void save(SettingCollection sender, Object tag) {
                 ((TownBlock) tag).save();
             }
         };
+        coreSettings.saveHandler = saveHandler;
+        townSettings.saveHandler = saveHandler;
+        friendSettings.saveHandler = saveHandler;
+        outSettings.saveHandler = saveHandler;
+        nationSettings.saveHandler = saveHandler;
     }
 
     public static TownBlock deserialize(String info) {
@@ -78,7 +100,11 @@ public class TownBlock {
             t.owner_name = splits[3];
         }
         if (splits.length > 4) {
-            t.settings.deserializeNorefresh(splits[4]);
+            t.coreSettings.deserialize(splits[4]);
+            t.townSettings.deserialize(splits[4]);
+            t.friendSettings.deserialize(splits[4]);
+            t.outSettings.deserialize(splits[4]);
+            t.nationSettings.deserialize(splits[4]);
         }
 
         return t;
@@ -86,7 +112,7 @@ public class TownBlock {
 
     public String serialize() // don't use space
     {
-        return worldDimension() + ";" + String.valueOf(x()) + ";" + String.valueOf(z()) + ";" + (owner == null ? "" : owner.name()) + ";" + settings.serialize();
+        return worldDimension() + ";" + String.valueOf(x()) + ";" + String.valueOf(z()) + ";" + (owner == null ? "" : owner.name()) + ";" + coreSettings.serialize() + ";" + townSettings.serialize() + ";" + friendSettings.serialize() + ";" + outSettings.serialize() + ";" + nationSettings.serialize();
     }
 
     public boolean equals(TownBlock block) {
@@ -115,22 +141,22 @@ public class TownBlock {
         TownBlock b;
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX, chunkZ - 1);
-        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
+        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
             return b;
         }
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX + 1, chunkZ);
-        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
+        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
             return b;
         }
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX, chunkZ + 1);
-        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
+        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
             return b;
         }
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX - 1, chunkZ);
-        if (b != null && b.town != null && b.town != notForTown && !b.settings.yCheckOn) {
+        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
             return b;
         }
 

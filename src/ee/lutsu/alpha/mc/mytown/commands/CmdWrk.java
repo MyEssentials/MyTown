@@ -23,7 +23,7 @@ public class CmdWrk extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender cs) {
         if (cs instanceof EntityPlayerMP) {
             EntityPlayerMP p = (EntityPlayerMP) cs;
-            return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.wrk");
+            return ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.wrk");
         }
         return false;
     }
@@ -32,7 +32,7 @@ public class CmdWrk extends CommandBase {
     public void processCommand(ICommandSender cs, String[] args) {
         EntityPlayerMP pl = (EntityPlayerMP) cs;
         EnumGameType mode = pl.theItemInWorldManager.getGameType();
-        String name = pl.username.toLowerCase();
+        String name = pl.getCommandSenderName().toLowerCase();
 
         if (args.length > 0 && args[0].equalsIgnoreCase("clip")) {
             pl.noClip = !pl.noClip;

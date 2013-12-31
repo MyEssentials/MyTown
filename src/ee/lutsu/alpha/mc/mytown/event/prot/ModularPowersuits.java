@@ -40,7 +40,7 @@ public class ModularPowersuits extends ProtBase {
         clEntityLuxCapacitor = Class.forName("net.machinemuse.powersuits.entity.EntityLuxCapacitor");
 
         clItemPowerFist = Class.forName("net.machinemuse.powersuits.item.ItemPowerFist");
-        clModuleManager = Class.forName("net.machinemuse.utils.ModuleManager");
+        clModuleManager = Class.forName("net.machinemuse.api.ModuleManager");
         mItemHasActiveModule = clModuleManager.getDeclaredMethod("itemHasActiveModule", ItemStack.class, String.class);
 
         clMusePlayerUtils = Class.forName("net.machinemuse.utils.MusePlayerUtils");

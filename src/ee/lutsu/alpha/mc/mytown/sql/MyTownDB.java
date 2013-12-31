@@ -437,9 +437,7 @@ public abstract class MyTownDB extends Database {
             try {
                 if (town.id() > 0) {
                     PreparedStatement statement = prepare("UPDATE " + prefix + "towns SET Name = ?, ExtraBlocks = ?, Blocks = ?, Extra = ? WHERE id = ?");
-                    // PreparedStatement statement = prepare("UPDATE " + prefix
-                    // +
-                    // "towns SET Name = ?, ExtraBlocks = ?, Blocks = ?, Extra = ?, PVP = ? WHERE id = ?");
+                    // PreparedStatement statement = prepare("UPDATE " + prefix + "towns SET Name = ?, ExtraBlocks = ?, Blocks = ?, Extra = ?, PVP = ? WHERE id = ?");
                     statement.setString(1, town.name());
                     statement.setInt(2, town.extraBlocks());
                     statement.setString(3, blocks.toString());
@@ -450,10 +448,7 @@ public abstract class MyTownDB extends Database {
                     statement.executeUpdate();
                 } else {
                     PreparedStatement statement = prepare("INSERT INTO " + prefix + "towns (Name, ExtraBlocks, Blocks, Extra) VALUES (?, ?, ?, ?)", true);
-                    // PreparedStatement statement = prepare("INSERT INTO " +
-                    // prefix +
-                    // "towns (Name, ExtraBlocks, Blocks, Extra, PVP) VALUES (?, ?, ?, ?, ?)",
-                    // true);
+                    // PreparedStatement statement = prepare("INSERT INTO " + prefix + "towns (Name, ExtraBlocks, Blocks, Extra, PVP) VALUES (?, ?, ?, ?, ?)", true);
                     statement.setString(1, town.name());
                     statement.setInt(2, town.extraBlocks());
                     statement.setString(3, blocks.toString());

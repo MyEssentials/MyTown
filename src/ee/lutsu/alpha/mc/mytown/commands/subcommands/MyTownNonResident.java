@@ -1,8 +1,11 @@
-package ee.lutsu.alpha.mc.mytown.commands;
+package ee.lutsu.alpha.mc.mytown.commands.subcommands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+
+import com.google.common.base.Joiner;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -104,7 +107,7 @@ public class MyTownNonResident {
 
                         t.sendTownInfo(res.onlinePlayer);
                     }
-                }, args, home);
+                }, Joiner.on("_").join(Arrays.copyOfRange(args, 1, args.length)), home);
             }
         } else if (args[0].equalsIgnoreCase(Term.TownCmdAccept.toString())) {
             Assert.Perm(cs, "mytown.cmd.accept");

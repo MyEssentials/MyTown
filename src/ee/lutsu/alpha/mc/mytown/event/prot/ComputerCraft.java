@@ -99,10 +99,10 @@ public class ComputerCraft extends ProtBase {
         TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, y2, z);
 
         if (b == null || b.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dim).allowCCTurtles;
+            return MyTown.instance.getWorldWildSettings(dim).getSetting("ccturtles").getValue(Boolean.class);
         }
 
-        return b.settings.allowCCTurtles;
+        return b.coreSettings.getSetting("ccturtles").getValue(Boolean.class);
     }
 
     private boolean canScream(ChunkCoordinates c) {

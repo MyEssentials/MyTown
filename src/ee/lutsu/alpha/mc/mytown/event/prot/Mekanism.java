@@ -3,15 +3,13 @@ package ee.lutsu.alpha.mc.mytown.event.prot;
 import java.lang.reflect.Field;
 
 import net.minecraft.entity.Entity;
-import ee.lutsu.alpha.mc.mytown.MyTown;
-import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
-import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
+import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 
 public class Mekanism extends ProtBase {
     public static Mekanism instance = new Mekanism();
 
-    public float explosionRadius = 6;
+    public float explosionRadius = 12;
 
     Class<?> clEntityObsidianTNT;
     Field fEntityObsidianTNT_Fuse, fMekanism_ObsidianTNTBlastRadius;
@@ -20,7 +18,7 @@ public class Mekanism extends ProtBase {
     public void load() throws Exception {
         clEntityObsidianTNT = Class.forName("mekanism.common.EntityObsidianTNT");
         fEntityObsidianTNT_Fuse = clEntityObsidianTNT.getDeclaredField("fuse");
-        fMekanism_ObsidianTNTBlastRadius = Class.forName("mekanism.common.Mekanism").getDeclaredField("ObsidianTNTBlastRadius");
+        fMekanism_ObsidianTNTBlastRadius = Class.forName("mekanism.common.Mekanism").getDeclaredField("obsidianTNTBlastRadius");
 
         explosionRadius = fMekanism_ObsidianTNTBlastRadius.getFloat(null);
     }
@@ -51,23 +49,13 @@ public class Mekanism extends ProtBase {
         boolean canBlow = true;
         for (int x = x1; x <= x2 && canBlow; x++) {
             for (int z = z1; z <= z2 && canBlow; z++) {
-                if (!canBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
+                if (!Utils.canTNTBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
                     canBlow = false;
                 }
             }
         }
 
         return canBlow ? null : "TNT explosion disabled here";
-    }
-
-    private boolean canBlow(int dim, int x, int yFrom, int yTo, int z) {
-        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, yFrom, yTo, z);
-
-        if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).disableTNT;
-        }
-
-        return !b.settings.disableTNT;
     }
 
     @Override

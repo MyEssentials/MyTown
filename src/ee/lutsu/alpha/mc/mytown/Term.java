@@ -230,6 +230,9 @@ public enum Term {
 
     // spawn command
     SpawnCmdTeleportStarted("§aStarted casting the spawn teleport spell. It will take %s seconds"), SpawnCmdTeleportNearStarted("§e%s started casting a %s second spawn teleport spell"), SpawnCmdTeleportEnded("§aWhoooOooOooooOoo"), SpawnCmdTeleportReset("§4Teleport spell casting interrupted"),
+    
+    // t spawn command
+    TownCmdTeleportStarted("§aStarted casting the town teleport spell. It will take %s seconds"), TownCmdTeleportNearStarted("§e%s started casting a %s second town teleport spell"),
 
     // home commands
     HomeCmdNoHomeByName("No home by that name was found"), HomeCmdDimNotSpawnDim("You cannot set the bed location in this dimension"), HomeCmdOwnerNotOnline("The bed owner is not online"), HomeCmdCannotDeleteBed("You cannot remove the bed spawn location"), HomeCmdNoHomes("You have no homes set"), HomeCmdTeleportStarted(

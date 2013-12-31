@@ -96,13 +96,27 @@ public class MyTownDatasource extends MyTownDB {
 
     public TownBlock getPermBlockAtCoord(int world_dimension, int x, int yFrom, int yTo, int z) {
         TownBlock targetBlock = getBlock(world_dimension, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (targetBlock != null && targetBlock.settings.yCheckOn) {
-            if (yTo < targetBlock.settings.yCheckFrom || yFrom > targetBlock.settings.yCheckTo) {
+        if (targetBlock != null && targetBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < targetBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > targetBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
                 targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
             }
         }
 
         return targetBlock;
+    }
+    
+    @Override
+    public void saveTown(Town town) {
+    	super.saveTown(town);
+    	towns.remove(town.oldName());
+    	towns.put(town.name(), town);
+    }
+    
+    @Override
+    public void saveNation(Nation nation) {
+    	super.saveNation(nation);
+    	nations.remove(nation.oldName());
+    	nations.put(nation.name(), nation);
     }
 
     public Town getTown(String name) {
@@ -181,7 +195,11 @@ public class MyTownDatasource extends MyTownDB {
     }
 
     public void unloadBlock(TownBlock b) {
-        b.settings.setParent(null);
+        b.coreSettings.setParent(null);
+        b.friendSettings.setParent(null);
+        b.townSettings.setParent(null);
+        b.outSettings.setParent(null);
+        b.nationSettings.setParent(null);
         blocks.remove(getTownBlockKey(b));
     }
 

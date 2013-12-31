@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import net.minecraft.command.CommandBase;
@@ -42,8 +41,10 @@ import ee.lutsu.alpha.mc.mytown.commands.CmdSpawn;
 import ee.lutsu.alpha.mc.mytown.commands.CmdTeleport;
 import ee.lutsu.alpha.mc.mytown.commands.CmdWrk;
 import ee.lutsu.alpha.mc.mytown.entities.ItemIdRange;
-import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
-import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection.ISettingsSaveHandler;
+//import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
+//import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
 import ee.lutsu.alpha.mc.mytown.event.PlayerEvents;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 import ee.lutsu.alpha.mc.mytown.event.TickHandler;
@@ -52,10 +53,13 @@ import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
-public class MyTown {
-    public TownSettingCollection serverWildSettings = new TownSettingCollection(true, true);
-    public TownSettingCollection serverSettings = new TownSettingCollection(true, false);
-    public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
+public class MyTown{
+//    public TownSettingCollection serverWildSettings = new TownSettingCollection(true, true);
+//    public TownSettingCollection serverSettings = new TownSettingCollection(true, false);
+//    public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
+	public SettingCollection serverWildSettings = SettingCollection.generateCoreSettings();
+	public SettingCollection serverSettings = SettingCollection.generateCoreSettings();
+    public Map<Integer, SettingCollection> worldWildSettings = new HashMap<Integer, SettingCollection>();
     public LinkedList<ItemIdRange> carts = null;
     public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
 
@@ -64,7 +68,7 @@ public class MyTown {
     public Config config = new Config();
 
     public List<CommandBase> commands = new ArrayList<CommandBase>();
-
+    
     @EventHandler
     public void preInit(FMLPreInitializationEvent ev) {
         Log.init();
@@ -115,7 +119,7 @@ public class MyTown {
     public void serverStopping(FMLServerStoppingEvent ev) throws InterruptedException {
         WorldBorder.instance.stopGenerators();
     }
-
+	
     private void addCommands() {
         commands.add(new CmdMyTown());
         commands.add(new CmdMyTownAdmin());
@@ -151,19 +155,17 @@ public class MyTown {
         }
     }
 
-    public TownSettingCollection getWorldWildSettings(int w) {
-        for (Entry<Integer, TownSettingCollection> set : worldWildSettings.entrySet()) {
-            if (set.getKey() == w) {
-                return set.getValue();
-            }
-        }
+    public SettingCollection getWorldWildSettings(int w) {
+    	if (worldWildSettings.containsKey(w)){
+    		return worldWildSettings.get(w);
+    	}
 
-        TownSettingCollection set = new TownSettingCollection(false, true);
+        SettingCollection set = SettingCollection.generateCoreSettings();
         set.tag = new Integer(w);
         set.setParent(serverWildSettings);
         set.saveHandler = new ISettingsSaveHandler() {
             @Override
-            public void save(TownSettingCollection sender, Object tag) {
+            public void save(SettingCollection sender, Object tag) {
                 int w = (Integer) tag;
                 MyTown.instance.config.get("wildperms", "Dim_" + String.valueOf(w), "").set(sender.serialize());
                 MyTown.instance.config.save();

@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
@@ -168,7 +169,7 @@ public class PlayerEvents implements IPlayerTracker {
         if (action == Action.RIGHT_CLICK_BLOCK && ev.entityPlayer.getHeldItem() != null && ev.entityPlayer.getHeldItem().getItem() != null && (ev.entityPlayer.getHeldItem().getItem() instanceof ItemMinecart || ItemIdRange.contains(MyTown.instance.carts, ev.entityPlayer.getHeldItem()))) {
             int en = ev.entityPlayer.worldObj.getBlockId(x, y, z);
             if (Block.blocksList[en] instanceof BlockRail) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(ev.entityPlayer.dimension).allowCartInteraction) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(ev.entityPlayer.dimension).getSetting("carts").getValue(Boolean.class)) {
                     return;
                 }
             }
@@ -312,7 +313,7 @@ public class PlayerEvents implements IPlayerTracker {
 
         TownBlock t = source().getBlock(r.onlinePlayer.dimension, ev.minecart.chunkCoordX, ev.minecart.chunkCoordZ);
 
-        if (t == null || t.town() == null || t.town() == r.town() || t.settings.allowCartInteraction) {
+        if (t == null || t.town() == null || t.town() == r.town() || t.coreSettings.getSetting("carts").getValue(Boolean.class)) {
             return;
         }
 
@@ -324,9 +325,18 @@ public class PlayerEvents implements IPlayerTracker {
     }
     
     @ForgeSubscribe
+    public void itemToss(ItemTossEvent event){
+    	if (event.isCanceled() || !event.isCancelable() || event.player == null) return;
+        Resident res = MyTownDatasource.instance.getOrMakeResident(event.player);
+        
+        if (!res.canInteract((int)event.player.posX, (int)event.player.posY, (int)event.player.posZ, Permissions.Loot)){
+        	event.setCanceled(true);
+        }
+    }
+    
+    @ForgeSubscribe
     public void entityEnterChunk(EntityEvent.EnteringChunk event){
-        if (event.isCanceled()) return;
-        if (event.entity == null || !(event.entity instanceof EntityPlayer)) return;
+        if (event.isCanceled() || event.entity == null || !(event.entity instanceof EntityPlayer)) return;
         Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.entity);
         if (res == null) return;
         res.checkLocation();
@@ -387,6 +397,7 @@ public class PlayerEvents implements IPlayerTracker {
         if (ev.isCanceled() || ev.message == null || ev.message.trim().length() < 1 || !Formatter.formatChat) {
             return;
         }
+        
         if (!disableAutoChatChannelUsage) {
             ev.setCanceled(true);
             Resident res = source().getOrMakeResident(ev.player);

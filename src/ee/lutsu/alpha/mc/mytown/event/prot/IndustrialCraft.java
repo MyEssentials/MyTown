@@ -9,20 +9,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import ee.lutsu.alpha.mc.mytown.MyTown;
 import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
+import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
-import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 
 public class IndustrialCraft extends ProtBase {
     public static IndustrialCraft instance = new IndustrialCraft();
-    // Core IC2
-//    Class<?> clIC2;
-//    float explosionPowerReactorMax;
-
     // tnts
     Class<?> clDynamite = null, clStickyDynamite, clEntityIC2Explosive;
     Field fFuse1, fFuse2, fExplosivePower;
@@ -31,15 +26,9 @@ public class IndustrialCraft extends ProtBase {
     public int explosionRadius = 6;
     Class<?> clLaser = null;
     Field fTickInAir, fOwner, fExplosive, fRange, fPower, fBlockBreaks;
-    
-    // Reactor
-//    Class<?> clIReactor, clTileEntityNuclearReactor;
-//    Method mGetHeat, mGetMaxHeat;
 
     @Override
     public void load() throws Exception {
-//    	clIC2 = Class.forName("ic2.core.IC2");
-//    	explosionPowerReactorMax = clIC2.getDeclaredField("explosionPowerReactorMax").getFloat(null);
     	
         clDynamite = Class.forName("ic2.core.block.EntityDynamite");
         clStickyDynamite = Class.forName("ic2.core.block.EntityStickyDynamite");
@@ -56,10 +45,6 @@ public class IndustrialCraft extends ProtBase {
         fRange = clLaser.getDeclaredField("range");
         fPower = clLaser.getDeclaredField("power");
         fBlockBreaks = clLaser.getDeclaredField("blockBreaks");
-        
-//        clIReactor = Class.forName("ic2.api.reactor.IReactor");
-//        mGetHeat = clIReactor.getMethod("getHeat");
-//        mGetMaxHeat = clIReactor.getMethod("getMaxHeat");
     }
 
     @Override
@@ -71,22 +56,6 @@ public class IndustrialCraft extends ProtBase {
     public boolean isEntityInstance(Entity e) {
         return clLaser.isInstance(e) || clDynamite.isInstance(e) || clStickyDynamite.isInstance(e) || clEntityIC2Explosive.isInstance(e);
     }
-    
-//    @Override
-//    public boolean isEntityInstance(TileEntity e){
-//    	return clIReactor.isInstance(e);
-//    }
-//    
-//    @Override
-//    public String update(TileEntity e) throws Exception{
-//    	if (explosionPowerReactorMax <= 0f) return null;
-//     	int heat = (Integer)mGetHeat.invoke(e);
-//     	if (heat < 4000) return null;
-//     	int maxHeat = (Integer)mGetMaxHeat.invoke(e);
-//     	float power = heat/maxHeat;
-//     	if (power >= 1.0F) return null;
-//     	return "Reactor explosion would be inside MyTown protected area";
-//    }
 
     @Override
     public String update(Entity e) throws Exception {
@@ -214,7 +183,7 @@ public class IndustrialCraft extends ProtBase {
             boolean canBlow = true;
             for (int x = x1; x <= x2 && canBlow; x++) {
                 for (int z = z1; z <= z2 && canBlow; z++) {
-                    if (!canBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
+                    if (!Utils.canTNTBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
                         canBlow = false;
                     }
                 }
@@ -222,16 +191,6 @@ public class IndustrialCraft extends ProtBase {
 
             return canBlow ? null : "TNT explosion disabled here";
         }
-    }
-
-    private boolean canBlow(int dim, int x, int yFrom, int yTo, int z) {
-        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, yFrom, yTo, z);
-
-        if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).disableTNT;
-        }
-
-        return !b.settings.disableTNT;
     }
 
     @Override

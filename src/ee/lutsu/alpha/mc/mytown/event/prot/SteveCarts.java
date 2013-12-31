@@ -105,17 +105,17 @@ public class SteveCarts extends ProtBase {
 
     private boolean canRoam(int dim, double x, double yFrom, double yTo, double z, boolean miner) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.yCheckOn) {
-            if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
+        if (b != null && b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < b.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > b.coreSettings.getSetting("yto").getValue(Integer.class)) {
                 b = b.getFirstFullSidingClockwise(b.town());
             }
         }
 
         if (b == null || b.town() == null) {
-            return miner && MyTown.instance.getWorldWildSettings(dim).allowStevecartsMiners || !miner && MyTown.instance.getWorldWildSettings(dim).allowStevecartsRailers;
+            return miner && MyTown.instance.getWorldWildSettings(dim).getSetting("steveminer").getValue(Boolean.class) || !miner && MyTown.instance.getWorldWildSettings(dim).getSetting("steverailer").getValue(Boolean.class);
         }
 
-        return miner && b.settings.allowStevecartsMiners || !miner && b.settings.allowStevecartsRailers;
+        return miner && b.coreSettings.getSetting("steveminer").getValue(Boolean.class) || !miner && b.coreSettings.getSetting("steverailer").getValue(Boolean.class);
     }
 
     private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {

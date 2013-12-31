@@ -55,7 +55,7 @@
 
 	<target name="build" depends="clean, prep, replace_tokens, recompile, reobfuscate">
 	    <mkdir dir="${environment.build_location}/MC ${build.minecraft_version}" />
-	    <jar destfile="${environment.build_location}/MC ${build.minecraft_version}/MyTown-${build.mod_version}.${build.build_number}.jar">
+		<jar destfile="${environment.build_location}/MC ${build.minecraft_version}/MyTown-${build.mod_version}.${build.build_number}.jar" index="true" manifestencoding="UTF-8" manifest="./MANIFEST.MF">
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="mcmod.info" />
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="pack.mcmeta" />
             <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/com/**,**/org/**"/>
@@ -66,7 +66,7 @@
 
 	<target name="release" depends="clean, increment_build_number, prep, replace_tokens, recompile, reobfuscate">
 	    <mkdir dir="${environment.release_location}" />
-	    <jar destfile="${environment.release_location}/MyTown-${build.mod_version}.${build.build_number}.jar">
+		<jar destfile="${environment.release_location}/MyTown-${build.mod_version}.${build.build_number}.jar" index="true" manifestencoding="UTF-8" manifest="./MANIFEST.MF">
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="mcmod.info" />
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="pack.mcmeta" />
             <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/com/**,**/org/**"/>

@@ -1,5 +1,6 @@
 package ee.lutsu.alpha.mc.mytown;
 
+import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
@@ -32,6 +33,22 @@ public class Utils {
         float var18 = var15 * var16;
         float var20 = var14 * var16;
         Vec3 var23 = var13.addVector(var18 * distance, var17 * distance, var20 * distance);
-        return world.rayTraceBlocks_do_do(var13, var23, hitLiquid, !hitLiquid);
+        return world.clip(var13, var23, hitLiquid);
+        //return world.rayTraceBlocks_do_do(var13, var23, hitLiquid, !hitLiquid);
+    }
+
+    public static boolean canTNTBlow(int dim, double x, double yFrom, double yTo, double z) {
+        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
+        if (b != null && b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < b.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > b.coreSettings.getSetting("yto").getValue(Integer.class)) {
+                b = b.getFirstFullSidingClockwise(b.town());
+            }
+        }
+
+        if (b == null || b.town() == null) {
+            return !MyTown.instance.getWorldWildSettings(dim).getSetting("tntoff").getValue(Boolean.class);
+        }
+
+        return !b.coreSettings.getSetting("tntoff").getValue(Boolean.class);
     }
 }

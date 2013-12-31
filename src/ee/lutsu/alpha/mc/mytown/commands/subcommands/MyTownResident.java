@@ -1,6 +1,7 @@
-package ee.lutsu.alpha.mc.mytown.commands;
+package ee.lutsu.alpha.mc.mytown.commands.subcommands;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -16,9 +17,10 @@ import ee.lutsu.alpha.mc.mytown.NoAccessException;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.Resident.Rank;
+import ee.lutsu.alpha.mc.mytown.entities.Setting;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
 import ee.lutsu.alpha.mc.mytown.entities.TownBlock;
-import ee.lutsu.alpha.mc.mytown.entities.TownSetting;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
 
 public class MyTownResident {
@@ -37,8 +39,7 @@ public class MyTownResident {
         if (args.length == 1) {
             list.add(Term.TownCmdLeave.toString());
             list.add(Term.TownCmdOnline.toString());
-            list.add(Term.TownCmdPerm.toString()); // /t perm town|res|plot
-                                                   // [force|(set key [val])]
+            list.add(Term.TownCmdPerm.toString()); // /t perm town|res|plot [force|(set key [val])]
         } else if (args.length == 2 && args[0].equalsIgnoreCase(Term.TownCmdPerm.toString())) {
             list.add(Term.TownCmdPermArgsTown.toString());
             list.add(Term.TownCmdPermArgsResident.toString());
@@ -47,13 +48,14 @@ public class MyTownResident {
             list.add(Term.TownCmdPermArgs2Set.toString());
             list.add(Term.TownCmdPermArgs2Force.toString());
         } else if (args.length == 4 && args[0].equalsIgnoreCase(Term.TownCmdPerm.toString())) {
-            for (TownSetting s : MyTown.instance.serverSettings.settings) {
-                list.add(s.getSerializationKey());
-            }
+        	Iterator<Setting> it = MyTown.instance.serverSettings.getSettings().values().iterator();
+        	while(it.hasNext()){
+        		list.add(it.next().getName());
+        	}
         } else if (args.length == 5 && args[0].equalsIgnoreCase(Term.TownCmdPerm.toString()) && args[2].equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString())) {
-            TownSetting s = MyTown.instance.serverSettings.getSetting(args[3]);
+            Setting s = MyTown.instance.serverSettings.getSetting(args[3]);
             if (s != null) {
-                Class<?> c = s.getValueClass();
+                Class<?> c = s.getType();
 
                 if (c == TownSettingCollection.Permissions.class) {
                     for (TownSettingCollection.Permissions p : TownSettingCollection.Permissions.values()) {
@@ -162,16 +164,16 @@ public class MyTownResident {
         return handled;
     }
 
-    private static TownSettingCollection getPermNode(String node, Resident res) throws CommandException {
-        TownSettingCollection set = null;
+    private static SettingCollection getPermNode(String node, Resident res) throws CommandException {  //TODO Finish!!!
+        SettingCollection set = null;
         if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
             if (res.town() == null) {
                 throw new CommandException(Term.ErrPermYouDontHaveTown);
             }
 
-            set = res.town().settings;
+            set = res.town().coreSettings;
         } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
-            set = res.settings;
+            set = res.coreSettings;
         } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
             TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
             if (block == null || block.town() == null) {
@@ -182,7 +184,7 @@ public class MyTownResident {
                 throw new CommandException(Term.ErrPermPlotNotInYourTown);
             }
 
-            set = block.settings;
+            set = block.coreSettings;
         } else {
             throw new CommandException(Term.ErrPermSettingCollectionNotFound, node);
         }
@@ -191,7 +193,7 @@ public class MyTownResident {
     }
 
     private static void showPermissions(ICommandSender sender, Resident res, String node) throws CommandException {
-        TownSettingCollection set = getPermNode(node, res);
+        SettingCollection set = getPermNode(node, res);
 
         String title = "";
         if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
@@ -207,9 +209,9 @@ public class MyTownResident {
     }
 
     private static void flushPermissions(ICommandSender sender, Resident res, String node, String perm) throws CommandException {
-        TownSettingCollection set = getPermNode(node, res);
+        SettingCollection set = getPermNode(node, res);
 
-        if (set.childs.size() < 1) {
+        if (set.getChildren().size() < 1) {
             throw new CommandException(Term.ErrPermNoChilds);
         }
 
@@ -217,12 +219,12 @@ public class MyTownResident {
             throw new CommandException(Term.ErrPermRankNotEnough);
         }
 
-        set.forceChildsToInherit(perm);
+//        set.forceChildsToInherit(perm);
         MyTown.sendChatToPlayer(sender, Term.PermForced.toString(node, perm == null || perm.equals("") ? "all" : perm));
     }
 
     private static void setPermissions(ICommandSender sender, Resident res, String node, String key, String val) throws CommandException {
-        TownSettingCollection set = getPermNode(node, res);
+        SettingCollection set = getPermNode(node, res);
 
         if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
             throw new CommandException(Term.ErrPermRankNotEnough);
@@ -235,7 +237,7 @@ public class MyTownResident {
             }
         }
 
-        set.setValue(key, val);
+        set.getSetting(key).setValue(val);
 
         showPermissions(sender, res, node);
         MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));

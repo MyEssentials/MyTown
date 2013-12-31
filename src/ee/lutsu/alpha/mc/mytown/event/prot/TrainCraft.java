@@ -53,10 +53,10 @@ public class TrainCraft extends ProtBase {
         TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, (int) x, (int) yFrom, (int) yTo, (int) z);
 
         if (b == null || b.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dim).allowStevecartsMiners && MyTown.instance.getWorldWildSettings(dim).allowStevecartsRailers;
+            return MyTown.instance.getWorldWildSettings(dim).getSetting("steveminer").getValue(Boolean.class) && MyTown.instance.getWorldWildSettings(dim).getSetting("steverailer").getValue(Boolean.class);
         }
 
-        return b.settings.allowStevecartsMiners && b.settings.allowStevecartsRailers;
+        return b.coreSettings.getSetting("steveminer").getValue(Boolean.class) && b.coreSettings.getSetting("steverailer").getValue(Boolean.class);
     }
 
     private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {

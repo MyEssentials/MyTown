@@ -68,17 +68,17 @@ public class Mobs extends ProtBase {
 
     private boolean canBe(int dim, double x, double yFrom, double yTo, double z) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.yCheckOn) {
-            if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
+        if (b != null && b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < b.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > b.coreSettings.getSetting("yto").getValue(Integer.class)) {
                 b = b.getFirstFullSidingClockwise(b.town());
             }
         }
 
         if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).disableMobs;
+            return !MyTown.instance.getWorldWildSettings(dim).getSetting("mobsoff").getValue(Boolean.class);
         }
 
-        return !b.settings.disableMobs;
+        return !b.coreSettings.getSetting("mobsoff").getValue(Boolean.class);
     }
 
     @Override

@@ -16,7 +16,7 @@ public class ThermalExpansion extends ProtBase {
 	Class<?> clEntityFlorb;
 	
     public void load() throws Exception {
-    	clEntityFlorb = Class.forName("thermalexpansion.entity.EntityFlorb");
+    	clEntityFlorb = Class.forName("thermalexpansion.entity.projectile.EntityFlorb");
     }
 
     public boolean loaded() {

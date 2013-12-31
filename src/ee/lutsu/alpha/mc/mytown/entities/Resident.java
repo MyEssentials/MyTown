@@ -35,7 +35,7 @@ import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 //import ee.lutsu.alpha.mc.mytown.Permissions;
 import ee.lutsu.alpha.mc.mytown.Term;
 import ee.lutsu.alpha.mc.mytown.commands.CmdChat;
-import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection.ISettingsSaveHandler;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 import ee.lutsu.alpha.mc.mytown.event.tick.WorldBorder;
 
@@ -106,9 +106,18 @@ public class Resident {
 
     public void setTown(Town t) {
         town = t;
-        settings.setParent(t == null ? null : t.settings);
+        coreSettings.setParent(t == null ? null : t.coreSettings);
+        townSettings.setParent(t == null ? null : t.townSettings);
+        friendSettings.setParent(t == null ? null : t.friendSettings);
+        outSettings.setParent(t == null ? null : t.outSettings);
+        nationSettings.setParent(t == null ? null : t.nationSettings);
+        
         if (t == null) {
-            settings.unlinkAllDown();
+        	coreSettings.unlinkAllDown();
+        	townSettings.unlinkAllDown();
+        	friendSettings.unlinkAllDown();
+        	outSettings.unlinkAllDown();
+        	nationSettings.unlinkAllDown();
         }
     }
 
@@ -144,7 +153,11 @@ public class Resident {
         return lastLoginOn;
     }
 
-    public TownSettingCollection settings = new TownSettingCollection();
+    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
+    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
+    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
+    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
+    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
     public SavedHomeList home = new SavedHomeList(this);
     public PayHandler pay = new PayHandler(this);
 
@@ -160,14 +173,25 @@ public class Resident {
     }
 
     protected Resident() {
-        settings.tag = this;
-        settings.saveHandler = new ISettingsSaveHandler() {
+        coreSettings.tag = this;
+        townSettings.tag = this;
+        friendSettings.tag = this;
+        outSettings.tag = this;
+        nationSettings.tag = this;
+        
+        ISettingsSaveHandler saveHandler = new ISettingsSaveHandler() {
             @Override
-            public void save(TownSettingCollection sender, Object tag) {
+            public void save(SettingCollection sender, Object tag) {
                 Resident r = (Resident) tag;
                 r.save();
             }
         };
+
+        coreSettings.saveHandler = saveHandler;
+        townSettings.saveHandler = saveHandler;
+        friendSettings.saveHandler = saveHandler;
+        outSettings.saveHandler = saveHandler;
+        nationSettings.saveHandler = saveHandler;
     }
 
     public boolean shouldShowTownBlocks() {
@@ -203,30 +227,30 @@ public class Resident {
 
     private boolean canInteractSub(TownBlock block, TownSettingCollection.Permissions askedFor) {
         if (block == null || block.town() == null) {
-            return MyTown.instance.getWorldWildSettings(onlinePlayer.dimension).outsiderRights.compareTo(askedFor) >= 0;
+        	return true;
         }
 
         if (block.owner() == this || block.town() == town() && rank() != Rank.Resident) {
             return true;
         }
-        
-        if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
-        	return block.town().settings.friendRights.compareTo(askedFor) >= 0;
-        }
-
-        if (block.owner() != null && block.owner().friends.contains(this)) {
-            return block.settings.friendRights.compareTo(askedFor) >= 0;
-        }
-
-        if (town() == block.town()) {
-            return block.settings.townMemberRights.compareTo(askedFor) >= 0;
-        }
-
-        if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
-            return block.settings.nationMemberRights.compareTo(askedFor) >= 0;
-        }
-
-        return block.settings.outsiderRights.compareTo(askedFor) >= 0;
+        return true;  //TODO Temporary!!!
+//        if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
+//        	return ((TownSettingCollection.Permissions)block.town().settings.getSetting("friend").effectiveValue).compareTo(askedFor) >= 0;
+//        }
+//
+//        if (block.owner() != null && block.owner().friends.contains(this)) {
+//        	return ((TownSettingCollection.Permissions)block.settings.getSetting("friend").effectiveValue).compareTo(askedFor) >= 0;
+//        }
+//
+//        if (town() == block.town()) {
+//        	return ((TownSettingCollection.Permissions)block.settings.getSetting("town").effectiveValue).compareTo(askedFor) >= 0;
+//        }
+//
+//        if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
+//        	return ((TownSettingCollection.Permissions)block.settings.getSetting("nation").effectiveValue).compareTo(askedFor) >= 0;
+//        }
+//
+//    	return ((TownSettingCollection.Permissions)block.settings.getSetting("out").effectiveValue).compareTo(askedFor) >= 0;
     }
 
     public boolean canInteract(TownBlock targetBlock, int y, TownSettingCollection.Permissions askedFor) {
@@ -234,8 +258,8 @@ public class Resident {
             return canInteract(null, askedFor);
         }
 
-        if (targetBlock.settings.yCheckOn) {
-            if (y < targetBlock.settings.yCheckFrom || y > targetBlock.settings.yCheckTo) {
+        if (targetBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+            if (y < targetBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || y > targetBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
                 targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
             }
         }
@@ -246,7 +270,7 @@ public class Resident {
     public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z, TownSettingCollection.Permissions askedFor) {
         TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, yFrom, yTo, z);
         if (targetBlock == null || targetBlock.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights.compareTo(askedFor) >= 0;
+        	return true;
         }
 
         return canInteract(targetBlock, askedFor);
@@ -255,7 +279,7 @@ public class Resident {
     public boolean canInteract(int dimension, int x, int y, int z, TownSettingCollection.Permissions askedFor) {
         TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, y, z);
         if (targetBlock == null || targetBlock.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dimension).outsiderRights.compareTo(askedFor) >= 0;
+        	return true;
         }
 
         return canInteract(targetBlock, askedFor);
@@ -270,7 +294,7 @@ public class Resident {
 
         if (e instanceof EntityMinecart) {
             if ((e.riddenByEntity == null || e.riddenByEntity == onlinePlayer)
-                    && (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).allowCartInteraction)) {
+                    && (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class))) {
                 return true;
             }
         }
@@ -323,9 +347,9 @@ public class Resident {
             }
 
             if (targetBlock != null && targetBlock.town() != null) {
-                if (targetBlock.settings.yCheckOn) {
+                if (targetBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
                     int y = (int) e.posY;
-                    if (y < targetBlock.settings.yCheckFrom || y > targetBlock.settings.yCheckTo) {
+                    if (y < targetBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || y > targetBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
                         targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
                     }
                 }
@@ -336,9 +360,9 @@ public class Resident {
             }
             TownBlock sourceBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, onlinePlayer.chunkCoordX, onlinePlayer.chunkCoordZ);
             if (sourceBlock != null && sourceBlock.town() != null) {
-                if (sourceBlock.settings.yCheckOn) {
+                if (sourceBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
                     int y = (int) e.posY;
-                    if (y < sourceBlock.settings.yCheckFrom || y > sourceBlock.settings.yCheckTo) {
+                    if (y < sourceBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || y > sourceBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
                         sourceBlock = sourceBlock.getFirstFullSidingClockwise(sourceBlock.town());
                     }
                 }
@@ -353,11 +377,11 @@ public class Resident {
             TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
 
             if (e instanceof EntityMinecart) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).allowCartInteraction) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class)) {
                     return true;
                 }
             } else if (e instanceof IMob) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowKillingMobsByNonResidents) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("killmobs").getValue(Boolean.class)) {
                     return true;
                 }
             }
@@ -447,11 +471,19 @@ public class Resident {
             town.residents().add(res);
         }
 
-        res.settings.setParent(town == null ? null : town.settings);
+        res.coreSettings.setParent(town == null ? null : town.coreSettings);
+        res.townSettings.setParent(town == null ? null : town.townSettings);
+        res.friendSettings.setParent(town == null ? null : town.friendSettings);
+        res.outSettings.setParent(town == null ? null : town.outSettings);
+        res.nationSettings.setParent(town == null ? null : town.nationSettings);
 
         if (extra != null && !extra.equals("")) {
             String[] extraParts = extra.split("\\|");
-            res.settings.deserialize(extraParts[0]);
+            res.coreSettings.deserialize(extraParts[0]);
+            res.townSettings.deserialize(extraParts[0]);
+            res.friendSettings.deserialize(extraParts[0]);
+            res.outSettings.deserialize(extraParts[0]);
+            res.nationSettings.deserialize(extraParts[0]);
 
             if (extraParts.length > 1) {
                 res.extraBlocks = Integer.parseInt(extraParts[1]);
@@ -462,7 +494,7 @@ public class Resident {
     }
 
     public String serializeExtra() {
-        return settings.serialize() + "|" + String.valueOf(extraBlocks);
+        return coreSettings.serialize() + "/" + townSettings.serialize() + "/" + friendSettings.serialize() + "/" + outSettings.serialize() + "/" + nationSettings.serialize() + "/" + "|" + String.valueOf(extraBlocks);
     }
 
     public void checkLocation() {
@@ -508,7 +540,7 @@ public class Resident {
                     beingBounced = false;
                 }
             } else {
-                checkYMovement = block.settings.yCheckOn ? block : null;
+                checkYMovement = block.coreSettings.getSetting("yon").getValue(Boolean.class) ? block : null;
 
                 if (block.owner() != location2 || block.town() != location) {
                     if (block.town() != location) {
@@ -560,7 +592,6 @@ public class Resident {
                 // onlinePlayer.mountEntity(e); // unomunts
             }
 
-            ((EntityPlayerMP) onlinePlayer).playerNetServerHandler.setPlayerLocation(prevX, prevY, prevZ, prevYaw, prevPitch);
         } else {
             throw new RuntimeException("Cannot bounce non multiplayer players");
         }
@@ -613,7 +644,7 @@ public class Resident {
             pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
         }
 
-        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
+        pl.setPosition(pl.posX, pl.posY, pl.posZ);
     }
 
     public void sendToTownSpawn(Town t) {
@@ -632,7 +663,7 @@ public class Resident {
         }
 
         Vec3 pos = t.getSpawn();
-        pl.playerNetServerHandler.setPlayerLocation(pos.xCoord, pos.yCoord, pos.zCoord, t.getSpawnEye2(), t.getSpawnEye1());
+        pl.setLocationAndAngles(pos.xCoord, pos.yCoord, pos.zCoord, t.getSpawnEye2(), t.getSpawnEye1());
     }
 
     public void sendToServerSpawn() {
@@ -656,7 +687,7 @@ public class Resident {
             pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
         }
 
-        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
+        pl.setLocationAndAngles(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
     }
 
     public void save() {
@@ -793,11 +824,28 @@ public class Resident {
             return false;
         }
     }
-
+    
+    private Town townSpawnTarget = null;
     private SavedHome teleportTargetHome = null;
     private long teleportToSpawnStamp = 0;
-    public static long teleportToSpawnWaitSeconds = 1 * 60; // 1 minute
-    public static long teleportToHomeWaitSeconds = 1 * 60; // 1 minute
+    public static int teleportToSpawnWaitSeconds = 1 * 60; // 1 minute
+    public static int teleportToHomeWaitSeconds = 1 * 60; // 1 minute
+    public static int teleportToTownWaitSeconds = 1 * 60; // 1 minute
+
+    public void asyncStartTownTeleport(Town town) {
+    	townSpawnTarget = town;
+
+        System.currentTimeMillis();
+        long takesTime = ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.teleportwait") ? 0 : teleportToTownWaitSeconds * 1000;
+
+        teleportToSpawnStamp = System.currentTimeMillis() + takesTime;
+
+        if (takesTime > 0) {
+            CmdChat.sendChatToAround(onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ, Term.TownCmdTeleportNearStarted.toString(name(), (int) Math.ceil(takesTime / 1000)), onlinePlayer);
+
+            MyTown.sendChatToPlayer(onlinePlayer, Term.TownCmdTeleportStarted.toString((int) Math.ceil(takesTime / 1000)));
+        }
+    }
 
     public void asyncStartSpawnTeleport(SavedHome home) {
         teleportTargetHome = home;
@@ -832,6 +880,8 @@ public class Resident {
 
         if (teleportTargetHome != null) {
             respawnPlayer(teleportTargetHome);
+        } else if (townSpawnTarget != null){
+        	sendToTownSpawn(townSpawnTarget);
         } else {
             sendToServerSpawn();
         }

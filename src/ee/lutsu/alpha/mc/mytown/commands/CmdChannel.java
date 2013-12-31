@@ -57,7 +57,7 @@ public class CmdChannel extends CommandBase {
                 ch = ChatChannel.defaultChannel;
             }
 
-            if (!ForgePerms.getPermissionManager().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
+            if (!ForgePerms.getPermissionManager().canAccess(res.onlinePlayer.getCommandSenderName(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
                 MyTown.sendChatToPlayer(sender, "§4You cannot focus to " + ch.name + " channel");
                 return;
             }
@@ -72,5 +72,4 @@ public class CmdChannel extends CommandBase {
             }
         }
     }
-
 }

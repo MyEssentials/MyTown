@@ -15,9 +15,9 @@ import ee.lutsu.alpha.mc.mytown.entities.ItemIdRange;
 import ee.lutsu.alpha.mc.mytown.entities.Nation;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.SavedHomeList;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection;
+import ee.lutsu.alpha.mc.mytown.entities.SettingCollection.ISettingsSaveHandler;
 import ee.lutsu.alpha.mc.mytown.entities.Town;
-import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
-import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
 import ee.lutsu.alpha.mc.mytown.event.PlayerEvents;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
 import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
@@ -113,9 +113,10 @@ public class Config extends Configuration {
 
         prop = get("general", "LeftClickAccessBlocks", "1000:2", "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
         MyTown.instance.leftClickAccessBlocks = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
-
+        
         Resident.teleportToSpawnWaitSeconds = get("general", "SpawnTeleportTimeout", Resident.teleportToSpawnWaitSeconds, "How many seconds the /spawn teleport takes").getInt();
         Resident.teleportToHomeWaitSeconds = get("general", "HomeTeleportTimeout", Resident.teleportToHomeWaitSeconds, "How many seconds the /home teleport takes").getInt();
+        Resident.teleportToTownWaitSeconds = get("general", "TownTeleportTimeout", Resident.teleportToTownWaitSeconds, "How many seconds the /t spawn teleport takes").getInt();
 
         SavedHomeList.defaultIsBed = get("general", "DefaultHomeIsBed", SavedHomeList.defaultIsBed, "Are the /sethome and /home commands with no home name linked to the bed location?").getBoolean(SavedHomeList.defaultIsBed);
     }
@@ -225,7 +226,7 @@ public class Config extends Configuration {
 
         MyTown.instance.serverSettings.saveHandler = new ISettingsSaveHandler() {
             @Override
-            public void save(TownSettingCollection sender, Object tag) {
+            public void save(SettingCollection sender, Object tag) {
                 MyTown.instance.config.get("serverperms", "Server", "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
@@ -236,7 +237,7 @@ public class Config extends Configuration {
 
         MyTown.instance.serverWildSettings.saveHandler = new ISettingsSaveHandler() {
             @Override
-            public void save(TownSettingCollection sender, Object tag) {
+            public void save(SettingCollection sender, Object tag) {
                 get("wildperms", "Server", "").set(sender.serialize());
                 MyTown.instance.config.save();
             }
@@ -250,7 +251,7 @@ public class Config extends Configuration {
             }
 
             int dim = Integer.parseInt(p.getName().substring(4));
-            TownSettingCollection set = MyTown.instance.getWorldWildSettings(dim);
+            SettingCollection set = MyTown.instance.getWorldWildSettings(dim);
             set.deserialize(p.getString());
         }
     }

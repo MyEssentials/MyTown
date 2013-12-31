@@ -2,15 +2,19 @@ package ee.lutsu.alpha.mc.mytown.event.prot;
 
 import java.lang.reflect.Method;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import ee.lutsu.alpha.mc.mytown.MyTownDatasource;
 import ee.lutsu.alpha.mc.mytown.Utils;
 import ee.lutsu.alpha.mc.mytown.entities.Resident;
 import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.Permissions;
 import ee.lutsu.alpha.mc.mytown.event.ProtBase;
+import ee.lutsu.alpha.mc.mytown.event.ProtectionEvents;
 
 public class RangedTools extends ProtBase {
     public static RangedTools instance = new RangedTools();
@@ -21,6 +25,11 @@ public class RangedTools extends ProtBase {
     @Override
     public boolean loaded() {
         return true;
+    }
+    
+    @Override
+    public boolean isEntityInstance(Entity e){
+    	return e instanceof EntityArrow;
     }
 
     @Override
@@ -61,6 +70,31 @@ public class RangedTools extends ProtBase {
         }
 
         return null;
+    }
+    
+    @Override
+    public String update(Entity e) throws Exception{
+    	if (e instanceof EntityArrow){
+    		EntityArrow arrow = (EntityArrow) e;
+    		Entity owner = arrow.shootingEntity;
+    		
+    		if (owner == null || !(owner instanceof EntityPlayer)){
+    			return "Owner null or not player";
+    		}
+    		
+    		Resident shooter = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) owner);
+
+            int x = (int) (e.posX + e.motionX);
+            int y = (int) (e.posY + e.motionY);
+            int z = (int) (e.posZ + e.motionZ);
+            int dim = shooter.onlinePlayer.dimension;
+
+            if (!shooter.canInteract(dim, x, y, z, Permissions.Build)) {
+                return "Arrow would land in a town";
+            }
+    	}
+    	
+    	return null;
     }
 
     @Override
