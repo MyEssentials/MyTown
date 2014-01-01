@@ -476,7 +476,7 @@ public class CmdMyTownAdmin extends CommandBase {
                 throw new CommandException(Term.ErrPermPlotNotInTown);
             }
 
-            set = block.town().coreSettings;
+            set = block.town().settings.get("core");
         } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
             if (res == null) {
                 throw new CommandException(Term.ErrNotUsableByConsole);
@@ -487,7 +487,7 @@ public class CmdMyTownAdmin extends CommandBase {
                 throw new CommandException(Term.ErrPermPlotNotInTown);
             }
 
-            set = block.coreSettings;
+            set = block.settings.get("core");
         } else if (node.equalsIgnoreCase(Term.TownadmCmdPermArgsServer.toString())) {
             set = MyTown.instance.serverSettings;
         } else if (node.equalsIgnoreCase(Term.TownadmCmdPermArgsWild.toString())) {

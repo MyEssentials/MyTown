@@ -3,10 +3,12 @@ package mytown;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import mytown.entities.Nation;
 import mytown.entities.Resident;
+import mytown.entities.SettingCollection;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
 import mytown.sql.MyTownDB;
@@ -96,8 +98,8 @@ public class MyTownDatasource extends MyTownDB {
 
     public TownBlock getPermBlockAtCoord(int world_dimension, int x, int yFrom, int yTo, int z) {
         TownBlock targetBlock = getBlock(world_dimension, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (targetBlock != null && targetBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
-            if (yTo < targetBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > targetBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
+        if (targetBlock != null && targetBlock.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < targetBlock.settings.get("core").getSetting("yfrom").getValue(Integer.class) || yFrom > targetBlock.settings.get("core").getSetting("yto").getValue(Integer.class)) {
                 targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
             }
         }
@@ -195,11 +197,10 @@ public class MyTownDatasource extends MyTownDB {
     }
 
     public void unloadBlock(TownBlock b) {
-        b.coreSettings.setParent(null);
-        b.friendSettings.setParent(null);
-        b.townSettings.setParent(null);
-        b.outSettings.setParent(null);
-        b.nationSettings.setParent(null);
+    	Iterator<SettingCollection> setIt = b.settings.values().iterator();
+    	while(setIt.hasNext()){
+    		setIt.next().setParent(null);
+    	}
         blocks.remove(getTownBlockKey(b));
     }
 

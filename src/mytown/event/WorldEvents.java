@@ -23,7 +23,7 @@ public class WorldEvents {
 				ev.setCanceled(true);
 			return;
 		} else {
-			if (b.coreSettings.getSetting("fireballoff").getValue(Boolean.class))
+			if (b.settings.get("core").getSetting("fireballoff").getValue(Boolean.class))
 				ev.setCanceled(true);
 		}
 		Log.info("%s : (%s, %s, %s) : %s", ev.world, ev.x, ev.y, ev.z, ev.isCanceled());

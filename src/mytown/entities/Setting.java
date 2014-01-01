@@ -143,6 +143,8 @@ public class Setting {
 			ret = Joiner.on(",").join(List.class.cast(value));
 		} else if (type.isInstance(Object[].class)){
 			ret = Joiner.on(",").join((String[])value);
+		} else {
+			ret = value.toString();
 		}
 		return name + ":" + ret;
 	}
@@ -162,6 +164,8 @@ public class Setting {
 			value = Arrays.asList(val.split(","));
 		} else if (type.isInstance(String[].class)){
 			value = val.split(",");
+		} else{
+			value = val;
 		}
 	}
 }

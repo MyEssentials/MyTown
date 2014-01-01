@@ -102,7 +102,7 @@ public class ComputerCraft extends ProtBase {
             return MyTown.instance.getWorldWildSettings(dim).getSetting("ccturtles").getValue(Boolean.class);
         }
 
-        return b.coreSettings.getSetting("ccturtles").getValue(Boolean.class);
+        return b.settings.get("core").getSetting("ccturtles").getValue(Boolean.class);
     }
 
     private boolean canScream(ChunkCoordinates c) {

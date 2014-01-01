@@ -212,9 +212,10 @@ public class SettingCollection {
         s.settings.put("creepoff", new Setting("creepoff", "Disable creeper explosion", false, boolean.class));
         s.settings.put("tntoff", new Setting("tntoff", "Disable TNT explosion", true, boolean.class));
         s.settings.put("mobsoff", new Setting("mobsoff", "Disable mobs", false, boolean.class));
-        s.settings.put("yon", new Setting("yon", "Height enabled", false, boolean.class));
-        s.settings.put("yfrom", new Setting("yfrom", "Height check from", 0, int.class));
-        s.settings.put("yto", new Setting("yto", "Height check to", 255, int.class));
+        s.settings.put("ycheck", new Setting("ycheck", "Where to check for permissions along the y-axis", "0,255", String.class));
+//        s.settings.put("yon", new Setting("yon", "Height enabled", false, boolean.class));
+//        s.settings.put("yfrom", new Setting("yfrom", "Height check from", 0, int.class));
+//        s.settings.put("yto", new Setting("yto", "Height check to", 255, int.class));
     	return s;
     }
     

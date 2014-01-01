@@ -56,7 +56,7 @@ public class FireBall extends ProtBase {
 			return !MyTown.instance.getWorldWildSettings(dim).getSetting("fireballoff").getValue(Boolean.class);
 		}
 	
-		return !b.coreSettings.getSetting("fireballoff").getValue(Boolean.class);
+		return !b.settings.get("core").getSetting("fireballoff").getValue(Boolean.class);
 	}
 
     @Override

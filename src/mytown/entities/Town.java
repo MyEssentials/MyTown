@@ -1,6 +1,7 @@
 package mytown.entities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -90,12 +91,13 @@ public class Town {
     public void setNation(Nation n) {
         nation = n;
     } // used internally only
-
-    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
-    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
-    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
-    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
-    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
+    
+    public Map<String, SettingCollection> settings;
+//    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
+//    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
+//    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
+//    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
+//    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
 
     public int getSpawnDimension() {
         return spawnDimension;
@@ -159,12 +161,12 @@ public class Town {
             home.setTown(this);
             blocks.add(home);
         }
+        
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        while(setIt.hasNext()){
+        	setSettings(setIt.next());
+        }
 
-        setSettings(coreSettings);
-        setSettings(outSettings);
-        setSettings(townSettings);
-        setSettings(friendSettings);
-        setSettings(nationSettings);
         MyTownDatasource.instance.addTown(this);
         save(); // has town id now
         creator.save();
@@ -178,12 +180,11 @@ public class Town {
         name = pName;
         extraBlocks = pExtraBlocks;
         blocks = pBlocks;
-
-        setSettings(coreSettings);
-        setSettings(outSettings);
-        setSettings(townSettings);
-        setSettings(friendSettings);
-        setSettings(nationSettings);
+        
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        while(setIt.hasNext()){
+        	setSettings(setIt.next());
+        }
         deserializeExtra(extra);
 
         for (TownBlock res : blocks) {
@@ -311,7 +312,7 @@ public class Town {
 
         int sqr = minDistanceFromOtherTown * minDistanceFromOtherTown;
         for (TownBlock b : MyTownDatasource.instance.blocks.values()) {
-            if (b != block && b.town() != null && b.town() != self && b.worldDimension() == block.worldDimension() && (b.town().nation() == null || self != null && b.town().nation() != self.nation()) && block.squaredDistanceTo(b) <= sqr && !b.coreSettings.getSetting("closeclaim").getValue(Boolean.class)) {
+            if (b != block && b.town() != null && b.town() != self && b.worldDimension() == block.worldDimension() && (b.town().nation() == null || self != null && b.town().nation() != self.nation()) && block.squaredDistanceTo(b) <= sqr && !b.settings.get("core").getSetting("closeclaim").getValue(Boolean.class)) {
                 throw new CommandException(Term.TownErrBlockTooCloseToAnotherTown);
             }
         }
@@ -465,11 +466,10 @@ public class Town {
         }
         blocks.clear();
 
-        coreSettings.unlinkAllDown();
-        outSettings.unlinkAllDown();
-        townSettings.unlinkAllDown();
-        friendSettings.unlinkAllDown();
-        nationSettings.unlinkAllDown();
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        while(setIt.hasNext()){
+        	setIt.next().unlinkAllDown();
+        }
         
         MyTownDatasource.instance.deleteTown(this); // sets resident town to 0
         MyTownDatasource.instance.unloadTown(this);
@@ -492,17 +492,14 @@ public class Town {
 
     public String serializeExtra() {
     	String settingsSerialize = "";
-    	String coreSettingsSerialize = coreSettings.serialize();
-    	String outSettingsSerialize = outSettings.serialize();
-    	String townSettingsSerialize = townSettings.serialize();
-    	String friendSettingsSerialize = friendSettings.serialize();
-    	String nationSettingsSerialize = nationSettings.serialize();
-
-    	settingsSerialize += (coreSettingsSerialize.isEmpty() ? "" : coreSettingsSerialize + "/");
-    	settingsSerialize += (outSettingsSerialize.isEmpty() ? "" : outSettingsSerialize + "/");
-    	settingsSerialize += (townSettingsSerialize.isEmpty() ? "" : townSettingsSerialize + "/");
-    	settingsSerialize += (friendSettingsSerialize.isEmpty() ? "" : friendSettingsSerialize + "/");
-    	settingsSerialize += (nationSettingsSerialize.isEmpty() ? "" : nationSettingsSerialize);
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        SettingCollection set;
+        
+        while(setIt.hasNext()){
+        	set = setIt.next();
+        	settingsSerialize += (set.serialize().isEmpty() ? "" : set.serialize());
+        	if (setIt.hasNext()) settingsSerialize += "/";
+        }
     	
         return settingsSerialize + ";" + (spawnLocation == null ? "" : spawnDimension + "/" + spawnLocation.xCoord + "/" + spawnLocation.yCoord + "/" + spawnLocation.zCoord + "/" + spawnEye1 + "/" + spawnEye2);
     }
@@ -511,11 +508,10 @@ public class Town {
     	Log.info(val);
         String[] parts = val.split(";");
         if (parts.length > 0) {
-        	coreSettings.deserialize(parts[0]);
-        	outSettings.deserialize(parts[0]);
-        	townSettings.deserialize(parts[0]);
-        	friendSettings.deserialize(parts[0]);
-        	nationSettings.deserialize(parts[0]);
+            Iterator<SettingCollection> setIt = settings.values().iterator();
+            while(setIt.hasNext()){
+            	setIt.next().deserialize(parts[0]);
+            }
         }
 
         if (parts.length > 1 && parts[1].trim().length() > 0) {

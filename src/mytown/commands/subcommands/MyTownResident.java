@@ -13,11 +13,9 @@ import mytown.MyTownDatasource;
 import mytown.NoAccessException;
 import mytown.Term;
 import mytown.entities.Resident;
-import mytown.entities.Setting;
-import mytown.entities.SettingCollection;
-import mytown.entities.Town;
-import mytown.entities.TownBlock;
 import mytown.entities.Resident.Rank;
+import mytown.entities.Setting;
+import mytown.entities.Town;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -119,13 +117,10 @@ public class MyTownResident {
                 }
 
                 MyTown.sendChatToPlayer(cs, Term.TownPlayersOnlineStart.toString(sb.toString()));
-            } else if (args[0].equalsIgnoreCase(Term.TownCmdPerm.toString())) {
+            } else if (args[0].equalsIgnoreCase(Term.TownCmdPerm.toString())) {  // /t perm [town|res|plot] [core|out|town|nation|friends] [force|(set key [val])]
                 handled = true;
-                if (args.length < 2) {
+                if (args.length < 3) {
                     MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
-                    // cs.sendChatToPlayer(Formatter.formatCommand(Term.TownCmdPerm.toString(),
-                    // Term.TownCmdPermArgs.toString(),
-                    // Term.TownCmdPermDesc.toString(), color));
                     return true;
                 }
 
@@ -133,107 +128,114 @@ public class MyTownResident {
                 if (!node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && !node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString()) && !node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
                     MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
                 }
-
-                if (args.length < 3) // show
-                {
-                    Assert.Perm(cs, "mytown.cmd.perm.show." + node);
-                    showPermissions(cs, res, node);
-                } else {
-                    String action = args[2];
-                    if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 3) {
-                        Assert.Perm(cs, "mytown.cmd.perm.set." + node + "." + args[3]);
-
-                        setPermissions(cs, res, node, args[3], args.length > 4 ? args[4] : null);
-                    } else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {
-                        Assert.Perm(cs, "mytown.cmd.perm.force." + node + "." + (args.length > 3 ? args[3] : "all"));
-
-                        flushPermissions(cs, res, node, args.length > 3 ? args[3] : null);
-                    } else {
-                        MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
-                    }
+                
+                if (args.length == 2){
+                	
                 }
+
+//                if (args.length < 3) // show
+//                {
+//                    Assert.Perm(cs, "mytown.cmd.perm.show." + node);
+//                    showPermissions(cs, res, node);
+//                } else {
+//                    String action = args[2];
+//                    if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 3) {
+//                        Assert.Perm(cs, "mytown.cmd.perm.set." + node + "." + args[3]);
+//
+//                        setPermissions(cs, res, node, args[3], args.length > 4 ? args[4] : null);
+//                    } else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {
+//                        Assert.Perm(cs, "mytown.cmd.perm.force." + node + "." + (args.length > 3 ? args[3] : "all"));
+//
+//                        flushPermissions(cs, res, node, args.length > 3 ? args[3] : null);
+//                    } else {
+//                        MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
+//                    }
+//                }
             }
         }
 
         return handled;
     }
-
-    private static SettingCollection getPermNode(String node, Resident res) throws CommandException {  //TODO Finish!!!
-        SettingCollection set = null;
-        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
-            if (res.town() == null) {
-                throw new CommandException(Term.ErrPermYouDontHaveTown);
-            }
-
-            set = res.town().coreSettings;
-        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
-            set = res.coreSettings;
-        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
-            TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
-            if (block == null || block.town() == null) {
-                throw new CommandException(Term.ErrPermPlotNotInTown);
-            }
-
-            if (block.town() != res.town()) {
-                throw new CommandException(Term.ErrPermPlotNotInYourTown);
-            }
-
-            set = block.coreSettings;
-        } else {
-            throw new CommandException(Term.ErrPermSettingCollectionNotFound, node);
-        }
-
-        return set;
+    
+    private static void showSettingCollection(ICommandSender sender, String collection){
     }
 
-    private static void showPermissions(ICommandSender sender, Resident res, String node) throws CommandException {
-        SettingCollection set = getPermNode(node, res);
-
-        String title = "";
-        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
-            title = "your town '" + res.town().name() + "' (default for residents)";
-        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
-            title = "you '" + res.name() + "'";
-        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
-            TownBlock block = (TownBlock) set.tag;
-            title = String.format("the plot @ dim %s, %s,%s owned by '%s'", block.worldDimension(), block.x(), block.z(), block.ownerDisplay());
-        }
-
-        set.show(sender, title, node, false);
-    }
-
-    private static void flushPermissions(ICommandSender sender, Resident res, String node, String perm) throws CommandException {
-        SettingCollection set = getPermNode(node, res);
-
-        if (set.getChildren().size() < 1) {
-            throw new CommandException(Term.ErrPermNoChilds);
-        }
-
-        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
-            throw new CommandException(Term.ErrPermRankNotEnough);
-        }
-
-//        set.forceChildsToInherit(perm);
-        MyTown.sendChatToPlayer(sender, Term.PermForced.toString(node, perm == null || perm.equals("") ? "all" : perm));
-    }
-
-    private static void setPermissions(ICommandSender sender, Resident res, String node, String key, String val) throws CommandException {
-        SettingCollection set = getPermNode(node, res);
-
-        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
-            throw new CommandException(Term.ErrPermRankNotEnough);
-        }
-
-        if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString()) && res.rank() == Rank.Resident) {
-            TownBlock b = (TownBlock) set.tag;
-            if (b.owner() != res) {
-                throw new CommandException(Term.ErrPermRankNotEnough);
-            }
-        }
-
-        set.getSetting(key).setValue(val);
-
-        showPermissions(sender, res, node);
-        MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));
-    }
+//    private static SettingCollection getPermNode(String node, Resident res) throws CommandException {
+//        SettingCollection set = null;
+//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
+//            if (res.town() == null) {
+//                throw new CommandException(Term.ErrPermYouDontHaveTown);
+//            }
+//
+//            set = res.town().coreSettings;
+//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
+//            set = res.coreSettings;
+//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
+//            TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
+//            if (block == null || block.town() == null) {
+//                throw new CommandException(Term.ErrPermPlotNotInTown);
+//            }
+//
+//            if (block.town() != res.town()) {
+//                throw new CommandException(Term.ErrPermPlotNotInYourTown);
+//            }
+//
+//            set = block.coreSettings;
+//        } else {
+//            throw new CommandException(Term.ErrPermSettingCollectionNotFound, node);
+//        }
+//
+//        return set;
+//    }
+//
+//    private static void showPermissions(ICommandSender sender, Resident res, String node) throws CommandException {
+//        SettingCollection set = getPermNode(node, res);
+//
+//        String title = "";
+//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
+//            title = "your town '" + res.town().name() + "' (default for residents)";
+//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
+//            title = "you '" + res.name() + "'";
+//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
+//            TownBlock block = (TownBlock) set.tag;
+//            title = String.format("the plot @ dim %s, %s,%s owned by '%s'", block.worldDimension(), block.x(), block.z(), block.ownerDisplay());
+//        }
+//
+//        set.show(sender, title, node, false);
+//    }
+//
+//    private static void flushPermissions(ICommandSender sender, Resident res, String node, String perm) throws CommandException {
+//        SettingCollection set = getPermNode(node, res);
+//
+//        if (set.getChildren().size() < 1) {
+//            throw new CommandException(Term.ErrPermNoChilds);
+//        }
+//
+//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
+//            throw new CommandException(Term.ErrPermRankNotEnough);
+//        }
+//
+////        set.forceChildsToInherit(perm);
+//        MyTown.sendChatToPlayer(sender, Term.PermForced.toString(node, perm == null || perm.equals("") ? "all" : perm));
+//    }
+//
+//    private static void setPermissions(ICommandSender sender, Resident res, String node, String key, String val) throws CommandException {
+//        SettingCollection set = getPermNode(node, res);
+//
+//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
+//            throw new CommandException(Term.ErrPermRankNotEnough);
+//        }
+//
+//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString()) && res.rank() == Rank.Resident) {
+//            TownBlock b = (TownBlock) set.tag;
+//            if (b.owner() != res) {
+//                throw new CommandException(Term.ErrPermRankNotEnough);
+//            }
+//        }
+//
+//        set.getSetting(key).setValue(val);
+//
+//        showPermissions(sender, res, node);
+//        MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));
+//    }
 }

@@ -133,7 +133,7 @@ public class BuildCraft extends ProtBase {
                 } else if (owner != null) {
                     allowed = owner.canInteract(block, "build");
                 } else {
-                    allowed = block.coreSettings.getSetting("bc").getValue(Boolean.class);
+                    allowed = block.settings.get("core").getSetting("bc").getValue(Boolean.class);
                 }
 
                 if (!allowed) {

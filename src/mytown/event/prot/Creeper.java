@@ -94,8 +94,8 @@ public class Creeper extends ProtBase {
 
     private boolean canBlow(int dim, double x, double yFrom, double yTo, double z) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
-            if (yTo < b.coreSettings.getSetting("yfrom").getValue(Integer.class) || yFrom > b.coreSettings.getSetting("yto").getValue(Integer.class)) {
+        if (b != null && b.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
+            if (yTo < b.settings.get("core").getSetting("yfrom").getValue(Integer.class) || yFrom > b.settings.get("core").getSetting("yto").getValue(Integer.class)) {
                 b = b.getFirstFullSidingClockwise(b.town());
             }
         }
@@ -104,7 +104,7 @@ public class Creeper extends ProtBase {
             return !MyTown.instance.getWorldWildSettings(dim).getSetting("creepoff").getValue(Boolean.class);
         }
 
-        return !b.coreSettings.getSetting("creepoff").getValue(Boolean.class);
+        return !b.settings.get("core").getSetting("creepoff").getValue(Boolean.class);
     }
 
     @Override

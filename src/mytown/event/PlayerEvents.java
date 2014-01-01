@@ -168,7 +168,7 @@ public class PlayerEvents implements IPlayerTracker {
         if (action == Action.RIGHT_CLICK_BLOCK && ev.entityPlayer.getHeldItem() != null && ev.entityPlayer.getHeldItem().getItem() != null && (ev.entityPlayer.getHeldItem().getItem() instanceof ItemMinecart || ItemIdRange.contains(MyTown.instance.carts, ev.entityPlayer.getHeldItem()))) {
             int en = ev.entityPlayer.worldObj.getBlockId(x, y, z);
             if (Block.blocksList[en] instanceof BlockRail) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(ev.entityPlayer.dimension).getSetting("carts").getValue(Boolean.class)) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(ev.entityPlayer.dimension).getSetting("carts").getValue(Boolean.class)) {
                     return;
                 }
             }
@@ -312,7 +312,7 @@ public class PlayerEvents implements IPlayerTracker {
 
         TownBlock t = source().getBlock(r.onlinePlayer.dimension, ev.minecart.chunkCoordX, ev.minecart.chunkCoordZ);
 
-        if (t == null || t.town() == null || t.town() == r.town() || t.coreSettings.getSetting("carts").getValue(Boolean.class)) {
+        if (t == null || t.town() == null || t.town() == r.town() || t.settings.get("core").getSetting("carts").getValue(Boolean.class)) {
             return;
         }
 
@@ -328,7 +328,7 @@ public class PlayerEvents implements IPlayerTracker {
     	if (event.isCanceled() || !event.isCancelable() || event.player == null) return;
         Resident res = MyTownDatasource.instance.getOrMakeResident(event.player);
         
-        if (!res.canInteract((int)event.player.posX, (int)event.player.posY, (int)event.player.posZ, "loot")){
+        if (!res.canInteract((int)event.player.posX, (int)event.player.posY, (int)event.player.posZ, "roam")){
         	event.setCanceled(true);
         }
     }

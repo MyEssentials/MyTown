@@ -56,7 +56,7 @@ public class TrainCraft extends ProtBase {
             return MyTown.instance.getWorldWildSettings(dim).getSetting("steveminer").getValue(Boolean.class) && MyTown.instance.getWorldWildSettings(dim).getSetting("steverailer").getValue(Boolean.class);
         }
 
-        return b.coreSettings.getSetting("steveminer").getValue(Boolean.class) && b.coreSettings.getSetting("steverailer").getValue(Boolean.class);
+        return b.settings.get("core").getSetting("steveminer").getValue(Boolean.class) && b.settings.get("core").getSetting("steverailer").getValue(Boolean.class);
     }
 
     private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {

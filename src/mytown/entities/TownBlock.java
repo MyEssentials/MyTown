@@ -1,5 +1,9 @@
 package mytown.entities;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import mytown.MyTownDatasource;
 import mytown.entities.SettingCollection.ISettingsSaveHandler;
 
@@ -37,11 +41,14 @@ public class TownBlock {
 
     public void setTown(Town val) {
         town = val;
-        coreSettings.setParent(town == null ? null : owner != null ? owner.coreSettings : town.coreSettings);
-        townSettings.setParent(town == null ? null : owner != null ? owner.townSettings : town.townSettings);
-        friendSettings.setParent(town == null ? null : owner != null ? owner.friendSettings : town.friendSettings);
-        outSettings.setParent(town == null ? null : owner != null ? owner.outSettings : town.outSettings);
-        nationSettings.setParent(town == null ? null : owner != null ? owner.nationSettings : town.nationSettings);
+        String key;
+        SettingCollection set;
+        Iterator<Entry<String, SettingCollection>> setIt = settings.entrySet().iterator();
+        while(setIt.hasNext()){
+        	key = setIt.next().getKey();
+        	set = setIt.next().getValue();
+        	set.setParent(town == null ? null : owner != null ? owner.settings.get(key) : town.settings.get("core"));
+        }
     }
 
     public void setOwner(Resident val) {
@@ -51,41 +58,45 @@ public class TownBlock {
 
     public void sqlSetOwner(Resident val) {
         owner = val;
-        coreSettings.setParent(town == null ? null : owner != null ? owner.coreSettings : town.coreSettings);
-        townSettings.setParent(town == null ? null : owner != null ? owner.townSettings : town.townSettings);
-        friendSettings.setParent(town == null ? null : owner != null ? owner.friendSettings : town.friendSettings);
-        outSettings.setParent(town == null ? null : owner != null ? owner.outSettings : town.outSettings);
-        nationSettings.setParent(town == null ? null : owner != null ? owner.nationSettings : town.nationSettings);
+        String key;
+        SettingCollection set;
+        Iterator<Entry<String, SettingCollection>> setIt = settings.entrySet().iterator();
+        while(setIt.hasNext()){
+        	key = setIt.next().getKey();
+        	set = setIt.next().getValue();
+        	set.setParent(town == null ? null : owner != null ? owner.settings.get(key) : town.settings.get("core"));
+        }
     }
 
     // extra
-    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
-    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
-    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
-    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
-    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
+    public Map<String, SettingCollection> settings;
 
     public TownBlock(int pWorld, int x, int z) {
+    	settings.put("core", SettingCollection.generateCoreSettings());
+    	settings.put("town", SettingCollection.generateTownMemberSettings());
+    	settings.put("friend", SettingCollection.generateTownMemberSettings());
+    	settings.put("out", SettingCollection.generateOutsiderSettings());
+    	settings.put("nation", SettingCollection.generateOutsiderSettings());
+    	
         world_dimension = pWorld;
         chunkX = x;
         chunkZ = z;
-
-        coreSettings.tag = this;
-        townSettings.tag = this;
-        friendSettings.tag = this;
-        outSettings.tag = this;
-        nationSettings.tag = this;
+        
         ISettingsSaveHandler saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(SettingCollection sender, Object tag) {
                 ((TownBlock) tag).save();
             }
         };
-        coreSettings.saveHandler = saveHandler;
-        townSettings.saveHandler = saveHandler;
-        friendSettings.saveHandler = saveHandler;
-        outSettings.saveHandler = saveHandler;
-        nationSettings.saveHandler = saveHandler;
+        
+
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        SettingCollection set;
+        while(setIt.hasNext()){
+        	set = setIt.next();
+        	set.tag = this;
+        	set.saveHandler = saveHandler;
+        }
     }
 
     public static TownBlock deserialize(String info) {
@@ -100,11 +111,10 @@ public class TownBlock {
             t.owner_name = splits[3];
         }
         if (splits.length > 4) {
-            t.coreSettings.deserialize(splits[4]);
-            t.townSettings.deserialize(splits[4]);
-            t.friendSettings.deserialize(splits[4]);
-            t.outSettings.deserialize(splits[4]);
-            t.nationSettings.deserialize(splits[4]);
+            Iterator<SettingCollection> setIt = t.settings.values().iterator();
+            while(setIt.hasNext()){
+            	setIt.next().deserialize(splits[4]);
+            }
         }
 
         return t;
@@ -112,17 +122,13 @@ public class TownBlock {
 
     public String serialize() { // don't use space
     	String settingsSerialize = "";
-    	String coreSettingsSerialize = coreSettings.serialize();
-    	String outSettingsSerialize = outSettings.serialize();
-    	String townSettingsSerialize = townSettings.serialize();
-    	String friendSettingsSerialize = friendSettings.serialize();
-    	String nationSettingsSerialize = nationSettings.serialize();
 
-    	settingsSerialize += (coreSettingsSerialize.isEmpty() ? "" : coreSettingsSerialize + "/");
-    	settingsSerialize += (outSettingsSerialize.isEmpty() ? "" : outSettingsSerialize + "/");
-    	settingsSerialize += (townSettingsSerialize.isEmpty() ? "" : townSettingsSerialize + "/");
-    	settingsSerialize += (friendSettingsSerialize.isEmpty() ? "" : friendSettingsSerialize + "/");
-    	settingsSerialize += (nationSettingsSerialize.isEmpty() ? "" : nationSettingsSerialize);
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        while(setIt.hasNext()){
+        	settingsSerialize += setIt.next().serialize();
+        	if (setIt.hasNext()) settingsSerialize += "/";
+        }
+        
         return worldDimension() + ";" + String.valueOf(x()) + ";" + String.valueOf(z()) + ";" + (owner == null ? "" : owner.name()) + ";" + settingsSerialize;
     }
 
@@ -152,22 +158,22 @@ public class TownBlock {
         TownBlock b;
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX, chunkZ - 1);
-        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+        if (b != null && b.town != null && b.town != notForTown && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
             return b;
         }
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX + 1, chunkZ);
-        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+        if (b != null && b.town != null && b.town != notForTown && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
             return b;
         }
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX, chunkZ + 1);
-        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+        if (b != null && b.town != null && b.town != notForTown && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
             return b;
         }
 
         b = MyTownDatasource.instance.getBlock(world_dimension, chunkX - 1, chunkZ);
-        if (b != null && b.town != null && b.town != notForTown && !b.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+        if (b != null && b.town != null && b.town != notForTown && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
             return b;
         }
 

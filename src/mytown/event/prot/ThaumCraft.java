@@ -231,7 +231,7 @@ public class ThaumCraft extends ProtBase {
                     Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
                     fBore_toDig.set(e, false);
                 } else{
-                	if (b.coreSettings.getSetting("tcbores").getValue(Boolean.class)) return null;
+                	if (b.settings.get("core").getSetting("tcbores").getValue(Boolean.class)) return null;
                     Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
                     fBore_toDig.set(e, false);
                 }

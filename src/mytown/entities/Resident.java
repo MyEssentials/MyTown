@@ -4,7 +4,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import mytown.ChatChannel;
@@ -106,18 +109,15 @@ public class Resident {
 
     public void setTown(Town t) {
         town = t;
-        coreSettings.setParent(t == null ? null : t.coreSettings);
-        townSettings.setParent(t == null ? null : t.townSettings);
-        friendSettings.setParent(t == null ? null : t.friendSettings);
-        outSettings.setParent(t == null ? null : t.outSettings);
-        nationSettings.setParent(t == null ? null : t.nationSettings);
         
-        if (t == null) {
-        	coreSettings.unlinkAllDown();
-        	townSettings.unlinkAllDown();
-        	friendSettings.unlinkAllDown();
-        	outSettings.unlinkAllDown();
-        	nationSettings.unlinkAllDown();
+        SettingCollection set;
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        while(setIt.hasNext()){
+        	set = setIt.next();
+        	set.setParent(t == null ? null : t.settings.get("core"));
+        	if (t == null){
+        		set.unlinkAllDown();
+        	}
         }
     }
 
@@ -152,12 +152,14 @@ public class Resident {
     public Date lastLogin() {
         return lastLoginOn;
     }
+    
+    public Map<String, SettingCollection> settings = new HashMap<String, SettingCollection>();
 
-    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
-    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
-    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
-    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
-    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
+//    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
+//    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
+//    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
+//    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
+//    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
     public SavedHomeList home = new SavedHomeList(this);
     public PayHandler pay = new PayHandler(this);
 
@@ -173,12 +175,12 @@ public class Resident {
     }
 
     protected Resident() {
-        coreSettings.tag = this;
-        townSettings.tag = this;
-        friendSettings.tag = this;
-        outSettings.tag = this;
-        nationSettings.tag = this;
-        
+    	settings.put("core", SettingCollection.generateCoreSettings());
+    	settings.put("town", SettingCollection.generateTownMemberSettings());
+    	settings.put("friend", SettingCollection.generateTownMemberSettings());
+    	settings.put("out", SettingCollection.generateOutsiderSettings());
+    	settings.put("nation", SettingCollection.generateOutsiderSettings());
+    	
         ISettingsSaveHandler saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(SettingCollection sender, Object tag) {
@@ -186,12 +188,14 @@ public class Resident {
                 r.save();
             }
         };
-
-        coreSettings.saveHandler = saveHandler;
-        townSettings.saveHandler = saveHandler;
-        friendSettings.saveHandler = saveHandler;
-        outSettings.saveHandler = saveHandler;
-        nationSettings.saveHandler = saveHandler;
+        
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        SettingCollection set;
+        while(setIt.hasNext()){
+        	set = setIt.next();
+        	set.tag = this;
+        	set.saveHandler = saveHandler;
+        }
     }
 
     public boolean shouldShowTownBlocks() {
@@ -216,27 +220,27 @@ public class Resident {
 		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
 		
 		if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
-			if (block.town().friendSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().friendSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			if (block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
 		}
 
 		if (block.owner() != null && block.owner().friends.contains(this)) {
-			if (block.town().friendSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().friendSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			if (block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
 		}
 
 		if (town() == block.town()) {
-			if (block.town().townSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().townSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			if (block.town().settings.get("town").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().settings.get("town").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
 		}
 
 		if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
-			if (block.town().nationSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().nationSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			if (block.town().settings.get("nation").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().settings.get("nation").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
 		}
 
-		if (block.town().outSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-		return block.town().outSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+		if (block.town().settings.get("out").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+		return block.town().settings.get("out").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
     }
     
     private boolean canInteractSub(TownBlock block, String setting){
@@ -244,22 +248,22 @@ public class Resident {
 		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
 		
 		if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
-			return block.town().friendSettings.getSetting(setting).getValue(Boolean.class);
+			return block.town().settings.get("friend").getSetting(setting).getValue(Boolean.class);
 		}
 
 		if (block.owner() != null && block.owner().friends.contains(this)) {
-			return block.town().friendSettings.getSetting(setting).getValue(Boolean.class);
+			return block.town().settings.get("friend").getSetting(setting).getValue(Boolean.class);
 		}
 
 		if (town() == block.town()) {
-			return block.town().townSettings.getSetting(setting).getValue(Boolean.class);
+			return block.town().settings.get("town").getSetting(setting).getValue(Boolean.class);
 		}
 
 		if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
-			return block.town().nationSettings.getSetting(setting).getValue(Boolean.class);
+			return block.town().settings.get("nation").getSetting(setting).getValue(Boolean.class);
 		}
 
-		return block.town().outSettings.getSetting(setting).getValue(Boolean.class);
+		return block.town().settings.get("out").getSetting(setting).getValue(Boolean.class);
 	}
     
     public boolean canInteract(String setting){
@@ -275,8 +279,8 @@ public class Resident {
 			return canInteract(null, setting);
 		}
 		
-		if (targetBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
-			if (y < targetBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || y > targetBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
+		if (targetBlock.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
+			if (y < targetBlock.settings.get("core").getSetting("yfrom").getValue(Integer.class) || y > targetBlock.settings.get("core").getSetting("yto").getValue(Integer.class)) {
 				targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
 			}
 		}
@@ -317,7 +321,7 @@ public class Resident {
 
         if (e instanceof EntityMinecart) {
             if ((e.riddenByEntity == null || e.riddenByEntity == onlinePlayer)
-                    && (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class))) {
+                    && (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class))) {
                 return true;
             }
         }
@@ -325,7 +329,7 @@ public class Resident {
         String perm = "build";
 
         if (e instanceof EntityItem) {
-            perm = "loot";
+            perm = "roam";
         } else {
             boolean isNpc = false;
 
@@ -370,9 +374,9 @@ public class Resident {
             }
 
             if (targetBlock != null && targetBlock.town() != null) {
-                if (targetBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+                if (targetBlock.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
                     int y = (int) e.posY;
-                    if (y < targetBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || y > targetBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
+                    if (y < targetBlock.settings.get("core").getSetting("yfrom").getValue(Integer.class) || y > targetBlock.settings.get("core").getSetting("yto").getValue(Integer.class)) {
                         targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
                     }
                 }
@@ -383,9 +387,9 @@ public class Resident {
             }
             TownBlock sourceBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, onlinePlayer.chunkCoordX, onlinePlayer.chunkCoordZ);
             if (sourceBlock != null && sourceBlock.town() != null) {
-                if (sourceBlock.coreSettings.getSetting("yon").getValue(Boolean.class)) {
+                if (sourceBlock.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
                     int y = (int) e.posY;
-                    if (y < sourceBlock.coreSettings.getSetting("yfrom").getValue(Integer.class) || y > sourceBlock.coreSettings.getSetting("yto").getValue(Integer.class)) {
+                    if (y < sourceBlock.settings.get("core").getSetting("yfrom").getValue(Integer.class) || y > sourceBlock.settings.get("core").getSetting("yto").getValue(Integer.class)) {
                         sourceBlock = sourceBlock.getFirstFullSidingClockwise(sourceBlock.town());
                     }
                 }
@@ -400,7 +404,7 @@ public class Resident {
             TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
 
             if (e instanceof EntityMinecart) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class)) {
+                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class)) {
                     return true;
                 }
             } else if (e instanceof EntityMob) {
@@ -497,23 +501,23 @@ public class Resident {
         if (town != null) {
             town.residents().add(res);
         }
+        
 
-        res.coreSettings.setParent(town == null ? null : town.coreSettings);
-        res.townSettings.setParent(town == null ? null : town.townSettings);
-        res.friendSettings.setParent(town == null ? null : town.friendSettings);
-        res.outSettings.setParent(town == null ? null : town.outSettings);
-        res.nationSettings.setParent(town == null ? null : town.nationSettings);
+        
+        Iterator<SettingCollection> setIt = res.settings.values().iterator();
+        SettingCollection set;
+        String[] extraParts = extra.split("\\|");
+        
+        while(setIt.hasNext()){
+        	set = setIt.next();
+        	set.setParent(town == null ? null : town.settings.get("core"));
+        	
+            if (extra != null && !extra.equals("")) {
+                set.deserialize(extraParts[0]);
 
-        if (extra != null && !extra.equals("")) {
-            String[] extraParts = extra.split("\\|");
-            res.coreSettings.deserialize(extraParts[0]);
-            res.townSettings.deserialize(extraParts[0]);
-            res.friendSettings.deserialize(extraParts[0]);
-            res.outSettings.deserialize(extraParts[0]);
-            res.nationSettings.deserialize(extraParts[0]);
-
-            if (extraParts.length > 1) {
-                res.extraBlocks = Integer.parseInt(extraParts[1]);
+                if (extraParts.length > 1) {
+                    res.extraBlocks = Integer.parseInt(extraParts[1]);
+                }
             }
         }
 
@@ -522,17 +526,14 @@ public class Resident {
 
     public String serializeExtra() {
     	String settingsSerialize = "";
-    	String coreSettingsSerialize = coreSettings.serialize();
-    	String outSettingsSerialize = outSettings.serialize();
-    	String townSettingsSerialize = townSettings.serialize();
-    	String friendSettingsSerialize = friendSettings.serialize();
-    	String nationSettingsSerialize = nationSettings.serialize();
-
-    	settingsSerialize += (coreSettingsSerialize.isEmpty() ? "" : coreSettingsSerialize + "/");
-    	settingsSerialize += (outSettingsSerialize.isEmpty() ? "" : outSettingsSerialize + "/");
-    	settingsSerialize += (townSettingsSerialize.isEmpty() ? "" : townSettingsSerialize + "/");
-    	settingsSerialize += (friendSettingsSerialize.isEmpty() ? "" : friendSettingsSerialize + "/");
-    	settingsSerialize += (nationSettingsSerialize.isEmpty() ? "" : nationSettingsSerialize);
+        Iterator<SettingCollection> setIt = settings.values().iterator();
+        SettingCollection set;
+        
+        while(setIt.hasNext()){
+        	set = setIt.next();
+        	settingsSerialize += (set.serialize().isEmpty() ? "" : set.serialize());
+        	if (setIt.hasNext()) settingsSerialize += "/";
+        }
     	
         return settingsSerialize + "|" + String.valueOf(extraBlocks);
     }
@@ -580,7 +581,7 @@ public class Resident {
                     beingBounced = false;
                 }
             } else {
-                checkYMovement = block.coreSettings.getSetting("yon").getValue(Boolean.class) ? block : null;
+                checkYMovement = block.settings.get("core").getSetting("yon").getValue(Boolean.class) ? block : null;
 
                 if (block.owner() != location2 || block.town() != location) {
                     if (block.town() != location) {

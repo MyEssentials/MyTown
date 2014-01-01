@@ -35,7 +35,7 @@ public class Gravigun extends ProtBase {
 			return (!MyTown.instance.getWorldWildSettings(e.dimension).getSetting("gravigun").getValue(Boolean.class)) ? null : "Gravigun is not allowed here";
 		}
 		
-		return (!b.coreSettings.getSetting("gravigun").getValue(Boolean.class)) ? null : "Gravigun is not allowed here";
+		return (!b.settings.get("core").getSetting("gravigun").getValue(Boolean.class)) ? null : "Gravigun is not allowed here";
 	}
 	
     @Override
