@@ -128,7 +128,6 @@ public class PlayerEvents implements IPlayerTracker {
             return;
         }
         String perm = "build";
-        //Permissions perm = Permissions.Build;
         int x = ev.x, y = ev.y, z = ev.z;
         Action action = ev.action;
 

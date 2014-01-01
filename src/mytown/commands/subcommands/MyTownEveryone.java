@@ -20,7 +20,6 @@ import mytown.entities.TownBlock;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-//import ee.lutsu.alpha.mc.mytown.Permissions;
 
 public class MyTownEveryone {
     public static List<String> getAutoComplete(ICommandSender cs, String[] args) {

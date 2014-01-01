@@ -20,7 +20,6 @@ import mytown.entities.TownBlock;
 import mytown.entities.Resident.Rank;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-//import ee.lutsu.alpha.mc.mytown.Permissions;
 
 public class MyTownResident {
     public static List<String> getAutoComplete(ICommandSender cs, String[] args) {

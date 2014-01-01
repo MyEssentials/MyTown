@@ -1,5 +1,8 @@
 package mytown.entities;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.common.base.Joiner;
 
 /**
@@ -136,6 +139,8 @@ public class Setting {
 			ret = Integer.toString((Integer)value);
 		} else if (type.isInstance(Boolean.class)){
 			ret = (Boolean)value ? "1" : "0";
+		} else if (type.isInstance(List.class)){
+			ret = Joiner.on(",").join(List.class.cast(value));
 		} else if (type.isInstance(Object[].class)){
 			ret = Joiner.on(",").join((String[])value);
 		}
@@ -153,6 +158,8 @@ public class Setting {
 			value = Integer.parseInt(val);
 		} else if (type.isInstance(Boolean.class)){
 			value = val == "1" ? true : false;
+		}  else if (type.isInstance(List.class)){
+			value = Arrays.asList(val.split(","));
 		} else if (type.isInstance(String[].class)){
 			value = val.split(",");
 		}

@@ -20,10 +20,11 @@ import mytown.event.ProtectionEvents;
 import mytown.event.tick.WorldBorder;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -210,6 +211,34 @@ public class Resident {
     	return ForgePerms.getPermissionManager().canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass." + name);
     }
     
+    public boolean checkList(TownBlock block, String setting, String unlocalizedName){
+		if (block == null || block.town() == null) return true;
+		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
+		
+		if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
+			if (block.town().friendSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().friendSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+		}
+
+		if (block.owner() != null && block.owner().friends.contains(this)) {
+			if (block.town().friendSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().friendSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+		}
+
+		if (town() == block.town()) {
+			if (block.town().townSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().townSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+		}
+
+		if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
+			if (block.town().nationSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+			return block.town().nationSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+		}
+
+		if (block.town().outSettings.getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+		return block.town().outSettings.getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+    }
+    
     private boolean canInteractSub(TownBlock block, String setting){
 		if (block == null || block.town() == null) return true;
 		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
@@ -374,9 +403,13 @@ public class Resident {
                 if (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class)) {
                     return true;
                 }
-            } else if (e instanceof IMob) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.coreSettings.getSetting("killmobs").getValue(Boolean.class)) {
-                    return true;
+            } else if (e instanceof EntityMob) {
+                if (targetBlock != null && targetBlock.town() != null && canInteract(targetBlock, "attackmobs")) {
+                    return checkList(targetBlock, "attackmobs", e.getEntityName());
+                }
+            } else if (e instanceof EntityCreature){
+                if (targetBlock != null && targetBlock.town() != null && canInteract(targetBlock, "attackcreatures")) {
+                    return checkList(targetBlock, "attackcreatures", e.getEntityName());
                 }
             }
 

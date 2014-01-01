@@ -208,7 +208,6 @@ public class SettingCollection {
         s.settings.put("tcbores", new Setting("tcbores", "Allow Thaumcraft Arcane Bores", false, boolean.class));
         s.settings.put("gravigunoff", new Setting("gravigunoff", "Disable Throwing of Blocks", true, boolean.class));
         s.settings.put("closeclaim", new Setting("closeclaim", "Allow claiming next to", false, boolean.class));
-//        s.settings.put("killmobs", new Setting("killmobs", "Allow everyone to kill mobs", true, boolean.class));
         s.settings.put("fireballoff", new Setting("fireballoff", "Disable FireBall/Wither explosion", true, boolean.class));
         s.settings.put("creepoff", new Setting("creepoff", "Disable creeper explosion", false, boolean.class));
         s.settings.put("tntoff", new Setting("tntoff", "Disable TNT explosion", true, boolean.class));
@@ -236,11 +235,11 @@ public class SettingCollection {
     	s.settings.put("attackcreatures", new Setting("attackcreatures", "allows them to attack creatures", false, boolean.class));
     	
     	//Array settings
-    	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, Object[].class));
-    	s.settings.put("activateList", new Setting("activateList", "List of allowed blocks to be activated", null, Object[].class));
-    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers to be accessed", null, Object[].class));
-    	s.settings.put("attackmobsList", new Setting("attackmobsList", "List of allowed mobs to be attacked", null, Object[].class));
-    	s.settings.put("attackcreaturesList", new Setting("attackcreaturesList", "List of allowed creatures to be attacked", null, Object[].class));
+    	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, List.class));
+    	s.settings.put("activateList", new Setting("activateList", "List of allowed blocks to be activated", null, List.class));
+    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers to be accessed", null, List.class));
+    	s.settings.put("attackmobsList", new Setting("attackmobsList", "List of allowed mobs to be attacked", null, List.class));
+    	s.settings.put("attackcreaturesList", new Setting("attackcreaturesList", "List of allowed creatures to be attacked", null, List.class));
     	return s;
     }
     
@@ -261,11 +260,11 @@ public class SettingCollection {
     	s.settings.put("attackcreatures", new Setting("attackcreatures", "allows them to attack creatures", true, boolean.class));
     	
     	//Array settings
-    	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, Object[].class));
-    	s.settings.put("activateList", new Setting("activateList", "List of allowed blocks to be activated", null, Object[].class));
-    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers to be accessed", null, Object[].class));
-    	s.settings.put("attackmobsList", new Setting("attackmobsList", "List of allowed mobs to be attacked", null, Object[].class));
-    	s.settings.put("attackcreaturesList", new Setting("attackcreaturesList", "List of allowed creatures to be attacked", null, Object[].class));
+    	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, List.class));
+    	s.settings.put("activateList", new Setting("activateList", "List of allowed blocks to be activated", null, List.class));
+    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers to be accessed", null, List.class));
+    	s.settings.put("attackmobsList", new Setting("attackmobsList", "List of allowed mobs to be attacked", null, List.class));
+    	s.settings.put("attackcreaturesList", new Setting("attackcreaturesList", "List of allowed creatures to be attacked", null, List.class));
     	return s;
     }
 }
