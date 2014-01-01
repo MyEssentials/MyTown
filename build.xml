@@ -6,7 +6,7 @@
 	<target name="clean">
 		<delete file="${environment.mcp_location}/src/minecraft/mcmod.info" />
 		<delete dir="${environment.mcp_location}/src/minecraft/com/sperion" />
-		<delete dir="${environment.mcp_location}/src/minecraft/ee" />
+		<delete dir="${environment.mcp_location}/src/minecraft/mytown" />
 		<delete dir="${environment.mcp_location}/src/minecraft/ic2" />
 		<delete dir="${environment.mcp_location}/src/minecraft/mithion" />
 		<delete dir="${environment.mcp_location}/src/minecraft/mods" />
@@ -29,8 +29,8 @@
 	</target>
 
     <target name="replace_tokens">
-        <replace dir="${environment.mcp_location}/src/minecraft/ee" token="@VERSION@" value="${build.mod_version}" />
-        <replace dir="${environment.mcp_location}/src/minecraft/ee" token="@BUILD_NUMBER@" value="${build.build_number}" />
+        <replace dir="${environment.mcp_location}/src/minecraft/mytown" token="@VERSION@" value="${build.mod_version}" />
+        <replace dir="${environment.mcp_location}/src/minecraft/mytown" token="@BUILD_NUMBER@" value="${build.build_number}" />
         <replace file="${environment.mcp_location}/src/minecraft/mcmod.info" token="@VERSION@" value="${build.mod_version}" />
         <replace file="${environment.mcp_location}/src/minecraft/mcmod.info" token="@BUILD_NUMBER@" value="${build.build_number}" />
     </target>
