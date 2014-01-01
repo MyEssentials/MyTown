@@ -132,7 +132,7 @@ public class ProtectionEvents implements ITickHandler {
     }
 
     @Override
-    public void tickStart(EnumSet<TickType> type, Object... tickData) {
+    public synchronized void tickStart(EnumSet<TickType> type, Object... tickData) {
         if (!enabled) {
             return;
         }

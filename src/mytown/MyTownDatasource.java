@@ -151,7 +151,7 @@ public class MyTownDatasource extends MyTownDB {
         return residents.get(player.getEntityName().toLowerCase());
     }
 
-    public Resident getOrMakeResident(String name) // case in-sensitive
+    public synchronized Resident getOrMakeResident(String name) // case in-sensitive
     {
         Resident res = residents.get(name.toLowerCase());
 
