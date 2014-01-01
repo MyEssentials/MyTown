@@ -130,8 +130,11 @@ public class TinkersConstruct extends ProtBase {
 
     private boolean canBe(int dim, double x, double yFrom, double yTo, double z) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
-            if (yTo < b.settings.get("core").getSetting("yfrom").getValue(Integer.class) || yFrom > b.settings.get("core").getSetting("yto").getValue(Integer.class)) {
+        if (b != null && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+        	String[] ycheck = b.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+        	int yto = Integer.parseInt(ycheck[0]);
+        	int yfrom = Integer.parseInt(ycheck[1]);
+            if (yTo < yto || yFrom > yfrom) {
                 b = b.getFirstFullSidingClockwise(b.town());
             }
         }

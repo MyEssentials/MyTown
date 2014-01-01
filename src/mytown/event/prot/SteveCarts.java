@@ -105,8 +105,11 @@ public class SteveCarts extends ProtBase {
 
     private boolean canRoam(int dim, double x, double yFrom, double yTo, double z, boolean miner) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
-            if (yTo < b.settings.get("core").getSetting("yfrom").getValue(Integer.class) || yFrom > b.settings.get("core").getSetting("yto").getValue(Integer.class)) {
+        if (b != null && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+        	String[] ycheck = b.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+        	int yto = Integer.parseInt(ycheck[0]);
+        	int yfrom = Integer.parseInt(ycheck[1]);
+            if (yTo < yto || yFrom > yfrom) {
                 b = b.getFirstFullSidingClockwise(b.town());
             }
         }
@@ -137,36 +140,4 @@ public class SteveCarts extends ProtBase {
     public String getComment() {
         return "Town permission: allowStevecartsMiners & allowStevecartsRailers";
     }
-    /*
-     * //fCargo.setAccessible(true); //mIsValidForTrack.setAccessible(true);
-     * module = railerModules.get(0); // will always return false if the miner
-     * is under ground because the miner first removes the wall //if
-     * (tryWorkRailer(module, next)) //{
-     * 
-     * boolean hasRails = false; for (Object railer : railerModules) {
-     * ItemStack[] cargo = (ItemStack[])fCargo.get(railer);
-     * 
-     * for (int i = 0; i < cargo.length; i++) { ItemStack stack = cargo[i]; if
-     * (stack == null) continue;
-     * 
-     * hasRails = true; cargo[i] = null; e.entityDropItem(stack, 1); } } if
-     * (hasRails) Log.severe(String.format(
-     * "§4A railer steve cart found in %s at dim %s, %s,%s,%s. Dropping rails.",
-     * b == null || b.town() == null ? "wilderness" : b.town().name(),
-     * e.dimension, (int)next.xCoord, (int)next.yCoord, (int)next.zCoord));
-     * 
-     * 
-     * private boolean tryWorkRailer(Object cart, Vec3 next) throws
-     * IllegalAccessException, IllegalArgumentException,
-     * InvocationTargetException { int x = (int)next.xCoord; int y =
-     * (int)next.yCoord; int z = (int)next.zCoord;
-     * 
-     * return canPlaceTrack(cart, x, y + 1, z) || canPlaceTrack(cart, x, y, z)
-     * || canPlaceTrack(cart, x, y - 1, z); }
-     * 
-     * private boolean canPlaceTrack(Object cart, int i, int j, int k) throws
-     * IllegalAccessException, IllegalArgumentException,
-     * InvocationTargetException { return (Boolean)mIsValidForTrack.invoke(cart,
-     * i, j, k, true); }
-     */
 }
