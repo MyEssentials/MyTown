@@ -21,9 +21,7 @@ import mytown.entities.TownBlock;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
-import com.sperion.forgeperms.Log;
 
 public class MyTownResident {
     public static List<String> getAutoComplete(ICommandSender cs, String[] args) {
@@ -140,9 +138,10 @@ public class MyTownResident {
                 } else {
                 	String action = args[3];
 					if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 3) {
-						MyTownResident.setPermission(cs, type, args[2], args[4], args[5]);
+						setPermission(cs, type, args[2], args[4], args[5]);
 					} else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {
 						Assert.Perm(cs, "mytown.cmd.perm.show." + type + "." + args[2] + "." + args[4]);
+						flushPermissions(cs, type, args[2], args[4], args[5]);
 					} else {
 						MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
 					}
@@ -182,6 +181,22 @@ public class MyTownResident {
       	}
     	
     	return setCollection;
+    }
+
+    private static void flushPermissions(ICommandSender sender, String type, String collection, String key, String value) throws CommandException {
+		Resident res = MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName());
+        SettingCollection set = getCollection(sender, type, collection);
+
+        if (set.getChildren().size() < 1) {
+            throw new CommandException(Term.ErrPermNoChilds);
+        }
+
+        if (type.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
+            throw new CommandException(Term.ErrPermRankNotEnough);
+        }
+
+        set.forceChildsToInherit(value);
+        MyTown.sendChatToPlayer(sender, Term.PermForced.toString(type, value == null || value.equals("") ? "all" : value));
     }
     
     private static void setPermission(ICommandSender sender, String type, String collection, String key, String value) throws CommandException, NoAccessException {

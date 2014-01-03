@@ -21,7 +21,6 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.DimensionManager;
 
 import com.sperion.forgeperms.ForgePerms;
-import com.sperion.forgeperms.Log;
 
 public class Town {
     public static int minDistanceFromOtherTown = 5;
@@ -517,7 +516,6 @@ public class Town {
     }
 
     public void deserializeExtra(String val) {
-    	Log.info(val);
         String[] parts = val.split(";");
         if (parts.length > 0) {
             Iterator<SettingCollection> setIt = settings.values().iterator();

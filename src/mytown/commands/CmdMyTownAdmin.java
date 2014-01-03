@@ -30,8 +30,6 @@ import net.minecraft.server.MinecraftServer;
 
 import com.sperion.forgeperms.ForgePerms;
 
-//import ee.lutsu.alpha.mc.mytown.Permissions;
-
 public class CmdMyTownAdmin extends CommandBase {
     @Override
     public String getCommandName() {
@@ -277,41 +275,25 @@ public class CmdMyTownAdmin extends CommandBase {
                     return;
                 }
                 
+                String type = var2[1];
+                if (!type.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && !type.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString()) && !type.equalsIgnoreCase(Term.TownadmCmdPermArgsServer.toString()) && !type.equalsIgnoreCase(Term.TownadmCmdPermArgsWild.toString()) && !type.toLowerCase().startsWith(Term.TownadmCmdPermArgsWild2.toString().toLowerCase())) {
+                    MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdPerm.toString(), Term.TownadmCmdPermArgs.toString(), Term.TownadmCmdPermDesc.toString(), color));
+                    return;
+                }
                 
-
-//                String node = var2[1];
-//                if (!node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && !node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString()) && !node.equalsIgnoreCase(Term.TownadmCmdPermArgsServer.toString()) && !node.equalsIgnoreCase(Term.TownadmCmdPermArgsWild.toString())
-//                        && !node.toLowerCase().startsWith(Term.TownadmCmdPermArgsWild2.toString().toLowerCase())) {
-//                    MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdPerm.toString(), Term.TownadmCmdPermArgs.toString(), Term.TownadmCmdPermDesc.toString(), color));
-//                    return;
-//                }
-//
-//                if (var2.length < 3) // show
-//                {
-//                    if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.show." + node)) {
-//                        MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
-//                        return;
-//                    }
-//                    showPermissions(cs, node);
-//                } else {
-//                    String action = var2[2];
-//                    if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Set.toString()) && var2.length > 3) {
-//                        if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.set." + node + "." + var2[3])) {
-//                            MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
-//                            return;
-//                        }
-//                        setPermissions(cs, node, var2[3], var2.length > 4 ? var2[4] : null);
-//                    } else if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Force.toString())) {
-//                        if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.perm.force." + node)) {
-//                            MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
-//                            return;
-//                        }
-//
-//                        flushPermissions(cs, node, var2.length > 3 ? var2[3] : null);
-//                    } else {
-//                        MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdPerm.toString(), Term.TownadmCmdPermArgs.toString(), Term.TownadmCmdPermDesc.toString(), color));
-//                    }
-//                }
+                if (var2.length == 3){
+                	showSettingCollection(cs, type, var2[2]);
+                } else {
+                	String action = var2[3];
+					if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Set.toString()) && var2.length > 3) {
+						setPermission(cs, type, var2[2], var2[4], var2[5]);
+					} else if (action.equalsIgnoreCase(Term.TownadmCmdPermArgs2Force.toString())) {
+						Assert.Perm(cs, "mytown.cmd.perm.show." + type + "." + var2[2] + "." + var2[4]);
+						flushPermissions(cs, type, var2[2], var2[4], var2[5]);
+					} else {
+						Formatter.formatAdminCommand(Term.TownadmCmdPerm.toString(), Term.TownadmCmdPermArgs.toString(), Term.TownadmCmdPermDesc.toString(), color);
+					}
+                }
             } else if (var2[0].equalsIgnoreCase(Term.TownadmCmdUnclaim.toString())){
                 if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.unclaim")) {
                     MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
@@ -493,11 +475,34 @@ public class CmdMyTownAdmin extends CommandBase {
     		}
     	} else if(type.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())){
     		setCollection = res.settings.get(collection);
-    	} else{
+    	} else if (type.equalsIgnoreCase(Term.TownadmCmdPermArgsServer.toString())) {
+    		setCollection = MyTown.instance.serverSettings;
+        } else if (type.equalsIgnoreCase(Term.TownadmCmdPermArgsWild.toString())) {
+        	setCollection = MyTown.instance.serverWildSettings;
+        } else if (type.toLowerCase().startsWith(Term.TownadmCmdPermArgsWild2.toString().toLowerCase())) {
+            int dim = Integer.parseInt(type.substring(Term.TownadmCmdPermArgsWild2.toString().length()));
+            setCollection = MyTown.instance.getWorldWildSettings(dim);
+        } else{
             throw new CommandException(Term.ErrPermSettingCollectionNotFound, collection);
       	}
     	
     	return setCollection;
+    }
+
+    private static void flushPermissions(ICommandSender sender, String type, String collection, String key, String value) throws CommandException {
+		Resident res = MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName());
+        SettingCollection set = getCollection(sender, type, collection);
+
+        if (set.getChildren().size() < 1) {
+            throw new CommandException(Term.ErrPermNoChilds);
+        }
+
+        if (type.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
+            throw new CommandException(Term.ErrPermRankNotEnough);
+        }
+
+        set.forceChildsToInherit(value);
+        MyTown.sendChatToPlayer(sender, Term.PermForced.toString(type, value == null || value.equals("") ? "all" : value));
     }
     
     private static void setPermission(ICommandSender sender, String type, String collection, String key, String value) throws CommandException, NoAccessException {

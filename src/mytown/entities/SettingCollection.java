@@ -266,14 +266,14 @@ public class SettingCollection {
     	s.settings.put("loot", new Setting("loot", "Allows them to pickup items", false, boolean.class));
     	s.settings.put("open", new Setting("open", "Allows them to open doors, trapdoors, etc", false, boolean.class));
     	s.settings.put("activate", new Setting("activate", "Allows them to activate buttons, switches, etc", false, boolean.class));
-    	s.settings.put("container", new Setting("container", "Allows them to open containers (chests, machines, etc)", false, boolean.class));
+    	s.settings.put("container", new Setting("container", "Allows them to open containers", false, boolean.class));
     	s.settings.put("attackmobs", new Setting("attackmobs", "allows them to attack mobs", false, boolean.class));
     	s.settings.put("attackcreatures", new Setting("attackcreatures", "allows them to attack creatures", false, boolean.class));
     	
     	//Array settings
     	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, List.class));
     	s.settings.put("activateList", new Setting("activateList", "List of allowed blocks to be activated", null, List.class));
-    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers to be accessed", null, List.class));
+    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers", null, List.class));
     	s.settings.put("attackmobsList", new Setting("attackmobsList", "List of allowed mobs to be attacked", null, List.class));
     	s.settings.put("attackcreaturesList", new Setting("attackcreaturesList", "List of allowed creatures to be attacked", null, List.class));
     	return s;
@@ -291,14 +291,14 @@ public class SettingCollection {
     	s.settings.put("loot", new Setting("loot", "Allows them to pickup items", true, boolean.class));
     	s.settings.put("open", new Setting("open", "Allows them to open doors, trapdoors, etc", true, boolean.class));
     	s.settings.put("activate", new Setting("activate", "Allows them to activate buttons, switches, etc", true, boolean.class));
-    	s.settings.put("container", new Setting("container", "Allows them to open containers (chests, machines, etc)", true, boolean.class));
+    	s.settings.put("container", new Setting("container", "Allows them to open containers", true, boolean.class));
     	s.settings.put("attackmobs", new Setting("attackmobs", "allows them to attack mobs", true, boolean.class));
     	s.settings.put("attackcreatures", new Setting("attackcreatures", "allows them to attack creatures", true, boolean.class));
     	
     	//Array settings
     	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, List.class));
     	s.settings.put("activateList", new Setting("activateList", "List of allowed blocks to be activated", null, List.class));
-    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers to be accessed", null, List.class));
+    	s.settings.put("containerList", new Setting("containerList", "List of allowed containers", null, List.class));
     	s.settings.put("attackmobsList", new Setting("attackmobsList", "List of allowed mobs to be attacked", null, List.class));
     	s.settings.put("attackcreaturesList", new Setting("attackcreaturesList", "List of allowed creatures to be attacked", null, List.class));
     	return s;

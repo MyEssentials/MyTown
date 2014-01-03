@@ -48,15 +48,10 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
-//import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection;
-//import ee.lutsu.alpha.mc.mytown.entities.TownSettingCollection.ISettingsSaveHandler;
 
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
 public class MyTown{
-//    public TownSettingCollection serverWildSettings = new TownSettingCollection(true, true);
-//    public TownSettingCollection serverSettings = new TownSettingCollection(true, false);
-//    public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
 	public SettingCollection serverWildSettings = SettingCollection.generateCoreSettings();
 	public SettingCollection serverSettings = SettingCollection.generateCoreSettings();
     public Map<Integer, SettingCollection> worldWildSettings = new HashMap<Integer, SettingCollection>();
