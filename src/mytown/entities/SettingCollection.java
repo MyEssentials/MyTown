@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import mytown.MyTown;
+import mytown.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -70,10 +70,10 @@ public class SettingCollection {
 	 * Shows all the permissions to the given ICommandSender
 	 * @param cs
 	 * @param title
-	 * @param node
+	 * @param type
 	 * @param all
 	 */
-    public void show(ICommandSender cs, String title, String node, boolean all) {
+    public String show(ICommandSender cs, String title, String type, boolean all) {
         EntityPlayer p = (EntityPlayer) cs;
     	Iterator<Setting> it = settings.values().iterator();
     	Setting set;
@@ -82,13 +82,13 @@ public class SettingCollection {
         
         while (it.hasNext()){
         	set = it.next();
-            if (all || ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getName())) {
+            if (all || ForgePerms.getPermissionManager().canAccess(p.getCommandSenderName(), p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.show." + type + "." + set.getName())) {
             	builder.append(set.getDisplay());
             }
         }
         builder.append("§6----------------------------");
         
-        MyTown.sendChatToPlayer(cs, builder.toString());
+        return builder.toString();
     }
 	
     /**
@@ -136,12 +136,21 @@ public class SettingCollection {
             saveHandler.save(this, tag);
         }
     }
-	
+
     /**
-     * Splits the given string and loads the appropriate setting
+     * Splits the given string and loads the appropriate setting and refreshes
      * @param val
      */
 	public void deserialize(String val){
+		deserializeNoRefresh(val);
+		refresh();
+	}
+
+    /**
+     * Splits the given string and loads the appropriate setting. But doesn't refresh
+     * @param val
+     */
+	public void deserializeNoRefresh(String val){
         if (val == null || val.isEmpty() || val.equals("")) {
             return;
         }
@@ -188,6 +197,32 @@ public class SettingCollection {
 			child.refresh();
 		}
 	}
+	
+	/**
+	 * Makes all children inherit
+	 * @param perm
+	 * @throws CommandException
+	 */
+    public void forceChildsToInherit(String perm) throws CommandException {
+        for (SettingCollection child : children) {
+            if (perm == null || perm.equals("")) {
+                child.clearValues();
+            } else {
+                child.getSetting(perm).setValue(null);
+            }
+
+            child.refresh();
+            child.forceChildsToInherit(perm);
+            child.save();
+        }
+    }
+    
+    public void clearValues(){
+    	Iterator<Setting> setIt = settings.values().iterator();
+    	while(setIt.hasNext()){
+    		setIt.next().setValue(null);
+    	}
+    }
 
     public interface ISettingsSaveHandler {
         void save(SettingCollection sender, Object tag);

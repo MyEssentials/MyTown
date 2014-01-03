@@ -1,6 +1,7 @@
 package mytown.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -143,8 +144,18 @@ public class Town {
             canAddBlock(home, true, null);
         }
     }
+    
+    private void createSettings(){
+    	settings = new HashMap<String, SettingCollection>();
+    	settings.put("core", SettingCollection.generateCoreSettings());
+    	settings.put("town", SettingCollection.generateTownMemberSettings());
+    	settings.put("friend", SettingCollection.generateTownMemberSettings());
+    	settings.put("out", SettingCollection.generateOutsiderSettings());
+    	settings.put("nation", SettingCollection.generateOutsiderSettings());
+    }
 
     public Town(String pName, Resident creator, TownBlock home) throws CommandException {
+    	createSettings();
         assertNewTownParams(pName, creator, home);
 
         id = -1;
@@ -176,6 +187,7 @@ public class Town {
      * Used by SQL loading
      */
     public Town(int pId, String pName, int pExtraBlocks, List<TownBlock> pBlocks, String extra) {
+    	createSettings();
         id = pId;
         name = pName;
         extraBlocks = pExtraBlocks;

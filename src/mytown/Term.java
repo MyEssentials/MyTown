@@ -206,7 +206,7 @@ public enum Term {
             "Cannot delete the town when in a nation"),
 
     // permissions - town command
-    TownCmdPerm("perm"), TownCmdPermArgs("town|res|plot [force [key]|set key [val]]"), TownCmdPermArgsTown("town"), TownCmdPermArgsResident("res"), TownCmdPermArgsPlot("plot"), TownCmdPermArgs2Set("set"), TownCmdPermArgs2Force("force"), TownCmdPermDesc("Shows, sets or forces the permissions"),
+    TownCmdPerm("perm"), TownCmdPermArgs("[town|res|plot] [core|out|town|nation|friends] [force [key]|set key [val]]"), TownCmdPermArgsTown("town"), TownCmdPermArgsResident("res"), TownCmdPermArgsPlot("plot"), TownCmdPermArgs2Set("set"), TownCmdPermArgs2Force("force"), TownCmdPermDesc("Shows, sets or forces the permissions"),
 
     // permissions - town admin command
     TownadmCmdPerm("perm"), TownadmCmdPermArgs("town|plot|server|wild|wild:# [(force [key])|(set key [val])]"), TownadmCmdPermArgsServer("server"), TownadmCmdPermArgsWild("wild"), TownadmCmdPermArgsWild2("wild:"), TownadmCmdPermArgs2Set("set"), TownadmCmdPermArgs2Force("force"), TownadmCmdPermDesc(

@@ -1,5 +1,6 @@
 package mytown.entities;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,10 +44,12 @@ public class TownBlock {
         town = val;
         String key;
         SettingCollection set;
+        Entry<String, SettingCollection> entry;
         Iterator<Entry<String, SettingCollection>> setIt = settings.entrySet().iterator();
         while(setIt.hasNext()){
-        	key = setIt.next().getKey();
-        	set = setIt.next().getValue();
+        	entry = setIt.next();
+        	key = entry.getKey();
+        	set = entry.getValue();
         	set.setParent(town == null ? null : owner != null ? owner.settings.get(key) : town.settings.get("core"));
         }
     }
@@ -60,10 +63,12 @@ public class TownBlock {
         owner = val;
         String key;
         SettingCollection set;
+        Entry<String, SettingCollection> entry;
         Iterator<Entry<String, SettingCollection>> setIt = settings.entrySet().iterator();
         while(setIt.hasNext()){
-        	key = setIt.next().getKey();
-        	set = setIt.next().getValue();
+        	entry = setIt.next();
+        	key = entry.getKey();
+        	set = entry.getValue();
         	set.setParent(town == null ? null : owner != null ? owner.settings.get(key) : town.settings.get("core"));
         }
     }
@@ -72,6 +77,7 @@ public class TownBlock {
     public Map<String, SettingCollection> settings;
 
     public TownBlock(int pWorld, int x, int z) {
+    	settings = new HashMap<String, SettingCollection>();
     	settings.put("core", SettingCollection.generateCoreSettings());
     	settings.put("town", SettingCollection.generateTownMemberSettings());
     	settings.put("friend", SettingCollection.generateTownMemberSettings());

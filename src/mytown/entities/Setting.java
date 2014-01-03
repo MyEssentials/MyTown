@@ -88,6 +88,10 @@ public class Setting {
 	 * @param set
 	 */
 	public void setValue(Setting set){
+		if (set==null){  //If null is passed to setValue it always calls this
+			value = null;
+			return;
+		}
 		setValue(set.value);
 	}
 	

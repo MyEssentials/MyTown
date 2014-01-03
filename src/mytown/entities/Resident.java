@@ -153,13 +153,7 @@ public class Resident {
         return lastLoginOn;
     }
     
-    public Map<String, SettingCollection> settings = new HashMap<String, SettingCollection>();
-
-//    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
-//    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
-//    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
-//    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
-//    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
+    public Map<String, SettingCollection> settings;
     public SavedHomeList home = new SavedHomeList(this);
     public PayHandler pay = new PayHandler(this);
 
@@ -175,6 +169,7 @@ public class Resident {
     }
 
     protected Resident() {
+    	settings = new HashMap<String, SettingCollection>();
     	settings.put("core", SettingCollection.generateCoreSettings());
     	settings.put("town", SettingCollection.generateTownMemberSettings());
     	settings.put("friend", SettingCollection.generateTownMemberSettings());
@@ -279,11 +274,14 @@ public class Resident {
 			return canInteract(null, setting);
 		}
 		
-		if (targetBlock.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
-			if (y < targetBlock.settings.get("core").getSetting("yfrom").getValue(Integer.class) || y > targetBlock.settings.get("core").getSetting("yto").getValue(Integer.class)) {
-				targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
-			}
-		}
+        if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+        	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+        	int yto = Integer.parseInt(ycheck[0]);
+        	int yfrom = Integer.parseInt(ycheck[1]);
+            if (y < yto || y > yfrom) {
+            	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+            }
+        }
 			
 			
 		return canInteract(targetBlock, setting);
@@ -374,10 +372,13 @@ public class Resident {
             }
 
             if (targetBlock != null && targetBlock.town() != null) {
-                if (targetBlock.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
+                if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
                     int y = (int) e.posY;
-                    if (y < targetBlock.settings.get("core").getSetting("yfrom").getValue(Integer.class) || y > targetBlock.settings.get("core").getSetting("yto").getValue(Integer.class)) {
-                        targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+                	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+                	int yto = Integer.parseInt(ycheck[0]);
+                	int yfrom = Integer.parseInt(ycheck[1]);
+                    if (y < yto || y > yfrom) {
+                    	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
                     }
                 }
 
@@ -387,10 +388,13 @@ public class Resident {
             }
             TownBlock sourceBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, onlinePlayer.chunkCoordX, onlinePlayer.chunkCoordZ);
             if (sourceBlock != null && sourceBlock.town() != null) {
-                if (sourceBlock.settings.get("core").getSetting("yon").getValue(Boolean.class)) {
+                if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
                     int y = (int) e.posY;
-                    if (y < sourceBlock.settings.get("core").getSetting("yfrom").getValue(Integer.class) || y > sourceBlock.settings.get("core").getSetting("yto").getValue(Integer.class)) {
-                        sourceBlock = sourceBlock.getFirstFullSidingClockwise(sourceBlock.town());
+                	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+                	int yto = Integer.parseInt(ycheck[0]);
+                	int yfrom = Integer.parseInt(ycheck[1]);
+                    if (y < yto || y > yfrom) {
+                    	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
                     }
                 }
 
@@ -581,7 +585,7 @@ public class Resident {
                     beingBounced = false;
                 }
             } else {
-                checkYMovement = block.settings.get("core").getSetting("yon").getValue(Boolean.class) ? block : null;
+                checkYMovement = (block.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty() || block.settings.get("core").getSetting("ycheck").getValue(String.class).equalsIgnoreCase("0,255")) ? block : null;
 
                 if (block.owner() != location2 || block.town() != location) {
                     if (block.town() != location) {
@@ -676,6 +680,7 @@ public class Resident {
             }
 
             world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
+            
             pl.setLocationAndAngles(h.x, h.y, h.z, h.look1, h.look2);
         }
 

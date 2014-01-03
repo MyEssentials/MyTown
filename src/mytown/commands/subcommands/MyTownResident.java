@@ -15,9 +15,15 @@ import mytown.Term;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Setting;
+import mytown.entities.SettingCollection;
 import mytown.entities.Town;
+import mytown.entities.TownBlock;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import com.google.common.base.Joiner;
+import com.sperion.forgeperms.ForgePerms;
+import com.sperion.forgeperms.Log;
 
 public class MyTownResident {
     public static List<String> getAutoComplete(ICommandSender cs, String[] args) {
@@ -124,118 +130,86 @@ public class MyTownResident {
                     return true;
                 }
 
-                String node = args[1];
-                if (!node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && !node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString()) && !node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
+                String type = args[1];
+                if (!type.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && !type.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString()) && !type.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
                     MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
                 }
                 
-                if (args.length == 2){
-                	
+                if (args.length == 3){
+                	showSettingCollection(cs, type, args[2]);
+                } else {
+                	String action = args[3];
+					if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 3) {
+						MyTownResident.setPermission(cs, type, args[2], args[4], args[5]);
+					} else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {
+						Assert.Perm(cs, "mytown.cmd.perm.show." + type + "." + args[2] + "." + args[4]);
+					} else {
+						MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
+					}
                 }
-
-//                if (args.length < 3) // show
-//                {
-//                    Assert.Perm(cs, "mytown.cmd.perm.show." + node);
-//                    showPermissions(cs, res, node);
-//                } else {
-//                    String action = args[2];
-//                    if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 3) {
-//                        Assert.Perm(cs, "mytown.cmd.perm.set." + node + "." + args[3]);
-//
-//                        setPermissions(cs, res, node, args[3], args.length > 4 ? args[4] : null);
-//                    } else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {
-//                        Assert.Perm(cs, "mytown.cmd.perm.force." + node + "." + (args.length > 3 ? args[3] : "all"));
-//
-//                        flushPermissions(cs, res, node, args.length > 3 ? args[3] : null);
-//                    } else {
-//                        MyTown.sendChatToPlayer(cs, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), color));
-//                    }
-//                }
             }
         }
 
         return handled;
     }
     
-    private static void showSettingCollection(ICommandSender sender, String collection){
+    private static SettingCollection getCollection(ICommandSender sender, String type, String collection) throws CommandException {
+		Resident res = MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName());
+		SettingCollection setCollection = null;
+    	if (type.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) || type.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())){
+    		Town town = res.town();
+    		if (town == null){
+              throw new CommandException(Term.ErrPermYouDontHaveTown);
+    		}
+    		
+    		if (type.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())){
+    			setCollection = town.settings.get(collection);
+    		} else{
+				TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
+				if (block == null || block.town() == null) {
+					throw new CommandException(Term.ErrPermPlotNotInTown);
+				}
+				
+				if (block.town() != res.town()) {
+					throw new CommandException(Term.ErrPermPlotNotInYourTown);
+				}
+				setCollection = block.settings.get(collection);
+    		}
+    	} else if(type.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())){
+    		setCollection = res.settings.get(collection);
+    	} else{
+            throw new CommandException(Term.ErrPermSettingCollectionNotFound, collection);
+      	}
+    	
+    	return setCollection;
     }
+    
+    private static void setPermission(ICommandSender sender, String type, String collection, String key, String value) throws CommandException, NoAccessException {
+		Assert.Perm(sender, "mytown.cmd.perm.set." + type + "." + collection + "." + key + "." + value);
+		SettingCollection setCollection = getCollection(sender, type, collection);
+		setCollection.getSetting(key).setValue(value);
+		showSettingCollection(sender, type, collection);
+    }
+    
+    private static void showSettingCollection(ICommandSender sender, String type, String collection) throws CommandException {
+		Resident res = MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName());
+		SettingCollection setCollection = getCollection(sender, type, collection);
+		if (setCollection == null) return;
+		String title = "";
+    	
+    	Iterator<Setting> it = setCollection.getSettings().values().iterator();
+    	Setting set;
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("§6-- §e%s permissions for %s§6 --\n", collection, title));
+        
+        while (it.hasNext()){
+        	set = it.next();
+            if (ForgePerms.getPermissionManager().canAccess(res.onlinePlayer.getCommandSenderName(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.perm.show." + type + "." + collection + "." + set.getName())) {
+            	builder.append(set.getDisplay());
+            }
+        }
+        builder.append("§6----------------------------");
 
-//    private static SettingCollection getPermNode(String node, Resident res) throws CommandException {
-//        SettingCollection set = null;
-//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
-//            if (res.town() == null) {
-//                throw new CommandException(Term.ErrPermYouDontHaveTown);
-//            }
-//
-//            set = res.town().coreSettings;
-//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
-//            set = res.coreSettings;
-//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
-//            TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
-//            if (block == null || block.town() == null) {
-//                throw new CommandException(Term.ErrPermPlotNotInTown);
-//            }
-//
-//            if (block.town() != res.town()) {
-//                throw new CommandException(Term.ErrPermPlotNotInYourTown);
-//            }
-//
-//            set = block.coreSettings;
-//        } else {
-//            throw new CommandException(Term.ErrPermSettingCollectionNotFound, node);
-//        }
-//
-//        return set;
-//    }
-//
-//    private static void showPermissions(ICommandSender sender, Resident res, String node) throws CommandException {
-//        SettingCollection set = getPermNode(node, res);
-//
-//        String title = "";
-//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
-//            title = "your town '" + res.town().name() + "' (default for residents)";
-//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsResident.toString())) {
-//            title = "you '" + res.name() + "'";
-//        } else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
-//            TownBlock block = (TownBlock) set.tag;
-//            title = String.format("the plot @ dim %s, %s,%s owned by '%s'", block.worldDimension(), block.x(), block.z(), block.ownerDisplay());
-//        }
-//
-//        set.show(sender, title, node, false);
-//    }
-//
-//    private static void flushPermissions(ICommandSender sender, Resident res, String node, String perm) throws CommandException {
-//        SettingCollection set = getPermNode(node, res);
-//
-//        if (set.getChildren().size() < 1) {
-//            throw new CommandException(Term.ErrPermNoChilds);
-//        }
-//
-//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
-//            throw new CommandException(Term.ErrPermRankNotEnough);
-//        }
-//
-////        set.forceChildsToInherit(perm);
-//        MyTown.sendChatToPlayer(sender, Term.PermForced.toString(node, perm == null || perm.equals("") ? "all" : perm));
-//    }
-//
-//    private static void setPermissions(ICommandSender sender, Resident res, String node, String key, String val) throws CommandException {
-//        SettingCollection set = getPermNode(node, res);
-//
-//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
-//            throw new CommandException(Term.ErrPermRankNotEnough);
-//        }
-//
-//        if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString()) && res.rank() == Rank.Resident) {
-//            TownBlock b = (TownBlock) set.tag;
-//            if (b.owner() != res) {
-//                throw new CommandException(Term.ErrPermRankNotEnough);
-//            }
-//        }
-//
-//        set.getSetting(key).setValue(val);
-//
-//        showPermissions(sender, res, node);
-//        MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));
-//    }
+        MyTown.sendChatToPlayer(sender, builder.toString());
+    }
 }
