@@ -77,32 +77,22 @@ public class TownBlock {
     public Map<String, SettingCollection> settings;
 
     public TownBlock(int pWorld, int x, int z) {
-    	settings = new HashMap<String, SettingCollection>();
-    	settings.put("core", SettingCollection.generateCoreSettings());
-    	settings.put("town", SettingCollection.generateTownMemberSettings());
-    	settings.put("friend", SettingCollection.generateTownMemberSettings());
-    	settings.put("out", SettingCollection.generateOutsiderSettings());
-    	settings.put("nation", SettingCollection.generateOutsiderSettings());
-    	
-        world_dimension = pWorld;
-        chunkX = x;
-        chunkZ = z;
-        
         ISettingsSaveHandler saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(SettingCollection sender, Object tag) {
                 ((TownBlock) tag).save();
             }
         };
-        
-
-        Iterator<SettingCollection> setIt = settings.values().iterator();
-        SettingCollection set;
-        while(setIt.hasNext()){
-        	set = setIt.next();
-        	set.tag = this;
-        	set.saveHandler = saveHandler;
-        }
+    	settings = new HashMap<String, SettingCollection>();
+    	settings.put("core", SettingCollection.generateCoreSettings(this, saveHandler));
+    	settings.put("town", SettingCollection.generateTownMemberSettings(this, saveHandler));
+    	settings.put("friend", SettingCollection.generateTownMemberSettings(this, saveHandler));
+    	settings.put("out", SettingCollection.generateOutsiderSettings(this, saveHandler));
+    	settings.put("nation", SettingCollection.generateOutsiderSettings(this, saveHandler));
+    	
+        world_dimension = pWorld;
+        chunkX = x;
+        chunkZ = z;
     }
 
     public static TownBlock deserialize(String info) {

@@ -52,7 +52,7 @@ import cpw.mods.fml.common.IPlayerTracker;
 
 public class PlayerEvents implements IPlayerTracker {
     public static boolean disableAutoChatChannelUsage;
-    public int explosionRadius = 6;  //IC2 Mining Laser explosion radius
+    public int explosionRadius = 6;  //IC2 Mining Laser explosion radius  TODO: See about getting from the config
     
     @ForgeSubscribe
     public void laserHitEntity(LaserEvent.LaserHitsEntityEvent event){
@@ -329,6 +329,7 @@ public class PlayerEvents implements IPlayerTracker {
         Resident res = MyTownDatasource.instance.getOrMakeResident(event.player);
         
         if (!res.canInteract((int)event.player.posX, (int)event.player.posY, (int)event.player.posZ, "roam")){
+        	MyTown.sendChatToPlayer(res.onlinePlayer, "You can't drop items here!");
         	event.setCanceled(true);
         }
     }
@@ -336,11 +337,14 @@ public class PlayerEvents implements IPlayerTracker {
     @ForgeSubscribe
     public void entityEnterChunk(EntityEvent.EnteringChunk event){
         if (event.isCanceled() || event.entity == null || !(event.entity instanceof EntityPlayer)) return;
-        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.entity);
-        if (res == null) return;
-        res.checkLocation();
-        if (res.mapMode)
-        	res.sendLocationMap(res.onlinePlayer.dimension, ChunkCoord.getCoord(res.onlinePlayer.posX), ChunkCoord.getCoord(res.onlinePlayer.posZ));
+        
+        if (event.entity instanceof EntityPlayer){
+            Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.entity);
+            if (res == null) return;
+            res.checkLocation();
+            if (res.mapMode)
+            	res.sendLocationMap(res.onlinePlayer.dimension, ChunkCoord.getCoord(res.onlinePlayer.posX), ChunkCoord.getCoord(res.onlinePlayer.posZ));
+        }
     }
 
     private MyTownDatasource source() {

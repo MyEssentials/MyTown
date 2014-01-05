@@ -109,8 +109,8 @@ public class TinkersConstruct extends ProtBase {
             int z = (int) e.posZ;
 
             if (placer == null || !(placer instanceof EntityPlayer)) {
-            	if (!Utils.canTNTBlow(e.dimension, x-explosionRadius, y-explosionRadius, y+explosionRadius, z-explosionRadius) || !Utils.canTNTBlow(e.dimension, x-explosionRadius, y-explosionRadius, y+explosionRadius, z+explosionRadius) ||
-            			!Utils.canTNTBlow(e.dimension, x+explosionRadius, y-explosionRadius, y+explosionRadius, z-explosionRadius) || !Utils.canTNTBlow(e.dimension, x+explosionRadius, y-explosionRadius, y+explosionRadius, z+explosionRadius)){
+            	if (!Utils.canBlow(e.dimension, x-explosionRadius, y-explosionRadius, y+explosionRadius, z-explosionRadius) || !Utils.canBlow(e.dimension, x-explosionRadius, y-explosionRadius, y+explosionRadius, z+explosionRadius) ||
+            			!Utils.canBlow(e.dimension, x+explosionRadius, y-explosionRadius, y+explosionRadius, z-explosionRadius) || !Utils.canBlow(e.dimension, x+explosionRadius, y-explosionRadius, y+explosionRadius, z+explosionRadius)){
             		return "TNT explosion disabled here";
             	}
             }

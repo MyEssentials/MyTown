@@ -52,8 +52,8 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
 public class MyTown{
-	public SettingCollection serverWildSettings = SettingCollection.generateCoreSettings();
-	public SettingCollection serverSettings = SettingCollection.generateCoreSettings();
+	public SettingCollection serverWildSettings;
+	public SettingCollection serverSettings;
     public Map<Integer, SettingCollection> worldWildSettings = new HashMap<Integer, SettingCollection>();
     public LinkedList<ItemIdRange> carts = null;
     public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
@@ -154,11 +154,7 @@ public class MyTown{
     	if (worldWildSettings.containsKey(w)){
     		return worldWildSettings.get(w);
     	}
-
-        SettingCollection set = SettingCollection.generateCoreSettings();
-        set.tag = new Integer(w);
-        set.setParent(serverWildSettings);
-        set.saveHandler = new ISettingsSaveHandler() {
+    	ISettingsSaveHandler saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(SettingCollection sender, Object tag) {
                 int w = (Integer) tag;
@@ -166,6 +162,9 @@ public class MyTown{
                 MyTown.instance.config.save();
             }
         };
+
+        SettingCollection set = SettingCollection.generateCoreSettings(new Integer(w), saveHandler);
+        set.setParent(serverWildSettings);
 
         worldWildSettings.put(w, set);
 

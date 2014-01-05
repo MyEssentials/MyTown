@@ -1,8 +1,6 @@
 package mytown.event.prot;
 
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.entities.TownBlock;
+import mytown.Utils;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
@@ -36,28 +34,17 @@ public class FireBall extends ProtBase {
     		radius = 7 + 2;
     	}
     		
-        int x = (int) (e.posX + e.motionX);
-        int y = (int) (e.posY + e.motionY);
-        int z = (int) (e.posZ + e.motionZ);
+        double x = e.posX + e.motionX;
+        double y = e.posY + e.motionY;
+        double z = e.posZ + e.motionZ;
         int dim = e.dimension;
 
-        if (!canBlow(dim, x - radius, y, z - radius) || !canBlow(dim, x - radius, y, z + radius) || !canBlow(dim, x + radius, y, z - radius)
-                || !canBlow(dim, x + radius, y, z + radius)) {
+        if (!Utils.canBlow(dim, x - radius, y, y, z - radius) || !Utils.canBlow(dim, x - radius, y, y, z + radius) || !Utils.canBlow(dim, x + radius, y, y, z - radius) || !Utils.canBlow(dim, x + radius, y, y, z + radius)) {
             return "Explosion would hit a protected town";
         }
 
         return null;
     }
-
-	private boolean canBlow(int dim, int x, int y, int z) {
-		TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, z);
-	
-		if (b == null || b.town() == null) {
-			return !MyTown.instance.getWorldWildSettings(dim).getSetting("fireballoff").getValue(Boolean.class);
-		}
-	
-		return !b.settings.get("core").getSetting("fireballoff").getValue(Boolean.class);
-	}
 
     @Override
     public String getMod() {

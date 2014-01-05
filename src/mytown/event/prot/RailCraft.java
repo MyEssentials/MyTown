@@ -48,7 +48,7 @@ public class RailCraft extends ProtBase {
 
             int radius = (int) Math.ceil(cart.getBlastRadius()) + 2; // 2 for safety
 
-            if (Utils.canTNTBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canTNTBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && Utils.canTNTBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canTNTBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
+            if (Utils.canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && Utils.canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
                 return null;
             }
 

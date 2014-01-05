@@ -182,7 +182,7 @@ public class IndustrialCraft extends ProtBase {
             boolean canBlow = true;
             for (int x = x1; x <= x2 && canBlow; x++) {
                 for (int z = z1; z <= z2 && canBlow; z++) {
-                    if (!Utils.canTNTBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
+                    if (!Utils.canBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
                         canBlow = false;
                     }
                 }

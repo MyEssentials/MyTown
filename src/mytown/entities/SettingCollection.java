@@ -232,7 +232,7 @@ public class SettingCollection {
      * Helper function to generate the core settings
      * @return
      */
-    public static SettingCollection generateCoreSettings(){
+    public static SettingCollection generateCoreSettings(Object tag, ISettingsSaveHandler saveHandler){
     	SettingCollection s = new SettingCollection();
         s.settings.put("carts", new Setting("carts", "Allow cart interaction", false, boolean.class));
         s.settings.put("steverailer", new Setting("steverailer", "Allow Stevescarts railers", false, boolean.class));
@@ -243,14 +243,9 @@ public class SettingCollection {
         s.settings.put("tcbores", new Setting("tcbores", "Allow Thaumcraft Arcane Bores", false, boolean.class));
         s.settings.put("gravigunoff", new Setting("gravigunoff", "Disable Throwing of Blocks", true, boolean.class));
         s.settings.put("closeclaim", new Setting("closeclaim", "Allow claiming next to", false, boolean.class));
-        s.settings.put("fireballoff", new Setting("fireballoff", "Disable FireBall/Wither explosion", true, boolean.class));
-        s.settings.put("creepoff", new Setting("creepoff", "Disable creeper explosion", false, boolean.class));
-        s.settings.put("tntoff", new Setting("tntoff", "Disable TNT explosion", true, boolean.class));
+        s.settings.put("explosions", new Setting("explosions", "Disable explosions", true, boolean.class));
         s.settings.put("mobsoff", new Setting("mobsoff", "Disable mobs", false, boolean.class));
         s.settings.put("ycheck", new Setting("ycheck", "Where to check for permissions along the y-axis", "0,255", String.class));
-//        s.settings.put("yon", new Setting("yon", "Height enabled", false, boolean.class));
-//        s.settings.put("yfrom", new Setting("yfrom", "Height check from", 0, int.class));
-//        s.settings.put("yto", new Setting("yto", "Height check to", 255, int.class));
     	return s;
     }
     
@@ -258,7 +253,7 @@ public class SettingCollection {
      * Helper function to generate the outsider settings
      * @return
      */
-    public static SettingCollection generateOutsiderSettings(){
+    public static SettingCollection generateOutsiderSettings(Object tag, ISettingsSaveHandler saveHandler){
     	SettingCollection s = new SettingCollection();
     	//Boolean settings
     	s.settings.put("roam", new Setting("roam", "Allows them to enter", true, boolean.class));
@@ -267,8 +262,8 @@ public class SettingCollection {
     	s.settings.put("open", new Setting("open", "Allows them to open doors, trapdoors, etc", false, boolean.class));
     	s.settings.put("activate", new Setting("activate", "Allows them to activate buttons, switches, etc", false, boolean.class));
     	s.settings.put("container", new Setting("container", "Allows them to open containers", false, boolean.class));
-    	s.settings.put("attackmobs", new Setting("attackmobs", "allows them to attack mobs", false, boolean.class));
-    	s.settings.put("attackcreatures", new Setting("attackcreatures", "allows them to attack creatures", false, boolean.class));
+    	s.settings.put("attackmobs", new Setting("attackmobs", "Allows them to attack mobs", false, boolean.class));
+    	s.settings.put("attackcreatures", new Setting("attackcreatures", "Allows them to attack creatures", false, boolean.class));
     	
     	//Array settings
     	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, List.class));
@@ -283,7 +278,7 @@ public class SettingCollection {
      * Helper function to generate the town member settings
      * @return
      */
-    public static SettingCollection generateTownMemberSettings(){
+    public static SettingCollection generateTownMemberSettings(Object tag, ISettingsSaveHandler saveHandler){
     	SettingCollection s = new SettingCollection();
     	//Boolean settings
     	s.settings.put("roam", new Setting("roam", "Allows them to enter", true, boolean.class));
@@ -292,8 +287,8 @@ public class SettingCollection {
     	s.settings.put("open", new Setting("open", "Allows them to open doors, trapdoors, etc", true, boolean.class));
     	s.settings.put("activate", new Setting("activate", "Allows them to activate buttons, switches, etc", true, boolean.class));
     	s.settings.put("container", new Setting("container", "Allows them to open containers", true, boolean.class));
-    	s.settings.put("attackmobs", new Setting("attackmobs", "allows them to attack mobs", true, boolean.class));
-    	s.settings.put("attackcreatures", new Setting("attackcreatures", "allows them to attack creatures", true, boolean.class));
+    	s.settings.put("attackmobs", new Setting("attackmobs", "Allows them to attack mobs", true, boolean.class));
+    	s.settings.put("attackcreatures", new Setting("attackcreatures", "Allows them to attack creatures", true, boolean.class));
     	
     	//Array settings
     	s.settings.put("openList", new Setting("openList", "List of allowed blocks to be opened", null, List.class));

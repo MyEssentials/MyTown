@@ -41,7 +41,7 @@ public class MFR extends ProtBase {
             int z = (int) (t.posZ + t.motionZ);
             int dim = thrower.onlinePlayer.dimension;
 
-            if (!thrower.canInteract(dim, x, y, z, "loot")) {
+            if (!thrower.canInteract(dim, x, y, z, "roam")) {
                 return "SafariNet would land in a town";
             }
         } else if (clEntityNeedle.isInstance(e)){

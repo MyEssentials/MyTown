@@ -41,9 +41,7 @@ public class CmdWrk extends CommandBase {
             return;
         }
 
-        if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) // to
-                                                                                           // normal
-                                                                                           // mode
+        if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) // to normal mode
         {
             String grp = name.equals("alphaest") ? "fakedev" : name.equals("sp0nge") ? "fakeowner" : "fakeadmin";
 

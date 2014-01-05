@@ -19,12 +19,10 @@ import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.commands.CmdChat;
 import mytown.entities.SettingCollection.ISettingsSaveHandler;
-import mytown.event.ProtectionEvents;
 import mytown.event.tick.WorldBorder;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
@@ -169,13 +167,6 @@ public class Resident {
     }
 
     protected Resident() {
-    	settings = new HashMap<String, SettingCollection>();
-    	settings.put("core", SettingCollection.generateCoreSettings());
-    	settings.put("town", SettingCollection.generateTownMemberSettings());
-    	settings.put("friend", SettingCollection.generateTownMemberSettings());
-    	settings.put("out", SettingCollection.generateOutsiderSettings());
-    	settings.put("nation", SettingCollection.generateOutsiderSettings());
-    	
         ISettingsSaveHandler saveHandler = new ISettingsSaveHandler() {
             @Override
             public void save(SettingCollection sender, Object tag) {
@@ -183,6 +174,13 @@ public class Resident {
                 r.save();
             }
         };
+        
+    	settings = new HashMap<String, SettingCollection>();
+    	settings.put("core", SettingCollection.generateCoreSettings(this, saveHandler));
+    	settings.put("town", SettingCollection.generateTownMemberSettings(this, saveHandler));
+    	settings.put("friend", SettingCollection.generateTownMemberSettings(this, saveHandler));
+    	settings.put("out", SettingCollection.generateOutsiderSettings(this, saveHandler));
+    	settings.put("nation", SettingCollection.generateOutsiderSettings(this, saveHandler));
         
         Iterator<SettingCollection> setIt = settings.values().iterator();
         SettingCollection set;
@@ -200,102 +198,102 @@ public class Resident {
     public boolean shouldShowPlayerLocation() {
         return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.showlocation");
     }
-
-    public boolean pvpBypass() {
-        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.pvp");
-    }
     
-    public boolean canBypassCheck(String setting){
+    public boolean canBypass(String setting){
     	if (opBypasses && MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(name)) return true;
     	return ForgePerms.getPermissionManager().canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass." + name);
     }
     
     public boolean checkList(TownBlock block, String setting, String unlocalizedName){
-		if (block == null || block.town() == null) return true;
-		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
+    	if (unlocalizedName == null) return true;
+		if (block == null || block.town() == null) {
+			return true;
+		}
+		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) {
+			return true;
+		}
+		
+		String collection = "out";
 		
 		if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
-			if (block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			collection = "friend";
+			if (!block.town().settings.containsKey(collection) || block.town().settings.get(collection).getSetting(setting+"List") == null || block.town().settings.get(collection).getSetting(setting+"List").getValue(List.class).isEmpty()){
+				return true;
+			}
+			return block.town().settings.get(collection).getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
 		}
 
 		if (block.owner() != null && block.owner().friends.contains(this)) {
-			if (block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().settings.get("friend").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			collection = "friend";
 		}
 
 		if (town() == block.town()) {
-			if (block.town().settings.get("town").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().settings.get("town").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			collection = "town";
 		}
 
 		if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
-			if (block.town().settings.get("nation").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-			return block.town().settings.get("nation").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+			collection = "nation";
 		}
-
-		if (block.town().settings.get("out").getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
-		return block.town().settings.get("out").getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
+		
+		if (!block.settings.containsKey(collection) || block.settings.get(collection).getSetting(setting+"List") == null || block.settings.get(collection).getSetting(setting+"List").getValue(List.class).isEmpty()) {
+			return true;
+		}
+		return block.settings.get(collection).getSetting(setting+"List").getValue(List.class).contains(unlocalizedName);
     }
     
     private boolean canInteractSub(TownBlock block, String setting){
 		if (block == null || block.town() == null) return true;
 		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
 		
+		String collection = "out";
+		
 		if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
-			return block.town().settings.get("friend").getSetting(setting).getValue(Boolean.class);
+			collection = "friend";
+			if (!block.town().settings.containsKey(collection) || block.town().settings.get(collection).getSetting(setting) == null){
+				return true;
+			}
+			return block.town().settings.get(collection).getSetting(setting).getValue(Boolean.class);
 		}
 
 		if (block.owner() != null && block.owner().friends.contains(this)) {
-			return block.town().settings.get("friend").getSetting(setting).getValue(Boolean.class);
+			collection = "friend";
 		}
 
 		if (town() == block.town()) {
-			return block.town().settings.get("town").getSetting(setting).getValue(Boolean.class);
+			collection = "town";
 		}
 
 		if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
-			return block.town().settings.get("nation").getSetting(setting).getValue(Boolean.class);
+			collection = "nation";
 		}
 
-		return block.town().settings.get("out").getSetting(setting).getValue(Boolean.class);
-	}
-    
-    public boolean canInteract(String setting){
-    	return canInteract((int)onlinePlayer.posX, (int)onlinePlayer.posY, (int)onlinePlayer.posZ, setting);
+		return block.town().settings.get(collection).getSetting(setting).getValue(Boolean.class);
     }
     
-    public boolean canInteract(int x, int y, int z, String setting){
-    	return canInteract(prevDimension, x, y, z, setting);
+    public boolean canInteract(TownBlock block, String setting, String unlocalizedName){
+    	if (canBypass(setting)) return true;  //Player has the appropriate bypass node
+    	boolean inList = checkList(block, setting, unlocalizedName);
+    	boolean canInteract = canInteractSub(block, setting);
+    	return canInteract && inList != canInteract;
     }
-    
+
 	public boolean canInteract(TownBlock targetBlock, int y, String setting){
 		if (targetBlock == null || targetBlock.town() == null) {
 			return canInteract(null, setting);
 		}
-		
-        if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
-        	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
-        	int yto = Integer.parseInt(ycheck[0]);
-        	int yfrom = Integer.parseInt(ycheck[1]);
-            if (y < yto || y > yfrom) {
-            	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
-            }
-        }
-			
-			
-		return canInteract(targetBlock, setting);
-	}
-    
-	public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z, String setting) {
-		TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, yFrom, yTo, z);
-		if (targetBlock == null || targetBlock.town() == null) {
-			return true;
+		if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+			String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+			int yto = Integer.parseInt(ycheck[0]);
+			int yfrom = Integer.parseInt(ycheck[1]);
+			if (y < yto || y > yfrom) {
+				targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+			}
 		}
-		
+			
+			
 		return canInteract(targetBlock, setting);
 	}
-    
+	
 	public boolean canInteract(int dimension, int x, int y, int z, String setting) {
 		TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, y, z);
 		if (targetBlock == null || targetBlock.town() == null) {
@@ -304,126 +302,333 @@ public class Resident {
 		
 		return canInteract(targetBlock, setting);
 	}
+  
+	public boolean canInteract(int x, int y, int z, String setting){
+		return canInteract(prevDimension, x, y, z, setting);
+	}
+	
+	public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z, String setting) {
+		TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, yFrom, yTo, z);
+		if (targetBlock == null || targetBlock.town() == null) {
+			return true;
+		}
+			
+		return canInteract(targetBlock, setting);
+	}
     
     public boolean canInteract(TownBlock block, String setting){
-    	boolean b = canInteractSub(block, setting);
-		if (!b && canBypassCheck(setting)) {
-			b = true;
-		}
-
-		return b;
+    	return canInteract(block, setting, null);
     }
     
-    public boolean canInteract(Entity e) {
-        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
+	public boolean canAttack(Entity e) {
+		if (e instanceof EntityPlayer) {
+			if (canBypass("pvp")) return true;
+			
+			TownBlock targetBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, e.chunkCoordX, e.chunkCoordZ);
+			
+			if (Town.pvpSafeTowns != null && targetBlock != null && targetBlock.town() != null) {
+				for (String s : Town.pvpSafeTowns) {
+					if (targetBlock.town().name().equals(s)) {
+						Log.log(Level.INFO, "Found safe town: %s", s);
+						return false;
+					}
+				}
+			}
+			
+			// disable friendly fire
+			if (!allowMemberToMemberPvp && town() != null && MyTownDatasource.instance.getOrMakeResident((EntityPlayer) e).town() == town()) {
+				return false;
+			}
+			
+			if (Town.allowFullPvp == true) {
+				return true;
+			}
+			
+			if (targetBlock != null && targetBlock.town() != null) {
+				if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+					int y = (int) e.posY;
+					String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+					int yto = Integer.parseInt(ycheck[0]);
+					int yfrom = Integer.parseInt(ycheck[1]);
+					if (y < yto || y > yfrom) {
+						targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+					}
+				}
+			
+				if (targetBlock != null) {
+					return Town.allowMemberToForeignPvp && town() == targetBlock.town();
+				}
+			}
+			TownBlock sourceBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, onlinePlayer.chunkCoordX, onlinePlayer.chunkCoordZ);
+			if (sourceBlock != null && sourceBlock.town() != null) {
+				if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+					int y = (int) e.posY;
+					String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+					int yto = Integer.parseInt(ycheck[0]);
+					int yfrom = Integer.parseInt(ycheck[1]);
+					if (y < yto || y > yfrom) {
+						targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+					}
+				}
+					
+				if (sourceBlock != null) {
+					return Town.allowMemberToForeignPvp && town() == sourceBlock.town();
+				}
+			}
+			
+			return true;
+		} else {
+			TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
+			
+			if (e instanceof EntityMinecart) {
+				if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class)) {
+					return true;
+				}
+			} else if (e instanceof EntityMob) {
+				if (targetBlock != null && targetBlock.town() != null) {
+					return canInteract(targetBlock, "attackmobs", e.getEntityName());
+				}
+			} else if (e instanceof EntityCreature){
+				if (targetBlock != null && targetBlock.town() != null) {
+					return canInteract(targetBlock, "attackcreatures", e.getEntityName());
+				}
+			}
+			return canInteract(targetBlock, "build", null);
+		}
+	}
 
-        if (e instanceof EntityMinecart) {
-            if ((e.riddenByEntity == null || e.riddenByEntity == onlinePlayer)
-                    && (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class))) {
-                return true;
-            }
-        }
-
-        String perm = "build";
-
-        if (e instanceof EntityItem) {
-            perm = "roam";
-        } else {
-            boolean isNpc = false;
-
-            for (Class<?> cl : ProtectionEvents.instance.getNPCClasses()) {
-                if (cl.isInstance(e)) {
-                    isNpc = true;
-                }
-            }
-
-            if (isNpc) {
-                perm = "container";
-            }
-        }
-
-        return canInteract(targetBlock, perm);
-    }
-
-    public boolean canAttack(Entity e) {
-        if (e instanceof EntityPlayer) {
-            if (pvpBypass()) {
-                return true;
-            }
-
-            TownBlock targetBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, e.chunkCoordX, e.chunkCoordZ);
-
-            if (Town.pvpSafeTowns != null && targetBlock != null && targetBlock.town() != null) {
-                for (String s : Town.pvpSafeTowns) {
-                    if (targetBlock.town().name().equals(s)) {
-                        Log.log(Level.INFO, "Found safe town: %s", s);
-                        return false;
-                    }
-                }
-            }
-
-            // disable friendly fire
-            if (!allowMemberToMemberPvp && town() != null && MyTownDatasource.instance.getOrMakeResident((EntityPlayer) e).town() == town()) {
-                return false;
-            }
-
-            if (Town.allowFullPvp == true) {
-                return true;
-            }
-
-            if (targetBlock != null && targetBlock.town() != null) {
-                if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
-                    int y = (int) e.posY;
-                	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
-                	int yto = Integer.parseInt(ycheck[0]);
-                	int yfrom = Integer.parseInt(ycheck[1]);
-                    if (y < yto || y > yfrom) {
-                    	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
-                    }
-                }
-
-                if (targetBlock != null) {
-                    return Town.allowMemberToForeignPvp && town() == targetBlock.town();
-                }
-            }
-            TownBlock sourceBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, onlinePlayer.chunkCoordX, onlinePlayer.chunkCoordZ);
-            if (sourceBlock != null && sourceBlock.town() != null) {
-                if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
-                    int y = (int) e.posY;
-                	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
-                	int yto = Integer.parseInt(ycheck[0]);
-                	int yfrom = Integer.parseInt(ycheck[1]);
-                    if (y < yto || y > yfrom) {
-                    	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
-                    }
-                }
-
-                if (sourceBlock != null) {
-                    return Town.allowMemberToForeignPvp && town() == sourceBlock.town();
-                }
-            }
-
-            return true;
-        } else {
-            TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
-
-            if (e instanceof EntityMinecart) {
-                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class)) {
-                    return true;
-                }
-            } else if (e instanceof EntityMob) {
-                if (targetBlock != null && targetBlock.town() != null && canInteract(targetBlock, "attackmobs")) {
-                    return checkList(targetBlock, "attackmobs", e.getEntityName());
-                }
-            } else if (e instanceof EntityCreature){
-                if (targetBlock != null && targetBlock.town() != null && canInteract(targetBlock, "attackcreatures")) {
-                    return checkList(targetBlock, "attackcreatures", e.getEntityName());
-                }
-            }
-
-            return canInteract(targetBlock, "build");
-        }
-    }
+//    public boolean pvpBypass() {
+//        return ForgePerms.getPermissionManager().canAccess(this.name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.pvp");
+//    }
+//    
+//    public boolean canBypassCheck(String setting){
+//    	if (opBypasses && MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(name)) return true;
+//    	return ForgePerms.getPermissionManager().canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass." + name);
+//    }
+//    
+//    public boolean checkList(TownBlock block, String setting, String unlocalizedName){
+//		if (block == null || block.town() == null) return true;
+//		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
+//		
+//		String collection = "out";
+//		
+//		if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
+//			collection = "friend";
+//		}
+//
+//		if (block.owner() != null && block.owner().friends.contains(this)) {
+//			collection = "friend";
+//		}
+//
+//		if (town() == block.town()) {
+//			collection = "town";
+//		}
+//
+//		if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
+//			collection = "nation";
+//		}
+//		
+//		if (!block.town().settings.containsKey(collection) || block.town().settings.get(collection).getSetting(setting+"List") == null || block.town().settings.get(collection).getSetting(setting+"List").getValue(List.class).isEmpty()) return true;
+//		return block.town().settings.get(collection).getSetting(setting+"List").getValue(List.class).contains(unlocalizedName) != block.town().settings.get(collection).getSetting(setting).getValue(Boolean.class);
+//    }
+//    
+//    private boolean canInteractSub(TownBlock block, String setting){
+//		if (block == null || block.town() == null) return true;
+//		if (block.owner() == this || block.town() == town() || rank() != Rank.Resident) return true;
+//		
+//		String collection = "out";
+//		
+//		if (block.owner() == null && block.town().getFirstMayor() != null && block.town().getFirstMayor().friends.contains(this)){
+//			collection = "friend";
+//		}
+//
+//		if (block.owner() != null && block.owner().friends.contains(this)) {
+//			collection = "friend";
+//		}
+//
+//		if (town() == block.town()) {
+//			collection = "town";
+//		}
+//
+//		if (town() != null && town().nation() != null && town().nation() == block.town().nation()) {
+//			collection = "nation";
+//		}
+//
+//		return block.town().settings.get(collection).getSetting(setting).getValue(Boolean.class);
+//	}
+//    
+//    public boolean canInteract(String setting){
+//    	return canInteract((int)onlinePlayer.posX, (int)onlinePlayer.posY, (int)onlinePlayer.posZ, setting);
+//    }
+//    
+//    public boolean canInteract(int x, int y, int z, String setting){
+//    	return canInteract(prevDimension, x, y, z, setting);
+//    }
+//  
+//	public boolean canInteract(int dimension, int x, int yFrom, int yTo, int z, String setting) {
+//		TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, yFrom, yTo, z);
+//		if (targetBlock == null || targetBlock.town() == null) {
+//			return true;
+//		}
+//		
+//		return canInteract(targetBlock, setting);
+//	}
+//    
+//	public boolean canInteract(TownBlock targetBlock, int y, String setting){
+//		if (targetBlock == null || targetBlock.town() == null) {
+//			return canInteract(null, setting);
+//		}
+//		
+//        if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+//        	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+//        	int yto = Integer.parseInt(ycheck[0]);
+//        	int yfrom = Integer.parseInt(ycheck[1]);
+//            if (y < yto || y > yfrom) {
+//            	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+//            }
+//        }
+//			
+//			
+//		return canInteract(targetBlock, setting);
+//	}
+//    
+//	public boolean canInteract(int dimension, int x, int y, int z, String setting) {
+//		TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(dimension, x, y, z);
+//		if (targetBlock == null || targetBlock.town() == null) {
+//			return true;
+//		}
+//		
+//		return canInteract(targetBlock, setting);
+//	}
+//    
+//    public boolean canInteract(TileEntity te){
+//    	TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord);
+//    	if (te instanceof IInventory){
+//    		return canInteract(b, "container") && checkList(b, "container", te.blockType.getUnlocalizedName());
+//    	}
+//    	
+//    	return true;
+//    }
+//    
+//    public boolean canInteract(TownBlock block, String setting){
+//    	boolean b = canInteractSub(block, setting);
+//		if (!b && canBypassCheck(setting)) {
+//			b = true;
+//		}
+//
+//		return b;
+//    }
+//    
+//    public boolean canInteract(Entity e) {
+//        TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
+//
+//        if (e instanceof EntityMinecart) {
+//            if ((e.riddenByEntity == null || e.riddenByEntity == onlinePlayer)
+//                    && (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class))) {
+//                return true;
+//            }
+//        }
+//
+//        String perm = "build";
+//
+//        if (e instanceof EntityItem) {
+//            perm = "roam";
+//        } else {
+//            boolean isNpc = false;
+//
+//            for (Class<?> cl : ProtectionEvents.instance.getNPCClasses()) {
+//                if (cl.isInstance(e)) {
+//                    isNpc = true;
+//                }
+//            }
+//
+//            if (isNpc) {
+//                perm = "container";
+//            }
+//        }
+//
+//        return canInteract(targetBlock, perm);
+//    }
+//
+//    public boolean canAttack(Entity e) {
+//        if (e instanceof EntityPlayer) {
+//            if (pvpBypass()) {
+//                return true;
+//            }
+//
+//            TownBlock targetBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, e.chunkCoordX, e.chunkCoordZ);
+//
+//            if (Town.pvpSafeTowns != null && targetBlock != null && targetBlock.town() != null) {
+//                for (String s : Town.pvpSafeTowns) {
+//                    if (targetBlock.town().name().equals(s)) {
+//                        Log.log(Level.INFO, "Found safe town: %s", s);
+//                        return false;
+//                    }
+//                }
+//            }
+//
+//            // disable friendly fire
+//            if (!allowMemberToMemberPvp && town() != null && MyTownDatasource.instance.getOrMakeResident((EntityPlayer) e).town() == town()) {
+//                return false;
+//            }
+//
+//            if (Town.allowFullPvp == true) {
+//                return true;
+//            }
+//
+//            if (targetBlock != null && targetBlock.town() != null) {
+//                if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+//                    int y = (int) e.posY;
+//                	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+//                	int yto = Integer.parseInt(ycheck[0]);
+//                	int yfrom = Integer.parseInt(ycheck[1]);
+//                    if (y < yto || y > yfrom) {
+//                    	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+//                    }
+//                }
+//
+//                if (targetBlock != null) {
+//                    return Town.allowMemberToForeignPvp && town() == targetBlock.town();
+//                }
+//            }
+//            TownBlock sourceBlock = MyTownDatasource.instance.getBlock(onlinePlayer.dimension, onlinePlayer.chunkCoordX, onlinePlayer.chunkCoordZ);
+//            if (sourceBlock != null && sourceBlock.town() != null) {
+//                if (targetBlock != null && targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
+//                    int y = (int) e.posY;
+//                	String[] ycheck = targetBlock.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
+//                	int yto = Integer.parseInt(ycheck[0]);
+//                	int yfrom = Integer.parseInt(ycheck[1]);
+//                    if (y < yto || y > yfrom) {
+//                    	targetBlock = targetBlock.getFirstFullSidingClockwise(targetBlock.town());
+//                    }
+//                }
+//
+//                if (sourceBlock != null) {
+//                    return Town.allowMemberToForeignPvp && town() == sourceBlock.town();
+//                }
+//            }
+//
+//            return true;
+//        } else {
+//            TownBlock targetBlock = MyTownDatasource.instance.getPermBlockAtCoord(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ);
+//
+//            if (e instanceof EntityMinecart) {
+//                if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.get("core").getSetting("carts").getValue(Boolean.class) || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).getSetting("carts").getValue(Boolean.class)) {
+//                    return true;
+//                }
+//            } else if (e instanceof EntityMob) {
+//                if (targetBlock != null && targetBlock.town() != null && canInteract(targetBlock, "attackmobs")) {
+//                    return checkList(targetBlock, "attackmobs", e.getEntityName());
+//                }
+//            } else if (e instanceof EntityCreature){
+//                if (targetBlock != null && targetBlock.town() != null && canInteract(targetBlock, "attackcreatures")) {
+//                    return checkList(targetBlock, "attackcreatures", e.getEntityName());
+//                }
+//            }
+//
+//            return canInteract(targetBlock, "build");
+//        }
+//    }
 
     public void sendLocationMap(int dim, int cx, int cz) {
         int heightRad = 4;
@@ -751,7 +956,7 @@ public class Resident {
 
                         if (!WorldBorder.instance.isWithinArea(onlinePlayer)) {
                             // bounce failed, send to spawn
-                            Log.warning(String.format("Player %s is over the edge of the world %s (%s, %s, %s). Sending to spawn.", name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ));
+                            Log.warning("Player %s is over the edge of the world %s (%s, %s, %s). Sending to spawn.", name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ);
 
                             respawnPlayer();
                         }

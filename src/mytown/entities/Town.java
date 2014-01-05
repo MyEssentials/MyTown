@@ -93,11 +93,6 @@ public class Town {
     } // used internally only
     
     public Map<String, SettingCollection> settings;
-//    public SettingCollection coreSettings = SettingCollection.generateCoreSettings();
-//    public SettingCollection townSettings = SettingCollection.generateTownMemberSettings();
-//    public SettingCollection friendSettings = SettingCollection.generateTownMemberSettings();
-//    public SettingCollection outSettings = SettingCollection.generateOutsiderSettings();
-//    public SettingCollection nationSettings = SettingCollection.generateOutsiderSettings();
 
     public int getSpawnDimension() {
         return spawnDimension;
@@ -145,12 +140,19 @@ public class Town {
     }
     
     private void createSettings(){
+    	ISettingsSaveHandler savehandler = new ISettingsSaveHandler() {
+            @Override
+            public void save(SettingCollection sender, Object tag) {
+                Town r = (Town) tag;
+                r.save();
+            }
+        };
     	settings = new HashMap<String, SettingCollection>();
-    	settings.put("core", SettingCollection.generateCoreSettings());
-    	settings.put("town", SettingCollection.generateTownMemberSettings());
-    	settings.put("friend", SettingCollection.generateTownMemberSettings());
-    	settings.put("out", SettingCollection.generateOutsiderSettings());
-    	settings.put("nation", SettingCollection.generateOutsiderSettings());
+    	settings.put("core", SettingCollection.generateCoreSettings(this, savehandler));
+    	settings.put("town", SettingCollection.generateTownMemberSettings(this, savehandler));
+    	settings.put("friend", SettingCollection.generateTownMemberSettings(this, savehandler));
+    	settings.put("out", SettingCollection.generateOutsiderSettings(this, savehandler));
+    	settings.put("nation", SettingCollection.generateOutsiderSettings(this, savehandler));
     }
 
     public Town(String pName, Resident creator, TownBlock home) throws CommandException {
@@ -171,11 +173,6 @@ public class Town {
             home.setTown(this);
             blocks.add(home);
         }
-        
-        Iterator<SettingCollection> setIt = settings.values().iterator();
-        while(setIt.hasNext()){
-        	setSettings(setIt.next());
-        }
 
         MyTownDatasource.instance.addTown(this);
         save(); // has town id now
@@ -191,28 +188,11 @@ public class Town {
         name = pName;
         extraBlocks = pExtraBlocks;
         blocks = pBlocks;
-        
-        Iterator<SettingCollection> setIt = settings.values().iterator();
-        while(setIt.hasNext()){
-        	setSettings(setIt.next());
-        }
         deserializeExtra(extra);
 
         for (TownBlock res : blocks) {
             res.setTown(this); // needs parent settings to be on
         }
-    }
-
-    private void setSettings(SettingCollection settings) {
-        settings.tag = this;
-        settings.setParent(MyTown.instance.serverSettings);
-        settings.saveHandler = new ISettingsSaveHandler() {
-            @Override
-            public void save(SettingCollection sender, Object tag) {
-                Town r = (Town) tag;
-                r.save();
-            }
-        };
     }
 
     public Resident getFirstMayor() {

@@ -288,11 +288,12 @@ public class WorldBorder extends TickBase {
             IChunkProvider provider = w.getChunkProvider();
             if (!provider.chunkExists(x, z)) {
                 provider.loadChunk(x, z);
-
+                
                 if (provider instanceof ChunkProviderServer) {
+                	Log.info("Setting chunk to unload...");
                     ((ChunkProviderServer) provider).unloadChunksIfNotNearSpawn(x, z);
                 }
-
+                
                 provider.unloadQueuedChunks();
             }
         }

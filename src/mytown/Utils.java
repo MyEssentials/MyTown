@@ -34,10 +34,9 @@ public class Utils {
         float var20 = var14 * var16;
         Vec3 var23 = var13.addVector(var18 * distance, var17 * distance, var20 * distance);
         return world.clip(var13, var23, hitLiquid);
-        //return world.rayTraceBlocks_do_do(var13, var23, hitLiquid, !hitLiquid);
     }
 
-    public static boolean canTNTBlow(int dim, double x, double yFrom, double yTo, double z) {
+    public static boolean canBlow(int dim, double x, double yFrom, double yTo, double z) {
         TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
         if (b != null && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
         	String[] ycheck = b.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
@@ -49,9 +48,9 @@ public class Utils {
         }
 
         if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).getSetting("tntoff").getValue(Boolean.class);
+            return !MyTown.instance.getWorldWildSettings(dim).getSetting("explosion").getValue(Boolean.class);
         }
 
-        return !b.settings.get("core").getSetting("tntoff").getValue(Boolean.class);
+        return !b.settings.get("core").getSetting("explosion").getValue(Boolean.class);
     }
 }

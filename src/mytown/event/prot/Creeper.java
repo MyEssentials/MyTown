@@ -2,10 +2,7 @@ package mytown.event.prot;
 
 import java.lang.reflect.Field;
 
-import mytown.ChunkCoord;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.entities.TownBlock;
+import mytown.Utils;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -75,8 +72,7 @@ public class Creeper extends ProtBase {
             if (timeSinceIgnited >= fuseTime) {
                 int radius = explosionRadius + (creeper.getPowered() ? explosionRadius : 0) + 2; // 2 for safety
 
-                if (canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius)
-                        && canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
+                if (Utils.canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canBlow(e.dimension, e.posX - radius, e.posY - radius, e.posY + radius, e.posZ + radius) && Utils.canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ - radius) && Utils.canBlow(e.dimension, e.posX + radius, e.posY - radius, e.posY + radius, e.posZ + radius)) {
                     return null;
                 }
 
@@ -88,24 +84,6 @@ public class Creeper extends ProtBase {
         }
 
         return null;
-    }
-
-    private boolean canBlow(int dim, double x, double yFrom, double yTo, double z) {
-        TownBlock b = MyTownDatasource.instance.getBlock(dim, ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-        if (b != null && b.settings.get("core").getSetting("ycheck").getValue(String.class) != null && !b.settings.get("core").getSetting("ycheck").getValue(String.class).isEmpty()) {
-        	String[] ycheck = b.settings.get("core").getSetting("ycheck").getValue(String.class).split(",");
-        	int yto = Integer.parseInt(ycheck[0]);
-        	int yfrom = Integer.parseInt(ycheck[1]);
-            if (yTo < yto || yFrom > yfrom) {
-                b = b.getFirstFullSidingClockwise(b.town());
-            }
-        }
-
-        if (b == null || b.town() == null) {
-            return !MyTown.instance.getWorldWildSettings(dim).getSetting("creepoff").getValue(Boolean.class);
-        }
-
-        return !b.settings.get("core").getSetting("creepoff").getValue(Boolean.class);
     }
 
     @Override
