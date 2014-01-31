@@ -1,0 +1,26 @@
+package mytown.event.prot;
+
+import java.util.List;
+
+import mytown.Log;
+
+public class CustomNPCs {
+    public static boolean debug = false;
+
+    @SuppressWarnings("rawtypes")
+    public static void addNPCClasses(List<Class> list) throws Exception {
+        addSub(list, "org.millenaire.common.MillVillager");
+        addSub(list, "noppes.npcs.EntityNPCInterface");
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static void addSub(List<Class> list, String name) {
+        try {
+            list.add(Class.forName(name));
+        } catch (Throwable t) {
+            if (debug) {
+                Log.warning(String.format("Cannot load %s for Custom NPCs", name));
+            }
+        }
+    }
+}
