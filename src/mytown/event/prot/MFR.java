@@ -10,58 +10,58 @@ import mytown.event.ProtectionEvents;
 import net.minecraft.entity.Entity;
 
 public class MFR extends ProtBase {
-    public static MFR instance = new MFR();
+	public static MFR instance = new MFR();
 
-    private Class<?> clEntityNeedle;
-    private Field f_owner;
+	private Class<?> clEntityNeedle;
+	private Field f_owner;
 
-    @Override
-    public void load() throws Exception {
-        clEntityNeedle = Class.forName("powercrystals.minefactoryreloaded.entity.EntityNeedle");
-        f_owner = clEntityNeedle.getDeclaredField("_owner");
-    }
+	@Override
+	public void load() throws Exception {
+		clEntityNeedle = Class.forName("powercrystals.minefactoryreloaded.entity.EntityNeedle");
+		f_owner = clEntityNeedle.getDeclaredField("_owner");
+	}
 
-    @Override
-    public String update(Entity e) throws Exception {
-        if (clEntityNeedle.isInstance(e)){
-        	Entity needle = (Entity) e;
-        	String owner = (String) f_owner.get(e);
-        	if (owner == null || owner.trim().isEmpty() || owner.trim() == ""){
-        		return "No owner";
-        	}
-        	
-        	Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident(owner);
+	@Override
+	public String update(Entity e) throws Exception {
+		if (clEntityNeedle.isInstance(e)) {
+			Entity needle = e;
+			String owner = (String) f_owner.get(e);
+			if (owner == null || owner.trim().isEmpty() || owner.trim() == "") {
+				return "No owner";
+			}
 
-            int x = (int) (needle.posX + needle.motionX);
-            int y = (int) (needle.posY + needle.motionY);
-            int z = (int) (needle.posZ + needle.motionZ);
-            int dim = thrower.onlinePlayer.dimension;
+			Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident(owner);
 
-            if (!thrower.canInteract(dim, x, y, z, Permissions.Build)) {
-                return "Needle would land in a town";
-            }
-        }
+			int x = (int) (needle.posX + needle.motionX);
+			int y = (int) (needle.posY + needle.motionY);
+			int z = (int) (needle.posZ + needle.motionZ);
+			int dim = thrower.onlinePlayer.dimension;
 
-        return null;
-    }
+			if (!thrower.canInteract(dim, x, y, z, Permissions.Build)) {
+				return "Needle would land in a town";
+			}
+		}
 
-    @Override
-    public boolean isEntityInstance(Entity e) {
-        return clEntityNeedle.isInstance(e);
-    }
+		return null;
+	}
 
-    @Override
-    public boolean loaded() {
-        return clEntityNeedle != null;
-    }
+	@Override
+	public boolean isEntityInstance(Entity e) {
+		return clEntityNeedle.isInstance(e);
+	}
 
-    @Override
-    public String getMod() {
-        return "MineFactory Reloaded";
-    }
+	@Override
+	public boolean loaded() {
+		return clEntityNeedle != null;
+	}
 
-    @Override
-    public String getComment() {
-        return "Stops MineFactory Reloaded items";
-    }
+	@Override
+	public String getMod() {
+		return "MineFactory Reloaded";
+	}
+
+	@Override
+	public String getComment() {
+		return "Stops MineFactory Reloaded items";
+	}
 }

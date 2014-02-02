@@ -11,127 +11,127 @@ import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.commands.CmdChat;
 import mytown.entities.TownBlock;
 import mytown.event.ProtBase;
+import mytown.old_commands.CmdChat;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 
 public class ComputerCraft extends ProtBase {
-    public static ComputerCraft instance = new ComputerCraft();
+	public static ComputerCraft instance = new ComputerCraft();
 
-    Class<?> clTurtle = null;
-    Method mTerminate, mIsOn;
-    Field fMoved, fClientState;
+	Class<?> clTurtle = null;
+	Method mTerminate, mIsOn;
+	Field fMoved, fClientState;
 
-    public HashMap<Object, Object> turtles = new HashMap<Object, Object>();
-    public HashMap<ChunkCoordinates, Long> anti_spam = new HashMap<ChunkCoordinates, Long>();
-    public int anti_spam_counter = 0;
+	public HashMap<Object, Object> turtles = new HashMap<Object, Object>();
+	public HashMap<ChunkCoordinates, Long> anti_spam = new HashMap<ChunkCoordinates, Long>();
+	public int anti_spam_counter = 0;
 
-    @Override
-    public void reload() {
-        anti_spam_counter = 0;
-        turtles = new HashMap<Object, Object>();
-        anti_spam = new HashMap<ChunkCoordinates, Long>();
-    }
+	@Override
+	public void reload() {
+		anti_spam_counter = 0;
+		turtles = new HashMap<Object, Object>();
+		anti_spam = new HashMap<ChunkCoordinates, Long>();
+	}
 
-    @Override
-    public void load() throws Exception {
-        clTurtle = Class.forName("dan200.turtle.shared.TileEntityTurtle");
-        mTerminate = clTurtle.getDeclaredMethod("terminate");
-        mIsOn = clTurtle.getDeclaredMethod("isOn");
-        fMoved = clTurtle.getDeclaredField("m_moved");
-        fClientState = clTurtle.getDeclaredField("m_clientState");
-        fClientState.setAccessible(true);
-    }
+	@Override
+	public void load() throws Exception {
+		clTurtle = Class.forName("dan200.turtle.shared.TileEntityTurtle");
+		mTerminate = clTurtle.getDeclaredMethod("terminate");
+		mIsOn = clTurtle.getDeclaredMethod("isOn");
+		fMoved = clTurtle.getDeclaredField("m_moved");
+		fClientState = clTurtle.getDeclaredField("m_clientState");
+		fClientState.setAccessible(true);
+	}
 
-    @Override
-    public boolean loaded() {
-        return clTurtle != null;
-    }
+	@Override
+	public boolean loaded() {
+		return clTurtle != null;
+	}
 
-    @Override
-    public boolean isEntityInstance(TileEntity e) {
-        return clTurtle.isInstance(e);
-    }
+	@Override
+	public boolean isEntityInstance(TileEntity e) {
+		return clTurtle.isInstance(e);
+	}
 
-    @Override
-    public String update(TileEntity e) throws Exception {
-        cleanAntiSpam();
+	@Override
+	public String update(TileEntity e) throws Exception {
+		cleanAntiSpam();
 
-        Object state = fClientState.get(e);
-        Object prev_turtle = turtles.get(state);
+		Object state = fClientState.get(e);
+		Object prev_turtle = turtles.get(state);
 
-        if (prev_turtle == e || !(Boolean) mIsOn.invoke(e)) {
-            return null;
-        }
+		if (prev_turtle == e || !(Boolean) mIsOn.invoke(e)) {
+			return null;
+		}
 
-        turtles.put(state, e);
+		turtles.put(state, e);
 
-        int radius = 1;
-        int dim = e.worldObj.provider.dimensionId;
-        if (canRoam(dim, e.xCoord - radius, e.yCoord, e.yCoord, e.zCoord) && canRoam(dim, e.xCoord + radius, e.yCoord, e.yCoord, e.zCoord) && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord - radius) && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord + radius)
-                && canRoam(dim, e.xCoord, e.yCoord - radius, e.yCoord + radius, e.zCoord)) {
-            return null;
-        }
+		int radius = 1;
+		int dim = e.worldObj.provider.dimensionId;
+		if (canRoam(dim, e.xCoord - radius, e.yCoord, e.yCoord, e.zCoord) && canRoam(dim, e.xCoord + radius, e.yCoord, e.yCoord, e.zCoord) && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord - radius) && canRoam(dim, e.xCoord, e.yCoord, e.yCoord, e.zCoord + radius)
+				&& canRoam(dim, e.xCoord, e.yCoord - radius, e.yCoord + radius, e.zCoord)) {
+			return null;
+		}
 
-        turtles.put(state, null);
-        blockAction(e);
-        return null;
-    }
+		turtles.put(state, null);
+		blockAction(e);
+		return null;
+	}
 
-    private void blockAction(TileEntity e) throws Exception {
-        mTerminate.invoke(e);
+	private void blockAction(TileEntity e) throws Exception {
+		mTerminate.invoke(e);
 
-        ChunkCoordinates c = new ChunkCoordinates(e.xCoord, e.yCoord, e.zCoord);
-        if (canScream(c)) {
-            Log.severe(String.format("§4Stopped a computercraft turtle found @ dim %s, %s,%s,%s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord));
+		ChunkCoordinates c = new ChunkCoordinates(e.xCoord, e.yCoord, e.zCoord);
+		if (canScream(c)) {
+			Log.severe(String.format("§4Stopped a computercraft turtle found @ dim %s, %s,%s,%s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord));
 
-            String msg = String.format("A turtle stopped @ %s,%s,%s because it wasn't allowed there", e.xCoord, e.yCoord, e.zCoord);
-            String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);
-            CmdChat.sendChatToAround(e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, formatted, null);
+			String msg = String.format("A turtle stopped @ %s,%s,%s because it wasn't allowed there", e.xCoord, e.yCoord, e.zCoord);
+			String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);
+			CmdChat.sendChatToAround(e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, formatted, null);
 
-            anti_spam.put(c, System.currentTimeMillis() + 60000);
-        }
-    }
+			anti_spam.put(c, System.currentTimeMillis() + 60000);
+		}
+	}
 
-    private boolean canRoam(int dim, int x, int y, int y2, int z) {
-        TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, y2, z);
+	private boolean canRoam(int dim, int x, int y, int y2, int z) {
+		TownBlock b = MyTownDatasource.instance.getPermBlockAtCoord(dim, x, y, y2, z);
 
-        if (b == null || b.town() == null) {
-            return MyTown.instance.getWorldWildSettings(dim).allowCCTurtles;
-        }
+		if (b == null || b.town() == null) {
+			return MyTown.instance.getWorldWildSettings(dim).allowCCTurtles;
+		}
 
-        return b.settings.allowCCTurtles;
-    }
+		return b.settings.allowCCTurtles;
+	}
 
-    private boolean canScream(ChunkCoordinates c) {
-        return anti_spam.get(c) == null;
-    }
+	private boolean canScream(ChunkCoordinates c) {
+		return anti_spam.get(c) == null;
+	}
 
-    private void cleanAntiSpam() {
-        anti_spam_counter++;
+	private void cleanAntiSpam() {
+		anti_spam_counter++;
 
-        if (anti_spam_counter > 1000) {
-            anti_spam_counter = 0;
-            long time = System.currentTimeMillis();
+		if (anti_spam_counter > 1000) {
+			anti_spam_counter = 0;
+			long time = System.currentTimeMillis();
 
-            for (Iterator<Entry<ChunkCoordinates, Long>> it = anti_spam.entrySet().iterator(); it.hasNext();) {
-                Entry<ChunkCoordinates, Long> kv = it.next();
-                if (kv.getValue() < time) {
-                    it.remove();
-                }
-            }
-        }
-    }
+			for (Iterator<Entry<ChunkCoordinates, Long>> it = anti_spam.entrySet().iterator(); it.hasNext();) {
+				Entry<ChunkCoordinates, Long> kv = it.next();
+				if (kv.getValue() < time) {
+					it.remove();
+				}
+			}
+		}
+	}
 
-    @Override
-    public String getMod() {
-        return "ComputerCraft";
-    }
+	@Override
+	public String getMod() {
+		return "ComputerCraft";
+	}
 
-    @Override
-    public String getComment() {
-        return "Town permission: ccturtles ";
-    }
+	@Override
+	public String getComment() {
+		return "Town permission: ccturtles ";
+	}
 }

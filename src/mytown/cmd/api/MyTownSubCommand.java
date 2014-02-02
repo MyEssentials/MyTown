@@ -6,10 +6,59 @@ import mytown.CommandException;
 import mytown.NoAccessException;
 import net.minecraft.command.ICommandSender;
 
+/**
+ * Interface for all MyTown sub-commands
+ * 
+ * @author Joe Goett
+ */
 public interface MyTownSubCommand {
+	/**
+	 * Returns the name of the command. Used to determine which sub-command to
+	 * run.
+	 * 
+	 * @return
+	 */
 	public String getName();
+
+	/**
+	 * Returns the permission node related to this sub command
+	 * 
+	 * @return
+	 */
 	public String getPermNode();
+
+	/**
+	 * Returns if the command can be used by the console
+	 * 
+	 * @return
+	 */
+	public boolean canUseByConsole();
+
+	/**
+	 * Checks if the sender can use the sub-command
+	 * 
+	 * @param sender
+	 * @throws CommandException
+	 * @throws NoAccessException
+	 */
 	public void canUse(ICommandSender sender) throws CommandException, NoAccessException;
+
+	/**
+	 * Processes the sub-command
+	 * 
+	 * @param sender
+	 * @param args
+	 * @throws CommandException
+	 * @throws NoAccessException
+	 */
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException;
+
+	/**
+	 * Returns the tab completion for the sub command
+	 * 
+	 * @param sender
+	 * @param args
+	 * @return
+	 */
 	public List<String> tabComplete(ICommandSender sender, String[] args);
 }

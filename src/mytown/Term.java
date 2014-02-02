@@ -5,300 +5,308 @@ import java.io.FileWriter;
 import java.util.HashMap;
 
 public enum Term {
-    // General & events
-    ChatFormat("§f[$color$$channel$§f]$prefix$$name$$postfix$$color$: $msg$"), EmoteFormat("§f[$color$$channel$§f]* $prefix$$name$$postfix$$color$ $msg$"), PrivMsgFormatIn("§7[$sprefix$$sname$$spostfix$ §7-> Me] $msg$"), PrivMsgFormatOut("§7[Me -> $prefix$$name$$postfix$§7] $msg$"),
+	// General & events
+	ChatFormat("§f[$color$$channel$§f]$prefix$$name$$postfix$$color$: $msg$"), EmoteFormat("§f[$color$$channel$§f]* $prefix$$name$$postfix$$color$ $msg$"), PrivMsgFormatIn("§7[$sprefix$$sname$$spostfix$ §7-> Me] $msg$"), PrivMsgFormatOut("§7[Me -> $prefix$$name$$postfix$§7] $msg$"),
 
-    ChatErrNotInTown("You cannot use townchat if you are not in a town"), ChatErrNotInNation("You cannot use nationchat if your town is not part of a nation"), ChatAloneInChannel("§7§oSo lonely..."), ChatListStart("Switch chat channel"), ChatListEntry("   %s%s §f[%s%s§f]"), ChatSwitch(
-            "Changed active channel to [%s%s§f] %s%s"), ChatSwitchAlreadyIn("You are already in channel [%s%s§f] %s%s"), NoBedMessage("You don't have a bed to spawn in"),
+	ChatErrNotInTown("You cannot use townchat if you are not in a town"), ChatErrNotInNation("You cannot use nationchat if your town is not part of a nation"), ChatAloneInChannel("§7§oSo lonely..."), ChatListStart("Switch chat channel"), ChatListEntry("   %s%s §f[%s%s§f]"), ChatSwitch(
+			"Changed active channel to [%s%s§f] %s%s"), ChatSwitchAlreadyIn("You are already in channel [%s%s§f] %s%s"), NoBedMessage("You don't have a bed to spawn in"),
 
-    SevereLevel("SEVERE"), WarningLevel("WARNING"), InfoLevel("INFO"),
+	SevereLevel("SEVERE"), WarningLevel("WARNING"), InfoLevel("INFO"),
 
-    MinecartMessedWith("Someone is messing with your towns minecart"),
+	MinecartMessedWith("Someone is messing with your towns minecart"),
 
-    // nation status
-    NationStatusName("§6--------[[ %s%s§6 ]]--------"), NationStatusGeneral("§2Size: §b%s§2/§b%s §2Members: §b%s"), NationStatusCapital("§2Capital: §b%s"), NationStatusTowns("§2Towns: §b%s"),
+	// nation status
+	NationStatusName("§6--------[[ %s%s§6 ]]--------"), NationStatusGeneral("§2Size: §b%s§2/§b%s §2Members: §b%s"), NationStatusCapital("§2Capital: §b%s"), NationStatusTowns("§2Towns: §b%s"),
 
-    // status
-    TownStatusName("§6--------[[ %s%s§6 ]]--------"), TownStatusGeneral("§2Town blocks: §b%s§2/§b%s §2Nation: §b%s"), TownStatusMayor("§2Mayor: §f%s"), TownStatusAssistants("§2Assistants: §f%s"), TownStatusResidents("§2Residents: §f%s"),
+	// status
+	TownStatusName("§6--------[[ %s%s§6 ]]--------"), TownStatusGeneral("§2Town blocks: §b%s§2/§b%s §2Nation: §b%s"), TownStatusMayor("§2Mayor: §f%s"), TownStatusAssistants("§2Assistants: §f%s"), TownStatusResidents("§2Residents: §f%s"),
 
-    // resident status
-    ResStatusName("§6--------[[ %s§6 ]]--------"), ResStatusLocation("§2Location: §b%s @ dim %s (%s,%s,%s)"), ResStatusGeneral1("§2Member from: §b%s"), ResStatusGeneral2("§2Last online: §b%s"), ResStatusTown("§2Member of: §b%s§2, §a%s"), ResStatusFriends("§2Friends: §f%s"), ResStatusFriends2("§2Friend of: §f%s"),
+	// resident status
+	ResStatusName("§6--------[[ %s§6 ]]--------"), ResStatusLocation("§2Location: §b%s @ dim %s (%s,%s,%s)"), ResStatusGeneral1("§2Member from: §b%s"), ResStatusGeneral2("§2Last online: §b%s"), ResStatusTown("§2Member of: §b%s§2, §a%s"), ResStatusFriends("§2Friends: §f%s"), ResStatusFriends2(
+			"§2Friend of: §f%s"),
 
-    // commands
-    OnlineCommand("online"), OnlineCommandAliases(""), OnlineCmdListStart("§aOnline [%s]§f: %s"),
+	// commands
+	OnlineCommand("online"), OnlineCommandAliases(""), OnlineCmdListStart("§aOnline [%s]§f: %s"),
 
-    TownCommand("mytown"), TownCommandAliases("t town"),
+	TownCommand("mytown"), TownCommandAliases("t town"),
 
-    TownAdmCommand("mytownadm"), TownAdmCommandAliases("ta"),
+	TownAdmCommand("mytownadm"), TownAdmCommandAliases("ta"),
 
-    ChannelCommand("ch"), ChannelCommandAliases(""),
+	ChannelCommand("ch"), ChannelCommandAliases(""),
 
-    TownCommandDesc("§5MyTown §2- Be protected by towns"), LineSeperator("§6--------[[ §5MyTown§6 ]]--------"),
+	TownCommandDesc("§5MyTown §2- Be protected by towns"), LineSeperator("§6--------[[ §5MyTown§6 ]]--------"),
 
-    CommandHelpStart("§4Commands: "), CommandHelpStartSub("§4%s commands: "), CommandHelp("help"),
+	CommandHelpStart("§4Commands: "), CommandHelpStartSub("§4%s commands: "), CommandHelp("help"),
 
-    CommandHelpAssistant("assistant"), CommandHelpAssistantDesc("Show the town assistant commands"),
+	CommandHelpAssistant("assistant"), CommandHelpAssistantDesc("Show the town assistant commands"),
 
-    CommandHelpMayor("mayor"), CommandHelpMayorDesc("Show the town mayor commands"),
+	CommandHelpMayor("mayor"), CommandHelpMayorDesc("Show the town mayor commands"),
 
-    CommandHelpNation("nation"), CommandHelpNationDesc("Show the nation commands"),
+	CommandHelpNation("nation"), CommandHelpNationDesc("Show the nation commands"),
 
-    // all
-    TownCmdHere("here"), TownCmdHereDesc("Displays the info of the town your standing inside"),
-    
-    TownCmdMap("map"), TownCmdMapArgs("[on|off]"), TownCmdMapDesc("Shows map or toggles map mode on/off"),
+	// all
+	TownCmdHere("here"), TownCmdHereDesc("Displays the info of the town your standing inside"),
 
-    TownCmdInfo("info"), TownCmdInfoArgs("townname"), TownCmdInfoDesc("Shows info about the town"),
+	TownCmdMap("map"), TownCmdMapArgs("[on|off]"), TownCmdMapDesc("Shows map or toggles map mode on/off"),
 
-    TownCmdRes("res"), TownCmdResArgs("playername"), TownCmdResDesc("Shows info about the resident"),
+	TownCmdInfo("info"), TownCmdInfoArgs("townname"), TownCmdInfoDesc("Shows info about the town"),
 
-    TownCmdList("list"), TownCmdListDesc("Lists all towns"), TownCmdListStart("§aTowns [%s]§f: %s"), TownCmdListEntry("§f%s§a[%s]"),
+	TownCmdRes("res"), TownCmdResArgs("playername"), TownCmdResDesc("Shows info about the resident"),
 
-    TownCmdFriend("friend"), TownCmdFriendArgs("add|remove name"), TownCmdFriendArgsAdd("add"), TownCmdFriendArgsRemove("remove"), TownCmdFriendDesc("Adds or removes friends"),
+	TownCmdList("list"), TownCmdListDesc("Lists all towns"), TownCmdListStart("§aTowns [%s]§f: %s"), TownCmdListEntry("§f%s§a[%s]"),
 
-    TownCmdSpawn("spawn"), TownCmdSpawnArgs("[name]"), TownCmdSpawnDesc("Teleports you to [the specified] town spawn"),
+	TownCmdFriend("friend"), TownCmdFriendArgs("add|remove name"), TownCmdFriendArgsAdd("add"), TownCmdFriendArgsRemove("remove"), TownCmdFriendDesc("Adds or removes friends"),
 
-    // mayor commands
-    TownCmdAssistant("assistant"), TownCmdAssistantArgs("add|remove name"), TownCmdAssistantArgs1("add"), TownCmdAssistantArgs2("remove"), TownCmdAssistantDesc("Allows people to manage residents and land"),
+	TownCmdSpawn("spawn"), TownCmdSpawnArgs("[name]"), TownCmdSpawnDesc("Teleports you to [the specified] town spawn"),
 
-    TownCmdMayor("mayor"), TownCmdMayorArgs("[name]"), TownCmdMayorDesc("Sets a new mayor"),
+	// mayor commands
+	TownCmdAssistant("assistant"), TownCmdAssistantArgs("add|remove name"), TownCmdAssistantArgs1("add"), TownCmdAssistantArgs2("remove"), TownCmdAssistantDesc("Allows people to manage residents and land"),
 
-    TownCmdRename("rename"), TownCmdRenameArgs("[name]"), TownCmdRenameDesc("Sets a new town name"),
+	TownCmdMayor("mayor"), TownCmdMayorArgs("[name]"), TownCmdMayorDesc("Sets a new mayor"),
 
-    TownCmdBounce("bounce"), TownCmdBounceDesc("Toggle non-member bounce mode"),
+	TownCmdRename("rename"), TownCmdRenameArgs("[name]"), TownCmdRenameDesc("Sets a new town name"),
 
-    TownCmdDelete("delete"), TownCmdDeleteDesc("Deletes your town"), TownCmdDeleteAction("Are you sure? Use /t delete ok"),
+	TownCmdBounce("bounce"), TownCmdBounceDesc("Toggle non-member bounce mode"),
 
-    // assistant commands
-    TownCmdClaim("claim"), TownCmdClaimArgs("[rect X]"), TownCmdClaimArgs1("rect"), TownCmdClaimDesc("Claim land for your town"),
+	TownCmdDelete("delete"), TownCmdDeleteDesc("Deletes your town"), TownCmdDeleteAction("Are you sure? Use /t delete ok"),
 
-    TownCmdUnclaim("unclaim"), TownCmdUnclaimArgs("[rect X]"), TownCmdUnclaimArgs1("rect"), TownCmdUnclaimDesc("Unclaim land"),
+	// assistant commands
+	TownCmdClaim("claim"), TownCmdClaimArgs("[rect X]"), TownCmdClaimArgs1("rect"), TownCmdClaimDesc("Claim land for your town"),
 
-    TownCmdInvite("invite"), TownCmdInviteArgs("name"), TownCmdInviteDesc("Invite a player to join your town"),
+	TownCmdUnclaim("unclaim"), TownCmdUnclaimArgs("[rect X]"), TownCmdUnclaimArgs1("rect"), TownCmdUnclaimDesc("Unclaim land"),
 
-    TownCmdKick("kick"), TownCmdKickArgs("name"), TownCmdKickDesc("Remove the player from your town"),
+	TownCmdInvite("invite"), TownCmdInviteArgs("name"), TownCmdInviteDesc("Invite a player to join your town"),
 
-    TownCmdPlot("assignplot"), TownCmdPlotArgs("name"), TownCmdPlotDesc("Assigns your current plot to the player"),
+	TownCmdKick("kick"), TownCmdKickArgs("name"), TownCmdKickDesc("Remove the player from your town"),
 
-    TownCmdSetSpawn("setspawn"), TownCmdSetSpawnDesc("Sets your town spawn"),
+	TownCmdPlot("assignplot"), TownCmdPlotArgs("name"), TownCmdPlotDesc("Assigns your current plot to the player"),
 
-    // resident commands
-    TownCmdLeave("leave"), TownCmdLeaveDesc("Leave the town"),
+	TownCmdSetSpawn("setspawn"), TownCmdSetSpawnDesc("Sets your town spawn"),
 
-    TownCmdOnline("online"), TownCmdOnlineDesc("Shows the players online in your town"),
+	// resident commands
+	TownCmdLeave("leave"), TownCmdLeaveDesc("Leave the town"),
 
-    // non-residents
-    TownCmdNew("new"), TownCmdNewArgs("name"), TownCmdNewDesc("Creates a new town"),
+	TownCmdOnline("online"), TownCmdOnlineDesc("Shows the players online in your town"),
 
-    TownCmdAccept("accept"), TownCmdAcceptDesc("Accept a town invitation"), TownCmdAcceptDesc2("Accept a nation invitation"),
+	// non-residents
+	TownCmdNew("new"), TownCmdNewArgs("name"), TownCmdNewDesc("Creates a new town"),
 
-    TownCmdDeny("deny"), TownCmdDenyDesc("Deny a town invitation"), TownCmdDenyDesc2("Deny a nation invitation"),
+	TownCmdAccept("accept"), TownCmdAcceptDesc("Accept a town invitation"), TownCmdAcceptDesc2("Accept a nation invitation"),
 
-    // nation commands
-    TownCmdNation("nation"),
+	TownCmdDeny("deny"), TownCmdDenyDesc("Deny a town invitation"), TownCmdDenyDesc2("Deny a nation invitation"),
 
-    TownCmdNationNew("new"), TownCmdNationNewArgs("name"), TownCmdNationNewDesc("Creates a new nation"),
+	// nation commands
+	TownCmdNation("nation"),
 
-    TownCmdNationDel("delete"), TownCmdNationDelDesc("Deletes your nation"),
+	TownCmdNationNew("new"), TownCmdNationNewArgs("name"), TownCmdNationNewDesc("Creates a new nation"),
 
-    TownCmdNationInvite("invite"), // use /t accept & reject
-    TownCmdNationInviteArgs("name"), TownCmdNationInviteDesc("Invites a town to your nation"),
+	TownCmdNationDel("delete"), TownCmdNationDelDesc("Deletes your nation"),
 
-    TownCmdNationLeave("leave"), TownCmdNationLeaveDesc("Leave the nation"),
+	TownCmdNationInvite("invite"), // use /t accept & reject
+	TownCmdNationInviteArgs("name"), TownCmdNationInviteDesc("Invites a town to your nation"),
 
-    TownCmdNationKick("kick"), TownCmdNationKickArgs("name"), TownCmdNationKickDesc("Kicks a town from your nation"),
+	TownCmdNationLeave("leave"), TownCmdNationLeaveDesc("Leave the nation"),
 
-    TownCmdNationTransfer("transfer"), TownCmdNationTransferArgs("name"), TownCmdNationTransferDesc("Transfers the capitol to a member town"),
+	TownCmdNationKick("kick"), TownCmdNationKickArgs("name"), TownCmdNationKickDesc("Kicks a town from your nation"),
 
-    TownCmdNationInfo("info"), TownCmdNationInfoArgs("[name]"), TownCmdNationInfoDesc("Shows info about a nation"),
+	TownCmdNationTransfer("transfer"), TownCmdNationTransferArgs("name"), TownCmdNationTransferDesc("Transfers the capitol to a member town"),
 
-    TownCmdNationList("list"), TownCmdNationListStart("§aNations [%s]§f: %s"), TownCmdNationListEntry("%s[%s]"), TownCmdNationListDesc("Lists all nations"),
+	TownCmdNationInfo("info"), TownCmdNationInfoArgs("[name]"), TownCmdNationInfoDesc("Shows info about a nation"),
 
-    // admin commands
-    TownadmCmdTownBlocks("blocks"), TownadmCmdTownBlocksArgs("townname"), TownadmCmdTownBlocksDesc("Gets a towns blocks"),
-    
-    TownadmCmdVersion("version"), TownadmCmdVersionDesc("Gets the version"), TownadmCmdVersionFormat("MyTown Version: %s"),
-    
-    TownadmCmdReload("reload"), TownadmCmdReloadDesc("Reload the config, db and terms"),
+	TownCmdNationList("list"), TownCmdNationListStart("§aNations [%s]§f: %s"), TownCmdNationListEntry("%s[%s]"), TownCmdNationListDesc("Lists all nations"),
 
-    TownadmCmdNew("new"), TownadmCmdNewArgs("townname mayorname"), TownadmCmdNewDesc("Creates a new town"),
+	// admin commands
+	TownadmCmdTownBlocks("blocks"), TownadmCmdTownBlocksArgs("townname"), TownadmCmdTownBlocksDesc("Gets a towns blocks"),
 
-    TownadmCmdDelete("delete"), TownadmCmdDeleteArgs("townname"), TownadmCmdDeleteDesc("Deletes a town"),
+	TownadmCmdVersion("version"), TownadmCmdVersionDesc("Gets the version"), TownadmCmdVersionFormat("MyTown Version: %s"),
 
-    TownadmCmdSet("set"), TownadmCmdSetArgs("townname rank name, name .."), TownadmCmdSetDesc("Adds members to a town or sets ranks"),
+	TownadmCmdReload("reload"), TownadmCmdReloadDesc("Reload the config, db and terms"),
 
-    TownadmCmdRem("rem"), TownadmCmdRemArgs("townname name, name .."), TownadmCmdRemDesc("Removes members from a town"),
+	TownadmCmdNew("new"), TownadmCmdNewArgs("townname mayorname"), TownadmCmdNewDesc("Creates a new town"),
 
-    TownadmCmdExtra("extra"), TownadmCmdExtraArgs("townname count"), TownadmCmdExtraDesc("Adds or removes extra blocks in a town"),
+	TownadmCmdDelete("delete"), TownadmCmdDeleteArgs("townname"), TownadmCmdDeleteDesc("Deletes a town"),
 
-    TownadmCmdExtraRes("extrares"), TownadmCmdExtraResArgs("playername add|sub|set amount"), TownadmCmdExtraResDesc("Adds, removes or sets a player extra blocks value"),
+	TownadmCmdSet("set"), TownadmCmdSetArgs("townname rank name, name .."), TownadmCmdSetDesc("Adds members to a town or sets ranks"),
 
-    TownadmCmdClaim("claim"), TownadmCmdClaimArgs("townname [playername] [x.y:x.y[:dim]]"), TownadmCmdClaimDesc("Sets the current (or specified) plot to the town (and player)"),
+	TownadmCmdRem("rem"), TownadmCmdRemArgs("townname name, name .."), TownadmCmdRemDesc("Removes members from a town"),
 
-    TownadmCmdUnclaim("unclaim"), TownadmCmdUnclaimArgs("[rect X]"), TownadmCmdUnclaimDesc("Unclaims the plot"),
+	TownadmCmdExtra("extra"), TownadmCmdExtraArgs("townname count"), TownadmCmdExtraDesc("Adds or removes extra blocks in a town"),
 
-    TownadmCmdWipeDim("wipedim"), TownadmCmdWipeDimArgs("dimension_id"), TownadmCmdWipeDimDesc("Deletes all town blocks from the specified dimension id"),
+	TownadmCmdExtraRes("extrares"), TownadmCmdExtraResArgs("playername add|sub|set amount"), TownadmCmdExtraResDesc("Adds, removes or sets a player extra blocks value"),
 
-    TownadmCmdResetFocusedChannels("reschannels"), TownadmCmdResetFocusedChannelsDesc("Reset the currently selected channel for all users to the default"),
+	TownadmCmdClaim("claim"), TownadmCmdClaimArgs("townname [playername] [x.y:x.y[:dim]]"), TownadmCmdClaimDesc("Sets the current (or specified) plot to the town (and player)"),
 
-    TownadmCmdSnoopPrivateChat("snoop"), TownadmCmdSnoopPrivateChatDesc("Starts or stops logging private chat into server log"),
+	TownadmCmdUnclaim("unclaim"), TownadmCmdUnclaimArgs("[rect X]"), TownadmCmdUnclaimDesc("Unclaims the plot"),
 
-    // Town errors
-    ErrCannotAccessCommand("§4You cannot access this command"), TownErrAlreadyClaimed("This block is claimed by another town"), TownErrNotClaimedByYourTown("This block is not claimed by your town"), TownErrPlayerAlreadyInTown("That player is already part of a town"), TownErrPlayerNotFound(
-            "Player not found"), TownErrPlayerNotFoundOrOnline("Player not found or not online"), TownErrBlockTooCloseToAnotherTown("This block is too close to another town"), TownErrCreatorPartOfTown("You cannot be part of a town"), TownErrTownNameCannotBeEmpty("Cannot set a empty name"), TownErrTownNameAlreadyInUse(
-            "This town name has already need used"), TownErrNoFreeBlocks("You don't have any free blocks"), TownErrNotAdjacent("Block is not adjacent to an already claimed block of this town"),
+	TownadmCmdWipeDim("wipedim"), TownadmCmdWipeDimArgs("dimension_id"), TownadmCmdWipeDimDesc("Deletes all town blocks from the specified dimension id"),
 
-    ErrUnknowCommand("§4Unknown command. Use tab for autocomplete or /t help to find correct commands. Commands are different based on your town rank."),
+	TownadmCmdResetFocusedChannels("reschannels"), TownadmCmdResetFocusedChannelsDesc("Reset the currently selected channel for all users to the default"),
 
-    TownErrCmdUnknownArgument("Unknown argument: §4%s"), TownErrCmdNumberFormatException("The input isn't numerical"),
+	TownadmCmdSnoopPrivateChat("snoop"), TownadmCmdSnoopPrivateChatDesc("Starts or stops logging private chat into server log"),
 
-    TownErrInvitationSelf("What are you doing? Invite OTHERS"), TownErrInvitationAlreadyInYourTown("Hes in your town moron"), TownErrInvitationActive("The player has a pending invitation already"), TownErrInvitationInTown("The player is already in a town"),
+	// Town errors
+	ErrNotInTown("Your not in a town"), ErrNotMayor("Your not the town mayor"),
 
-    TownErrPlayerNotInYourTown("The player is not in your town"), TownErrPlayerDoesntHaveAccessToTownManagement("The player can't access town management by perm nodes"), TownErrCannotDoWithYourself("You cannot do this with yourself"), TownErrPlayerIsAlreadyMayor("The player is already a mayor"), TownErrPlayerIsAlreadyAssistant(
-            "The player is already an assistant"), TownErrPlayerIsNotAssistant("The player isn't an assistant"), TownErrCannotUseThisDemoteMayor("Cannot use this to demote a mayor"),
+	ErrCannotAccessCommand("§4You cannot access this command"), TownErrAlreadyClaimed("This block is claimed by another town"), TownErrNotClaimedByYourTown("This block is not claimed by your town"), TownErrPlayerAlreadyInTown("That player is already part of a town"),
 
-    TownErrCannotKickAssistants("You cannot kick another assistant"), TownErrCannotKickMayor("You cannot kick mayors"), TownErrMayorsCantLeaveTheTown("You cannot leave the town as a mayor"), TownErrCannotKickYourself("You cannot kick yourself"),
+	TownErrPlayerNotFound("Player not found"), TownErrPlayerNotFoundOrOnline("Player not found or not online"), TownErrBlockTooCloseToAnotherTown("This block is too close to another town"), TownErrCreatorPartOfTown("You cannot be part of a town"), TownErrTownNameCannotBeEmpty(
+			"Cannot set a empty name"),
 
-    TownErrYouDontHavePendingInvitations("You don't have any pending invitation"), TownErrNotFound("Town named %s cannot be found"), TownErrSpawnNotSet("Town spawn isn't set"),
+	TownErrTownNameAlreadyInUse("This town name has already need used"), TownErrNoFreeBlocks("You don't have any free blocks"), TownErrNotAdjacent("Block is not adjacent to an already claimed block of this town"),
 
-    // Globals
-    TownBroadcastCreated("%s has just founded a new town called %s"), TownBroadcastDeleted("The town of %s went like POOF"),
+	ErrUnknowCommand("§4Unknown command. Use tab for autocomplete or /t help to find correct commands. Commands are different based on your town rank."),
 
-    TownBroadcastLoggedIn("%s just came online"), TownBroadcastLoggedOut("%s just went offline"),
+	TownErrCmdUnknownArgument("Unknown argument: §4%s"), TownErrCmdNumberFormatException("The input isn't numerical"),
 
-    TownadmCreatedNewTown("Town named %s created for mayor %s"), TownadmDeletedTown("Town named %s deleted"),
+	TownErrInvitationSelf("What are you doing? Invite OTHERS"), TownErrInvitationAlreadyInYourTown("Hes in your town"), TownErrInvitationActive("The player has a pending invitation already"), TownErrInvitationInTown("The player is already in a town"),
 
-    TownadmResidentsSet("Town residents set"), TownadmExtraSet("Town extra blocks value set"), TownadmResExtraSet("Resident extra blocks value set"),
+	TownErrPlayerNotInYourTown("The player is not in your town"), TownErrPlayerDoesntHaveAccessToTownManagement("The player can't access town management by perm nodes"), TownErrCannotDoWithYourself("You cannot do this with yourself"), TownErrPlayerIsAlreadyMayor("The player is already a mayor"),
 
-    PlayerEnteredWild("§aYou just entered the §2wilderness"), PlayerEnteredTown("§aWelcome to §4%s"), PlayerEnteredOwnTown("§aWelcome back to §2%s"), PlayerEnteredOtherPlot("§6~%s"), PlayerEnteredOwnPlot("§2~%s"), PlayerEnteredUnclaimedPlot("§6~unassigned"),
+	TownErrPlayerIsAlreadyAssistant("The player is already an assistant"), TownErrPlayerIsNotAssistant("The player isn't an assistant"), TownErrCannotUseThisDemoteMayor("Cannot use this to demote a mayor"),
 
-    PlayerMapModeOn("§aTown map mode is now §2ON"), PlayerMapModeOff("§aTown map mode is now §4OFF"),
+	TownErrCannotKickAssistants("You cannot kick another assistant"), TownErrCannotKickMayor("You cannot kick mayors"), TownErrMayorsCantLeaveTheTown("You cannot leave the town as a mayor"), TownErrCannotKickYourself("You cannot kick yourself"),
 
-    TownBlocksClaimed("§a%s blocks claimed [%s]"), TownBlocksClaimedDisclaimer("§a%s blocks requested of which %s are able to be claimed and %s already owned"), TownBlocksClaimedDisclaimer2("§4First error: %s"), TownBlocksUnclaimed("§a%s blocks unclaimed [%s]"), TownMapHead(
-            "§6--------[[ §5MyTown§6 ]]--------"),
+	TownErrYouDontHavePendingInvitations("You don't have any pending invitation"), TownErrNotFound("Town named %s cannot be found"), TownErrSpawnNotSet("Town spawn isn't set"),
 
-    TownInvitedPlayer("§aSent the town invitation to %s"), TownKickedPlayer("%s kicked the player %s from town"), TownPlayerLeft("%s left the town"), TownInvitation("§a%s would like you to join his town %s. Use /t §2accept §aor /t §4deny §ato reply"), TownRenamed(
-            "Your town charter has been renamed to %s"),
+	// Globals
+	TownBroadcastCreated("%s has just founded a new town called %s"), TownBroadcastDeleted("The town of %s went like POOF"),
 
-    TownPlayerPromotedToAssistant("Player %s promoted to be an assistant"), TownPlayerDemotedFromAssistant("Player %s demoted to a normal resident"), TownPlayerPromotedToMayor("Player %s promoted to be town mayor"),
+	TownBroadcastLoggedIn("%s just came online"), TownBroadcastLoggedOut("%s just went offline"),
 
-    TownPlayerJoinedTown("The player %s has joined the town"), TownPlayerDeniedInvitation("You have denied the invitation"),
+	TownadmCreatedNewTown("Town named %s created for mayor %s"), TownadmDeletedTown("Town named %s deleted"),
 
-    TownadmModReloaded("The mod has been reloaded"),
+	TownadmResidentsSet("Town residents set"), TownadmExtraSet("Town extra blocks value set"), TownadmResExtraSet("Resident extra blocks value set"),
 
-    TownPlayersOnlineStart("§aPlayers online: %s"), TownYouCannotEnter("§aYou cannot enter the town §4%s§a. Town rules."), OutofBorderCannotEnter("§aYou cannot walk over the edge of the (pizza)world!"),
+	PlayerEnteredWild("§aYou just entered the §2wilderness"), PlayerEnteredTown("§aWelcome to §4%s"), PlayerEnteredOwnTown("§aWelcome back to §2%s"), PlayerEnteredOtherPlot("§6~%s"), PlayerEnteredOwnPlot("§2~%s"), PlayerEnteredUnclaimedPlot("§6~unassigned"),
 
-    TownSpawnSet("§aTown spawn has been set"),
+	PlayerMapModeOn("§aTown map mode is now §2ON"), PlayerMapModeOff("§aTown map mode is now §4OFF"),
 
-    TownBouncingChanged("§aThe town is now in %s §astatus"), ChatTownLogFormat("§f[§a%s§f]%s"), ChatNationLogFormat("§f[§2%s§f]%s"),
+	TownBlocksClaimed("§a%s blocks claimed [%s]"), TownBlocksClaimedDisclaimer("§a%s blocks requested of which %s are able to be claimed and %s already owned"), TownBlocksClaimedDisclaimer2("§4First error: %s"), TownBlocksUnclaimed("§a%s blocks unclaimed [%s]"), TownMapHead(
+			"§6--------[[ §5MyTown§6 ]]--------"),
 
-    TownSpawnReset("Your spawn has been reset. Please set a new one"),
+	TownInvitedPlayer("§aSent the town invitation to %s"), TownKickedPlayer("%s kicked the player %s from town"), TownPlayerLeft("%s left the town"), TownInvitation("§a%s would like you to join his town %s. Use /t §2accept §aor /t §4deny §ato reply"), TownRenamed(
+			"Your town charter has been renamed to %s"),
 
-    // nation
-    NationBroadcastCreated("§eThe town of %s grew into the nation of %s"), NationBroadcastDeleted("§eThe nation of %s has fallen"), NationTownJoinedNation("The town %s has joined the nation"),
+	TownPlayerPromotedToAssistant("Player %s promoted to be an assistant"), TownPlayerDemotedFromAssistant("Player %s demoted to a normal resident"), TownPlayerPromotedToMayor("Player %s promoted to be town mayor"),
 
-    NationLeft("§aYou left the nation of %s"), NationNowCapital("§aYour town was made the capital of %s"),
+	TownPlayerJoinedTown("The player %s has joined the town"), TownPlayerDeniedInvitation("You have denied the invitation"),
 
-    NationDeleteConfirmation("§aAre you sure? Use \"... delete yes\" to delete your nation"), NationCapitalTransfered("§aCapital transfered to %s"), TownKickedFromNation("§aTown '%s' kicked out of the nation"), NationInvitation(
-            "§a%s would like you to join his nation %s. Use /t §2accept §aor /t §4deny §ato reply"), NationInvitedPlayer("§aSent the town invitation to %s of %s"), NationPlayerDeniedInvitation("You have denied the invitation"),
+	TownadmModReloaded("The mod has been reloaded"),
 
-    TownErrNationNotFound("Cannot find the nation by the name '%s'"), TownErrAlreadyInNation("This town is already part of a nation"), TownErrNationNameInUse("Name already in use"), TownErrNationNameCannotBeEmpty("Cannot set a empty name"), TownErrNationSelfNotPartOfNation(
-            "Your're not part of any nation"), TownErrNationNotPartOfNation("That town isn't part of this nation"), TownErrNationNoMayorOnline("The town of %s has no mayors currently online. Try again later"), TownErrNationCannotKickSelf("You cannot kick your own town"), TownErrNationCannotTransferSelf(
-            "You are already the capital"), TownErrNationYouDontHavePendingInvitations("You don't have any pending invitation"), TownErrNationInvitingSelf("Why are you inviting your own town?"), TownErrNationCantRemoveCapital("Cannot remove the capital town"), TownErrCannotDeleteInNation(
-            "Cannot delete the town when in a nation"),
+	TownPlayersOnlineStart("§aPlayers online: %s"), TownYouCannotEnter("§aYou cannot enter the town §4%s§a. Town rules."), OutofBorderCannotEnter("§aYou cannot walk over the edge of the (pizza)world!"),
 
-    // permissions - town command
-    TownCmdPerm("perm"), TownCmdPermArgs("town|res|plot [force [key]|set key [val]]"), TownCmdPermArgsTown("town"), TownCmdPermArgsResident("res"), TownCmdPermArgsPlot("plot"), TownCmdPermArgs2Set("set"), TownCmdPermArgs2Force("force"), TownCmdPermDesc("Shows, sets or forces the permissions"),
+	TownSpawnSet("§aTown spawn has been set"),
 
-    // permissions - town admin command
-    TownadmCmdPerm("perm"), TownadmCmdPermArgs("town|plot|server|wild|wild:# [(force [key])|(set key [val])]"), TownadmCmdPermArgsServer("server"), TownadmCmdPermArgsWild("wild"), TownadmCmdPermArgsWild2("wild:"), TownadmCmdPermArgs2Set("set"), TownadmCmdPermArgs2Force("force"), TownadmCmdPermDesc(
-            "Shows, sets or forces the permissions"),
+	TownBouncingChanged("§aThe town is now in %s §astatus"), ChatTownLogFormat("§f[§a%s§f]%s"), ChatNationLogFormat("§f[§2%s§f]%s"),
 
-    // per general
-    PermForced("§aAll childs have been updated to inherit from the node '§2%s§a' for perm '§2%s§a'"), PermSetDone("§aPermission '§2%s§a' set for the node '§2%s§a'"),
+	TownSpawnReset("Your spawn has been reset. Please set a new one"),
 
-    TownPlotAssigned("§aPlot(s) assigned to '%s'"), TownPlotUnAssigned("§aPlot(s) unassigned"),
+	// nation
+	NationBroadcastCreated("§eThe town of %s grew into the nation of %s"), NationBroadcastDeleted("§eThe nation of %s has fallen"), NationTownJoinedNation("The town %s has joined the nation"),
 
-    // per errors
-    ErrPermSettingNotFound("The specified setting '%s' cannot be found"), ErrPermSettingCollectionNotFound("The specified node '%s' doesn't exist"), ErrPermNoChilds("The current permission node has no children"), ErrPermSupportedValues("§4Value type: §2%s§4, Supported values: §2%s"), ErrPermInvalidValue(
-            "§4Error: §2%s§4, Supported values: §2%s"), ErrPermYouDontHaveTown("You don't belong to any town"), ErrPermPlotNotInTown("The current block doesn't belong to any town"), ErrPermPlotNotInYourTown("The current block doesn't belong to your town"), ErrPermRankNotEnough(
-            "You have to be atleast the assistant of the town for this"),
+	NationLeft("§aYou left the nation of %s"), NationNowCapital("§aYour town was made the capital of %s"),
 
-    ErrPermCannotBuildHere("§4You cannot build in this area"), ErrPermCannotAccessHere("§4You cannot access things here"), ErrPermCannotPickup("§4You cannot pick items up here"),
+	NationDeleteConfirmation("§aAre you sure? Use \"... delete yes\" to delete your nation"), NationCapitalTransfered("§aCapital transfered to %s"), TownKickedFromNation("§aTown '%s' kicked out of the nation"), NationInvitation(
+			"§a%s would like you to join his nation %s. Use /t §2accept §aor /t §4deny §ato reply"), NationInvitedPlayer("§aSent the town invitation to %s of %s"), NationPlayerDeniedInvitation("You have denied the invitation"),
 
-    ErrPermCannotInteract("You cannot interact with the target here"), ErrPermCannotAttack("You cannot attack the target here"),
+	TownErrNationNotFound("Cannot find the nation by the name '%s'"), TownErrAlreadyInNation("This town is already part of a nation"), TownErrNationNameInUse("Name already in use"), TownErrNationNameCannotBeEmpty("Cannot set a empty name"), TownErrNationSelfNotPartOfNation(
+			"Your're not part of any nation"), TownErrNationNotPartOfNation("That town isn't part of this nation"), TownErrNationNoMayorOnline("The town of %s has no mayors currently online. Try again later"), TownErrNationCannotKickSelf("You cannot kick your own town"), TownErrNationCannotTransferSelf(
+			"You are already the capital"), TownErrNationYouDontHavePendingInvitations("You don't have any pending invitation"), TownErrNationInvitingSelf("Why are you inviting your own town?"), TownErrNationCantRemoveCapital("Cannot remove the capital town"), TownErrCannotDeleteInNation(
+			"Cannot delete the town when in a nation"),
 
-    ErrNotUsableByConsole("This command can't be run from console"), ErrPlayerAlreadyInFriendList("The player '%s' is already in your friends list"), ErrPlayerNotInFriendList("The player '%s' is not in your friends list"),
+	// permissions - town command
+	TownCmdPerm("perm"), TownCmdPermArgs("town|res|plot [force [key]|set key [val]]"), TownCmdPermArgsTown("town"), TownCmdPermArgsResident("res"), TownCmdPermArgsPlot("plot"), TownCmdPermArgs2Set("set"), TownCmdPermArgs2Force("force"), TownCmdPermDesc("Shows, sets or forces the permissions"),
 
-    // spawn command
-    SpawnCmdTeleportStarted("§aStarted casting the spawn teleport spell. It will take %s seconds"), SpawnCmdTeleportNearStarted("§e%s started casting a %s second spawn teleport spell"), SpawnCmdTeleportEnded("§aWhoooOooOooooOoo"), SpawnCmdTeleportReset("§4Teleport spell casting interrupted"),
+	// permissions - town admin command
+	TownadmCmdPerm("perm"), TownadmCmdPermArgs("town|plot|server|wild|wild:# [(force [key])|(set key [val])]"), TownadmCmdPermArgsServer("server"), TownadmCmdPermArgsWild("wild"), TownadmCmdPermArgsWild2("wild:"), TownadmCmdPermArgs2Set("set"), TownadmCmdPermArgs2Force("force"), TownadmCmdPermDesc(
+			"Shows, sets or forces the permissions"),
 
-    // home commands
-    HomeCmdNoHomeByName("No home by that name was found"), HomeCmdDimNotSpawnDim("You cannot set the bed location in this dimension"), HomeCmdOwnerNotOnline("The bed owner is not online"), HomeCmdCannotDeleteBed("You cannot remove the bed spawn location"), HomeCmdNoHomes("You have no homes set"), HomeCmdTeleportStarted(
-            "§aStarted casting the home teleport spell. It will take %s seconds"), HomeCmdTeleportNearStarted("§e%s started casting a %s second home teleport spell"), HomeCmdHomeSet("§aHome set"), HomeCmdHome2Set("§aHome '%s' set"), HomeCmdHomeDeleted("§aHome location deleted"), HomeCmdHome2Deleted(
-            "§aHome location '%s' deleted"), HomeCmdCannotSetHere("You can set your home only in places where you can build"), HomeCmdHomesTitle("§2Your homes: %s"), HomeCmdHomesItem("§a%s§2"), HomeCmdHomesUnaccessibleItem("§4%s§2"), HomeCmdHomesItem2("   §a%s§2 (%s, %s, %s, %s)"), HomeCmdHomesUnaccessibleItem2(
-            "   §4%s§2 (%s, %s, %s, %s)"), HomeCmdDontMove("§2Don't move! Or you will lose your payment and the teleport is canceled."),
+	// per general
+	PermForced("§aAll childs have been updated to inherit from the node '§2%s§a' for perm '§2%s§a'"), PermSetDone("§aPermission '§2%s§a' set for the node '§2%s§a'"),
 
-    // Purchase
-    PayByHandNotify("§2To complete this action, please pay %sx %s (%s)"), PayByHandNotify2("§a(Right click the requested item)"), ;
+	TownPlotAssigned("§aPlot(s) assigned to '%s'"), TownPlotUnAssigned("§aPlot(s) unassigned"),
 
-    public String defaultVal;
-    public static String language = null;
-    public static HashMap<String, HashMap<Term, String>> translations = new HashMap<String, HashMap<Term, String>>();
+	// per errors
+	ErrPermSettingNotFound("The specified setting '%s' cannot be found"), ErrPermSettingCollectionNotFound("The specified node '%s' doesn't exist"), ErrPermNoChilds("The current permission node has no children"), ErrPermSupportedValues("§4Value type: §2%s§4, Supported values: §2%s"), ErrPermInvalidValue(
+			"§4Error: §2%s§4, Supported values: §2%s"), ErrPermYouDontHaveTown("You don't belong to any town"), ErrPermPlotNotInTown("The current block doesn't belong to any town"), ErrPermPlotNotInYourTown("The current block doesn't belong to your town"), ErrPermRankNotEnough(
+			"You have to be atleast the assistant of the town for this"),
 
-    Term(String def) {
-        defaultVal = def;
-    }
+	ErrPermCannotBuildHere("§4You cannot build in this area"), ErrPermCannotAccessHere("§4You cannot access things here"), ErrPermCannotPickup("§4You cannot pick items up here"),
 
-    public String fname() {
-        return super.toString();
-    }
+	ErrPermCannotInteract("You cannot interact with the target here"), ErrPermCannotAttack("You cannot attack the target here"),
 
-    @Override
-    public String toString() {
-        if (language == null) {
-            return defaultVal;
-        }
+	ErrNotUsableByConsole("This command can't be run from console"), ErrPlayerAlreadyInFriendList("The player '%s' is already in your friends list"), ErrPlayerNotInFriendList("The player '%s' is not in your friends list"),
 
-        HashMap<Term, String> terms = translations.get(language);
-        if (terms == null) {
-            return defaultVal;
-        }
+	// spawn command
+	SpawnCmdTeleportStarted("§aStarted casting the spawn teleport spell. It will take %s seconds"), SpawnCmdTeleportNearStarted("§e%s started casting a %s second spawn teleport spell"), SpawnCmdTeleportEnded("§aWhoooOooOooooOoo"), SpawnCmdTeleportReset("§4Teleport spell casting interrupted"),
 
-        String s = terms.get(this);
+	// home commands
+	HomeCmdNoHomeByName("No home by that name was found"), HomeCmdDimNotSpawnDim("You cannot set the bed location in this dimension"), HomeCmdOwnerNotOnline("The bed owner is not online"), HomeCmdCannotDeleteBed("You cannot remove the bed spawn location"), HomeCmdNoHomes("You have no homes set"), HomeCmdTeleportStarted(
+			"§aStarted casting the home teleport spell. It will take %s seconds"), HomeCmdTeleportNearStarted("§e%s started casting a %s second home teleport spell"), HomeCmdHomeSet("§aHome set"), HomeCmdHome2Set("§aHome '%s' set"), HomeCmdHomeDeleted("§aHome location deleted"), HomeCmdHome2Deleted(
+			"§aHome location '%s' deleted"), HomeCmdCannotSetHere("You can set your home only in places where you can build"), HomeCmdHomesTitle("§2Your homes: %s"), HomeCmdHomesItem("§a%s§2"), HomeCmdHomesUnaccessibleItem("§4%s§2"), HomeCmdHomesItem2("   §a%s§2 (%s, %s, %s, %s)"), HomeCmdHomesUnaccessibleItem2(
+			"   §4%s§2 (%s, %s, %s, %s)"), HomeCmdDontMove("§2Don't move! Or you will lose your payment and the teleport is canceled."),
 
-        return s == null || s.equals("") ? defaultVal : s;
-    }
+	// Purchase
+	PayByHandNotify("§2To complete this action, please pay %sx %s (%s)"), PayByHandNotify2("§a(Right click the requested item)"), ;
 
-    public String toString(Object... params) {
-        return String.format(toString(), params);
-    }
+	public String defaultVal;
+	public static String language = null;
+	public static HashMap<String, HashMap<Term, String>> translations = new HashMap<String, HashMap<Term, String>>();
 
-    public static void translate(String lang, Term term, String val) {
-        HashMap<Term, String> terms = translations.get(lang);
-        if (terms == null) {
-            translations.put(lang, terms = new HashMap<Term, String>());
-        }
+	Term(String def) {
+		defaultVal = def;
+	}
 
-        terms.put(term, val);
-    }
-    
-    public static void dumpLangFile(String filename){
-    	BufferedWriter writer;
-    	if (filename.trim() == "" || filename.trim().isEmpty()) return;
-    	Log.info("Dumping terms to %s", filename);
-    	try {
+	public String fname() {
+		return super.toString();
+	}
+
+	@Override
+	public String toString() {
+		if (language == null) {
+			return defaultVal;
+		}
+
+		HashMap<Term, String> terms = translations.get(language);
+		if (terms == null) {
+			return defaultVal;
+		}
+
+		String s = terms.get(this);
+
+		return s == null || s.equals("") ? defaultVal : s;
+	}
+
+	public String toString(Object... params) {
+		return String.format(toString(), params);
+	}
+
+	public static void translate(String lang, Term term, String val) {
+		HashMap<Term, String> terms = translations.get(lang);
+		if (terms == null) {
+			translations.put(lang, terms = new HashMap<Term, String>());
+		}
+
+		terms.put(term, val);
+	}
+
+	public static void dumpLangFile(String filename) {
+		BufferedWriter writer;
+		if (filename.trim() == "" || filename.trim().isEmpty())
+			return;
+		Log.info("Dumping terms to %s", filename);
+		try {
 			FileWriter fw = new FileWriter(Constants.CONFIG_FOLDER + filename);
 			writer = new BufferedWriter(fw);
 			writer.write("# Default terms used by MyTown");
 			writer.newLine();
-	    	for (Term t : Term.values()){
-	    		writer.append(t.fname() + "=" + t.defaultVal);
-	    		writer.newLine();
-	    	}
-	    	writer.close();
+			for (Term t : Term.values()) {
+				writer.append(t.fname() + "=" + t.defaultVal);
+				writer.newLine();
+			}
+			writer.close();
 		} catch (Exception e) {
 			Log.warning("Failed to dump the terms because %s", e.getMessage());
 		}
-    }
+	}
 }

@@ -7,109 +7,110 @@ import java.util.regex.Pattern;
 import mytown.entities.Resident;
 
 public class Formatter {
-    public static boolean formatChat = true;
-    public static String colorPrefix = "$";
-    private static Pattern colorPattern = Pattern.compile("(?i)\\$([0-9A-FK-OR])");
+	public static boolean formatChat = true;
+	public static String colorPrefix = "$";
+	private static Pattern colorPattern = Pattern.compile("(?i)\\$([0-9A-FK-OR])");
 
-    public static void generateColorPattern() {
-        colorPattern = Pattern.compile("(?i)" + Pattern.quote(colorPrefix) + "([0-9A-FK-OR])");
-    }
+	public static void generateColorPattern() {
+		colorPattern = Pattern.compile("(?i)" + Pattern.quote(colorPrefix) + "([0-9A-FK-OR])");
+	}
 
-    public static String formatLevel(Level lvl) {
-        if (lvl == Level.SEVERE) {
-            return "§4" + Term.SevereLevel;
-        } else if (lvl == Level.SEVERE) {
-            return "§6" + Term.WarningLevel;
-        } else {
-            return "§a" + Term.InfoLevel;
-        }
-    }
+	public static String formatLevel(Level lvl) {
+		if (lvl == Level.SEVERE) {
+			return "§4" + Term.SevereLevel;
+		} else if (lvl == Level.SEVERE) {
+			return "§6" + Term.WarningLevel;
+		} else {
+			return "§a" + Term.InfoLevel;
+		}
+	}
 
-    public static String townNotification(Level lvl, String msg) {
-        return String.format("[%s%s§f][%s§f] %s%s", ChatChannel.Town.color, ChatChannel.Town.abbrevation, formatLevel(lvl), ChatChannel.Town.color, msg);
-    }
+	public static String townNotification(Level lvl, String msg) {
+		return String.format("[%s%s§f][%s§f] %s%s", ChatChannel.Town.color, ChatChannel.Town.abbrevation, formatLevel(lvl), ChatChannel.Town.color, msg);
+	}
 
-    public static String formatCommand(String cmd, String args, String info, String color) {
-        if (color == null) {
-            color = "f";
-        }
+	public static String formatCommand(String cmd, String args, String info, String color) {
+		if (color == null) {
+			color = "f";
+		}
 
-        String arg = args == null || args.length() == 0 ? "" : " §3" + args;
+		String arg = args == null || args.length() == 0 ? "" : " §3" + args;
 
-        return String.format("§%s    %s%s §7- %s", color, cmd, arg, info);
-    }
+		return String.format("§%s    %s%s §7- %s", color, cmd, arg, info);
+	}
 
-    public static String formatGroupCommand(String cmd, String args, String info, String color) {
-        if (color == null) {
-            color = "f";
-        }
+	public static String formatGroupCommand(String cmd, String args, String info, String color) {
+		if (color == null) {
+			color = "f";
+		}
 
-        String arg = args == null || args.length() == 0 ? "" : " §3" + args;
+		String arg = args == null || args.length() == 0 ? "" : " §3" + args;
 
-        return String.format("§%s +  %s%s §7- %s", color, cmd, arg, info);
-    }
-    
-    public static String formatAdminCommand(Term cmd, Term args, Term info, String color){
-    	return formatAdminCommand(cmd.toString(), args.toString(), info.toString(), color);
-    }
+		return String.format("§%s +  %s%s §7- %s", color, cmd, arg, info);
+	}
 
-    public static String formatAdminCommand(String cmd, String args, String info, String color) {
-        if (color == null) {
-            color = "f";
-        }
+	public static String formatAdminCommand(Term cmd, Term args, Term info, String color) {
+		return formatAdminCommand(cmd.toString(), args.toString(), info.toString(), color);
+	}
 
-        return String.format("§%s/%s %s §7%s §%s- %s", color, Term.TownAdmCommand, cmd, args, color, info);
-    }
+	public static String formatAdminCommand(String cmd, String args, String info, String color) {
+		if (color == null) {
+			color = "f";
+		}
 
-    public static String commandError(Level lvl, String msg) {
-        return String.format("[%s§f] %s", formatLevel(lvl), msg);
-    }
+		return String.format("§%s/%s %s §7%s §%s- %s", color, Term.TownAdmCommand, cmd, args, color, info);
+	}
 
-    public static String formatChat(Resident res, String line, ChatChannel channel, boolean emote) {
-        if (!formatChat) {
-            return emote ? String.format("* %s %s", res.name(), line) : String.format("<%s> %s", res.name(), line);
-        } 
-        return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix()).replace("$town$", (res.town()==null ? "" : res.town().name()));
-    }
+	public static String commandError(Level lvl, String msg) {
+		return String.format("[%s§f] %s", formatLevel(lvl), msg);
+	}
 
-    public static String formatChatSystem(String line, ChatChannel channel) {
-        if (!formatChat) {
-            return "<§4Sys:MyTown§f> " + line;
-        }
+	public static String formatChat(Resident res, String line, ChatChannel channel, boolean emote) {
+		if (!formatChat) {
+			return emote ? String.format("* %s %s", res.name(), line) : String.format("<%s> %s", res.name(), line);
+		}
+		return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix())
+				.replace("$town$", (res.town() == null ? "" : res.town().name()));
+	}
 
-        return Term.ChatFormat.toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", "§4MyTown").replace("$msg$", line).replace("$prefix$", "§f[§4Sys§f]").replace("$postfix$", "");
-    }
+	public static String formatChatSystem(String line, ChatChannel channel) {
+		if (!formatChat) {
+			return "<§4Sys:MyTown§f> " + line;
+		}
 
-    public static String formatPrivMsg(Resident sender, Resident receiver, String line, boolean out) {
-        return (out ? Term.PrivMsgFormatOut : Term.PrivMsgFormatIn).toString().replace("$sname$", sender.name()).replace("$sprefix$", sender.prefix()).replace("$spostfix$", sender.postfix())
+		return Term.ChatFormat.toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", "§4MyTown").replace("$msg$", line).replace("$prefix$", "§f[§4Sys§f]").replace("$postfix$", "");
+	}
 
-        .replace("$name$", receiver.name()).replace("$prefix$", receiver.prefix()).replace("$postfix$", receiver.postfix())
+	public static String formatPrivMsg(Resident sender, Resident receiver, String line, boolean out) {
+		return (out ? Term.PrivMsgFormatOut : Term.PrivMsgFormatIn).toString().replace("$sname$", sender.name()).replace("$sprefix$", sender.prefix()).replace("$spostfix$", sender.postfix())
 
-        .replace("$msg$", line);
-    }
+		.replace("$name$", receiver.name()).replace("$prefix$", receiver.prefix()).replace("$postfix$", receiver.postfix())
 
-    public static String formatResidentName(Resident r) {
-        if (r.isOnline()) {
-            return String.format("§f%s§4*", r.formattedName());
-        } else {
-            return String.format("§f%s", r.formattedName());
-        }
-    }
+		.replace("$msg$", line);
+	}
 
-    public static String applyColorCodes(String str) {
-        if (str == null || str.equals("")) {
-            return "";
-        }
+	public static String formatResidentName(Resident r) {
+		if (r.isOnline()) {
+			return String.format("§f%s§4*", r.formattedName());
+		} else {
+			return String.format("§f%s", r.formattedName());
+		}
+	}
 
-        Matcher m = colorPattern.matcher(str);
-        String s = str;
+	public static String applyColorCodes(String str) {
+		if (str == null || str.equals("")) {
+			return "";
+		}
 
-        while (m.find()) {
-            String color = m.group(1).toLowerCase();
-            s = m.replaceFirst("§" + color.charAt(0));
-            m = m.reset(s);
-        }
+		Matcher m = colorPattern.matcher(str);
+		String s = str;
 
-        return s;
-    }
+		while (m.find()) {
+			String color = m.group(1).toLowerCase();
+			s = m.replaceFirst("§" + color.charAt(0));
+			m = m.reset(s);
+		}
+
+		return s;
+	}
 }

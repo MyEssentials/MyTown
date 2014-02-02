@@ -30,49 +30,49 @@ public class CmdSpawn extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
-        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
-        Town target = null;
-        if (args.length < 1) {
-            if (res.town() == null) {
-                throw new CommandException(Term.ErrPermYouDontHaveTown);
-            }
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		Town target = null;
+		if (args.length < 1) {
+			if (res.town() == null) {
+				throw new CommandException(Term.ErrPermYouDontHaveTown);
+			}
 
-            target = res.town();
-        } else {
-            Town t = MyTownDatasource.instance.getTown(args[0]);
-            if (t == null) {
-                throw new CommandException(Term.TownErrNotFound, args[0]);
-            }
+			target = res.town();
+		} else {
+			Town t = MyTownDatasource.instance.getTown(args[0]);
+			if (t == null) {
+				throw new CommandException(Term.TownErrNotFound, args[0]);
+			}
 
-            target = t;
-        }
-        if (target.spawnBlock == null || target.getSpawn() == null) {
-            throw new CommandException(Term.TownErrSpawnNotSet);
-        }
+			target = t;
+		}
+		if (target.spawnBlock == null || target.getSpawn() == null) {
+			throw new CommandException(Term.TownErrSpawnNotSet);
+		}
 
-        ItemStack cost = null;
-        if (target == res.town()) {
-            Assert.Perm(sender, "mytown.cmd.spawn.own");
-            cost = Cost.TownSpawnTeleportOwn.item;
-        } else {
-            Assert.Perm(sender, "mytown.cmd.spawn.other");
-            cost = Cost.TownSpawnTeleportOther.item;
-        }
+		ItemStack cost = null;
+		if (target == res.town()) {
+			Assert.Perm(sender, "mytown.cmd.spawn.own");
+			cost = Cost.TownSpawnTeleportOwn.item;
+		} else {
+			Assert.Perm(sender, "mytown.cmd.spawn.other");
+			cost = Cost.TownSpawnTeleportOther.item;
+		}
 
-        res.pay.requestPayment(target == res.town() ? "townspawntpown" : "townspawntpother", cost, new PayHandler.IDone() {
-            @Override
-            public void run(Resident player, Object[] args) {
-                player.sendToTownSpawn((Town) args[0]);
-            }
-        }, target);
+		res.pay.requestPayment(target == res.town() ? "townspawntpown" : "townspawntpother", cost, new PayHandler.IDone() {
+			@Override
+			public void run(Resident player, Object[] args) {
+				player.sendToTownSpawn((Town) args[0]);
+			}
+		}, target);
 	}
 
 	@Override
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		ArrayList<String> list = new ArrayList<String>();
-        for (Town t : MyTownDatasource.instance.towns.values()) {
-            list.add(t.name());
-        }
-        return list;
+		for (Town t : MyTownDatasource.instance.towns.values()) {
+			list.add(t.name());
+		}
+		return list;
 	}
 }

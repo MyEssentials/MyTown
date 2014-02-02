@@ -8,12 +8,42 @@ import net.minecraft.server.MinecraftServer;
 import com.sperion.forgeperms.ForgePerms;
 
 public class Assert {
-    public static void Perm(ICommandSender cs, String node) throws NoAccessException, CommandException {
-        if (cs instanceof MinecraftServer || cs instanceof RConConsoleSource) throw new CommandException(Term.ErrNotUsableByConsole);
-        EntityPlayer p = (EntityPlayer) cs;
-        if (ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
-            return;
-        }
-        throw new NoAccessException(cs, node);
-    }
+	/**
+	 * Checks if command server has the given permission node. Does NOT allow
+	 * console to access.
+	 * 
+	 * @param cs
+	 * @param node
+	 * @throws NoAccessException
+	 * @throws CommandException
+	 */
+	public static void Perm(ICommandSender cs, String node) throws NoAccessException, CommandException {
+		Assert.Perm(cs, node, false);
+	}
+
+	/**
+	 * Checks if command sender has the given permission node.
+	 * 
+	 * @param cs
+	 * @param node
+	 * @param allowConsole
+	 * @throws NoAccessException
+	 * @throws CommandException
+	 */
+	public static void Perm(ICommandSender cs, String node, boolean allowConsole) throws NoAccessException, CommandException {
+		if (cs instanceof MinecraftServer || cs instanceof RConConsoleSource) {
+			if (allowConsole) {
+				return;
+			} else {
+				throw new CommandException(Term.ErrNotUsableByConsole);
+			}
+		}
+		if (node == null)
+			return;
+		EntityPlayer p = (EntityPlayer) cs;
+		if (ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
+			return;
+		}
+		throw new NoAccessException(cs, node);
+	}
 }

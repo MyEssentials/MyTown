@@ -1,7 +1,9 @@
 package mytown.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import mytown.CommandException;
@@ -15,219 +17,225 @@ import net.minecraft.entity.player.EntityPlayer;
 import com.google.common.base.Joiner;
 
 public class Nation {
-    public static int nationAddsBlocks = 0;
-    public static int nationAddsBlocksPerResident = 0;
+	public static int nationAddsBlocks = 0;
+	public static int nationAddsBlocksPerResident = 0;
 
-    private List<Town> towns = new ArrayList<Town>();
-    private int id = 0;
-    private String name;
-    private Town capital;
-    private int extraBlocks = 0;
+	private Map<String, Town> towns = new HashMap<String, Town>();
+	// private List<Town> towns = new ArrayList<Town>();
+	private int id = 0;
+	private String name;
+	private Town capital;
+	private int extraBlocks = 0;
 
-    public String name() {
-        return name;
-    }
+	public String name() {
+		return name;
+	}
 
-    public Town capital() {
-        return capital;
-    }
+	public Town capital() {
+		return capital;
+	}
 
-    public int extraBlocks() {
-        return extraBlocks;
-    }
+	public int extraBlocks() {
+		return extraBlocks;
+	}
 
-    public void setExtraBlocks(int val) {
-        extraBlocks = val;
-        save();
-    }
+	public void setExtraBlocks(int val) {
+		extraBlocks = val;
+		save();
+	}
 
-    public List<Town> towns() {
-        return towns;
-    }
+	public Map<String, Town> towns() {
+		return towns;
+	}
 
-    public int id() {
-        return id;
-    }
+	// public List<Town> towns() {
+	// return towns;
+	// }
 
-    public void setId(int val) {
-        id = val;
-    }
+	public int id() {
+		return id;
+	}
 
-    protected Nation() {}
+	public void setId(int val) {
+		id = val;
+	}
 
-    public Nation(String pName, Town pCapital) throws CommandException {
-        checkName(pName);
+	protected Nation() {
+	}
 
-        if (pCapital.nation() != null) {
-            throw new CommandException(Term.TownErrAlreadyInNation);
-        }
+	public Nation(String pName, Town pCapital) throws CommandException {
+		checkName(pName);
 
-        name = pName;
-        capital = pCapital;
+		if (pCapital.nation() != null) {
+			throw new CommandException(Term.TownErrAlreadyInNation);
+		}
 
-        addTown(capital); // calls save
+		name = pName;
+		capital = pCapital;
 
-        MyTownDatasource.instance.addNation(this);
-    }
+		addTown(capital); // calls save
 
-    public void checkName(String name) throws CommandException {
-        if (name == null || name.equals("")) {
-            throw new CommandException(Term.TownErrNationNameCannotBeEmpty);
-        }
+		MyTownDatasource.instance.addNation(this);
+	}
 
-        Nation n = MyTownDatasource.instance.nations.get(name.toLowerCase());
-        if (n != null && n != this) {
-            throw new CommandException(Term.TownErrNationNameInUse);
-        }
-    }
+	public void checkName(String name) throws CommandException {
+		if (name == null || name.equals("")) {
+			throw new CommandException(Term.TownErrNationNameCannotBeEmpty);
+		}
 
-    public void save() {
-        MyTownDatasource.instance.saveNation(this);
-    }
+		Nation n = MyTownDatasource.instance.nations.get(name.toLowerCase());
+		if (n != null && n != this) {
+			throw new CommandException(Term.TownErrNationNameInUse);
+		}
+	}
 
-    public void delete() {
-        for (Town t : towns) {
-            t.setNation(null);
-        }
+	public void save() {
+		MyTownDatasource.instance.saveNation(this);
+	}
 
-        MyTownDatasource.instance.deleteNation(this);
-        MyTownDatasource.instance.unloadNation(this);
-    }
+	public void delete() {
+		for (Town t : towns.values()) {
+			t.setNation(null);
+		}
 
-    public void addTown(Town t) throws CommandException {
-        if (t.nation() != null) {
-            throw new CommandException(Term.TownErrAlreadyInNation);
-        }
+		MyTownDatasource.instance.deleteNation(this);
+		MyTownDatasource.instance.unloadNation(this);
+	}
 
-        t.setNation(this);
-        towns.add(t);
-        t.pendingNationInvitation = null;
+	public void addTown(Town t) throws CommandException {
+		if (t.nation() != null) {
+			throw new CommandException(Term.TownErrAlreadyInNation);
+		}
 
-        save();
-    }
+		t.setNation(this);
+		towns.put(t.name(), t);
+		t.pendingNationInvitation = null;
 
-    public void removeTown(Town t) throws CommandException {
-        if (t.nation() != this || !towns.contains(t)) {
-            throw new CommandException(Term.TownErrNationNotPartOfNation);
-        }
-        if (t == capital) {
-            throw new CommandException(Term.TownErrNationCantRemoveCapital);
-        }
+		save();
+	}
 
-        t.setNation(null);
-        towns.remove(t);
-        save();
-    }
+	public void removeTown(Town t) throws CommandException {
+		if (t.nation() != this || !towns.containsValue(t)) {
+			throw new CommandException(Term.TownErrNationNotPartOfNation);
+		}
+		if (t == capital) {
+			throw new CommandException(Term.TownErrNationCantRemoveCapital);
+		}
 
-    public void setCapital(Town t) throws CommandException {
-        if (t.nation() != this || !towns.contains(t)) {
-            throw new CommandException(Term.TownErrNationNotPartOfNation);
-        }
+		t.setNation(null);
+		towns.remove(t);
+		save();
+	}
 
-        capital = t;
-        save();
-    }
+	public void setCapital(Town t) throws CommandException {
+		if (t.nation() != this || !towns.containsValue(t)) {
+			throw new CommandException(Term.TownErrNationNotPartOfNation);
+		}
 
-    public void setName(String v) throws CommandException {
-        checkName(v);
-        name = v;
-        save();
-    }
+		capital = t;
+		save();
+	}
 
-    public int getTotalExtraBlocks(Town forTown) {
-        if (forTown.nation() != this) {
-            return 0;
-        }
+	public void setName(String v) throws CommandException {
+		checkName(v);
+		name = v;
+		save();
+	}
 
-        return nationAddsBlocksPerResident * forTown.residents().size() + extraBlocks + nationAddsBlocks;
-    }
+	public int getTotalExtraBlocks(Town forTown) {
+		if (forTown.nation() != this) {
+			return 0;
+		}
 
-    public static Nation sqlLoad(int id, String name, int capital, String pTowns, String extra) {
-        Nation n = new Nation();
-        n.id = id;
-        n.name = name;
+		return nationAddsBlocksPerResident * forTown.residents().size() + extraBlocks + nationAddsBlocks;
+	}
 
-        if (pTowns != null && pTowns.trim().length() > 0) {
-            for (String town : pTowns.trim().split(";")) {
-                Town t = MyTownDatasource.instance.getTown(Integer.parseInt(town));
+	public static Nation sqlLoad(int id, String name, int capital, String pTowns, String extra) {
+		Nation n = new Nation();
+		n.id = id;
+		n.name = name;
 
-                if (t != null) {
-                    t.setNation(n);
-                    n.towns.add(t);
-                }
-            }
-        }
+		if (pTowns != null && pTowns.trim().length() > 0) {
+			for (String town : pTowns.trim().split(";")) {
+				Town t = MyTownDatasource.instance.getTown(Integer.parseInt(town));
 
-        if (capital > 0) {
-            Town t = MyTownDatasource.instance.getTown(capital);
+				if (t != null) {
+					t.setNation(n);
+					n.towns.put(t.name(), t);
+				}
+			}
+		}
 
-            if (t != null) {
-                n.capital = t;
-            }
-        }
+		if (capital > 0) {
+			Town t = MyTownDatasource.instance.getTown(capital);
 
-        // handle extra
-        if (extra != null && extra.trim().length() > 0) {
-            String[] exSp = extra.split(";");
-            for (String ex : exSp) {
-                String[] sp = ex.split(":");
+			if (t != null) {
+				n.capital = t;
+			}
+		}
 
-                if (sp[0].equals("eb")) {
-                    n.extraBlocks = Integer.parseInt(sp[1]);
-                }
-            }
-        }
+		// handle extra
+		if (extra != null && extra.trim().length() > 0) {
+			String[] exSp = extra.split(";");
+			for (String ex : exSp) {
+				String[] sp = ex.split(":");
 
-        return n;
-    }
+				if (sp[0].equals("eb")) {
+					n.extraBlocks = Integer.parseInt(sp[1]);
+				}
+			}
+		}
 
-    public String serializeExtra() {
-        List<String> ex = new ArrayList<String>();
+		return n;
+	}
 
-        if (extraBlocks != 0) {
-            ex.add("eb:" + String.valueOf(extraBlocks));
-        }
+	public String serializeExtra() {
+		List<String> ex = new ArrayList<String>();
 
-        return Joiner.on(";").join(ex);
-    }
+		if (extraBlocks != 0) {
+			ex.add("eb:" + String.valueOf(extraBlocks));
+		}
 
-    public void sendNotification(Level lvl, String msg) {
-        String formatted = Formatter.townNotification(lvl, msg);
-        for (Town t : towns) {
-            for (Resident r : t.residents()) {
-                if (!r.isOnline()) {
-                    continue;
-                }
+		return Joiner.on(";").join(ex);
+	}
 
-                MyTown.sendChatToPlayer(r.onlinePlayer, formatted);
-            }
-        }
-    }
+	public void sendNotification(Level lvl, String msg) {
+		String formatted = Formatter.townNotification(lvl, msg);
+		for (Town t : towns.values()) {
+			for (Resident r : t.residents()) {
+				if (!r.isOnline()) {
+					continue;
+				}
 
-    public void sendNationInfo(ICommandSender pl) {
-        Nation n = this;
+				MyTown.sendChatToPlayer(r.onlinePlayer, formatted);
+			}
+		}
+	}
 
-        List<String> names = new ArrayList<String>();
-        int b1 = 0, b2 = 0, m1 = 0;
-        for (Town t : n.towns()) {
-            b1 += t.blocks().size();
-            b2 += t.totalBlocks();
-            m1 += t.residents().size();
-            names.add(String.format("§b%s[%s]", t.name(), t.residents().size()));
-        }
-        String tNames = Joiner.on("§2, ").join(names);
+	public void sendNationInfo(ICommandSender pl) {
+		Nation n = this;
 
-        String nationColor = "§2";
-        if (pl instanceof EntityPlayer) {
-            Resident target = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) pl);
-            if (target.town() == null || target.town().nation() != n) {
-                nationColor = "§4";
-            }
-        }
+		List<String> names = new ArrayList<String>();
+		int b1 = 0, b2 = 0, m1 = 0;
+		for (Town t : n.towns().values()) {
+			b1 += t.blocks().size();
+			b2 += t.totalBlocks();
+			m1 += t.residents().size();
+			names.add(String.format("§b%s[%s]", t.name(), t.residents().size()));
+		}
+		String tNames = Joiner.on("§2, ").join(names);
 
-        MyTown.sendChatToPlayer(pl, Term.NationStatusName.toString(nationColor, n.name()));
-        MyTown.sendChatToPlayer(pl, Term.NationStatusGeneral.toString(b1, b2, m1));
-        MyTown.sendChatToPlayer(pl, Term.NationStatusCapital.toString(n.capital() != null ? n.capital().name() : "?"));
-        MyTown.sendChatToPlayer(pl, Term.NationStatusTowns.toString(tNames));
-    }
+		String nationColor = "§2";
+		if (pl instanceof EntityPlayer) {
+			Resident target = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) pl);
+			if (target.town() == null || target.town().nation() != n) {
+				nationColor = "§4";
+			}
+		}
+
+		MyTown.sendChatToPlayer(pl, Term.NationStatusName.toString(nationColor, n.name()));
+		MyTown.sendChatToPlayer(pl, Term.NationStatusGeneral.toString(b1, b2, m1));
+		MyTown.sendChatToPlayer(pl, Term.NationStatusCapital.toString(n.capital() != null ? n.capital().name() : "?"));
+		MyTown.sendChatToPlayer(pl, Term.NationStatusTowns.toString(tNames));
+	}
 }

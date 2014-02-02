@@ -15,13 +15,13 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class CmdTownMap extends MyTownSubCommandAdapter {
 	private ArrayList<String> tabList;
-	
-	public CmdTownMap(){
+
+	public CmdTownMap() {
 		tabList = new ArrayList<String>();
 		tabList.add("on");
 		tabList.add("off");
 	}
-	
+
 	@Override
 	public String getName() {
 		return "map";
@@ -34,23 +34,23 @@ public class CmdTownMap extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
-        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
-        if (args.length == 1) {
-            boolean modeOn = !res.mapMode;
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (args.length == 1) {
+			boolean modeOn = !res.mapMode;
 
-            if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("enable") || args[0].equalsIgnoreCase("activate")) {
-                modeOn = true;
-            } else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable") || args[0].equalsIgnoreCase("deactivate")) {
-                modeOn = false;
-            }
+			if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("enable") || args[0].equalsIgnoreCase("activate")) {
+				modeOn = true;
+			} else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable") || args[0].equalsIgnoreCase("deactivate")) {
+				modeOn = false;
+			}
 
-            res.mapMode = modeOn;
+			res.mapMode = modeOn;
 
-            String msg = res.mapMode ? Term.PlayerMapModeOn.toString() : Term.PlayerMapModeOff.toString();
-            MyTown.sendChatToPlayer(sender, msg);
-        } else {
-            res.sendLocationMap(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
-        }
+			String msg = res.mapMode ? Term.PlayerMapModeOn.toString() : Term.PlayerMapModeOff.toString();
+			MyTown.sendChatToPlayer(sender, msg);
+		} else {
+			res.sendLocationMap(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
+		}
 	}
 
 	@Override

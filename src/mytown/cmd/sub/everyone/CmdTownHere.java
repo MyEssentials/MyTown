@@ -25,18 +25,18 @@ public class CmdTownHere extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
-        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
-        TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(res.onlinePlayer.dimension, (int)res.onlinePlayer.posX, (int)res.onlinePlayer.posY, (int)res.onlinePlayer.posZ);
-        if (block == null){
-            return;
-        }
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+		if (block == null) {
+			return;
+		}
 
-        Town t = block.town();
-        if (t == null) {
-        	return;
-        }
+		Town t = block.town();
+		if (t == null) {
+			return;
+		}
 
-        t.sendTownInfo(sender);
+		t.sendTownInfo(sender);
 	}
 
 	@Override

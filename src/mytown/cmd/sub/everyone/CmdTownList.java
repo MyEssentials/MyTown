@@ -5,19 +5,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import mytown.Assert;
 import mytown.CommandException;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.NoAccessException;
 import mytown.Term;
-import mytown.cmd.api.MyTownSubCommand;
+import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Town;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.network.rcon.RConConsoleSource;
-import net.minecraft.server.MinecraftServer;
 
-public class CmdTownList implements MyTownSubCommand {
+public class CmdTownList extends MyTownSubCommandAdapter {
 	@Override
 	public String getName() {
 		return "list";
@@ -29,38 +26,37 @@ public class CmdTownList implements MyTownSubCommand {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
-        if (sender instanceof MinecraftServer || sender instanceof RConConsoleSource) return;
-        Assert.Perm(sender, getPermNode());
+	public boolean canUseByConsole() {
+		return true;
 	}
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
-        ArrayList<Town> sorted = new ArrayList<Town>(MyTownDatasource.instance.towns.values());
+		ArrayList<Town> sorted = new ArrayList<Town>(MyTownDatasource.instance.towns.values());
 
-        Collections.sort(sorted, new Comparator<Town>() {
-            @Override
-            public int compare(Town arg0, Town arg1) {
-                return Integer.compare(arg1.residents().size(), arg0.residents().size());
-            }
-        });
+		Collections.sort(sorted, new Comparator<Town>() {
+			@Override
+			public int compare(Town arg0, Town arg1) {
+				return Integer.compare(arg1.residents().size(), arg0.residents().size());
+			}
+		});
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(Term.TownCmdListStart.toString(sorted.size(), ""));
-        int i = 0;
+		StringBuilder sb = new StringBuilder();
+		sb.append(Term.TownCmdListStart.toString(sorted.size(), ""));
+		int i = 0;
 
-        for (Town e : sorted) {
-            String n = Term.TownCmdListEntry.toString(e.name(), e.residents().size());
-            if (i > 0) {
-                sb.append(", ");
-            }
-            i++;
-            sb.append(n);
-        }
+		for (Town e : sorted) {
+			String n = Term.TownCmdListEntry.toString(e.name(), e.residents().size());
+			if (i > 0) {
+				sb.append(", ");
+			}
+			i++;
+			sb.append(n);
+		}
 
-        if (sb.length() > 0) {
-            MyTown.sendChatToPlayer(sender, sb.toString());
-        }
+		if (sb.length() > 0) {
+			MyTown.sendChatToPlayer(sender, sb.toString());
+		}
 	}
 
 	@Override

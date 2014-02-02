@@ -3,15 +3,15 @@ package mytown.event.prot;
 import mytown.event.ProtBase;
 
 public class ArsMagica2 extends ProtBase {
-    @Override
-    public void load() throws Exception {
-    }
+	@Override
+	public void load() throws Exception {
+	}
 
-    @Override
-    public boolean loaded() {
-    	return false;
-    }
-    
+	@Override
+	public boolean loaded() {
+		return false;
+	}
+
 	@Override
 	public String getMod() {
 		return "Ars Magics 2";

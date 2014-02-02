@@ -8,22 +8,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import mytown.commands.CmdChannel;
-import mytown.commands.CmdChat;
-import mytown.commands.CmdDelHome;
-import mytown.commands.CmdEmote;
-import mytown.commands.CmdGamemode;
-import mytown.commands.CmdHome;
-import mytown.commands.CmdHomes;
-import mytown.commands.CmdMyTownAdmin;
-import mytown.commands.CmdOnline;
-import mytown.commands.CmdPrivateMsg;
-import mytown.commands.CmdReplyPrivateMsg;
-import mytown.commands.CmdSetHome;
-import mytown.commands.CmdSetSpawn;
-import mytown.commands.CmdSpawn;
-import mytown.commands.CmdTeleport;
-import mytown.commands.CmdWrk;
+import mytown.cmd.CmdDelHome;
+import mytown.cmd.CmdEmote;
+import mytown.cmd.CmdGamemode;
+import mytown.cmd.CmdHome;
+import mytown.cmd.CmdHomes;
+import mytown.cmd.CmdMyTown;
+import mytown.cmd.CmdOnline;
+import mytown.cmd.CmdPrivateMsg;
+import mytown.cmd.CmdReplyPrivateMsg;
+import mytown.cmd.CmdSetHome;
+import mytown.cmd.CmdSetSpawn;
+import mytown.cmd.CmdSpawn;
+import mytown.cmd.CmdTeleport;
+import mytown.cmd.CmdWrk;
 import mytown.entities.ItemIdRange;
 import mytown.entities.TownSettingCollection;
 import mytown.entities.TownSettingCollection.ISettingsSaveHandler;
@@ -32,6 +30,9 @@ import mytown.event.ProtectionEvents;
 import mytown.event.TickHandler;
 import mytown.event.WorldEvents;
 import mytown.event.tick.WorldBorder;
+import mytown.old_commands.CmdChannel;
+import mytown.old_commands.CmdChat;
+import mytown.old_commands.CmdMyTownAdmin;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -52,134 +53,147 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
 public class MyTown {
-    public TownSettingCollection serverWildSettings = new TownSettingCollection(true, true);
-    public TownSettingCollection serverSettings = new TownSettingCollection(true, false);
-    public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
-    public LinkedList<ItemIdRange> carts = null;
-    public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
+	public TownSettingCollection serverWildSettings = new TownSettingCollection(true, true);
+	public TownSettingCollection serverSettings = new TownSettingCollection(true, false);
+	public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
+	public LinkedList<ItemIdRange> carts = null;
+	public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
 
-    @Instance("MyTown")
-    public static MyTown instance;
-    public Config config = new Config();
+	@Instance("MyTown")
+	public static MyTown instance;
+	public Config config = new Config();
 
-    public List<CommandBase> commands = new ArrayList<CommandBase>();
+	public List<CommandBase> commands = new ArrayList<CommandBase>();
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent ev) {
-        Log.init();
-        addCommands();
-        config.loadConfig();
-    }
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent ev) {
+		Log.init();
+		addCommands();
+		config.loadConfig();
+	}
 
-    @EventHandler
-    public void modsLoaded(FMLServerStartedEvent var1) {
-        try {
-            MyTownDatasource.instance.init();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
+	@EventHandler
+	public void modsLoaded(FMLServerStartedEvent var1) {
+		try {
+			MyTownDatasource.instance.init();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex.getMessage(), ex);
+		}
 
-        PlayerEvents events = new PlayerEvents();
-        MinecraftForge.EVENT_BUS.register(events);
-        GameRegistry.registerPlayerTracker(events);
-        
-        try{
+		PlayerEvents events = new PlayerEvents();
+		MinecraftForge.EVENT_BUS.register(events);
+		GameRegistry.registerPlayerTracker(events);
+
+		try {
 			Class.forName("net.minecraftforge.event.world.BlockEvent$BreakEvent");
-			MinecraftForge.EVENT_BUS.register(Class.forName("mytown.event.ExtraEvents").newInstance());  //A sort of compat for older versions of Forge that don't contain all the events
+			MinecraftForge.EVENT_BUS.register(Class.forName("mytown.event.ExtraEvents").newInstance()); // A
+																										// sort
+																										// of
+																										// compat
+																										// for
+																										// older
+																										// versions
+																										// of
+																										// Forge
+																										// that
+																										// don't
+																										// contain
+																										// all
+																										// the
+																										// events
 			Log.info("ExtraEvents loaded");
-        } catch(Exception e){
-        	Log.info("Failed to load ExtraEvents");
-        }
-        
-        MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
-        TickRegistry.registerTickHandler(ProtectionEvents.instance, Side.SERVER);
-        
-        TickRegistry.registerTickHandler(TickHandler.instance, Side.SERVER);
-        MinecraftForge.EVENT_BUS.register(WorldEvents.instance);
+		} catch (Exception e) {
+			Log.info("Failed to load ExtraEvents");
+		}
 
-        try {
-            config.loadCommandsConfig();
-            WorldBorder.instance.continueGeneratingChunks();
-        } catch (Exception ex) {
-            FMLLog.log(Level.SEVERE, ex, Constants.MODNAME + " was unable to load it\'s configuration successfully", new Object[0]);
-            throw new RuntimeException(ex);
-        } finally {
-            config.save(); // re-save to add the missing configuration variables
-        }
+		MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
+		TickRegistry.registerTickHandler(ProtectionEvents.instance, Side.SERVER);
 
-        Log.info("Loaded");
-    }
+		TickRegistry.registerTickHandler(TickHandler.instance, Side.SERVER);
+		MinecraftForge.EVENT_BUS.register(WorldEvents.instance);
 
-    @EventHandler
-    public void serverStopping(FMLServerStoppingEvent ev) throws InterruptedException {
-        WorldBorder.instance.stopGenerators();
-    }
+		try {
+			config.loadCommandsConfig();
+			WorldBorder.instance.continueGeneratingChunks();
+		} catch (Exception ex) {
+			FMLLog.log(Level.SEVERE, ex, Constants.MODNAME + " was unable to load it\'s configuration successfully", new Object[0]);
+			throw new RuntimeException(ex);
+		} finally {
+			config.save(); // re-save to add the missing configuration variables
+		}
 
-    private void addCommands() {
-        //commands.add(new CmdMyTown());
-    	commands.add(new mytown.cmd.CmdMyTown());
-        commands.add(new CmdMyTownAdmin());
-        commands.add(new CmdChannel());
-        commands.add(new CmdGamemode());
-        commands.add(new CmdWrk());
-        commands.add(new CmdSpawn());
-        commands.add(new CmdTeleport());
-        commands.add(new CmdSetSpawn());
-        commands.add(new CmdOnline());
-        commands.add(new CmdEmote());
-        commands.add(new CmdPrivateMsg());
-        commands.add(new CmdReplyPrivateMsg());
-        commands.add(new CmdHomes());
-        commands.add(new CmdHome());
-        commands.add(new CmdSetHome());
-        commands.add(new CmdDelHome());
+		Log.info("Loaded");
+	}
 
-        for (ChatChannel c : ChatChannel.values()) {
-            commands.add(new CmdChat(c));
-        }
-    }
+	@EventHandler
+	public void serverStopping(FMLServerStoppingEvent ev) throws InterruptedException {
+		WorldBorder.instance.stopGenerators();
+	}
 
-    public void reload() {
-        config.loadConfig();
+	private void addCommands() {
+		commands.add(new CmdMyTown());
+		commands.add(new CmdMyTownAdmin());
+		commands.add(new CmdChannel());
+		commands.add(new CmdGamemode());
+		commands.add(new CmdWrk());
+		commands.add(new CmdSpawn());
+		commands.add(new CmdTeleport());
+		commands.add(new CmdSetSpawn());
+		commands.add(new CmdOnline());
+		commands.add(new CmdEmote());
+		commands.add(new CmdPrivateMsg());
+		commands.add(new CmdReplyPrivateMsg());
+		commands.add(new CmdHomes());
+		commands.add(new CmdHome());
+		commands.add(new CmdSetHome());
+		commands.add(new CmdDelHome());
 
-        ProtectionEvents.instance.reload();
+		for (ChatChannel c : ChatChannel.values()) {
+			commands.add(new CmdChat(c));
+		}
+	}
 
-        try {
-            MyTownDatasource.instance.init();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
-    }
+	public void reload() {
+		config.loadConfig();
 
-    public TownSettingCollection getWorldWildSettings(int w) {
-        for (Entry<Integer, TownSettingCollection> set : worldWildSettings.entrySet()) {
-            if (set.getKey() == w) {
-                return set.getValue();
-            }
-        }
+		ProtectionEvents.instance.reload();
 
-        TownSettingCollection set = new TownSettingCollection(false, true);
-        set.tag = new Integer(w);
-        set.setParent(serverWildSettings);
-        set.saveHandler = new ISettingsSaveHandler() {
-            @Override
-            public void save(TownSettingCollection sender, Object tag) {
-                int w = (Integer) tag;
-                MyTown.instance.config.get("wildperms", "Dim_" + String.valueOf(w), "").set(sender.serialize());
-                MyTown.instance.config.save();
-            }
-        };
+		try {
+			MyTownDatasource.instance.init();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex.getMessage(), ex);
+		}
+	}
 
-        worldWildSettings.put(w, set);
+	public TownSettingCollection getWorldWildSettings(int w) {
+		for (Entry<Integer, TownSettingCollection> set : worldWildSettings.entrySet()) {
+			if (set.getKey() == w) {
+				return set.getValue();
+			}
+		}
 
-        return set;
-    }
-    
-    public static void sendChatToPlayer(ICommandSender sender, String msg) {
-        if (sender instanceof MinecraftServer){
-            Log.info(msg);
-            return;
-        }
-        sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
-    }
+		TownSettingCollection set = new TownSettingCollection(false, true);
+		set.tag = new Integer(w);
+		set.setParent(serverWildSettings);
+		set.saveHandler = new ISettingsSaveHandler() {
+			@Override
+			public void save(TownSettingCollection sender, Object tag) {
+				int w = (Integer) tag;
+				MyTown.instance.config.get("wildperms", "Dim_" + String.valueOf(w), "").set(sender.serialize());
+				MyTown.instance.config.save();
+			}
+		};
+
+		worldWildSettings.put(w, set);
+
+		return set;
+	}
+
+	public static void sendChatToPlayer(ICommandSender sender, String msg) {
+		if (sender instanceof MinecraftServer) {
+			Log.info(msg);
+			return;
+		}
+		sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));
+	}
 }

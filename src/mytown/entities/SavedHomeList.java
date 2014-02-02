@@ -15,130 +15,130 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 public class SavedHomeList extends ArrayList<SavedHome> {
-    private static final long serialVersionUID = 5008778401802591440L;
-    public static boolean defaultIsBed = true;
-    public Resident owner;
+	private static final long serialVersionUID = 5008778401802591440L;
+	public static boolean defaultIsBed = true;
+	public Resident owner;
 
-    public SavedHomeList(Resident owner) {
-        this.owner = owner;
-    }
+	public SavedHomeList(Resident owner) {
+		this.owner = owner;
+	}
 
-    public void deserialize(String str) {
-        this.clear();
+	public void deserialize(String str) {
+		clear();
 
-        if (str == null || str.trim().length() < 1) {
-            return;
-        }
+		if (str == null || str.trim().length() < 1) {
+			return;
+		}
 
-        String[] a = str.split("\\|");
+		String[] a = str.split("\\|");
 
-        for (String b : a) {
-            add(SavedHome.deserialize(b));
-        }
-    }
+		for (String b : a) {
+			add(SavedHome.deserialize(b));
+		}
+	}
 
-    public String serialize() {
-        List<String> ret = Lists.newArrayList();
-        for (SavedHome h : this) {
-            ret.add(h.serialize());
-        }
+	public String serialize() {
+		List<String> ret = Lists.newArrayList();
+		for (SavedHome h : this) {
+			ret.add(h.serialize());
+		}
 
-        return Joiner.on("|").join(ret);
-    }
+		return Joiner.on("|").join(ret);
+	}
 
-    public SavedHome get(String name) {
-        if (defaultIsBed && name == null) {
-            if (!owner.isOnline()) {
-                throw new RuntimeException(Term.HomeCmdOwnerNotOnline.toString());
-            }
+	public SavedHome get(String name) {
+		if (defaultIsBed && name == null) {
+			if (!owner.isOnline()) {
+				throw new RuntimeException(Term.HomeCmdOwnerNotOnline.toString());
+			}
 
-            return SavedHome.fromBed((EntityPlayerMP) owner.onlinePlayer); // bed
-        } else{
-            name = getHomeName(name);
-        }
+			return SavedHome.fromBed((EntityPlayerMP) owner.onlinePlayer); // bed
+		} else {
+			name = getHomeName(name);
+		}
 
-        for (SavedHome a : this) {
-            if (a.name.equalsIgnoreCase(name)) {
-                return a;
-            }
-        }
+		for (SavedHome a : this) {
+			if (a.name.equalsIgnoreCase(name)) {
+				return a;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public String getHomeName(String name) {
-        if (name == null || name.trim().length() < 1) {
-            return "default";
-        }
+	public String getHomeName(String name) {
+		if (name == null || name.trim().length() < 1) {
+			return "default";
+		}
 
-        return name.replace('/', '_').replace('|', '_').replace(' ', '_');
-    }
+		return name.replace('/', '_').replace('|', '_').replace(' ', '_');
+	}
 
-    public void assertSetHome(String name, Entity pos) throws CommandException, NoAccessException {
-        if (!owner.isOnline()) {
-            throw new CommandException(Term.HomeCmdOwnerNotOnline);
-        }
-        
-        boolean newHome = getHomeName(name) == null;
+	public void assertSetHome(String name, Entity pos) throws CommandException, NoAccessException {
+		if (!owner.isOnline()) {
+			throw new CommandException(Term.HomeCmdOwnerNotOnline);
+		}
 
-        if (newHome) {
-            Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.new_" + String.valueOf(size() + 1));
-        }
+		boolean newHome = getHomeName(name) == null;
 
-        if (defaultIsBed && name == null) // bed
-        {
-            if (pos.dimension != pos.worldObj.provider.getRespawnDimension((EntityPlayerMP) owner.onlinePlayer)) {
-                throw new CommandException(Term.HomeCmdDimNotSpawnDim);
-            }
-        } else if (!newHome) {
-            Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.replace");
-        }
-    }
-    
-    public void set(String name, Entity pos) {
-        if (defaultIsBed && name == null) {
-            owner.onlinePlayer.setSpawnChunk(new ChunkCoordinates((int) pos.posX, (int) pos.posY, (int) pos.posZ), true);
-        } else {
-            SavedHome h = get(name);
-            if (h == null) {
-                add(new SavedHome(name, pos));
-            } else {
-                h.reset(pos);
-            }
+		if (newHome) {
+			Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.new_" + String.valueOf(size() + 1));
+		}
 
-            save();
-        }
-    }
-    
-    public void delete(String name) throws CommandException {
-        if (defaultIsBed && name == null) {
-            throw new CommandException(Term.HomeCmdCannotDeleteBed);
-        }
+		if (defaultIsBed && name == null) // bed
+		{
+			if (pos.dimension != pos.worldObj.provider.getRespawnDimension((EntityPlayerMP) owner.onlinePlayer)) {
+				throw new CommandException(Term.HomeCmdDimNotSpawnDim);
+			}
+		} else if (!newHome) {
+			Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.replace");
+		}
+	}
 
-        SavedHome h = get(name);
+	public void set(String name, Entity pos) {
+		if (defaultIsBed && name == null) {
+			owner.onlinePlayer.setSpawnChunk(new ChunkCoordinates((int) pos.posX, (int) pos.posY, (int) pos.posZ), true);
+		} else {
+			SavedHome h = get(name);
+			if (h == null) {
+				add(new SavedHome(name, pos));
+			} else {
+				h.reset(pos);
+			}
 
-        if (h == null) {
-            throw new CommandException(Term.HomeCmdNoHomeByName);
-        }
+			save();
+		}
+	}
 
-        if (remove(h)) {
-            save();
-        }
-    }
+	public void delete(String name) throws CommandException {
+		if (defaultIsBed && name == null) {
+			throw new CommandException(Term.HomeCmdCannotDeleteBed);
+		}
 
-    public boolean hasHomes() {
-        if (size() > 0) {
-            return true;
-        }
+		SavedHome h = get(name);
 
-        if (defaultIsBed && owner.isOnline() && owner.onlinePlayer.getBedLocation(owner.onlinePlayer.dimension) != null) {
-            return true;
-        }
+		if (h == null) {
+			throw new CommandException(Term.HomeCmdNoHomeByName);
+		}
 
-        return false;
-    }
+		if (remove(h)) {
+			save();
+		}
+	}
 
-    public void save() {
-        owner.save();
-    }
+	public boolean hasHomes() {
+		if (size() > 0) {
+			return true;
+		}
+
+		if (defaultIsBed && owner.isOnline() && owner.onlinePlayer.getBedLocation(owner.onlinePlayer.dimension) != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public void save() {
+		owner.save();
+	}
 }

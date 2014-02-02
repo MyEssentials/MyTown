@@ -7,69 +7,69 @@ import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
 
 public class Mekanism extends ProtBase {
-    public static Mekanism instance = new Mekanism();
+	public static Mekanism instance = new Mekanism();
 
-    public float explosionRadius = 6;
+	public float explosionRadius = 6;
 
-    Class<?> clEntityObsidianTNT;
-    Field fEntityObsidianTNT_Fuse, fMekanism_ObsidianTNTBlastRadius;
+	Class<?> clEntityObsidianTNT;
+	Field fEntityObsidianTNT_Fuse, fMekanism_ObsidianTNTBlastRadius;
 
-    @Override
-    public void load() throws Exception {
-        clEntityObsidianTNT = Class.forName("mekanism.common.EntityObsidianTNT");
-        fEntityObsidianTNT_Fuse = clEntityObsidianTNT.getDeclaredField("fuse");
-        fMekanism_ObsidianTNTBlastRadius = Class.forName("mekanism.common.Mekanism").getDeclaredField("obsidianTNTBlastRadius");
+	@Override
+	public void load() throws Exception {
+		clEntityObsidianTNT = Class.forName("mekanism.common.EntityObsidianTNT");
+		fEntityObsidianTNT_Fuse = clEntityObsidianTNT.getDeclaredField("fuse");
+		fMekanism_ObsidianTNTBlastRadius = Class.forName("mekanism.common.Mekanism").getDeclaredField("obsidianTNTBlastRadius");
 
-        explosionRadius = fMekanism_ObsidianTNTBlastRadius.getFloat(null);
-    }
+		explosionRadius = fMekanism_ObsidianTNTBlastRadius.getFloat(null);
+	}
 
-    @Override
-    public boolean loaded() {
-        return clEntityObsidianTNT != null;
-    }
+	@Override
+	public boolean loaded() {
+		return clEntityObsidianTNT != null;
+	}
 
-    @Override
-    public boolean isEntityInstance(Entity e) {
-        return clEntityObsidianTNT.isInstance(e);
-    }
+	@Override
+	public boolean isEntityInstance(Entity e) {
+		return clEntityObsidianTNT.isInstance(e);
+	}
 
-    @Override
-    public String update(Entity e) throws Exception {
-        if (e.isDead || fEntityObsidianTNT_Fuse.getInt(e) > 1) {
-            return null;
-        }
+	@Override
+	public String update(Entity e) throws Exception {
+		if (e.isDead || fEntityObsidianTNT_Fuse.getInt(e) > 1) {
+			return null;
+		}
 
-        int radius = (int) Math.ceil(explosionRadius) + 2; // 2 for safety
+		int radius = (int) Math.ceil(explosionRadius) + 2; // 2 for safety
 
-        int x1 = (int) e.posX - radius >> 4;
-        int z1 = (int) e.posZ - radius >> 4;
-        int x2 = (int) e.posX + radius >> 4;
-        int z2 = (int) e.posZ + radius >> 4;
+		int x1 = (int) e.posX - radius >> 4;
+		int z1 = (int) e.posZ - radius >> 4;
+		int x2 = (int) e.posX + radius >> 4;
+		int z2 = (int) e.posZ + radius >> 4;
 
-        boolean canBlow = true;
-        for (int x = x1; x <= x2 && canBlow; x++) {
-            for (int z = z1; z <= z2 && canBlow; z++) {
-                if (!Utils.canTNTBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
-                    canBlow = false;
-                }
-            }
-        }
+		boolean canBlow = true;
+		for (int x = x1; x <= x2 && canBlow; x++) {
+			for (int z = z1; z <= z2 && canBlow; z++) {
+				if (!Utils.canTNTBlow(e.dimension, x << 4, (int) e.posY - radius, (int) e.posY + radius, z << 4)) {
+					canBlow = false;
+				}
+			}
+		}
 
-        return canBlow ? null : "TNT explosion disabled here";
-    }
+		return canBlow ? null : "TNT explosion disabled here";
+	}
 
-    @Override
-    public String getMod() {
-        return "Mekanism";
-    }
+	@Override
+	public String getMod() {
+		return "Mekanism";
+	}
 
-    @Override
-    public String getComment() {
-        return "Town permission: disableTNT";
-    }
+	@Override
+	public String getComment() {
+		return "Town permission: disableTNT";
+	}
 
-    @Override
-    public boolean defaultEnabled() {
-        return false;
-    }
+	@Override
+	public boolean defaultEnabled() {
+		return false;
+	}
 }

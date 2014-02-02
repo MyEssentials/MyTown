@@ -16,13 +16,13 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class CmdFriend extends MyTownSubCommandAdapter {
 	ArrayList<String> tabComplete;
-	
-	public CmdFriend(){
+
+	public CmdFriend() {
 		tabComplete = new ArrayList<String>();
 		tabComplete.add(Term.TownCmdFriendArgsAdd.toString());
 		tabComplete.add(Term.TownCmdFriendArgsRemove.toString());
 	}
-	
+
 	@Override
 	public String getName() {
 		return "friend";
@@ -35,51 +35,51 @@ public class CmdFriend extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
-        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
-        if (args.length == 2) {
-            String cmd = args[0];
-            Resident target = MyTownDatasource.instance.getResident(args[1]);
-            if (target == null) {
-                throw new CommandException(Term.TownErrPlayerNotFound);
-            }
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (args.length == 2) {
+			String cmd = args[0];
+			Resident target = MyTownDatasource.instance.getResident(args[1]);
+			if (target == null) {
+				throw new CommandException(Term.TownErrPlayerNotFound);
+			}
 
-            if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd.toString())) {
-                if (!res.addFriend(target)) {
-                    throw new CommandException(Term.ErrPlayerAlreadyInFriendList, target.name());
-                }
-            } else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
-                if (!res.removeFriend(target)) {
-                    throw new CommandException(Term.ErrPlayerNotInFriendList, target.name());
-                }
-            }
-            res.sendInfoTo(sender, res.shouldShowPlayerLocation());
-        } else {
-            MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdFriend.toString(), Term.TownCmdFriendArgs.toString(), Term.TownCmdFriendDesc.toString(), null));
-        }
+			if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd.toString())) {
+				if (!res.addFriend(target)) {
+					throw new CommandException(Term.ErrPlayerAlreadyInFriendList, target.name());
+				}
+			} else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
+				if (!res.removeFriend(target)) {
+					throw new CommandException(Term.ErrPlayerNotInFriendList, target.name());
+				}
+			}
+			res.sendInfoTo(sender, res.shouldShowPlayerLocation());
+		} else {
+			MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdFriend.toString(), Term.TownCmdFriendArgs.toString(), Term.TownCmdFriendDesc.toString(), null));
+		}
 	}
 
 	@Override
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
-		if (args.length < 1){
+		if (args.length < 1) {
 			return tabComplete;
 		}
-        String cmd = args[0];
-        Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		String cmd = args[0];
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		ArrayList<String> list = new ArrayList<String>();
 
-        if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd.toString())) {
-            for (Resident r : MyTownDatasource.instance.residents.values()) {
-                if (res.friends.contains(r)) {
-                    continue;
-                }
+		if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd.toString())) {
+			for (Resident r : MyTownDatasource.instance.residents.values()) {
+				if (res.friends.contains(r)) {
+					continue;
+				}
 
-                list.add(r.name());
-            }
-        } else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
-        	for (Resident r : res.friends){
-        		list.add(r.name());
-        	}
-        }
-        return list;
+				list.add(r.name());
+			}
+		} else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
+			for (Resident r : res.friends) {
+				list.add(r.name());
+			}
+		}
+		return list;
 	}
 }

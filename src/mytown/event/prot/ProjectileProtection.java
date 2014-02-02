@@ -1,5 +1,6 @@
 package mytown.event.prot;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import mytown.entities.Resident;
@@ -20,80 +21,88 @@ public class ProjectileProtection extends ProtBase {
 	public static ProjectileProtection instance = new ProjectileProtection();
 
 	@Override
-	public boolean loaded(){
+	public boolean loaded() {
 		return true;
 	}
-	
+
 	@Override
-	public boolean isEntityInstance(Entity e){
-		return e instanceof IThrowableEntity || e instanceof EntityThrowable || e instanceof EntityArrow;
-	}
-	
-	@Override
-	public String update(Entity e){
-		Entity thrower = null;
-		if (e instanceof IThrowableEntity){
-			thrower = ((IThrowableEntity)e).getThrower();
-		} else if (e instanceof EntityThrowable){
-			thrower = ((EntityThrowable)e).getThrower();
-		} else if (e instanceof EntityArrow){
-			thrower = ((EntityArrow)e).shootingEntity;
+	public boolean isEntityInstance(Entity e) {
+		Method m = null;
+		try {
+			m = e.getClass().getDeclaredMethod("getThrower");
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-		
-		if (thrower == null || !(thrower instanceof EntityPlayer)) return "Thrower is null or not a player";
-        Resident res = ProtectionEvents.instance.lastOwner = Resident.getOrMake((EntityPlayer) thrower);
-        if (res == null) return "Resident is null";
+		return e instanceof IThrowableEntity || e instanceof EntityThrowable || e instanceof EntityArrow || m != null;
+	}
 
-        Vec3 vec3 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY, e.posZ);
-        Vec3 vec31 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
-        MovingObjectPosition mop = e.worldObj.clip(vec3, vec31);
-        vec3 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY, e.posZ);
-        vec31 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+	@Override
+	public String update(Entity e) throws Exception {
+		Entity thrower = null;
+		if (e instanceof IThrowableEntity) {
+			thrower = ((IThrowableEntity) e).getThrower();
+		} else if (e instanceof EntityThrowable) {
+			thrower = ((EntityThrowable) e).getThrower();
+		} else if (e instanceof EntityArrow) {
+			thrower = ((EntityArrow) e).shootingEntity;
+		} else {
+			thrower = (Entity) e.getClass().getDeclaredMethod("getThrower").invoke(e);
+		}
 
-        if (mop != null){
-            vec31 = e.worldObj.getWorldVec3Pool().getVecFromPool(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord);
-        }
+		if (thrower == null || !(thrower instanceof EntityPlayer))
+			return "Thrower is null or not a player";
+		Resident res = ProtectionEvents.instance.lastOwner = Resident.getOrMake((EntityPlayer) thrower);
+		if (res == null)
+			return "Resident is null";
 
-        if (!e.worldObj.isRemote){
-            Entity entity = null;
-            List<?> list = e.worldObj.getEntitiesWithinAABBExcludingEntity(e, e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(1.0D, 1.0D, 1.0D));
-            double d0 = 0.0D;
+		Vec3 vec3 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY, e.posZ);
+		Vec3 vec31 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
+		MovingObjectPosition mop = e.worldObj.clip(vec3, vec31);
+		vec3 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY, e.posZ);
+		vec31 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
 
-            for (int j = 0; j < list.size(); ++j){
-                Entity entity1 = (Entity)list.get(j);
+		if (mop != null) {
+			vec31 = e.worldObj.getWorldVec3Pool().getVecFromPool(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord);
+		}
 
-                if (entity1.canBeCollidedWith() && (entity1 != thrower)){
-                    float f = 0.3F;
-                    AxisAlignedBB axisalignedbb = entity1.boundingBox.expand((double)f, (double)f, (double)f);
-                    MovingObjectPosition movingobjectposition1 = axisalignedbb.calculateIntercept(vec3, vec31);
+		if (!e.worldObj.isRemote) {
+			Entity entity = null;
+			List<?> list = e.worldObj.getEntitiesWithinAABBExcludingEntity(e, e.boundingBox.addCoord(e.motionX, e.motionY, e.motionZ).expand(1.0D, 1.0D, 1.0D));
+			double d0 = 0.0D;
 
-                    if (movingobjectposition1 != null){
-                        double d1 = vec3.distanceTo(movingobjectposition1.hitVec);
+			for (int j = 0; j < list.size(); ++j) {
+				Entity entity1 = (Entity) list.get(j);
 
-                        if (d1 < d0 || d0 == 0.0D){
-                            entity = entity1;
-                            d0 = d1;
-                        }
-                    }
-                }
-            }
+				if (entity1.canBeCollidedWith() && (entity1 != thrower)) {
+					float f = 0.3F;
+					AxisAlignedBB axisalignedbb = entity1.boundingBox.expand(f, f, f);
+					MovingObjectPosition movingobjectposition1 = axisalignedbb.calculateIntercept(vec3, vec31);
 
-            if (entity != null){
-                mop = new MovingObjectPosition(entity);
-            }
-            
-            if (mop == null) return null;
-            
-            if (mop.typeOfHit.equals(EnumMovingObjectType.ENTITY)
-            		&& !res.canAttack(mop.entityHit)
-            		|| mop.typeOfHit.equals(EnumMovingObjectType.TILE)
-            		&& !res.canInteract(mop.blockX, mop.blockY, mop.blockZ, Permissions.Build)){
-            	return "Target in MyTown protected area";
-            }
-        }
+					if (movingobjectposition1 != null) {
+						double d1 = vec3.distanceTo(movingobjectposition1.hitVec);
+
+						if (d1 < d0 || d0 == 0.0D) {
+							entity = entity1;
+							d0 = d1;
+						}
+					}
+				}
+			}
+
+			if (entity != null) {
+				mop = new MovingObjectPosition(entity);
+			}
+
+			if (mop == null)
+				return null;
+
+			if (mop.typeOfHit.equals(EnumMovingObjectType.ENTITY) && !res.canAttack(mop.entityHit) || mop.typeOfHit.equals(EnumMovingObjectType.TILE) && !res.canInteract(mop.blockX, mop.blockY, mop.blockZ, Permissions.Build)) {
+				return "Target in MyTown protected area";
+			}
+		}
 		return null;
 	}
-	
+
 	@Override
 	public String getMod() {
 		return "Projectile Protection";
