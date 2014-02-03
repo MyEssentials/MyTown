@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import mytown.cmd.CmdChannel;
+import mytown.cmd.CmdChat;
 import mytown.cmd.CmdDelHome;
 import mytown.cmd.CmdEmote;
 import mytown.cmd.CmdGamemode;
@@ -32,8 +34,6 @@ import mytown.event.ProtectionEvents;
 import mytown.event.TickHandler;
 import mytown.event.WorldEvents;
 import mytown.event.tick.WorldBorder;
-import mytown.old_commands.CmdChannel;
-import mytown.old_commands.CmdChat;
 import mytown.old_commands.CmdMyTownAdmin;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;

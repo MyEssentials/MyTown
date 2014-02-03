@@ -1,4 +1,4 @@
-package mytown.old_commands;
+package mytown.cmd;
 
 import java.util.List;
 
@@ -8,7 +8,6 @@ import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
-import mytown.cmd.CmdPrivateMsg;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import mytown.entities.Town;

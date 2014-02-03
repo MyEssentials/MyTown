@@ -50,11 +50,11 @@ public class CmdMyTown extends MyTownCommandBase {
 
 		// Assistant
 		commands.put("setspawn", new CmdSetSpawn());
-		commands.put("setspawn", new CmdTownClaim());
-		commands.put("setspawn", new CmdTownInvite());
-		commands.put("setspawn", new CmdTownKick());
-		commands.put("setspawn", new CmdTownPlot());
-		commands.put("setspawn", new CmdTownUnclaim());
+		commands.put("claim", new CmdTownClaim());
+		commands.put("invite", new CmdTownInvite());
+		commands.put("kick", new CmdTownKick());
+		commands.put("plot", new CmdTownPlot());
+		commands.put("unclaim", new CmdTownUnclaim());
 
 		// Everyone
 		commands.put("friend", new CmdFriend());

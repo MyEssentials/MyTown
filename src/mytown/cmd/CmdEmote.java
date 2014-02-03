@@ -6,7 +6,6 @@ import mytown.Formatter;
 import mytown.MyTownDatasource;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
-import mytown.old_commands.CmdChat;
 import net.minecraft.command.CommandServerEmote;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;

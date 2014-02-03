@@ -5,9 +5,9 @@ import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
+import mytown.cmd.CmdChat;
 import mytown.entities.TownBlock;
 import mytown.event.ProtBase;
-import mytown.old_commands.CmdChat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 

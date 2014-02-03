@@ -1,4 +1,4 @@
-package mytown.old_commands;
+package mytown.cmd;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,7 +7,6 @@ import mytown.ChatChannel;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
-import mytown.cmd.CmdPrivateMsg;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import net.minecraft.command.CommandBase;
