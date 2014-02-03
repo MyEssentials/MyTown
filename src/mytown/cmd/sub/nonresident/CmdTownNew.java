@@ -43,13 +43,13 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		Assert.Perm(sender, "mytown.cmd.new.dim" + res.onlinePlayer.dimension);
 
-		if (args.length < 2 || args.length > 2) {
+		if (args.length < 1 || args.length > 1) {
 			MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), null));
 		} else {
 			TownBlock home = MyTownDatasource.instance.getOrMakeBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
 			try {
 				Town.assertNewTownParams(args[1], res, home);
-			} catch (Exception e) {
+			} catch (CommandException e) {
 				if (home != null && home.town() == null) {
 					MyTownDatasource.instance.unloadBlock(home);
 				}
@@ -63,9 +63,9 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 					String[] args = (String[]) ar2[0];
 
 					Town t = null;
-					try { // should never crash because we're doing
-							// the same checks before
-						t = new Town(args[1], res, (TownBlock) ar2[1]);
+					try { // should never crash because we're doing the same
+							// checks before
+						t = new Town(args[0], res, (TownBlock) ar2[1]);
 					} catch (CommandException e) {
 						Log.severe("Town creating failed after taking payment", e);
 					}
