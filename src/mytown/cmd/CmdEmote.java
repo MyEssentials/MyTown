@@ -26,6 +26,7 @@ public class CmdEmote extends CommandServerEmote {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
+		if (!this.canCommandSenderUseCommand(cs)) return;
 		if (!Formatter.formatChat || arg.length < 1) {
 			super.processCommand(cs, arg);
 		} else {

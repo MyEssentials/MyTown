@@ -34,6 +34,7 @@ public class CmdPrivateMsg extends CommandServerMessage {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
+		if (!this.canCommandSenderUseCommand(cs)) return;
 		if (arg.length > 0) {
 			EntityPlayerMP target = getPlayer(cs, arg[0]);
 

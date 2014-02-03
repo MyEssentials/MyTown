@@ -27,6 +27,7 @@ public class CmdTeleport extends CommandServerTp {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
+		if (!this.canCommandSenderUseCommand(cs)) return;
 		if (arg.length < 1) {
 			throw new WrongUsageException("/tp [player] <toplayer> | /tp [player] [dim] <x> <y> <z>");
 		} else {

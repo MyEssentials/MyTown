@@ -19,6 +19,7 @@ public class CmdWrk extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
+		if (!this.canCommandSenderUseCommand(cs)) return;
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		EnumGameType mode = pl.theItemInWorldManager.getGameType();
 		String name = pl.username.toLowerCase();

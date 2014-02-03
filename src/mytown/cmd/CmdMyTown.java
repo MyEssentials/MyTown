@@ -118,6 +118,7 @@ public class CmdMyTown extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
+		if (!this.canCommandSenderUseCommand(sender)) return;
 		if (args.length < 1)
 			return;
 		try {

@@ -22,6 +22,7 @@ public class CmdReplyPrivateMsg extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
+		if (!this.canCommandSenderUseCommand(cs)) return;
 		EntityPlayer pl = CmdPrivateMsg.lastMessages.get(cs);
 
 		if (pl == null) {

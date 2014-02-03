@@ -31,6 +31,7 @@ public class CmdHomes extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
+		if (!this.canCommandSenderUseCommand(cs)) return;
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
 
