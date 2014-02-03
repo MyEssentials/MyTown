@@ -20,4 +20,10 @@ public class CmdGamemode extends CommandGameMode {
 		}
 		return false;
 	}
+	
+	@Override
+    public void processCommand(ICommandSender cs, String[] args){
+		if (!this.canCommandSenderUseCommand(cs)) return;
+		super.processCommand(cs, args);
+	}
 }
