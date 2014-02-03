@@ -4,6 +4,7 @@ import java.util.List;
 
 import mytown.Formatter;
 import mytown.MyTownDatasource;
+import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import mytown.old_commands.CmdChat;
 import net.minecraft.command.CommandServerEmote;
@@ -14,7 +15,7 @@ import net.minecraft.server.MinecraftServer;
 
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdEmote extends CommandServerEmote {
+public class CmdEmote extends CommandServerEmote implements MyTownCommand {
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
@@ -43,5 +44,17 @@ public class CmdEmote extends CommandServerEmote {
 	@Override
 	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
 		return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
+	}
+
+	
+	@Override
+	public List<String> dumpCommands() {
+		return null;
+	}
+	
+
+	@Override
+	public String getPermNode() {
+		return "mytown.ecmd.me";
 	}
 }

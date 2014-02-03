@@ -1,5 +1,6 @@
 package mytown;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,6 +23,7 @@ import mytown.cmd.CmdSetSpawn;
 import mytown.cmd.CmdSpawn;
 import mytown.cmd.CmdTeleport;
 import mytown.cmd.CmdWrk;
+import mytown.cmd.api.MyTownCommand;
 import mytown.entities.ItemIdRange;
 import mytown.entities.TownSettingCollection;
 import mytown.entities.TownSettingCollection.ISettingsSaveHandler;
@@ -33,7 +35,7 @@ import mytown.event.tick.WorldBorder;
 import mytown.old_commands.CmdChannel;
 import mytown.old_commands.CmdChat;
 import mytown.old_commands.CmdMyTownAdmin;
-import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
@@ -58,15 +60,18 @@ public class MyTown {
 	public Map<Integer, TownSettingCollection> worldWildSettings = new HashMap<Integer, TownSettingCollection>();
 	public LinkedList<ItemIdRange> carts = null;
 	public LinkedList<ItemIdRange> leftClickAccessBlocks = null;
+	public boolean isMCPC = false;
+	public Method MCPCRegisterCommand = null;
 
 	@Instance("MyTown")
 	public static MyTown instance;
 	public Config config = new Config();
 
-	public List<CommandBase> commands = new ArrayList<CommandBase>();
+	public List<MyTownCommand> commands = new ArrayList<MyTownCommand>();
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
+		isMCPC = MinecraftServer.getServer().getServerModName().contains("mcpc");
 		Log.init();
 		addCommands();
 		config.loadConfig();
@@ -150,6 +155,15 @@ public class MyTown {
 
 		for (ChatChannel c : ChatChannel.values()) {
 			commands.add(new CmdChat(c));
+		}
+
+		if (isMCPC){
+			try {
+				MCPCRegisterCommand = net.minecraft.command.CommandHandler.class.getMethod("registerCommand", ICommand.class, String.class);
+				Log.info("MCPC+ detected. Set up special command registration, just for it ;)");
+			} catch (Exception e) {
+				isMCPC = false;  // Set isMCPC to false
+			} 
 		}
 	}
 

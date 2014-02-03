@@ -2,7 +2,7 @@ package mytown.cmd.api;
 
 import java.util.List;
 
-import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -13,21 +13,7 @@ import com.sperion.forgeperms.ForgePerms;
  * 
  * @author Joe Goett
  */
-public abstract class MyTownCommandBase extends CommandBase {
-	/**
-	 * Dumps this command and any associated sub-commands to a list
-	 * 
-	 * @return
-	 */
-	public abstract List<String> dumpCommands();
-
-	/**
-	 * Gets the permission node for this command
-	 * 
-	 * @return
-	 */
-	public abstract String getPermNode();
-
+public abstract class MyTownCommandBase implements MyTownCommand {
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 		if (sender instanceof EntityPlayerMP) {
@@ -35,4 +21,28 @@ public abstract class MyTownCommandBase extends CommandBase {
 		}
 		return false;
 	}
+
+	@Override
+	public List<?> getCommandAliases() {
+		return null;
+	}
+
+	@Override
+	public List<?> addTabCompletionOptions(ICommandSender icommandsender, String[] astring) {
+		return null;
+	}
+
+	@Override
+	public boolean isUsernameIndex(String[] astring, int i) {
+		return false;
+	}
+
+    public int compareTo(ICommand par1ICommand) {
+        return this.getCommandName().compareTo(par1ICommand.getCommandName());
+    }
+
+	@Override
+    public int compareTo(Object par1Obj) {
+        return this.compareTo((ICommand)par1Obj);
+    }
 }

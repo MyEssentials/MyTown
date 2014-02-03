@@ -5,6 +5,7 @@ import java.util.List;
 
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -29,7 +30,7 @@ public class CmdReplyPrivateMsg extends MyTownCommandBase {
 			MyTown.sendChatToPlayer(cs, "§4Noone to reply to");
 		} else {
 			if (arg.length > 0) {
-				CmdPrivateMsg.sendChat((EntityPlayer) cs, pl, func_82360_a(cs, arg, 0));
+				CmdPrivateMsg.sendChat((EntityPlayer) cs, pl, CommandBase.func_82360_a(cs, arg, 0));
 			} else {
 				CmdPrivateMsg.lockChatWithNotify((EntityPlayer) cs, pl);
 			}
@@ -42,7 +43,7 @@ public class CmdReplyPrivateMsg extends MyTownCommandBase {
 	 */
 	@Override
 	public List<?> addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
-		return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
+		return CommandBase.getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
 	}
 
 	@Override

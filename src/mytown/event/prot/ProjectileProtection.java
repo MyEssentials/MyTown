@@ -1,6 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import mytown.entities.Resident;
@@ -27,13 +26,7 @@ public class ProjectileProtection extends ProtBase {
 
 	@Override
 	public boolean isEntityInstance(Entity e) {
-		Method m = null;
-		try {
-			m = e.getClass().getDeclaredMethod("getThrower");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return e instanceof IThrowableEntity || e instanceof EntityThrowable || e instanceof EntityArrow || m != null;
+		return e instanceof IThrowableEntity || e instanceof EntityThrowable || e instanceof EntityArrow;
 	}
 
 	@Override
@@ -45,8 +38,6 @@ public class ProjectileProtection extends ProtBase {
 			thrower = ((EntityThrowable) e).getThrower();
 		} else if (e instanceof EntityArrow) {
 			thrower = ((EntityArrow) e).shootingEntity;
-		} else {
-			thrower = (Entity) e.getClass().getDeclaredMethod("getThrower").invoke(e);
 		}
 
 		if (thrower == null || !(thrower instanceof EntityPlayer))

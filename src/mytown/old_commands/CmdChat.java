@@ -1,5 +1,7 @@
 package mytown.old_commands;
 
+import java.util.List;
+
 import mytown.ChatChannel;
 import mytown.Formatter;
 import mytown.Log;
@@ -7,6 +9,7 @@ import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.CmdPrivateMsg;
+import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import mytown.entities.Town;
 import net.minecraft.command.CommandBase;
@@ -17,7 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdChat extends CommandBase {
+public class CmdChat extends CommandBase implements MyTownCommand {
 	public ChatChannel channel;
 
 	public CmdChat(ChatChannel ch) {
@@ -212,6 +215,18 @@ public class CmdChat extends CommandBase {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) var1);
 
 		sendToChannel(res, msg, channel);
+	}
+
+	
+	@Override
+	public List<String> dumpCommands() {
+		return null;
+	}
+	
+
+	@Override
+	public String getPermNode() {
+		return "mytown.chat.focus." + channel.name.toLowerCase();
 	}
 
 }

@@ -1,5 +1,8 @@
 package mytown.cmd;
 
+import java.util.List;
+
+import mytown.cmd.api.MyTownCommand;
 import net.minecraft.command.CommandServerTp;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -10,7 +13,7 @@ import net.minecraft.server.MinecraftServer;
 
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdTeleport extends CommandServerTp {
+public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
@@ -115,5 +118,17 @@ public class CmdTeleport extends CommandServerTp {
 		}
 
 		return var8;
+	}
+
+	
+	@Override
+	public List<String> dumpCommands() {
+		return null;
+	}
+	
+
+	@Override
+	public String getPermNode() {
+		return "mytown.adm.cmd.tp";
 	}
 }

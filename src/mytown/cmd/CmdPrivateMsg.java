@@ -6,6 +6,7 @@ import java.util.Map;
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
+import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import net.minecraft.command.CommandServerMessage;
 import net.minecraft.command.ICommandSender;
@@ -18,7 +19,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdPrivateMsg extends CommandServerMessage {
+public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand {
 	public static Map<EntityPlayer, EntityPlayer> lastMessages = Maps.newHashMap();
 	public static Map<EntityPlayer, EntityPlayer> chatLock = Maps.newHashMap();
 	public static List<ICommandSender> snoopers = Lists.newArrayList();
@@ -92,5 +93,17 @@ public class CmdPrivateMsg extends CommandServerMessage {
 			MyTown.sendChatToPlayer(sender, Formatter.formatPrivMsg(Resident.getOrMake(sender), Resident.getOrMake(target), msg, true));
 			MyTown.sendChatToPlayer(target, Formatter.formatPrivMsg(Resident.getOrMake(sender), Resident.getOrMake(target), msg, false));
 		}
+	}
+
+	
+	@Override
+	public List<String> dumpCommands() {
+		return null;
+	}
+
+	
+	@Override
+	public String getPermNode() {
+		return "mytown.ecmd.msg";
 	}
 }

@@ -33,7 +33,7 @@ public class LycanitesMobs extends ProtBase {
 
 	@Override
 	public String update(Entity e) throws Exception {
-		if ((boolean) mIsTamed.invoke(e))
+		if ((Boolean) mIsTamed.invoke(e))
 			return null;
 		if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
 			return null;

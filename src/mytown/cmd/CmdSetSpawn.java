@@ -5,6 +5,7 @@ import java.util.List;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -72,7 +73,7 @@ public class CmdSetSpawn extends MyTownCommandBase {
 				par4Str = par4Str.substring(1);
 			}
 
-			var8 += parseDouble(par1ICommandSender, par4Str);
+			var8 += CommandBase.parseDouble(par1ICommandSender, par4Str);
 
 			if (!var10 && !var7) {
 				var8 += 0.5D;

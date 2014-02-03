@@ -13,6 +13,7 @@ import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.CmdPrivateMsg;
+import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
@@ -27,7 +28,7 @@ import net.minecraft.server.MinecraftServer;
 
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdMyTownAdmin extends CommandBase {
+public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 	@Override
 	public String getCommandName() {
 		return Term.TownAdmCommand.toString();
@@ -42,7 +43,7 @@ public class CmdMyTownAdmin extends CommandBase {
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
 			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd");
+			return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), getPermNode());
 		} else if (cs instanceof MinecraftServer) {
 			return true;
 		}
@@ -560,5 +561,17 @@ public class CmdMyTownAdmin extends CommandBase {
 		showPermissions(sender, node);
 		MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));
 		// sender.sendChatToPlayer(Term.PermSetDone.toString(key, node));
+	}
+
+	
+	@Override
+	public List<String> dumpCommands() {
+		return null;
+	}
+	
+
+	@Override
+	public String getPermNode() {
+		return "mytown.adm.cmd";
 	}
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import mytown.cmd.api.MyTownCommand;
 import mytown.entities.ItemIdRange;
 import mytown.entities.Nation;
 import mytown.entities.Resident;
@@ -17,7 +18,6 @@ import mytown.event.ProtectionEvents;
 import mytown.event.TickHandler;
 import mytown.event.tick.WorldBorder;
 import mytown.sql.Database;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -273,12 +273,20 @@ public class Config extends Configuration {
 		Property prop;
 		ServerCommandManager mgr = (ServerCommandManager) MinecraftServer.getServer().getCommandManager();
 
-		for (CommandBase cmd : MyTown.instance.commands) {
+		for (MyTownCommand cmd : MyTown.instance.commands) {
 			prop = get("commands", "Enable_" + cmd.getCommandName(), true);
 			prop.comment = String.format("Should the %s [/%s] command be used?", cmd.getClass().getSimpleName(), cmd.getCommandName());
 
 			if (prop.getBoolean(true)) {
-				mgr.registerCommand(cmd);
+				if (MyTown.instance.isMCPC && MyTown.instance.MCPCRegisterCommand != null){
+					try {
+						MyTown.instance.MCPCRegisterCommand.invoke(mgr, cmd, cmd.getPermNode());
+					} catch (Exception e) {
+						mgr.registerCommand(cmd);
+					}
+				} else {
+					mgr.registerCommand(cmd);
+				}
 			}
 		}
 	}

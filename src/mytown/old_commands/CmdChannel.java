@@ -8,6 +8,7 @@ import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.CmdPrivateMsg;
+import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -15,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdChannel extends CommandBase {
+public class CmdChannel extends CommandBase implements MyTownCommand {
 	@Override
 	public String getCommandName() {
 		return Term.ChannelCommand.toString();
@@ -71,6 +72,18 @@ public class CmdChannel extends CommandBase {
 				MyTown.sendChatToPlayer(sender, Term.ChatSwitchAlreadyIn.toString(ch.color, ch.abbrevation, ch.color, ch.name));
 			}
 		}
+	}
+
+	
+	@Override
+	public List<String> dumpCommands() {
+		return null;
+	}
+	
+
+	@Override
+	public String getPermNode() {
+		return "mytown.chat";
 	}
 
 }
