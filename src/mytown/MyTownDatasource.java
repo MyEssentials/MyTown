@@ -172,6 +172,26 @@ public class MyTownDatasource extends MyTownDB {
 		return ret;
 	}
 
+	@Override
+	public void saveTown(Town town) {
+    	if (!town.oldName().trim().isEmpty()){
+    		towns.remove(town.oldName().toLowerCase());
+    		town.setOldName("");
+    	}
+    	super.saveTown(town);
+    	towns.put(town.name().toLowerCase(), town);
+	}
+    
+    @Override
+    public void saveNation(Nation nation) {
+    	super.saveNation(nation);
+    	if (!nation.oldName().trim().isEmpty()){
+        	nations.remove(nation.oldName().toLowerCase());
+        	nation.setOldName("");
+    	}
+    	nations.put(nation.name().toLowerCase(), nation);
+    }
+
 	public void unloadTown(Town t) {
 		towns.remove(t.name().toLowerCase());
 	}

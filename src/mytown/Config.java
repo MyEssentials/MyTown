@@ -278,7 +278,7 @@ public class Config extends Configuration {
 			prop.comment = String.format("Should the %s [/%s] command be used?", cmd.getClass().getSimpleName(), cmd.getCommandName());
 
 			if (prop.getBoolean(true)) {
-				if (MyTown.instance.isMCPC && MyTown.instance.MCPCRegisterCommand != null){
+				if (MyTown.instance.isMCPC && MyTown.instance.MCPCRegisterCommand != null) {
 					try {
 						MyTown.instance.MCPCRegisterCommand.invoke(mgr, cmd, cmd.getPermNode());
 					} catch (Exception e) {

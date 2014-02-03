@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -13,6 +12,7 @@ import mytown.NoAccessException;
 import mytown.Term;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -108,22 +108,22 @@ public class MyTownMayor {
 
 				Resident r = MyTownDatasource.instance.getResident(name);
 				if (r == null) {
-					throw new CommandException(Term.TownErrPlayerNotFound);
+					throw new CommandException(Term.TownErrPlayerNotFound.toString());
 				}
 				if (r == res) {
-					throw new CommandException(Term.TownErrCannotDoWithYourself);
+					throw new CommandException(Term.TownErrCannotDoWithYourself.toString());
 				}
 				if (r.town() != res.town()) {
-					throw new CommandException(Term.TownErrPlayerNotInYourTown);
+					throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 				}
 
 				if (cmd.equalsIgnoreCase(Term.TownCmdAssistantArgs1.toString())) // add
 				{
 					if (r.rank() == Rank.Mayor) {
-						throw new CommandException(Term.TownErrCannotUseThisDemoteMayor);
+						throw new CommandException(Term.TownErrCannotUseThisDemoteMayor.toString());
 					}
 					if (r.rank() == Rank.Assistant) {
-						throw new CommandException(Term.TownErrPlayerIsAlreadyAssistant);
+						throw new CommandException(Term.TownErrPlayerIsAlreadyAssistant.toString());
 					}
 
 					res.town().setResidentRank(r, Rank.Assistant);
@@ -131,7 +131,7 @@ public class MyTownMayor {
 				} else if (cmd.equalsIgnoreCase(Term.TownCmdAssistantArgs2.toString())) // remove
 				{
 					if (r.rank() != Rank.Assistant) {
-						throw new CommandException(Term.TownErrPlayerIsNotAssistant);
+						throw new CommandException(Term.TownErrPlayerIsNotAssistant.toString());
 					}
 
 					res.town().setResidentRank(r, Rank.Resident);
@@ -151,17 +151,17 @@ public class MyTownMayor {
 
 				Resident r = MyTownDatasource.instance.getResident(name);
 				if (r == null) {
-					throw new CommandException(Term.TownErrPlayerNotFound);
+					throw new CommandException(Term.TownErrPlayerNotFound.toString());
 				}
 				if (r == res) {
-					throw new CommandException(Term.TownErrCannotDoWithYourself);
+					throw new CommandException(Term.TownErrCannotDoWithYourself.toString());
 				}
 				if (r.town() != res.town()) {
-					throw new CommandException(Term.TownErrPlayerNotInYourTown);
+					throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 				}
 
 				if (!ForgePerms.getPermissionManager().canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
-					throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement);
+					throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement.toString());
 				}
 
 				res.town().setResidentRank(r, Rank.Mayor);

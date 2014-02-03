@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Cost;
 import mytown.Formatter;
 import mytown.Log;
@@ -19,6 +18,7 @@ import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -121,7 +121,7 @@ public class MyTownAssistant {
 				if (args[1].equalsIgnoreCase(Term.TownCmdClaimArgs1.toString())) {
 					radius_rec = Integer.parseInt(args[2]);
 				} else {
-					throw new CommandException(Term.TownErrCmdUnknownArgument, args[1]);
+					throw new CommandException(Term.TownErrCmdUnknownArgument.toString(), args[1]);
 				}
 			}
 
@@ -214,7 +214,8 @@ public class MyTownAssistant {
 
 			MyTown.sendChatToPlayer(cs, Term.TownBlocksClaimedDisclaimer.toString(requestedBlocks, ableToClaim, alreadyOwn));
 			if (firstError != null) {
-				MyTown.sendChatToPlayer(cs, Term.TownBlocksClaimedDisclaimer2.toString(firstError.errorCode.toString(firstError.args)));
+//				MyTown.sendChatToPlayer(cs, Term.TownBlocksClaimedDisclaimer2.toString(firstError.errorCode.toString(firstError.args)));
+				throw firstError;
 			}
 
 			if (blocks.size() > 0) {
@@ -267,7 +268,7 @@ public class MyTownAssistant {
 				if (args[1].equalsIgnoreCase(Term.TownCmdUnclaimArgs1.toString())) {
 					radius_rec = Integer.parseInt(args[2]);
 				} else {
-					throw new CommandException(Term.TownErrCmdUnknownArgument, args[1]);
+					throw new CommandException(Term.TownErrCmdUnknownArgument.toString(), args[1]);
 				}
 			}
 
@@ -315,20 +316,20 @@ public class MyTownAssistant {
 			} else {
 				Resident target = MyTownDatasource.instance.getResident(args[1]);
 				if (target == null || target.onlinePlayer == null) {
-					throw new CommandException(Term.TownErrPlayerNotFoundOrOnline);
+					throw new CommandException(Term.TownErrPlayerNotFoundOrOnline.toString());
 				}
 
 				if (target == res) {
-					throw new CommandException(Term.TownErrInvitationSelf);
+					throw new CommandException(Term.TownErrInvitationSelf.toString());
 				}
 				if (target.town() == res.town()) {
-					throw new CommandException(Term.TownErrInvitationAlreadyInYourTown);
+					throw new CommandException(Term.TownErrInvitationAlreadyInYourTown.toString());
 				}
 				if (target.town() != null) {
-					throw new CommandException(Term.TownErrInvitationInTown);
+					throw new CommandException(Term.TownErrInvitationInTown.toString());
 				}
 				if (target.inviteActiveFrom != null) {
-					throw new CommandException(Term.TownErrInvitationActive);
+					throw new CommandException(Term.TownErrInvitationActive.toString());
 				}
 
 				target.inviteActiveFrom = res.town();
@@ -346,20 +347,20 @@ public class MyTownAssistant {
 				Resident target = MyTownDatasource.instance.getResident(args[1]);
 
 				if (target == null) {
-					throw new CommandException(Term.TownErrPlayerNotFound);
+					throw new CommandException(Term.TownErrPlayerNotFound.toString());
 				}
 
 				if (target == res) {
-					throw new CommandException(Term.TownErrCannotKickYourself);
+					throw new CommandException(Term.TownErrCannotKickYourself.toString());
 				}
 				if (target.town() != res.town()) {
-					throw new CommandException(Term.TownErrPlayerNotInYourTown);
+					throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 				}
 				if (target.rank() == Rank.Mayor && res.rank() == Rank.Assistant) {
-					throw new CommandException(Term.TownErrCannotKickMayor);
+					throw new CommandException(Term.TownErrCannotKickMayor.toString());
 				}
 				if (target.rank() == Rank.Assistant && res.rank() == Rank.Assistant) {
-					throw new CommandException(Term.TownErrCannotKickAssistants);
+					throw new CommandException(Term.TownErrCannotKickAssistants.toString());
 				}
 
 				res.town().removeResident(target);
@@ -378,7 +379,7 @@ public class MyTownAssistant {
 					if (args[2].equalsIgnoreCase("rect")) {
 						radius_rec = Integer.parseInt(args[3]);
 					} else {
-						throw new CommandException(Term.TownErrCmdUnknownArgument, args[2]);
+						throw new CommandException(Term.TownErrCmdUnknownArgument.toString(), args[2]);
 					}
 				}
 
@@ -387,10 +388,10 @@ public class MyTownAssistant {
 				if (args[1] != null && !args[1].equals("") && !args[1].equalsIgnoreCase("none") && !args[1].equalsIgnoreCase("null")) {
 					target = MyTownDatasource.instance.getResident(args[1]);
 					if (target == null) {
-						throw new CommandException(Term.TownErrPlayerNotFound);
+						throw new CommandException(Term.TownErrPlayerNotFound.toString());
 					}
 					if (res.town() != target.town()) {
-						throw new CommandException(Term.TownErrPlayerNotInYourTown);
+						throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 					}
 				}
 
@@ -401,10 +402,10 @@ public class MyTownAssistant {
 					for (int x = cx - radius_rec; x <= cx + radius_rec; x++) {
 						TownBlock b = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, x, z);
 						if (b == null || b.town() == null) {
-							throw new CommandException(Term.ErrPermPlotNotInTown);
+							throw new CommandException(Term.ErrPermPlotNotInTown.toString());
 						}
 						if (b.town() != res.town()) {
-							throw new CommandException(Term.ErrPermPlotNotInYourTown);
+							throw new CommandException(Term.ErrPermPlotNotInYourTown.toString());
 						}
 
 						if (b.owner() == target) {
@@ -437,10 +438,10 @@ public class MyTownAssistant {
 			TownBlock b = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
 
 			if (b == null || b.town() == null) {
-				throw new CommandException(Term.ErrPermPlotNotInTown);
+				throw new CommandException(Term.ErrPermPlotNotInTown.toString());
 			}
 			if (b.town() != res.town()) {
-				throw new CommandException(Term.ErrPermPlotNotInYourTown);
+				throw new CommandException(Term.ErrPermPlotNotInYourTown.toString());
 			}
 
 			Vec3 vec = Vec3.createVectorHelper(res.onlinePlayer.posX, res.onlinePlayer.posY, res.onlinePlayer.posZ);

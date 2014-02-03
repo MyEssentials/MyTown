@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 
 public class LycanitesMobs extends ProtBase {
+	public static LycanitesMobs instance = new LycanitesMobs();
 	Class<?> clEntityCreatureTameable;
 	Method mIsTamed;
 

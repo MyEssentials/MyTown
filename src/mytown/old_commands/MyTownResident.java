@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -17,6 +16,7 @@ import mytown.entities.Town;
 import mytown.entities.TownBlock;
 import mytown.entities.TownSetting;
 import mytown.entities.TownSettingCollection;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -96,7 +96,7 @@ public class MyTownResident {
 				handled = true;
 
 				if (res.rank() == Rank.Mayor) {
-					throw new CommandException(Term.TownErrMayorsCantLeaveTheTown);
+					throw new CommandException(Term.TownErrMayorsCantLeaveTheTown.toString());
 				}
 
 				Town t = res.town();
@@ -165,7 +165,7 @@ public class MyTownResident {
 		TownSettingCollection set = null;
 		if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
 			if (res.town() == null) {
-				throw new CommandException(Term.ErrPermYouDontHaveTown);
+				throw new CommandException(Term.ErrPermYouDontHaveTown.toString());
 			}
 
 			set = res.town().settings;
@@ -174,16 +174,16 @@ public class MyTownResident {
 		} else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
 			TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
 			if (block == null || block.town() == null) {
-				throw new CommandException(Term.ErrPermPlotNotInTown);
+				throw new CommandException(Term.ErrPermPlotNotInTown.toString());
 			}
 
 			if (block.town() != res.town()) {
-				throw new CommandException(Term.ErrPermPlotNotInYourTown);
+				throw new CommandException(Term.ErrPermPlotNotInYourTown.toString());
 			}
 
 			set = block.settings;
 		} else {
-			throw new CommandException(Term.ErrPermSettingCollectionNotFound, node);
+			throw new CommandException(Term.ErrPermSettingCollectionNotFound.toString(), node);
 		}
 
 		return set;
@@ -209,11 +209,11 @@ public class MyTownResident {
 		TownSettingCollection set = getPermNode(node, res);
 
 		if (set.childs.size() < 1) {
-			throw new CommandException(Term.ErrPermNoChilds);
+			throw new CommandException(Term.ErrPermNoChilds.toString());
 		}
 
 		if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
-			throw new CommandException(Term.ErrPermRankNotEnough);
+			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 		}
 
 		set.forceChildsToInherit(perm);
@@ -224,13 +224,13 @@ public class MyTownResident {
 		TownSettingCollection set = getPermNode(node, res);
 
 		if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString()) && res.rank() == Rank.Resident) {
-			throw new CommandException(Term.ErrPermRankNotEnough);
+			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 		}
 
 		if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString()) && res.rank() == Rank.Resident) {
 			TownBlock b = (TownBlock) set.tag;
 			if (b.owner() != res) {
-				throw new CommandException(Term.ErrPermRankNotEnough);
+				throw new CommandException(Term.ErrPermRankNotEnough.toString());
 			}
 		}
 

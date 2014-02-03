@@ -62,7 +62,7 @@ public abstract class ProtBase {
 	public abstract String getComment();
 
 	public boolean defaultEnabled() {
-		return false;
+		return true;
 	}
 
 	public static Resident getActorFromLocation(int dim, int x, int y, int z, String defaultActor) {

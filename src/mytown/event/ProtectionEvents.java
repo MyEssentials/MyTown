@@ -18,6 +18,7 @@ import mytown.event.prot.CustomNPCs;
 import mytown.event.prot.FireBall;
 import mytown.event.prot.IndustrialCraft;
 import mytown.event.prot.LOTR;
+import mytown.event.prot.LycanitesMobs;
 import mytown.event.prot.MFR;
 import mytown.event.prot.Mekanism;
 import mytown.event.prot.MinecartProtection;
@@ -25,6 +26,8 @@ import mytown.event.prot.Mobs;
 import mytown.event.prot.ModularPowersuits;
 import mytown.event.prot.PortalGun;
 import mytown.event.prot.ProjectileProtection;
+import mytown.event.prot.RailCraft;
+import mytown.event.prot.SteveCarts;
 import mytown.event.prot.TNT;
 import mytown.event.prot.ThaumCraft;
 import mytown.event.prot.TheMistsOfRioV;
@@ -64,17 +67,8 @@ public class ProtectionEvents implements ITickHandler {
 	public boolean dynamicEnabling = true;
 
 	public ProtectionEvents() {
-		ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, LOTR.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, /*
-																																																				 * SteveCarts
-																																																				 * .
-																																																				 * instance
-																																																				 * ,
-																																																				 * RailCraft
-																																																				 * .
-																																																				 * instance
-																																																				 * ,
-																																																				 */TrainCraft.instance, Mekanism.instance, ModularPowersuits.instance, MFR.instance,
-				TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance, ThermalExpansion.instance, MinecartProtection.instance, ProjectileProtection.instance }));
+		ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, LOTR.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
+				ModularPowersuits.instance, MFR.instance, TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance, ThermalExpansion.instance, MinecartProtection.instance, ProjectileProtection.instance, LycanitesMobs.instance }));
 		ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance }));
 		ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance, TwilightForest.instance }));
 	}

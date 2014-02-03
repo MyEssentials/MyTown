@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Cost;
 import mytown.Formatter;
 import mytown.Log;
@@ -17,6 +16,7 @@ import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -110,7 +110,7 @@ public class MyTownNonResident {
 			handled = true;
 
 			if (res.inviteActiveFrom == null) {
-				throw new CommandException(Term.TownErrYouDontHavePendingInvitations);
+				throw new CommandException(Term.TownErrYouDontHavePendingInvitations.toString());
 			}
 
 			res.setRank(Rank.Resident);
@@ -123,7 +123,7 @@ public class MyTownNonResident {
 			handled = true;
 
 			if (res.inviteActiveFrom == null) {
-				throw new CommandException(Term.TownErrYouDontHavePendingInvitations);
+				throw new CommandException(Term.TownErrYouDontHavePendingInvitations.toString());
 			}
 
 			res.inviteActiveFrom = null;

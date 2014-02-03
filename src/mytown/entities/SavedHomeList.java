@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.NoAccessException;
 import mytown.Term;
+import net.minecraft.command.CommandException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
@@ -76,7 +76,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 
 	public void assertSetHome(String name, Entity pos) throws CommandException, NoAccessException {
 		if (!owner.isOnline()) {
-			throw new CommandException(Term.HomeCmdOwnerNotOnline);
+			throw new CommandException(Term.HomeCmdOwnerNotOnline.toString());
 		}
 
 		boolean newHome = getHomeName(name) == null;
@@ -88,7 +88,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 		if (defaultIsBed && name == null) // bed
 		{
 			if (pos.dimension != pos.worldObj.provider.getRespawnDimension((EntityPlayerMP) owner.onlinePlayer)) {
-				throw new CommandException(Term.HomeCmdDimNotSpawnDim);
+				throw new CommandException(Term.HomeCmdDimNotSpawnDim.toString());
 			}
 		} else if (!newHome) {
 			Assert.Perm(owner.onlinePlayer, "mytown.ecmd.sethome.replace");
@@ -112,13 +112,13 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 
 	public void delete(String name) throws CommandException {
 		if (defaultIsBed && name == null) {
-			throw new CommandException(Term.HomeCmdCannotDeleteBed);
+			throw new CommandException(Term.HomeCmdCannotDeleteBed.toString());
 		}
 
 		SavedHome h = get(name);
 
 		if (h == null) {
-			throw new CommandException(Term.HomeCmdNoHomeByName);
+			throw new CommandException(Term.HomeCmdNoHomeByName.toString());
 		}
 
 		if (remove(h)) {

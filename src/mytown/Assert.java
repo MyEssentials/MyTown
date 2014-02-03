@@ -1,5 +1,6 @@
 package mytown;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.rcon.RConConsoleSource;
@@ -35,7 +36,7 @@ public class Assert {
 			if (allowConsole) {
 				return;
 			} else {
-				throw new CommandException(Term.ErrNotUsableByConsole);
+				throw new CommandException("commands.generic.permission"); // FIXME Might change to custom translation again!
 			}
 		}
 		if (node == null)

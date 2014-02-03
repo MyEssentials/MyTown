@@ -157,13 +157,13 @@ public class MyTown {
 			commands.add(new CmdChat(c));
 		}
 
-		if (isMCPC){
+		if (isMCPC) {
 			try {
 				MCPCRegisterCommand = net.minecraft.command.CommandHandler.class.getMethod("registerCommand", ICommand.class, String.class);
 				Log.info("MCPC+ detected. Set up special command registration, just for it ;)");
 			} catch (Exception e) {
-				isMCPC = false;  // Set isMCPC to false
-			} 
+				isMCPC = false; // Set isMCPC to false
+			}
 		}
 	}
 

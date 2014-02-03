@@ -3,9 +3,9 @@ package mytown.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.MyTown;
 import mytown.Term;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -158,18 +158,18 @@ public class TownSettingCollection {
 	public void setValue(String key, String value) throws CommandException {
 		TownSetting set = getSetting(key);
 		if (set == null) {
-			throw new CommandException(Term.ErrPermSettingNotFound, key);
+			throw new CommandException(String.format(Term.ErrPermSettingNotFound.toString(), key), key);
 		}
 
 		if (value != null && value.equals("?")) {
-			throw new CommandException(Term.ErrPermSupportedValues, set.getValueType(), set.getValueDescription());
+			throw new CommandException(String.format(Term.ErrPermSupportedValues.toString(), set.getValueType(), set.getValueDescription()));
 		}
 
 		try {
 			set.setValue(value);
 		} catch (Exception e) {
 			String err = e.getClass().getSimpleName() + (e.toString() != null ? ": " + e.toString() : "");
-			throw new CommandException(Term.ErrPermSupportedValues, err, set.getValueDescription());
+			throw new CommandException(String.format(Term.ErrPermSupportedValues.toString(), err, set.getValueDescription()));
 		}
 
 		refresh();

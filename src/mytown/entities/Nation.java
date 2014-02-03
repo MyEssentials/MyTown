@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -24,6 +24,7 @@ public class Nation {
 	// private List<Town> towns = new ArrayList<Town>();
 	private int id = 0;
 	private String name;
+	private String oldName = "";
 	private Town capital;
 	private int extraBlocks = 0;
 
@@ -31,6 +32,14 @@ public class Nation {
 		return name;
 	}
 
+	public String oldName(){
+		return oldName;
+	}
+	
+	public void setOldName(String name){
+		oldName = name;
+	}
+	
 	public Town capital() {
 		return capital;
 	}
@@ -67,7 +76,7 @@ public class Nation {
 		checkName(pName);
 
 		if (pCapital.nation() != null) {
-			throw new CommandException(Term.TownErrAlreadyInNation);
+			throw new CommandException(Term.TownErrAlreadyInNation.toString());
 		}
 
 		name = pName;
@@ -80,12 +89,12 @@ public class Nation {
 
 	public void checkName(String name) throws CommandException {
 		if (name == null || name.equals("")) {
-			throw new CommandException(Term.TownErrNationNameCannotBeEmpty);
+			throw new CommandException(Term.TownErrNationNameCannotBeEmpty.toString());
 		}
 
 		Nation n = MyTownDatasource.instance.nations.get(name.toLowerCase());
 		if (n != null && n != this) {
-			throw new CommandException(Term.TownErrNationNameInUse);
+			throw new CommandException(Term.TownErrNationNameInUse.toString());
 		}
 	}
 
@@ -104,7 +113,7 @@ public class Nation {
 
 	public void addTown(Town t) throws CommandException {
 		if (t.nation() != null) {
-			throw new CommandException(Term.TownErrAlreadyInNation);
+			throw new CommandException(Term.TownErrAlreadyInNation.toString());
 		}
 
 		t.setNation(this);
@@ -116,10 +125,10 @@ public class Nation {
 
 	public void removeTown(Town t) throws CommandException {
 		if (t.nation() != this || !towns.containsValue(t)) {
-			throw new CommandException(Term.TownErrNationNotPartOfNation);
+			throw new CommandException(Term.TownErrNationNotPartOfNation.toString());
 		}
 		if (t == capital) {
-			throw new CommandException(Term.TownErrNationCantRemoveCapital);
+			throw new CommandException(Term.TownErrNationCantRemoveCapital.toString());
 		}
 
 		t.setNation(null);
@@ -129,7 +138,7 @@ public class Nation {
 
 	public void setCapital(Town t) throws CommandException {
 		if (t.nation() != this || !towns.containsValue(t)) {
-			throw new CommandException(Term.TownErrNationNotPartOfNation);
+			throw new CommandException(Term.TownErrNationNotPartOfNation.toString());
 		}
 
 		capital = t;
@@ -138,6 +147,7 @@ public class Nation {
 
 	public void setName(String v) throws CommandException {
 		checkName(v);
+		oldName = name;
 		name = v;
 		save();
 	}

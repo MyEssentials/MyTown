@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -17,6 +16,7 @@ import mytown.entities.Nation;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -115,14 +115,14 @@ public class MyTownNation {
 			if (args.length < 3 && cs instanceof EntityPlayer) {
 				Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs);
 				if (res.town() == null || res.town().nation() == null) {
-					throw new CommandException(Term.TownErrNationSelfNotPartOfNation);
+					throw new CommandException(Term.TownErrNationSelfNotPartOfNation.toString());
 				}
 
 				res.town().nation().sendNationInfo(cs);
 			} else if (args.length == 3) {
 				Nation n = MyTownDatasource.instance.getNation(args[2]);
 				if (n == null) {
-					throw new CommandException(Term.TownErrNationNotFound, args[2]);
+					throw new CommandException(Term.TownErrNationNotFound.toString(), args[2]);
 				}
 
 				n.sendNationInfo(cs);
@@ -191,7 +191,7 @@ public class MyTownNation {
 				handled = true;
 
 				if (town.pendingNationInvitation == null) {
-					throw new CommandException(Term.TownErrNationYouDontHavePendingInvitations);
+					throw new CommandException(Term.TownErrNationYouDontHavePendingInvitations.toString());
 				}
 
 				Nation n = town.pendingNationInvitation;
@@ -203,7 +203,7 @@ public class MyTownNation {
 				handled = true;
 
 				if (town.pendingNationInvitation == null) {
-					throw new CommandException(Term.TownErrNationYouDontHavePendingInvitations);
+					throw new CommandException(Term.TownErrNationYouDontHavePendingInvitations.toString());
 				}
 
 				town.pendingNationInvitation = null;
@@ -247,10 +247,10 @@ public class MyTownNation {
 				if (args.length == 3) {
 					Town t = MyTownDatasource.instance.getTown(args[2]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, args[2]);
+						throw new CommandException(Term.TownErrNotFound.toString(), args[2]);
 					}
 					if (t == town) {
-						throw new CommandException(Term.TownErrNationInvitingSelf);
+						throw new CommandException(Term.TownErrNationInvitingSelf.toString());
 					}
 
 					boolean mayorOnline = false;
@@ -276,15 +276,15 @@ public class MyTownNation {
 				if (args.length == 3) {
 					Town t = MyTownDatasource.instance.getTown(args[2]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, args[2]);
+						throw new CommandException(Term.TownErrNotFound.toString(), args[2]);
 					}
 
 					if (t.nation() != nation) {
-						throw new CommandException(Term.TownErrNationNotPartOfNation);
+						throw new CommandException(Term.TownErrNationNotPartOfNation.toString());
 					}
 
 					if (t == town) {
-						throw new CommandException(Term.TownErrNationCannotKickSelf);
+						throw new CommandException(Term.TownErrNationCannotKickSelf.toString());
 					}
 
 					nation.removeTown(t);
@@ -301,15 +301,15 @@ public class MyTownNation {
 				if (args.length == 3) {
 					Town t = MyTownDatasource.instance.getTown(args[2]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, args[2]);
+						throw new CommandException(Term.TownErrNotFound.toString(), args[2]);
 					}
 
 					if (t.nation() != nation) {
-						throw new CommandException(Term.TownErrNationNotPartOfNation);
+						throw new CommandException(Term.TownErrNationNotPartOfNation.toString());
 					}
 
 					if (t == town) {
-						throw new CommandException(Term.TownErrNationCannotTransferSelf);
+						throw new CommandException(Term.TownErrNationCannotTransferSelf.toString());
 					}
 
 					nation.setCapital(t);

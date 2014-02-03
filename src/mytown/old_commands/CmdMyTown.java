@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.NoAccessException;
 import mytown.Term;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -61,14 +61,14 @@ public class CmdMyTown extends CommandBase {
 			handled = MyTownNation.handleCommand(cs, var2) || handled;
 
 			if (!handled) {
-				throw new CommandException(Term.ErrUnknowCommand);
+				throw new CommandException(Term.ErrUnknowCommand.toString());
 			}
 		} catch (NoAccessException ex) {
 			MyTown.sendChatToPlayer(cs, ex.toString());
 		} catch (NumberFormatException ex) {
 			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, Term.TownErrCmdNumberFormatException.toString()));
 		} catch (CommandException ex) {
-			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
+//			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
 		} catch (Throwable ex) {
 			Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
 			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));

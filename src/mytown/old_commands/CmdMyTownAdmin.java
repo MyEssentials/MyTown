@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.ChatChannel;
-import mytown.CommandException;
 import mytown.Constants;
 import mytown.Formatter;
 import mytown.Log;
@@ -13,14 +12,14 @@ import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.CmdPrivateMsg;
-import mytown.cmd.api.MyTownCommand;
+import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
 import mytown.entities.TownSettingCollection;
 import mytown.event.tick.WorldBorder;
-import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,7 +27,7 @@ import net.minecraft.server.MinecraftServer;
 
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
+public class CmdMyTownAdmin extends MyTownCommandBase {
 	@Override
 	public String getCommandName() {
 		return Term.TownAdmCommand.toString();
@@ -40,23 +39,14 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender cs) {
-		if (cs instanceof EntityPlayerMP) {
-			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), getPermNode());
-		} else if (cs instanceof MinecraftServer) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public String getCommandUsage(ICommandSender par1ICommandSender) {
 		return "/" + getCommandName();
 	}
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] var2) {
+		if (!canCommandSenderUseCommand(cs))
+			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
 		EntityPlayerMP p = null;
 		if (cs instanceof EntityPlayerMP) {
 			p = (EntityPlayerMP) cs;
@@ -94,7 +84,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 				}
 				Town t = MyTownDatasource.instance.getTown(var2[1]);
 				if (t == null) {
-					throw new CommandException(Term.TownErrNotFound, var2[1]);
+					throw new CommandException(Term.TownErrNotFound.toString(), var2[1]);
 				}
 
 				MyTown.sendChatToPlayer(cs, "" + t.getBlocks());
@@ -166,7 +156,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 					Town t = src.getTown(var2[1]);
 
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, var2[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), var2[1]);
 					}
 
 					t.deleteTown();
@@ -183,7 +173,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 				} else {
 					Town t = src.getTown(var2[1]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, var2[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), var2[1]);
 					}
 
 					Rank rank = Rank.parse(var2[2]);
@@ -214,7 +204,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 				} else {
 					Town t = src.getTown(var2[1]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, var2[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), var2[1]);
 					}
 
 					for (int i = 2; i < var2.length; i++) {
@@ -237,7 +227,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 					Town t = src.getTown(var2[1]);
 					int cnt = Integer.parseInt(var2[2]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, var2[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), var2[1]);
 					}
 
 					t.setExtraBlocks(cnt);
@@ -269,7 +259,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 					int cnt = Integer.parseInt(var2[3]);
 
 					if (t == null) {
-						throw new CommandException(Term.TownErrPlayerNotFound, var2[1]);
+						throw new CommandException(Term.TownErrPlayerNotFound.toString(), var2[1]);
 					}
 
 					if (cmd.equalsIgnoreCase("add")) {
@@ -333,7 +323,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 
 				Resident res = cs instanceof EntityPlayer ? MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs) : null;
 				if (res == null) {
-					throw new CommandException(Term.ErrNotUsableByConsole);
+					throw new CommandException(Term.ErrNotUsableByConsole.toString());
 				}
 
 				int cx = res.onlinePlayer.chunkCoordX;
@@ -384,7 +374,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 				} else {
 					t = MyTownDatasource.instance.getTown(var2[1]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, var2[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), var2[1]);
 					}
 				}
 
@@ -395,7 +385,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 					} else {
 						target_res = MyTownDatasource.instance.getResident(var2[2]);
 						if (target_res == null) {
-							throw new CommandException(Term.TownErrPlayerNotFound);
+							throw new CommandException(Term.TownErrPlayerNotFound.toString());
 						}
 					}
 				}
@@ -419,7 +409,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 					} else {
 						Resident res = cs instanceof EntityPlayer ? MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs) : null;
 						if (res == null) {
-							throw new CommandException(Term.ErrNotUsableByConsole); // console
+							throw new CommandException(Term.ErrNotUsableByConsole.toString()); // console
 																					// needs
 																					// up
 																					// to
@@ -431,7 +421,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 				} else {
 					Resident res = cs instanceof EntityPlayer ? MyTownDatasource.instance.getOrMakeResident((EntityPlayer) cs) : null;
 					if (res == null) {
-						throw new CommandException(Term.ErrNotUsableByConsole);
+						throw new CommandException(Term.ErrNotUsableByConsole.toString());
 					}
 
 					ax = bx = res.onlinePlayer.chunkCoordX;
@@ -474,7 +464,8 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 				MyTown.sendChatToPlayer(cs, String.format("§aWorld gen is now %s", WorldBorder.instance.genenabled ? "§2ENABLED" : "§4DISABLED"));
 			}
 		} catch (CommandException ex) {
-			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
+//			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
+			throw ex;
 		} catch (Throwable ex) {
 			Log.log(Level.WARNING, String.format("Admin command execution error by %s", cs), ex);
 			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
@@ -487,23 +478,23 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 		TownSettingCollection set = null;
 		if (node.equalsIgnoreCase(Term.TownCmdPermArgsTown.toString())) {
 			if (res == null) {
-				throw new CommandException(Term.ErrNotUsableByConsole);
+				throw new CommandException(Term.ErrNotUsableByConsole.toString());
 			}
 
 			TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
 			if (block == null || block.town() == null) {
-				throw new CommandException(Term.ErrPermPlotNotInTown);
+				throw new CommandException(Term.ErrPermPlotNotInTown.toString());
 			}
 
 			set = block.town().settings;
 		} else if (node.equalsIgnoreCase(Term.TownCmdPermArgsPlot.toString())) {
 			if (res == null) {
-				throw new CommandException(Term.ErrNotUsableByConsole);
+				throw new CommandException(Term.ErrNotUsableByConsole.toString());
 			}
 
 			TownBlock block = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
 			if (block == null || block.town() == null) {
-				throw new CommandException(Term.ErrPermPlotNotInTown);
+				throw new CommandException(Term.ErrPermPlotNotInTown.toString());
 			}
 
 			set = block.settings;
@@ -515,7 +506,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 			int dim = Integer.parseInt(node.substring(Term.TownadmCmdPermArgsWild2.toString().length()));
 			set = MyTown.instance.getWorldWildSettings(dim);
 		} else {
-			throw new CommandException(Term.ErrPermSettingCollectionNotFound, node);
+			throw new CommandException(Term.ErrPermSettingCollectionNotFound.toString(), node);
 		}
 
 		return set;
@@ -544,7 +535,7 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 	private void flushPermissions(ICommandSender sender, String node, String perm) throws CommandException {
 		TownSettingCollection set = getPermNode(sender, node);
 		if (set.childs.size() < 1) {
-			throw new CommandException(Term.ErrPermNoChilds);
+			throw new CommandException(Term.ErrPermNoChilds.toString());
 		}
 
 		set.forceChildsToInherit(perm);
@@ -563,15 +554,18 @@ public class CmdMyTownAdmin extends CommandBase implements MyTownCommand {
 		// sender.sendChatToPlayer(Term.PermSetDone.toString(key, node));
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {
 		return "mytown.adm.cmd";
+	}
+
+	@Override
+	public boolean canConsoleUse() {
+		return true;
 	}
 }

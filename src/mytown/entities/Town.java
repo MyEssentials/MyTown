@@ -6,21 +6,20 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import mytown.ChunkCoord;
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.entities.Resident.Rank;
 import mytown.entities.TownSettingCollection.ISettingsSaveHandler;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.DimensionManager;
 
+import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
-
-//import ee.lutsu.alpha.mc.mytown.Permissions;
 
 public class Town {
 	public static int minDistanceFromOtherTown = 5;
@@ -34,6 +33,7 @@ public class Town {
 
 	private int id;
 	private String name;
+	private String oldName = "";
 	private int extraBlocks;
 	private List<Resident> residents = new ArrayList<Resident>();
 	private List<TownBlock> blocks;
@@ -50,6 +50,14 @@ public class Town {
 		return name;
 	}
 
+	public String oldName() {
+		return oldName;
+	}
+
+	public void setOldName(String name){
+		oldName = name;
+	}
+	
 	public int id() {
 		return id;
 	}
@@ -125,7 +133,7 @@ public class Town {
 
 	public static void assertNewTownParams(String pName, Resident creator, TownBlock home) throws CommandException {
 		if (creator.town() != null) {
-			throw new CommandException(Term.TownErrCreatorPartOfTown);
+			throw new CommandException(Term.TownErrCreatorPartOfTown.toString());
 		}
 
 		canSetName(pName, null);
@@ -272,35 +280,36 @@ public class Town {
 	public void setTownName(String newName) throws CommandException {
 		canSetName(newName, this);
 
+		oldName = name;
 		name = newName;
 		save();
 	}
 
 	public static void canSetName(String name, Town self) throws CommandException {
 		if (name == null || name.equals("")) {
-			throw new CommandException(Term.TownErrTownNameCannotBeEmpty);
+			throw new CommandException(Term.TownErrTownNameCannotBeEmpty.toString());
 		}
 
 		Town t = MyTownDatasource.instance.towns.get(name.toLowerCase());
 		if (t != null && t != self) {
-			throw new CommandException(Term.TownErrTownNameAlreadyInUse);
+			throw new CommandException(Term.TownErrTownNameAlreadyInUse.toString());
 		}
 	}
 
 	public static void canAddBlock(TownBlock block, boolean ignoreRoomCheck, Town self) throws CommandException {
 		if (block.town() != null) {
-			throw new CommandException(Term.TownErrAlreadyClaimed);
+			throw new CommandException(Term.TownErrAlreadyClaimed.toString());
 		}
 
 		int sqr = minDistanceFromOtherTown * minDistanceFromOtherTown;
 		for (TownBlock b : MyTownDatasource.instance.blocks.values()) {
 			if (b != block && b.town() != null && b.town() != self && b.worldDimension() == block.worldDimension() && (b.town().nation() == null || self != null && b.town().nation() != self.nation()) && block.squaredDistanceTo(b) <= sqr && !b.settings.allowClaimingNextTo) {
-				throw new CommandException(Term.TownErrBlockTooCloseToAnotherTown);
+				throw new CommandException(Term.TownErrBlockTooCloseToAnotherTown.toString());
 			}
 		}
 
 		if (!ignoreRoomCheck && self != null && self.freeBlocks() < 1) {
-			throw new CommandException(Term.TownErrNoFreeBlocks);
+			throw new CommandException(Term.TownErrNoFreeBlocks.toString());
 		}
 	}
 
@@ -366,7 +375,7 @@ public class Town {
 
 	public void addResident(Resident res) throws CommandException {
 		if (res.town() != null) {
-			throw new CommandException(Term.TownErrPlayerAlreadyInTown);
+			throw new CommandException(Term.TownErrPlayerAlreadyInTown.toString());
 		}
 
 		res.setTown(this);
@@ -377,7 +386,7 @@ public class Town {
 	public void removeBlocks(List<TownBlock> b) throws CommandException {
 		for (TownBlock block : b) {
 			if (block.town() == null || block.town() != this) {
-				throw new CommandException(Term.TownErrAlreadyClaimed);
+				throw new CommandException(Term.TownErrAlreadyClaimed.toString());
 			}
 
 			if (spawnBlock == block) {
@@ -403,7 +412,7 @@ public class Town {
 
 	public void removeBlock(TownBlock block) throws CommandException {
 		if (block.town() == null || block.town() != this) {
-			throw new CommandException(Term.TownErrNotClaimedByYourTown);
+			throw new CommandException(Term.TownErrNotClaimedByYourTown.toString());
 		}
 
 		removeBlockUnsafe(block);
@@ -432,7 +441,7 @@ public class Town {
 
 	public void deleteTown() throws CommandException {
 		if (nation() != null) {
-			throw new CommandException(Term.TownErrCannotDeleteInNation);
+			throw new CommandException(Term.TownErrCannotDeleteInNation.toString());
 		}
 
 		for (Resident res : residents) {
@@ -514,16 +523,7 @@ public class Town {
 	}
 
 	public String getBlocks() {
-		StringBuilder blocks_list = new StringBuilder();
-
-		for (TownBlock block : blocks) {
-			if (blocks_list.length() > 0) {
-				blocks_list.append(", ");
-			}
-			blocks_list.append(String.format("(%s,%s)", block.x(), block.z()));
-		}
-
-		return blocks_list.toString();
+		return Joiner.on(", ").join(blocks);
 	}
 
 	public void sendTownInfo(ICommandSender pl) {
@@ -588,5 +588,10 @@ public class Town {
 		if (!Town.showTownLogoutMessage)
 			return;
 		sendNotification(Level.INFO, Term.TownBroadcastLoggedOut.toString(r.name()));
+	}
+
+	@Override
+	public String toString(){
+		return Term.TownCmdListEntry.toString(name(), residents().size());
 	}
 }

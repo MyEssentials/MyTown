@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Cost;
 import mytown.Formatter;
 import mytown.MyTown;
@@ -17,6 +16,7 @@ import mytown.entities.PayHandler;
 import mytown.entities.Resident;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -110,7 +110,7 @@ public class MyTownEveryone {
 
 				Town t = block.town();
 				if (t == null) {
-					throw new CommandException(Term.TownErrNotFound, args[1]);
+					throw new CommandException(Term.TownErrNotFound.toString(), args[1]);
 				}
 
 				t.sendTownInfo(cs);
@@ -141,7 +141,7 @@ public class MyTownEveryone {
 				if (args.length == 2) {
 					Town t = MyTownDatasource.instance.getTown(args[1]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, args[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), args[1]);
 					}
 
 					t.sendTownInfo(cs);
@@ -156,16 +156,16 @@ public class MyTownEveryone {
 					String cmd = args[1];
 					Resident target = MyTownDatasource.instance.getResident(args[2]);
 					if (target == null) {
-						throw new CommandException(Term.TownErrPlayerNotFound);
+						throw new CommandException(Term.TownErrPlayerNotFound.toString());
 					}
 
 					if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd.toString())) {
 						if (!res.addFriend(target)) {
-							throw new CommandException(Term.ErrPlayerAlreadyInFriendList, target.name());
+							throw new CommandException(Term.ErrPlayerAlreadyInFriendList.toString(), target.name());
 						}
 					} else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
 						if (!res.removeFriend(target)) {
-							throw new CommandException(Term.ErrPlayerNotInFriendList, target.name());
+							throw new CommandException(Term.ErrPlayerNotInFriendList.toString(), target.name());
 						}
 					}
 					res.sendInfoTo(cs, res.shouldShowPlayerLocation());
@@ -183,20 +183,20 @@ public class MyTownEveryone {
 				Town target = null;
 				if (args.length < 2) {
 					if (res.town() == null) {
-						throw new CommandException(Term.ErrPermYouDontHaveTown);
+						throw new CommandException(Term.ErrPermYouDontHaveTown.toString());
 					}
 
 					target = res.town();
 				} else {
 					Town t = MyTownDatasource.instance.getTown(args[1]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, args[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), args[1]);
 					}
 
 					target = t;
 				}
 				if (target.spawnBlock == null || target.getSpawn() == null) {
-					throw new CommandException(Term.TownErrSpawnNotSet);
+					throw new CommandException(Term.TownErrSpawnNotSet.toString());
 				}
 
 				ItemStack cost = null;
@@ -228,7 +228,7 @@ public class MyTownEveryone {
 				if (args.length == 2) {
 					Town t = MyTownDatasource.instance.getTown(args[1]);
 					if (t == null) {
-						throw new CommandException(Term.TownErrNotFound, args[1]);
+						throw new CommandException(Term.TownErrNotFound.toString(), args[1]);
 					}
 
 					t.sendTownInfo(cs);
