@@ -3,7 +3,6 @@ package mytown.cmd.sub.assistant;
 import java.util.ArrayList;
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.NoAccessException;
@@ -11,6 +10,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -37,7 +37,7 @@ public class CmdTownUnclaim extends MyTownSubCommandAdapter {
 			if (args[0].equalsIgnoreCase(Term.TownCmdUnclaimArgs1.toString())) {
 				radius_rec = Integer.parseInt(args[21]);
 			} else {
-				throw new CommandException(Term.TownErrCmdUnknownArgument, args[0]);
+				throw new CommandException(Term.TownErrCmdUnknownArgument.toString(), args[0]);
 			}
 		}
 

@@ -25,5 +25,13 @@ public interface MyTownCommand extends ICommand {
 	 */
 	public String getPermNode();
 
+	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender);
+
+	/**
+	 * Returns whether the console can use this or not
+	 * 
+	 * @return
+	 */
+	public boolean canConsoleUse();
 }

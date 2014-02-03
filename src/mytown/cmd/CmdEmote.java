@@ -4,8 +4,10 @@ import java.util.List;
 
 import mytown.Formatter;
 import mytown.MyTownDatasource;
+import mytown.Term;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandServerEmote;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,8 +27,14 @@ public class CmdEmote extends CommandServerEmote implements MyTownCommand {
 	}
 
 	@Override
+	public boolean canConsoleUse() {
+		return false;
+	}
+
+	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new CommandException(Term.ErrCannotAccessCommand.toString());
 		if (!Formatter.formatChat || arg.length < 1) {
 			super.processCommand(cs, arg);
 		} else {
@@ -45,12 +53,10 @@ public class CmdEmote extends CommandServerEmote implements MyTownCommand {
 		return getListOfStringsMatchingLastWord(par2ArrayOfStr, MinecraftServer.getServer().getAllUsernames());
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {

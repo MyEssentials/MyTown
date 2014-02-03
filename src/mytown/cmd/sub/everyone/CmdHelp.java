@@ -2,10 +2,8 @@ package mytown.cmd.sub.everyone;
 
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommand;
 import net.minecraft.command.ICommandSender;
@@ -27,11 +25,11 @@ public class CmdHelp implements MyTownSubCommand {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) {
 		MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdMap.toString(), Term.TownCmdMapArgs.toString(), Term.TownCmdMapDesc.toString(), null));
 		MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), null));
 		MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdList.toString(), "", Term.TownCmdListDesc.toString(), null));

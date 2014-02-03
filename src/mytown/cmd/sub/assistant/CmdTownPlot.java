@@ -3,7 +3,6 @@ package mytown.cmd.sub.assistant;
 import java.util.List;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -12,6 +11,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -37,7 +37,7 @@ public class CmdTownPlot extends MyTownSubCommandAdapter {
 				if (args[1].equalsIgnoreCase("rect")) {
 					radius_rec = Integer.parseInt(args[2]);
 				} else {
-					throw new CommandException(Term.TownErrCmdUnknownArgument, args[2]);
+					throw new CommandException(String.format(Term.TownErrCmdUnknownArgument.toString(), args[2]));
 				}
 			}
 
@@ -46,10 +46,10 @@ public class CmdTownPlot extends MyTownSubCommandAdapter {
 			if (args[0] != null && !args[0].equals("") && !args[0].equalsIgnoreCase("none") && !args[0].equalsIgnoreCase("null")) {
 				target = MyTownDatasource.instance.getResident(args[1]);
 				if (target == null) {
-					throw new CommandException(Term.TownErrPlayerNotFound);
+					throw new CommandException(Term.TownErrPlayerNotFound.toString());
 				}
 				if (res.town() != target.town()) {
-					throw new CommandException(Term.TownErrPlayerNotInYourTown);
+					throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 				}
 			}
 
@@ -60,10 +60,10 @@ public class CmdTownPlot extends MyTownSubCommandAdapter {
 				for (int x = cx - radius_rec; x <= cx + radius_rec; x++) {
 					TownBlock b = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, x, z);
 					if (b == null || b.town() == null) {
-						throw new CommandException(Term.ErrPermPlotNotInTown);
+						throw new CommandException(Term.ErrPermPlotNotInTown.toString());
 					}
 					if (b.town() != res.town()) {
-						throw new CommandException(Term.ErrPermPlotNotInYourTown);
+						throw new CommandException(Term.ErrPermPlotNotInYourTown.toString());
 					}
 
 					if (b.owner() == target) {

@@ -3,14 +3,13 @@ package mytown.cmd.sub.resident;
 import java.util.List;
 import java.util.logging.Level;
 
-import mytown.CommandException;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -26,10 +25,10 @@ public class CmdTownLeave extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.rank() == Rank.Mayor) {
-			throw new CommandException(Term.TownErrMayorsCantLeaveTheTown);
+			throw new CommandException(Term.TownErrMayorsCantLeaveTheTown.toString());
 		}
 
 		Town t = res.town();

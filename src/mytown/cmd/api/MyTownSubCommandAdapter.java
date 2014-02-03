@@ -1,8 +1,8 @@
 package mytown.cmd.api;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.NoAccessException;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 /**

@@ -31,7 +31,8 @@ public class CmdHomes extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
 
@@ -68,14 +69,11 @@ public class CmdHomes extends MyTownCommandBase {
 		}
 	}
 
-	
-
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
 
-	
 	@Override
 	public String getPermNode() {
 		return "mytown.ecmd.homes";

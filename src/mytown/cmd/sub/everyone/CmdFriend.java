@@ -3,7 +3,6 @@ package mytown.cmd.sub.everyone;
 import java.util.ArrayList;
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -11,6 +10,7 @@ import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -40,16 +40,16 @@ public class CmdFriend extends MyTownSubCommandAdapter {
 			String cmd = args[0];
 			Resident target = MyTownDatasource.instance.getResident(args[1]);
 			if (target == null) {
-				throw new CommandException(Term.TownErrPlayerNotFound);
+				throw new CommandException(Term.TownErrPlayerNotFound.toString());
 			}
 
 			if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsAdd.toString())) {
 				if (!res.addFriend(target)) {
-					throw new CommandException(Term.ErrPlayerAlreadyInFriendList, target.name());
+					throw new CommandException(Term.ErrPlayerAlreadyInFriendList.toString(), target.name());
 				}
 			} else if (cmd.equalsIgnoreCase(Term.TownCmdFriendArgsRemove.toString())) {
 				if (!res.removeFriend(target)) {
-					throw new CommandException(Term.ErrPlayerNotInFriendList, target.name());
+					throw new CommandException(Term.ErrPlayerNotInFriendList.toString(), target.name());
 				}
 			}
 			res.sendInfoTo(sender, res.shouldShowPlayerLocation());

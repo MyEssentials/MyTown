@@ -2,13 +2,12 @@ package mytown.cmd.sub.mayor;
 
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -26,9 +25,12 @@ public class CmdTownDelete extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (args.length == 1 && args[0].equalsIgnoreCase("ok")) {
+			if (res.town() == null){
+				throw new CommandException(Term.ErrNotInTown.toString());
+			}
 			String name = res.town().name();
 			res.town().deleteTown();
 

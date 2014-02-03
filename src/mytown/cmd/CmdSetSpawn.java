@@ -4,8 +4,10 @@ import java.util.List;
 
 import mytown.Log;
 import mytown.MyTown;
+import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,7 +27,8 @@ public class CmdSetSpawn extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new CommandException(Term.ErrCannotAccessCommand.toString());
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 
 		int dim = 0;
@@ -93,12 +96,10 @@ public class CmdSetSpawn extends MyTownCommandBase {
 		return var8;
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {

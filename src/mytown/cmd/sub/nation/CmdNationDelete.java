@@ -2,10 +2,8 @@ package mytown.cmd.sub.nation;
 
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Nation;
@@ -29,7 +27,7 @@ public class CmdNationDelete extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null || res.rank() != Rank.Mayor) {
 			return;

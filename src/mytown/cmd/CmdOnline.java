@@ -26,7 +26,8 @@ public class CmdOnline extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
 		ArrayList<Resident> sorted = new ArrayList<Resident>(MyTownDatasource.instance.getOnlineResidents());
 
 		Collections.sort(sorted, new Comparator<Resident>() {
@@ -58,13 +59,11 @@ public class CmdOnline extends MyTownCommandBase {
 		return null;
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
 
-	
 	@Override
 	public String getPermNode() {
 		return "mytown.ecmd.online";

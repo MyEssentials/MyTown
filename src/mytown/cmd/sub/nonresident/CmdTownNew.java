@@ -3,7 +3,6 @@ package mytown.cmd.sub.nonresident;
 import java.util.List;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Cost;
 import mytown.Formatter;
 import mytown.Log;
@@ -16,6 +15,7 @@ import mytown.entities.PayHandler;
 import mytown.entities.Resident;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;

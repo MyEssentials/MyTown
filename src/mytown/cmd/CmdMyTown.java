@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
@@ -40,6 +39,8 @@ import mytown.cmd.sub.nonresident.CmdTownNew;
 import mytown.cmd.sub.resident.CmdTownLeave;
 import mytown.cmd.sub.resident.CmdTownOnline;
 import mytown.cmd.sub.resident.CmdTownPerm;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
 
 public class CmdMyTown extends MyTownCommandBase {
@@ -118,14 +119,14 @@ public class CmdMyTown extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
-		if (!this.canCommandSenderUseCommand(sender)) return;
+		if (!canCommandSenderUseCommand(sender))
+			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
 		if (args.length < 1)
-			return;
+			return;  // TODO: Print help command out?
 		try {
 			MyTownSubCommand cmd = commands.get(args[0]);
-			if (cmd == null) {
-				return; // TODO: Command doesn't exist
-			}
+			if (cmd == null)
+				throw new CommandNotFoundException();
 			cmd.canUse(sender);
 			cmd.process(sender, Arrays.copyOfRange(args, 1, args.length));
 		} catch (NoAccessException ex) {
@@ -133,8 +134,8 @@ public class CmdMyTown extends MyTownCommandBase {
 		} catch (NumberFormatException ex) {
 			MyTown.sendChatToPlayer(sender, Formatter.commandError(Level.WARNING, Term.TownErrCmdNumberFormatException.toString()));
 		} catch (CommandException ex) {
-			MyTown.sendChatToPlayer(sender, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
-		} catch (Throwable ex) {
+			throw ex;
+		}  catch (Throwable ex) {
 			Log.log(Level.WARNING, String.format("Command execution error by %s", sender), ex);
 			MyTown.sendChatToPlayer(sender, Formatter.commandError(Level.SEVERE, ex.toString()));
 		}

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Cost;
 import mytown.Log;
 import mytown.MyTown;
@@ -16,6 +15,7 @@ import mytown.entities.PayHandler;
 import mytown.entities.Resident;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -46,7 +46,7 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 			if (args[0].equalsIgnoreCase(Term.TownCmdClaimArgs1.toString())) {
 				radius_rec = Integer.parseInt(args[1]);
 			} else {
-				throw new CommandException(Term.TownErrCmdUnknownArgument, args[0]);
+				throw new CommandException(Term.TownErrCmdUnknownArgument.toString(), args[0]);
 			}
 		}
 
@@ -137,7 +137,9 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 
 		MyTown.sendChatToPlayer(sender, Term.TownBlocksClaimedDisclaimer.toString(requestedBlocks, ableToClaim, alreadyOwn));
 		if (firstError != null) {
-			MyTown.sendChatToPlayer(sender, Term.TownBlocksClaimedDisclaimer2.toString(firstError.errorCode.toString(firstError.args)));
+			// MyTown.sendChatToPlayer(sender,
+			// Term.TownBlocksClaimedDisclaimer2.toString(firstError.errorCode.toString(firstError.args)));
+			throw firstError;
 		}
 
 		if (blocks.size() > 0) {

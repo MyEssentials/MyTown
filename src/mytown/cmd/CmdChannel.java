@@ -10,6 +10,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -33,6 +34,11 @@ public class CmdChannel extends CommandBase implements MyTownCommand {
 	}
 
 	@Override
+	public boolean canConsoleUse() {
+		return false;
+	}
+
+	@Override
 	public String getCommandUsage(ICommandSender par1ICommandSender) {
 		return "/" + getCommandName() + " channel";
 	}
@@ -40,7 +46,7 @@ public class CmdChannel extends CommandBase implements MyTownCommand {
 	@Override
 	public void processCommand(ICommandSender sender, String[] var2) {
 		if (!(sender instanceof EntityPlayer)) {
-			return;
+			throw new CommandException(Term.ErrNotUsableByConsole.toString());
 		}
 
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
@@ -73,12 +79,10 @@ public class CmdChannel extends CommandBase implements MyTownCommand {
 		}
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {

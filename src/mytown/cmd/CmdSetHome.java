@@ -3,7 +3,6 @@ package mytown.cmd;
 import java.util.List;
 import java.util.logging.Level;
 
-import mytown.CommandException;
 import mytown.Cost;
 import mytown.Formatter;
 import mytown.Log;
@@ -16,6 +15,7 @@ import mytown.entities.PayHandler;
 import mytown.entities.Resident;
 import mytown.entities.SavedHome;
 import mytown.entities.TownSettingCollection;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -33,13 +33,14 @@ public class CmdSetHome extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
 
 		try {
 			if (!res.canInteract(pl.dimension, (int) pl.posX, (int) pl.posY, (int) pl.posZ, TownSettingCollection.Permissions.Build)) {
-				throw new CommandException(Term.HomeCmdCannotSetHere);
+				throw new CommandException(Term.HomeCmdCannotSetHere.toString());
 			}
 
 			res.home.assertSetHome(args.length == 0 ? null : args[0], pl);
@@ -66,7 +67,8 @@ public class CmdSetHome extends MyTownCommandBase {
 		} catch (NoAccessException ex) {
 			MyTown.sendChatToPlayer(cs, ex.toString());
 		} catch (CommandException ex) {
-			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
+			throw ex;
+//			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
 		} catch (Throwable ex) {
 			Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
 			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
@@ -78,12 +80,10 @@ public class CmdSetHome extends MyTownCommandBase {
 		MyTown.sendChatToPlayer(pl, args.length == 0 ? Term.HomeCmdHomeSet.toString() : Term.HomeCmdHome2Set.toString(args[0]));
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {

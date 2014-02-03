@@ -2,9 +2,7 @@ package mytown.cmd.sub.everyone;
 
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.Town;
@@ -24,7 +22,7 @@ public class CmdTownHere extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		TownBlock block = MyTownDatasource.instance.getPermBlockAtCoord(res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
 		if (block == null) {

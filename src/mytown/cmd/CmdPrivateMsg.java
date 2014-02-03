@@ -6,8 +6,10 @@ import java.util.Map;
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
+import mytown.Term;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandServerMessage;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
@@ -34,8 +36,14 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 	}
 
 	@Override
+	public boolean canConsoleUse() {
+		return false;
+	}
+
+	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new CommandException(Term.ErrCannotAccessCommand.toString());
 		if (arg.length > 0) {
 			EntityPlayerMP target = getPlayer(cs, arg[0]);
 
@@ -95,13 +103,11 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 		}
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
 
-	
 	@Override
 	public String getPermNode() {
 		return "mytown.ecmd.msg";

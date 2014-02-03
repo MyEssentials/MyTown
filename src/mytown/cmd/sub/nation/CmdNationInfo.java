@@ -3,15 +3,14 @@ package mytown.cmd.sub.nation;
 import java.util.ArrayList;
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Nation;
 import mytown.entities.Resident;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -33,16 +32,16 @@ public class CmdNationInfo extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Nation n = null;
 
 		if (args.length < 1 && sender instanceof EntityPlayer) {
 			Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 			if (res.town() == null) {
-				throw new CommandException(Term.ErrNotInTown);
+				throw new CommandException(Term.ErrNotInTown.toString());
 			}
 			if (res.town().nation() == null) {
-				throw new CommandException(Term.TownErrNationSelfNotPartOfNation);
+				throw new CommandException(Term.TownErrNationSelfNotPartOfNation.toString());
 			}
 			n = res.town().nation();
 		} else if (args.length == 1) {
@@ -53,7 +52,7 @@ public class CmdNationInfo extends MyTownSubCommandAdapter {
 		}
 
 		if (n == null) {
-			throw new CommandException(Term.TownErrNationNotFound, args[0]);
+			throw new CommandException(Term.TownErrNationNotFound.toString(), args[0]);
 		}
 		n.sendNationInfo(sender);
 	}

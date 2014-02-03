@@ -3,17 +3,16 @@ package mytown.cmd.sub.nation;
 import java.util.ArrayList;
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Nation;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -30,7 +29,7 @@ public class CmdNationInvite extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null || res.rank() != Rank.Mayor) {
 			return;
@@ -42,10 +41,10 @@ public class CmdNationInvite extends MyTownSubCommandAdapter {
 		if (args.length == 2) {
 			Town t = MyTownDatasource.instance.getTown(args[0]);
 			if (t == null) {
-				throw new CommandException(Term.TownErrNotFound, args[1]);
+				throw new CommandException(Term.TownErrNotFound.toString(), args[1]);
 			}
 			if (t == town) {
-				throw new CommandException(Term.TownErrNationInvitingSelf);
+				throw new CommandException(Term.TownErrNationInvitingSelf.toString());
 			}
 
 			boolean mayorOnline = false;

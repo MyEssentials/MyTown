@@ -2,7 +2,9 @@ package mytown.cmd;
 
 import java.util.List;
 
+import mytown.Term;
 import mytown.cmd.api.MyTownCommand;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandServerTp;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -24,13 +26,19 @@ public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 	}
 
 	@Override
+	public boolean canConsoleUse() {
+		return false;
+	}
+
+	@Override
 	public String getCommandUsage(ICommandSender par1iCommandSender) {
 		return "/tp [player] <toplayer> | /tp [player] [dim] <x> <y> <z>";
 	}
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new CommandException(Term.ErrCannotAccessCommand.toString());
 		if (arg.length < 1) {
 			throw new WrongUsageException("/tp [player] <toplayer> | /tp [player] [dim] <x> <y> <z>");
 		} else {
@@ -120,12 +128,10 @@ public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 		return var8;
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {

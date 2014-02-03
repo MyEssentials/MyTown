@@ -6,10 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mytown.CommandException;
 import mytown.NoAccessException;
 import mytown.cmd.api.MyTownSubCommand;
 import mytown.cmd.api.MyTownSubCommandAdapter;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
 
 public class CmdNation extends MyTownSubCommandAdapter {
@@ -42,10 +43,11 @@ public class CmdNation extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+		if (args.length < 1)
+			return;
 		MyTownSubCommand cmd = commands.get(args[0]);
-		if (cmd == null) {
-			return; // TODO: Command doesn't exist
-		}
+		if (cmd == null)
+			throw new CommandNotFoundException();
 		cmd.canUse(sender);
 		cmd.process(sender, Arrays.copyOfRange(args, 1, args.length));
 	}

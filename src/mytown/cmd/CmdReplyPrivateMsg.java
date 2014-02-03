@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import mytown.MyTown;
+import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -23,7 +25,8 @@ public class CmdReplyPrivateMsg extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
-		if (!this.canCommandSenderUseCommand(cs)) return;
+		if (!canCommandSenderUseCommand(cs))
+			throw new CommandException(Term.ErrCannotAccessCommand.toString());
 		EntityPlayer pl = CmdPrivateMsg.lastMessages.get(cs);
 
 		if (pl == null) {
@@ -52,12 +55,10 @@ public class CmdReplyPrivateMsg extends MyTownCommandBase {
 		return null;
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {

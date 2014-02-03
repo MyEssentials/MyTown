@@ -2,7 +2,6 @@ package mytown.cmd.sub.assistant;
 
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.NoAccessException;
@@ -10,6 +9,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.TownBlock;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
@@ -31,10 +31,10 @@ public class CmdSetSpawn extends MyTownSubCommandAdapter {
 		TownBlock b = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
 
 		if (b == null || b.town() == null) {
-			throw new CommandException(Term.ErrPermPlotNotInTown);
+			throw new CommandException(Term.ErrPermPlotNotInTown.toString());
 		}
 		if (b.town() != res.town()) {
-			throw new CommandException(Term.ErrPermPlotNotInYourTown);
+			throw new CommandException(Term.ErrPermPlotNotInYourTown.toString());
 		}
 
 		Vec3 vec = Vec3.createVectorHelper(res.onlinePlayer.posX, res.onlinePlayer.posY, res.onlinePlayer.posZ);

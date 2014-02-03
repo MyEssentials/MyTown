@@ -1,18 +1,13 @@
 package mytown.cmd.sub.nation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
-import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
-import mytown.entities.Nation;
 import net.minecraft.command.ICommandSender;
+
+import com.google.common.base.Joiner;
 
 public class CmdNationList extends MyTownSubCommandAdapter {
 
@@ -32,32 +27,8 @@ public class CmdNationList extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
-		ArrayList<Nation> sorted = new ArrayList<Nation>(MyTownDatasource.instance.nations.values());
-
-		Collections.sort(sorted, new Comparator<Nation>() {
-			@Override
-			public int compare(Nation arg0, Nation arg1) {
-				return Integer.compare(arg1.towns().size(), arg0.towns().size());
-			}
-		});
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(Term.TownCmdNationListStart.toString(sorted.size(), ""));
-		int i = 0;
-
-		for (Nation e : sorted) {
-			String n = Term.TownCmdNationListEntry.toString(e.name(), e.towns().size());
-			if (i > 0) {
-				sb.append(", ");
-			}
-			i++;
-			sb.append(n);
-		}
-
-		if (sb.length() > 0) {
-			MyTown.sendChatToPlayer(sender, sb.toString());
-		}
+	public void process(ICommandSender sender, String[] args) {
+		MyTown.sendChatToPlayer(sender, Joiner.on(", ").join(MyTownDatasource.instance.nations.keySet()));
 	}
 
 	@Override

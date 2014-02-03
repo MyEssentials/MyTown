@@ -2,7 +2,9 @@ package mytown.cmd;
 
 import java.util.List;
 
+import mytown.Term;
 import mytown.cmd.api.MyTownCommand;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandGameMode;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,6 +18,11 @@ public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 	}
 
 	@Override
+	public boolean canConsoleUse() {
+		return false;
+	}
+
+	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
 			EntityPlayerMP p = (EntityPlayerMP) cs;
@@ -23,19 +30,18 @@ public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 		}
 		return false;
 	}
-	
+
 	@Override
-    public void processCommand(ICommandSender cs, String[] args){
-		if (!this.canCommandSenderUseCommand(cs)) return;
+	public void processCommand(ICommandSender cs, String[] args) {
+		if (!canCommandSenderUseCommand(cs))
+			throw new CommandException(Term.ErrCannotAccessCommand.toString());
 		super.processCommand(cs, args);
 	}
 
-	
 	@Override
 	public List<String> dumpCommands() {
 		return null;
 	}
-	
 
 	@Override
 	public String getPermNode() {

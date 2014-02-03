@@ -2,7 +2,6 @@ package mytown.cmd.sub.nation;
 
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -13,6 +12,7 @@ import mytown.entities.Nation;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -34,18 +34,18 @@ public class CmdNationNew extends MyTownSubCommandAdapter {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null) {
-			throw new CommandException(Term.ErrNotInTown);
+			throw new CommandException(Term.ErrNotInTown.toString());
 		}
 		if (res.rank() != Rank.Mayor) {
-			throw new CommandException(Term.ErrNotMayor);
+			throw new CommandException(Term.ErrNotMayor.toString());
 		}
 		if (res.town().pendingNationInvitation == null) {
-			throw new CommandException(Term.TownErrNationYouDontHavePendingInvitations);
+			throw new CommandException(Term.TownErrNationYouDontHavePendingInvitations.toString());
 		}
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		Town town = res.town();
 

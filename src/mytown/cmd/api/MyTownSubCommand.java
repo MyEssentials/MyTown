@@ -2,8 +2,8 @@ package mytown.cmd.api;
 
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.NoAccessException;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 /**

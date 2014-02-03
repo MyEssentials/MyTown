@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mytown.Assert;
-import mytown.CommandException;
 import mytown.Cost;
 import mytown.MyTownDatasource;
 import mytown.NoAccessException;
@@ -13,6 +12,7 @@ import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.PayHandler;
 import mytown.entities.Resident;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,20 +34,20 @@ public class CmdSpawn extends MyTownSubCommandAdapter {
 		Town target = null;
 		if (args.length < 1) {
 			if (res.town() == null) {
-				throw new CommandException(Term.ErrPermYouDontHaveTown);
+				throw new CommandException(Term.ErrPermYouDontHaveTown.toString());
 			}
 
 			target = res.town();
 		} else {
 			Town t = MyTownDatasource.instance.getTown(args[0]);
 			if (t == null) {
-				throw new CommandException(Term.TownErrNotFound, args[0]);
+				throw new CommandException(Term.TownErrNotFound.toString(), args[0]);
 			}
 
 			target = t;
 		}
 		if (target.spawnBlock == null || target.getSpawn() == null) {
-			throw new CommandException(Term.TownErrSpawnNotSet);
+			throw new CommandException(Term.TownErrSpawnNotSet.toString());
 		}
 
 		ItemStack cost = null;

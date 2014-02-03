@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Nation;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -31,7 +30,7 @@ public class CmdNationKick extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null || res.rank() != Rank.Mayor) {
 			return;
@@ -43,15 +42,15 @@ public class CmdNationKick extends MyTownSubCommandAdapter {
 		if (args.length == 3) {
 			Town t = MyTownDatasource.instance.getTown(args[2]);
 			if (t == null) {
-				throw new CommandException(Term.TownErrNotFound, args[2]);
+				throw new CommandException(Term.TownErrNotFound.toString(), args[2]);
 			}
 
 			if (t.nation() != nation) {
-				throw new CommandException(Term.TownErrNationNotPartOfNation);
+				throw new CommandException(Term.TownErrNationNotPartOfNation.toString());
 			}
 
 			if (t == town) {
-				throw new CommandException(Term.TownErrNationCannotKickSelf);
+				throw new CommandException(Term.TownErrNationCannotKickSelf.toString());
 			}
 
 			nation.removeTown(t);

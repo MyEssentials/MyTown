@@ -3,7 +3,6 @@ package mytown.cmd.sub.everyone;
 import java.util.ArrayList;
 import java.util.List;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -11,6 +10,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -40,14 +40,14 @@ public class CmdTownInfo extends MyTownSubCommandAdapter {
 			Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 			t = res.town();
 			if (t == null)
-				throw new CommandException(Term.ErrNotInTown);
+				throw new CommandException(Term.ErrNotInTown.toString());
 		} else {
 			MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdInfo.toString(), Term.TownCmdInfoArgs.toString(), Term.TownCmdInfoDesc.toString(), null));
 			return;
 		}
 
 		if (t == null) {
-			throw new CommandException(Term.TownErrNotFound, args[0]);
+			throw new CommandException(Term.TownErrNotFound.toString(), args[0]);
 		}
 
 		t.sendTownInfo(sender);

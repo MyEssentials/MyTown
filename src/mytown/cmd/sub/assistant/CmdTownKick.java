@@ -3,7 +3,6 @@ package mytown.cmd.sub.assistant;
 import java.util.List;
 import java.util.logging.Level;
 
-import mytown.CommandException;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -12,6 +11,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -35,20 +35,20 @@ public class CmdTownKick extends MyTownSubCommandAdapter {
 			Resident target = MyTownDatasource.instance.getResident(args[0]);
 
 			if (target == null) {
-				throw new CommandException(Term.TownErrPlayerNotFound);
+				throw new CommandException(Term.TownErrPlayerNotFound.toString());
 			}
 
 			if (target == res) {
-				throw new CommandException(Term.TownErrCannotKickYourself);
+				throw new CommandException(Term.TownErrCannotKickYourself.toString());
 			}
 			if (target.town() != res.town()) {
-				throw new CommandException(Term.TownErrPlayerNotInYourTown);
+				throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 			}
 			if (target.rank() == Rank.Mayor && res.rank() == Rank.Assistant) {
-				throw new CommandException(Term.TownErrCannotKickMayor);
+				throw new CommandException(Term.TownErrCannotKickMayor.toString());
 			}
 			if (target.rank() == Rank.Assistant && res.rank() == Rank.Assistant) {
-				throw new CommandException(Term.TownErrCannotKickAssistants);
+				throw new CommandException(Term.TownErrCannotKickAssistants.toString());
 			}
 
 			res.town().removeResident(target);
