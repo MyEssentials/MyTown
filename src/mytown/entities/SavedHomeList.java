@@ -131,7 +131,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 			return true;
 		}
 
-		if (defaultIsBed && owner.isOnline() && owner.onlinePlayer.getBedLocation(owner.onlinePlayer.dimension) != null) {
+		if (defaultIsBed && owner.isOnline() && owner.onlinePlayer.getBedLocation(owner.onlinePlayer.worldObj.provider.getRespawnDimension((EntityPlayerMP) owner.onlinePlayer)) != null) {
 			return true;
 		}
 
