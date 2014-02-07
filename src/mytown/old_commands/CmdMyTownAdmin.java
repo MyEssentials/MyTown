@@ -75,7 +75,7 @@ public class CmdMyTownAdmin extends MyTownCommandBase {
 				MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdVersion.toString(), "", Term.TownadmCmdVersion.toString(), color));
 				MyTown.sendChatToPlayer(cs, Formatter.formatAdminCommand(Term.TownadmCmdTownBlocks.toString(), Term.TownadmCmdTownBlocksArgs.toString(), Term.TownadmCmdTownBlocksDesc.toString(), color));
 			} else if (var2[0].equalsIgnoreCase(Term.TownadmCmdTownBlocks.toString())) {
-				if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.reschannels")) {
+				if (cs instanceof EntityPlayerMP && !ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.blocks")) {
 					MyTown.sendChatToPlayer(cs, Term.ErrCannotAccessCommand.toString());
 					return;
 				}
