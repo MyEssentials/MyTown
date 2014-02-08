@@ -65,6 +65,7 @@ public class ProtectionEvents implements ITickHandler {
 	@SuppressWarnings("rawtypes")
 	private List<Class> npcClasses = null;
 	public boolean dynamicEnabling = true;
+	public boolean mobsoffspawnonly = false;
 
 	public ProtectionEvents() {
 		ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, LOTR.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,

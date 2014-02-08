@@ -202,12 +202,14 @@ public class Config extends Configuration {
 	}
 
 	private void loadExtraProtectionConfig() {
+		ProtectionEvents.instance.mobsoffspawnonly = get("protex", "MobsOffSpawnOnly", false, "MobsOff perm controls mob spawning only").getBoolean(false);
 		ProtectionEvents.instance.enabled = get("protex", "Enabled", true, "Run the extra protections").getBoolean(true);
 		ProtectionEvents.instance.dynamicEnabling = get("protex", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);
 
 		if (ProtectionEvents.instance.dynamicEnabling) {
 			getCategory("protex").clear();
 
+			get("protex", "MobsOffSpawnOnly", false, "MobsOff perm controls mob spawning only").set(ProtectionEvents.instance.mobsoffspawnonly);
 			get("protex", "Enabled", true, "Run the extra protections?").set(ProtectionEvents.instance.enabled);
 			get("protex", "DynamicEnabling", true, "Load all modules for which mods are present").set(ProtectionEvents.instance.dynamicEnabling);
 		} else {

@@ -36,23 +36,25 @@ public class Mobs extends ProtBase {
 
 	@Override
 	public String update(Entity e) throws Exception {
-		if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
-			return null;
-		}
-
-		EntityLiving mob = (EntityLiving) e;
-
-		if (e.isEntityAlive()) {
-			if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ)) {
-				// silent removal of the mob
-				ProtectionEvents.instance.toRemove.add(e);
+		if (!ProtectionEvents.instance.mobsoffspawnonly) {
+			if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
 				return null;
+			}
+
+			EntityLiving mob = (EntityLiving) e;
+
+			if (e.isEntityAlive()) {
+				if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ)) {
+					// silent removal of the mob
+					ProtectionEvents.instance.toRemove.add(e);
+					return null;
+				}
 			}
 		}
 
 		return null;
 	}
-
+	
 	@ForgeSubscribe
 	public void entityJoinWorld(EntityJoinWorldEvent ev) {
 		if (!isEntityInstance(ev.entity)) {

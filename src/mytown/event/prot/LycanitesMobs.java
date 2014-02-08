@@ -10,46 +10,65 @@ import mytown.event.ProtBase;
 import mytown.event.ProtectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 public class LycanitesMobs extends ProtBase {
 	public static LycanitesMobs instance = new LycanitesMobs();
+	Class<?> clEntityCreatureBase;
 	Class<?> clEntityCreatureTameable;
 	Method mIsTamed;
 
 	@Override
 	public void load() throws Exception {
+		clEntityCreatureBase = Class.forName("lycanite.lycanitesmobs.entity.EntityCreatureBase");
 		clEntityCreatureTameable = Class.forName("lycanite.lycanitesmobs.entity.EntityCreatureTameable");
-		mIsTamed = clEntityCreatureTameable.getMethod("isTamed");
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Override
 	public boolean loaded() {
-		return clEntityCreatureTameable != null;
+		return clEntityCreatureBase != null;
 	}
 
 	@Override
 	public boolean isEntityInstance(Entity e) {
-		return clEntityCreatureTameable.isInstance(e);
+		return clEntityCreatureBase.isInstance(e);
 	}
 
 	@Override
 	public String update(Entity e) throws Exception {
-		if ((Boolean) mIsTamed.invoke(e))
-			return null;
-		if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
-			return null;
-		}
-
-		EntityLiving mob = (EntityLiving) e;
-
-		if (e.isEntityAlive()) {
-			if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ)) {
-				// silent removal of the mob
-				ProtectionEvents.instance.toRemove.add(e);
+		if (!ProtectionEvents.instance.mobsoffspawnonly) {
+			if (clEntityCreatureTameable.isInstance(e) && (Boolean) mIsTamed.invoke(e))
+				return null;
+			if ((int) e.posX == (int) e.prevPosX && (int) e.posY == (int) e.prevPosY && (int) e.posZ == (int) e.prevPosZ) {
+				return null;
+			}
+	
+			EntityLiving mob = (EntityLiving) e;
+	
+			if (e.isEntityAlive()) {
+				if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ)) {
+					// silent removal of the mob
+					ProtectionEvents.instance.toRemove.add(e);
+				}
 			}
 		}
 
 		return null;
+	}
+	
+	@ForgeSubscribe
+	public void entityJoinWorld(EntityJoinWorldEvent ev) {
+		if (!isEntityInstance(ev.entity)) {
+			return;
+		}
+
+		EntityLiving mob = (EntityLiving) ev.entity;
+		if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY + 1, mob.posZ)) {
+			ev.setCanceled(true);
+		}
 	}
 
 	private boolean canBe(int dim, double x, double yFrom, double yTo, double z) {
@@ -74,6 +93,6 @@ public class LycanitesMobs extends ProtBase {
 
 	@Override
 	public String getComment() {
-		return "Stops non-tamed mobs from entering towns";
+		return "Stops Lycanite mobs from spawning in towns";
 	}
 }
