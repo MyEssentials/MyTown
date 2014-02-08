@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import mytown.cmd.CmdAdmin;
 import mytown.cmd.CmdChannel;
 import mytown.cmd.CmdChat;
 import mytown.cmd.CmdDelHome;
@@ -34,7 +35,6 @@ import mytown.event.ProtectionEvents;
 import mytown.event.TickHandler;
 import mytown.event.WorldEvents;
 import mytown.event.tick.WorldBorder;
-import mytown.old_commands.CmdMyTownAdmin;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -137,7 +137,7 @@ public class MyTown {
 
 	private void addCommands() {
 		commands.add(new CmdMyTown());
-		commands.add(new CmdMyTownAdmin());
+		commands.add(new CmdAdmin());
 		commands.add(new CmdChannel());
 		commands.add(new CmdGamemode());
 		commands.add(new CmdWrk());
