@@ -52,14 +52,14 @@ public class CmdTownPerm extends MyTownSubCommandAdapter {
 			showPermissions(sender, res, node);
 		} else {
 			String action = args[1];
-			if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 3) {  // Set
+			if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 2) {  // Set
 				Assert.Perm(sender, "mytown.cmd.perm.set." + node + "." + args[2]);
 
-				setPermissions(sender, res, node, args[2], args.length > 4 ? args[3] : null);
+				setPermissions(sender, res, node, args[2], args.length > 3 ? args[3] : null);
 			} else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {  //Force
-				Assert.Perm(sender, "mytown.cmd.perm.force." + node + "." + (args.length > 3 ? args[2] : "all"));
+				Assert.Perm(sender, "mytown.cmd.perm.force." + node + "." + (args.length > 2 ? args[2] : "all"));
 
-				flushPermissions(sender, res, node, args.length > 3 ? args[2] : null);
+				flushPermissions(sender, res, node, args.length > 2 ? args[2] : null);
 			} else {
 				MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), null));
 			}
