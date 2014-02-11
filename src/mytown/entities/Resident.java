@@ -28,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
@@ -36,8 +37,6 @@ import net.minecraftforge.common.DimensionManager;
 import com.google.common.base.Joiner;
 import com.sperion.forgeperms.ForgePerms;
 import com.sperion.forgeperms.api.IChatManager;
-
-//import ee.lutsu.alpha.mc.mytown.Permissions;
 
 public class Resident {
 	public static boolean allowMemberToMemberPvp = false;
@@ -62,6 +61,7 @@ public class Resident {
 	public EntityPlayer onlinePlayer;
 
 	private String name;
+	private String nick = null;
 	private Town town;
 	private Rank rank = Rank.Resident;
 	private int id = 0;
@@ -120,6 +120,7 @@ public class Resident {
 		rank = r;
 	}
 
+
 	public String name() {
 		return name;
 	}
@@ -152,6 +153,7 @@ public class Resident {
 		this();
 
 		name = pName;
+		nick = name;
 		createdOn = new Date(System.currentTimeMillis());
 		lastLoginOn = new Date(System.currentTimeMillis());
 		activeChannel = ChatChannel.defaultChannel;
@@ -447,7 +449,17 @@ public class Resident {
 		return postfix;
 	}
 
-	public static Resident loadFromDB(int id, String name, Town town, Rank r, ChatChannel c, Date created, Date lastLogin, String extra, String home) {
+	public void setNick(String nick){
+		if (nick == null) nick = name();
+		this.nick = nick;
+	}
+	
+	public String nick(){
+		if (nick == null) return name;
+		return nick;
+	}
+	
+	public static Resident loadFromDB(int id, String name, String nick, Town town, Rank r, ChatChannel c, Date created, Date lastLogin, String extra, String home) {
 		Resident res = new Resident();
 		res.name = name;
 		res.id = id;
@@ -586,49 +598,36 @@ public class Resident {
 	}
 
 	public void respawnPlayer(SavedHome h) {
-		if (!(onlinePlayer instanceof EntityPlayerMP)) {
-			throw new RuntimeException("Cannot move a non-player");
+        if (!(onlinePlayer instanceof EntityPlayerMP)) {
+            throw new RuntimeException("Cannot move a non-player");
+        }
+
+        EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
+        WorldServer world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
+        
+        ChunkCoordinates c = new ChunkCoordinates(MathHelper.floor_double(h.x), MathHelper.floor_double(h.y), MathHelper.floor_double(h.z));
+        boolean forcedSpawn = pl.isSpawnForced(pl.dimension);
+        if (c != null){
+        	c = EntityPlayer.verifyRespawnCoordinates(world, c, forcedSpawn);
+        }
+        
+        if (c != null){
+        	pl.setLocationAndAngles(c.posX + 0.5F, c.posY + 0.1F, c.posZ + 0.5F, 0.0F, 0.0F);
+        } else {
+        	pl.setLocationAndAngles(h.x, h.y, h.x, h.look1, h.look2);
+        }
+
+		if (pl.dimension != h.dim) {
+			MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, h.dim);
 		}
 
-		EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
-		WorldServer world = null;
+        world.theChunkProviderServer.loadChunk((int) pl.posX >> 4, (int) pl.posZ >> 4);
 
-		if (h == null) {
-			if (pl.dimension != pl.worldObj.provider.getRespawnDimension(pl)) {
-				MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, pl.worldObj.provider.getRespawnDimension(pl));
-			}
-
-			world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
-			ChunkCoordinates c = pl.getBedLocation(pl.dimension);
-			boolean forcedSpawn = pl.isSpawnForced(pl.dimension);
-
-			if (c != null) {
-				c = EntityPlayer.verifyRespawnCoordinates(world, c, forcedSpawn);
-			}
-
-			if (c != null) {
-				pl.setLocationAndAngles(c.posX + 0.5F, c.posY + 0.1F, c.posZ + 0.5F, 0.0F, 0.0F);
-			} else {
-				MyTown.sendChatToPlayer(pl, Term.NoBedMessage.toString());
-				WorldInfo info = world.getWorldInfo();
-				pl.setLocationAndAngles(info.getSpawnX() + 0.5F, info.getSpawnY() + 0.1F, info.getSpawnZ() + 0.5F, 0, 0);
-			}
-		} else {
-			if (pl.dimension != h.dim) {
-				MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, h.dim);
-			}
-
-			world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
-			pl.setLocationAndAngles(h.x, h.y, h.z, h.look1, h.look2);
-		}
-
-		world.theChunkProviderServer.loadChunk((int) pl.posX >> 4, (int) pl.posZ >> 4);
-
-		while (!world.getCollidingBoundingBoxes(pl, pl.boundingBox).isEmpty()) {
-			pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
-		}
-
-		pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
+        while (!world.getCollidingBoundingBoxes(pl, pl.boundingBox).isEmpty()) {
+            pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
+        }
+        
+        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
 	}
 
 	public void sendToTownSpawn(Town t) {
@@ -735,7 +734,7 @@ public class Resident {
 	}
 
 	public String formattedName() {
-		return prefix() + name() + postfix();
+		return prefix() + nick() + postfix();
 	}
 
 	public void sendInfoTo(ICommandSender cs, boolean adminInfo) {

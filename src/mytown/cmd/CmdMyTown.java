@@ -27,6 +27,7 @@ import mytown.cmd.sub.everyone.CmdTownHere;
 import mytown.cmd.sub.everyone.CmdTownInfo;
 import mytown.cmd.sub.everyone.CmdTownList;
 import mytown.cmd.sub.everyone.CmdTownMap;
+import mytown.cmd.sub.everyone.CmdTownOnline;
 import mytown.cmd.sub.everyone.CmdTownRes;
 import mytown.cmd.sub.mayor.CmdSetAssistant;
 import mytown.cmd.sub.mayor.CmdTownDelete;
@@ -37,7 +38,6 @@ import mytown.cmd.sub.nonresident.CmdTownAccept;
 import mytown.cmd.sub.nonresident.CmdTownDeny;
 import mytown.cmd.sub.nonresident.CmdTownNew;
 import mytown.cmd.sub.resident.CmdTownLeave;
-import mytown.cmd.sub.resident.CmdTownOnline;
 import mytown.cmd.sub.resident.CmdTownPerm;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
@@ -66,6 +66,7 @@ public class CmdMyTown extends MyTownCommandBase {
 		commands.put("res", new CmdTownRes());
 		commands.put("spawn", new CmdSpawn());
 		commands.put("help", new CmdHelp());
+		commands.put("online", new CmdTownOnline());
 
 		// Mayor
 		commands.put("assistant", new CmdSetAssistant());
@@ -83,7 +84,6 @@ public class CmdMyTown extends MyTownCommandBase {
 
 		// Resident
 		commands.put("leave", new CmdTownLeave());
-		commands.put("online", new CmdTownOnline());
 		commands.put("perm", new CmdTownPerm());
 	}
 

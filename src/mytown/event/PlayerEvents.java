@@ -329,7 +329,7 @@ public class PlayerEvents implements IPlayerTracker {
 			t.town().sendNotification(Level.WARNING, Term.MinecartMessedWith.toString());
 		}
 	}
-
+	
 	@ForgeSubscribe
 	public void entityEnterChunk(EntityEvent.EnteringChunk event) {
 		if (event.isCanceled())
@@ -348,14 +348,14 @@ public class PlayerEvents implements IPlayerTracker {
 	private MyTownDatasource source() {
 		return MyTownDatasource.instance;
 	}
-
+	
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
 		// load the resident
 		Resident res = source().getOrMakeResident(player);
 
 		if (!WorldBorder.instance.isWithinArea(player)) {
-			Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.", res.name(), player.dimension, player.posX, player.posY, player.posZ));
+			Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.", res.nick(), player.dimension, player.posX, player.posY, player.posZ));
 			res.respawnPlayer();
 		}
 
@@ -365,7 +365,7 @@ public class PlayerEvents implements IPlayerTracker {
 		res.location2 = t != null && t.town() != null ? t.owner() : null;
 
 		if (!res.canInteract(t, (int) player.posY, Permissions.Enter)) {
-			Log.warning(String.format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", res.name(), res.location.name(), player.dimension, player.posX, player.posY, player.posZ));
+			Log.warning(String.format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", res.nick(), res.location.name(), player.dimension, player.posX, player.posY, player.posZ));
 			res.respawnPlayer();
 		}
 

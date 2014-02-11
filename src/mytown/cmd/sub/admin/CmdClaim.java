@@ -29,7 +29,7 @@ public class CmdClaim extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
-		if (args.length < 1) { // /ta claim townname [playername] [x.y:x.y]
+		if (args.length < 1) { // /ta claim townname [playername] [[x.y:x.y] | rect [radius]]
 			MyTown.sendChatToPlayer(sender, Formatter.formatAdminCommand(Term.TownadmCmdClaim.toString(), Term.TownadmCmdClaimArgs.toString(), Term.TownadmCmdClaimDesc.toString(), null));
 			return;
 		}
@@ -59,27 +59,40 @@ public class CmdClaim extends MyTownSubCommandAdapter {
 
 		int ax, az, bx, bz, dim;
 		if (args.length > 2) {
-			String[] sp = args[2].split(":");
-			String[] sp2 = sp[0].split("\\.");
-
-			ax = bx = Integer.parseInt(sp2[0]);
-			az = bz = Integer.parseInt(sp2[1]);
-
-			if (sp.length > 1) {
-				sp2 = sp[1].split("\\.");
-
-				bx = Integer.parseInt(sp2[0]);
-				bz = Integer.parseInt(sp2[1]);
-			}
-			if (sp.length > 2) {
-				dim = Integer.parseInt(sp[2]);
-			} else {
+			if (args[2].equalsIgnoreCase(Term.TownCmdClaimArgs1.toString())){
+				int radius_rec = Integer.parseInt(args[3]);
 				Resident res = sender instanceof EntityPlayer ? MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender) : null;
 				if (res == null) {
-					throw new CommandException(Term.ErrNotUsableByConsole.toString()); // console needs up to this
+					throw new CommandException(Term.ErrNotUsableByConsole.toString());
 				}
-
+				ax = res.onlinePlayer.chunkCoordX - radius_rec;
+				bx = res.onlinePlayer.chunkCoordX + radius_rec;
+				az = res.onlinePlayer.chunkCoordZ - radius_rec;
+				bz = res.onlinePlayer.chunkCoordZ + radius_rec;
 				dim = res.onlinePlayer.dimension;
+			} else{
+				String[] sp = args[2].split(":");
+				String[] sp2 = sp[0].split("\\.");
+	
+				ax = bx = Integer.parseInt(sp2[0]);
+				az = bz = Integer.parseInt(sp2[1]);
+	
+				if (sp.length > 1) {
+					sp2 = sp[1].split("\\.");
+	
+					bx = Integer.parseInt(sp2[0]);
+					bz = Integer.parseInt(sp2[1]);
+				}
+				if (sp.length > 2) {
+					dim = Integer.parseInt(sp[2]);
+				} else {
+					Resident res = sender instanceof EntityPlayer ? MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender) : null;
+					if (res == null) {
+						throw new CommandException(Term.ErrNotUsableByConsole.toString()); // console needs up to this
+					}
+	
+					dim = res.onlinePlayer.dimension;
+				}
 			}
 		} else {
 			Resident res = sender instanceof EntityPlayer ? MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender) : null;

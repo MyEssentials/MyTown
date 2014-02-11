@@ -65,9 +65,8 @@ public class CmdHome extends MyTownCommandBase {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getCommandUsage(ICommandSender s) {
+		return "/" + getCommandName();
 	}
 
 	@Override
@@ -78,5 +77,11 @@ public class CmdHome extends MyTownCommandBase {
 	@Override
 	public String getPermNode() {
 		return "mytown.ecmd.home";
+	}
+
+	@Override
+	public List<?> addTabCompletionOptions(ICommandSender sender, String[] args) {
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayerMP)sender);
+		return res.home;
 	}
 }

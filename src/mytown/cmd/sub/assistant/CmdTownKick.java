@@ -27,6 +27,16 @@ public class CmdTownKick extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+		super.canUse(sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (res.town() == null)
+			throw new CommandException(Term.ChatErrNotInTown.toString());
+		if (res.rank().compareTo(Rank.Assistant) >= 0)
+			throw new CommandException(Term.ErrPermRankNotEnough.toString());
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (args.length != 1) {

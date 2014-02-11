@@ -4,9 +4,11 @@ import java.util.List;
 
 import mytown.MyTown;
 import mytown.MyTownDatasource;
+import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
+import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +26,16 @@ public class CmdTownDelete extends MyTownSubCommandAdapter {
 		return "mytown.cmd.delete";
 	}
 
+	@Override
+	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+		super.canUse(sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (res.town() == null)
+			throw new CommandException(Term.ChatErrNotInTown.toString());
+		if (res.rank().compareTo(Rank.Mayor) >= 0)
+			throw new CommandException(Term.ErrPermRankNotEnough.toString());
+	}
+	
 	@Override
 	public void process(ICommandSender sender, String[] args) {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);

@@ -18,7 +18,7 @@ public class Assert {
 	 * @throws NoAccessException
 	 * @throws CommandException
 	 */
-	public static void Perm(ICommandSender cs, String node) throws NoAccessException, CommandException {
+	public static void Perm(ICommandSender cs, String node) throws CommandException {
 		Assert.Perm(cs, node, false);
 	}
 
@@ -31,7 +31,7 @@ public class Assert {
 	 * @throws NoAccessException
 	 * @throws CommandException
 	 */
-	public static void Perm(ICommandSender cs, String node, boolean allowConsole) throws NoAccessException, CommandException {
+	public static void Perm(ICommandSender cs, String node, boolean allowConsole) throws CommandException {
 		if (cs instanceof MinecraftServer || cs instanceof RConConsoleSource) {
 			if (allowConsole) {
 				return;
@@ -45,6 +45,7 @@ public class Assert {
 		if (ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
 			return;
 		}
-		throw new NoAccessException(cs, node);
+		throw new CommandException("commands.generic.permission"); // FIXME Might change to custom translation again!
+		//throw new NoAccessException(cs, node);
 	}
 }

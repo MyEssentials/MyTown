@@ -4,6 +4,7 @@ import java.util.List;
 
 import mytown.MyTown;
 import mytown.MyTownDatasource;
+import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
@@ -22,6 +23,14 @@ public class CmdTownDeny extends MyTownSubCommandAdapter {
 		return "mytown.cmd.deny";
 	}
 
+	@Override
+	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+		super.canUse(sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (res.town() != null)
+			throw new CommandException("Already in a town");
+	}
+	
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);

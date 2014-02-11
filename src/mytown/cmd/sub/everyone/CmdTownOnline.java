@@ -1,4 +1,4 @@
-package mytown.cmd.sub.resident;
+package mytown.cmd.sub.everyone;
 
 import java.util.List;
 

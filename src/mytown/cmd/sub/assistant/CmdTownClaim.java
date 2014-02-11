@@ -15,6 +15,7 @@ import mytown.entities.PayHandler;
 import mytown.entities.Resident;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
+import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +37,16 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+		super.canUse(sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (res.town() == null)
+			throw new CommandException(Term.ChatErrNotInTown.toString());
+		if (res.rank().compareTo(Rank.Assistant) >= 0)
+			throw new CommandException(Term.ErrPermRankNotEnough.toString());
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		int dim = res.onlinePlayer.worldObj.provider.dimensionId;
@@ -44,6 +55,7 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 		int radius_rec = 0;
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase(Term.TownCmdClaimArgs1.toString())) {
+				Assert.Perm(sender, "mytown.cmd.claim.rect");
 				radius_rec = Integer.parseInt(args[1]);
 			} else {
 				throw new CommandException(Term.TownErrCmdUnknownArgument.toString(), args[0]);

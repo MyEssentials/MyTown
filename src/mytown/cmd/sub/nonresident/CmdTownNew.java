@@ -33,9 +33,10 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 
 	@Override
 	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
-		if (MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender).town() != null)
-			return;
 		super.canUse(sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (res.town() != null)
+			throw new CommandException("Already in a town");
 	}
 
 	@Override
@@ -63,11 +64,10 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 					String[] args = (String[]) ar2[0];
 
 					Town t = null;
-					try { // should never crash because we're doing the same
-							// checks before
+					try { // should never crash because we're doing the same checks before
 						t = new Town(args[0], res, (TownBlock) ar2[1]);
 					} catch (CommandException e) {
-						Log.severe("Town creating failed after taking payment", e);
+						Log.severe("Town creation failed after taking payment", e);
 					}
 
 					// emulate that the player just entered it

@@ -68,7 +68,6 @@ public class CmdSetHome extends MyTownCommandBase {
 			MyTown.sendChatToPlayer(cs, ex.toString());
 		} catch (CommandException ex) {
 			throw ex;
-//			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.WARNING, ex.errorCode.toString(ex.args)));
 		} catch (Throwable ex) {
 			Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
 			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));

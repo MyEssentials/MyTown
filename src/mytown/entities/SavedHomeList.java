@@ -58,7 +58,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 		}
 
 		for (SavedHome a : this) {
-			if (a.name.equalsIgnoreCase(name)) {
+			if ((a.name == null && name == "default") || a.name.equalsIgnoreCase(name)) {
 				return a;
 			}
 		}
@@ -101,7 +101,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 		} else {
 			SavedHome h = get(name);
 			if (h == null) {
-				add(new SavedHome(name, pos));
+				add(new SavedHome(getHomeName(name), pos));
 			} else {
 				h.reset(pos);
 			}

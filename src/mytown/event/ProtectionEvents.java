@@ -15,6 +15,7 @@ import mytown.event.prot.BuildCraft;
 import mytown.event.prot.ComputerCraft;
 import mytown.event.prot.Creeper;
 import mytown.event.prot.CustomNPCs;
+import mytown.event.prot.DubstepGun;
 import mytown.event.prot.FireBall;
 import mytown.event.prot.IndustrialCraft;
 import mytown.event.prot.LOTR;
@@ -69,7 +70,7 @@ public class ProtectionEvents implements ITickHandler {
 
 	public ProtectionEvents() {
 		ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, LOTR.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
-				ModularPowersuits.instance, MFR.instance, TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance, ThermalExpansion.instance, MinecartProtection.instance, ProjectileProtection.instance, LycanitesMobs.instance }));
+				ModularPowersuits.instance, MFR.instance, TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance, ThermalExpansion.instance, MinecartProtection.instance, ProjectileProtection.instance, LycanitesMobs.instance, DubstepGun.instance}));
 		ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance }));
 		ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance, TwilightForest.instance }));
 	}

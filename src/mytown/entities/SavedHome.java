@@ -20,6 +20,7 @@ public class SavedHome {
 	}
 
 	public SavedHome(String name, Entity entityFrom) {
+		if (name == null) name = "default";
 		this.name = name;
 		reset(entityFrom);
 	}

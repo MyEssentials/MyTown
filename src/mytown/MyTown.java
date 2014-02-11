@@ -18,6 +18,7 @@ import mytown.cmd.CmdGamemode;
 import mytown.cmd.CmdHome;
 import mytown.cmd.CmdHomes;
 import mytown.cmd.CmdMyTown;
+import mytown.cmd.CmdNick;
 import mytown.cmd.CmdOnline;
 import mytown.cmd.CmdPrivateMsg;
 import mytown.cmd.CmdReplyPrivateMsg;
@@ -152,6 +153,7 @@ public class MyTown {
 		commands.add(new CmdHome());
 		commands.add(new CmdSetHome());
 		commands.add(new CmdDelHome());
+		commands.add(new CmdNick());
 
 		for (ChatChannel c : ChatChannel.values()) {
 			commands.add(new CmdChat(c));
@@ -160,7 +162,7 @@ public class MyTown {
 		if (isMCPC) {
 			try {
 				MCPCRegisterCommand = net.minecraft.command.CommandHandler.class.getMethod("registerCommand", ICommand.class, String.class);
-				Log.info("MCPC+ detected. Set up special command registration, just for it ;)");
+				Log.info("MCPC detected. Set up special command registration, just for it ;)");
 			} catch (Exception e) {
 				isMCPC = false; // Set isMCPC to false
 			}

@@ -69,7 +69,7 @@ public class Formatter {
 		if (!formatChat) {
 			return emote ? String.format("* %s %s", res.name(), line) : String.format("<%s> %s", res.name(), line);
 		}
-		return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix())
+		return (emote ? Term.EmoteFormat : Term.ChatFormat).toString().replace("$color$", channel.color).replace("$channel$", channel.abbrevation).replace("$name$", res.name()).replace("$nick$", res.nick()).replace("$msg$", line).replace("$prefix$", res.prefix()).replace("$postfix$", res.postfix())
 				.replace("$town$", (res.town() == null ? "" : res.town().name()));
 	}
 
@@ -82,7 +82,7 @@ public class Formatter {
 	}
 
 	public static String formatPrivMsg(Resident sender, Resident receiver, String line, boolean out) {
-		return (out ? Term.PrivMsgFormatOut : Term.PrivMsgFormatIn).toString().replace("$sname$", sender.name()).replace("$sprefix$", sender.prefix()).replace("$spostfix$", sender.postfix())
+		return (out ? Term.PrivMsgFormatOut : Term.PrivMsgFormatIn).toString().replace("$sname$", sender.name()).replace("$nick$", sender.nick()).replace("$sprefix$", sender.prefix()).replace("$spostfix$", sender.postfix())
 
 		.replace("$name$", receiver.name()).replace("$prefix$", receiver.prefix()).replace("$postfix$", receiver.postfix())
 
