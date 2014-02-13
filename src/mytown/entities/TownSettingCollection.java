@@ -301,7 +301,7 @@ public class TownSettingCollection {
 			allowClaimingNextTo = set.getEffBoolean();
 		} else if (set.getSerializationKey().equals("ccturtles")) {
 			allowCCTurtles = set.getEffBoolean();
-		} else if (set.getSerializationKey().equals("allowTCBores")) {
+		} else if (set.getSerializationKey().equals("tcbores")) {
 			allowTCBores = set.getEffBoolean();
 		} else if (set.getSerializationKey().equals("killmobs")) {
 			allowKillingMobsByNonResidents = set.getEffBoolean();
