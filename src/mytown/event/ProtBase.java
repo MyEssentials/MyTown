@@ -41,6 +41,14 @@ public abstract class ProtBase {
 		return false;
 	}
 
+	public boolean isHostileMob(Entity e) {
+		return true;
+	}
+
+	public boolean canAttackMob(Entity e) {
+		return true;
+	}
+
 	public boolean isEntityInstance(TileEntity e) {
 		return false;
 	}

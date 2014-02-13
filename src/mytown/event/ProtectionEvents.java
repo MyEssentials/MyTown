@@ -55,6 +55,8 @@ public class ProtectionEvents implements ITickHandler {
 	public static ArrayList<ProtBase> entityProtections = new ArrayList<ProtBase>();
 	public static ArrayList<ProtBase> tileProtections = new ArrayList<ProtBase>();
 	public static ArrayList<ProtBase> toolProtections = new ArrayList<ProtBase>();
+	public static ArrayList<ProtBase> hostileMobs = new ArrayList<ProtBase>();
+	public static ArrayList<ProtBase> attackMobs = new ArrayList<ProtBase>();
 
 	public static ProtectionEvents instance = new ProtectionEvents();
 
@@ -73,18 +75,28 @@ public class ProtectionEvents implements ITickHandler {
 				ModularPowersuits.instance, MFR.instance, TwilightForest.instance, TheMistsOfRioV.instance, FireBall.instance, ThermalExpansion.instance, MinecartProtection.instance, ProjectileProtection.instance, LycanitesMobs.instance, DubstepGun.instance}));
 		ProtectionEvents.tileProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance }));
 		ProtectionEvents.toolProtections.addAll(Arrays.asList(new ProtBase[] { BuildCraft.instance, ComputerCraft.instance, ThaumCraft.instance, ModularPowersuits.instance, TinkersConstruct.instance, TwilightForest.instance }));
+		ProtectionEvents.hostileMobs.addAll(Arrays.asList(new ProtBase[] { LycanitesMobs.instance }));
+		ProtectionEvents.attackMobs.addAll(Arrays.asList(new ProtBase[] { LycanitesMobs.instance, CustomNPCs.instance }));
 	}
 
-	public static void addEntityProtection(ProtBase protection) {
-		entityProtections.add(protection);
+	public boolean isHostileMob(Entity e) {
+		for (ProtBase mob : hostileMobs) {
+			if (mob.enabled && mob.isHostileMob(e)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
-	public static void addTileProtection(ProtBase protection) {
-		tileProtections.add(protection);
-	}
-
-	public static void addToolProtection(ProtBase protection) {
-		toolProtections.add(protection);
+	public boolean canAttackMob(Entity e) {
+		for (ProtBase mob : attackMobs) {
+			if (mob.enabled && mob.canAttackMob(e)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public boolean itemUsed(Resident r) {

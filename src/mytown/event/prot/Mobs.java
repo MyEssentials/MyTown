@@ -31,7 +31,7 @@ public class Mobs extends ProtBase {
 
 	@Override
 	public boolean isEntityInstance(Entity e) {
-		return e instanceof IMob;
+		return (e instanceof IMob) || ProtectionEvents.instance.isHostileMob(e);
 	}
 
 	@Override

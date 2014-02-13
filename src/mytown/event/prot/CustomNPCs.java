@@ -2,10 +2,39 @@ package mytown.event.prot;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import mytown.Log;
+import mytown.event.ProtBase;
 
-public class CustomNPCs {
+public class CustomNPCs extends ProtBase {
+	public static CustomNPCs instance = new CustomNPCs();
+	Class<?> clEntityNPCInterface;
 	public static boolean debug = false;
+
+	@Override
+	public void load() throws Exception {
+		clEntityNPCInterface = Class.forName("noppes.npcs.EntityNPCInterface");
+	}
+
+	@Override
+	public boolean loaded() {
+		return clEntityNPCInterface != null;
+	}
+
+	@Override
+	public boolean canAttackMob(Entity e) {
+		return clEntityNPCInterface.isInstance(e);
+	}
+
+	@Override
+	public String getMod() {
+		return "Custom NPCs";
+	}
+
+	@Override
+	public String getComment() {
+		return "Identifies special cases for Custom NPCs";
+	}
 
 	@SuppressWarnings("rawtypes")
 	public static void addNPCClasses(List<Class> list) throws Exception {

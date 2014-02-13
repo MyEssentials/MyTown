@@ -373,7 +373,7 @@ public class Resident {
 				if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowCartInteraction || (targetBlock == null || targetBlock.town() == null) && MyTown.instance.getWorldWildSettings(e.dimension).allowCartInteraction) {
 					return true;
 				}
-			} else if (e instanceof IMob) {
+			} else if ((e instanceof IMob) || ProtectionEvents.instance.canAttackMob(e)) {
 				if (targetBlock != null && targetBlock.town() != null && targetBlock.settings.allowKillingMobsByNonResidents) {
 					return true;
 				}
