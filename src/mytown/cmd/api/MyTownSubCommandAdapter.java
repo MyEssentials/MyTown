@@ -1,7 +1,8 @@
 package mytown.cmd.api;
 
+import java.util.List;
+
 import mytown.Assert;
-import mytown.NoAccessException;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
@@ -13,12 +14,17 @@ import net.minecraft.command.ICommandSender;
  */
 public abstract class MyTownSubCommandAdapter implements MyTownSubCommand {
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		Assert.Perm(sender, getPermNode(), canUseByConsole());
 	}
 
 	@Override
 	public boolean canUseByConsole() {
 		return false;
+	}
+
+	@Override
+	public List<String> tabComplete(ICommandSender sender, String[] args) {
+		return null;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import mytown.Assert;
 import mytown.Cost;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.PayHandler;
@@ -29,7 +28,7 @@ public class CmdSpawn extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		Town target = null;
 		if (args.length < 1) {

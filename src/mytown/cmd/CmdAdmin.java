@@ -10,11 +10,11 @@ import java.util.logging.Level;
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.cmd.api.MyTownSubCommand;
 import mytown.cmd.sub.admin.CmdClaim;
+import mytown.cmd.sub.admin.CmdDumpDB;
 import mytown.cmd.sub.admin.CmdExtraRes;
 import mytown.cmd.sub.admin.CmdPerm;
 import mytown.cmd.sub.admin.CmdReload;
@@ -37,7 +37,7 @@ import net.minecraft.command.ICommandSender;
 public class CmdAdmin extends MyTownCommandBase {
 	Map<String, MyTownSubCommand> commands;
 
-	public CmdAdmin(){
+	public CmdAdmin() {
 		commands = new HashMap<String, MyTownSubCommand>();
 		commands.put("claim", new CmdClaim());
 		commands.put("extrares", new CmdExtraRes());
@@ -55,8 +55,9 @@ public class CmdAdmin extends MyTownCommandBase {
 		commands.put("unclaim", new CmdUnclaim());
 		commands.put("version", new CmdVersion());
 		commands.put("wipedim", new CmdWipeDim());
+		commands.put("dump", new CmdDumpDB());
 	}
-	
+
 	@Override
 	public String getPermNode() {
 		return "mytown.adm.cmd";
@@ -65,6 +66,11 @@ public class CmdAdmin extends MyTownCommandBase {
 	@Override
 	public String getCommandName() {
 		return Term.TownAdmCommand.toString();
+	}
+
+	@Override
+	public boolean canConsoleUse() {
+		return true;
 	}
 
 	@Override
@@ -79,23 +85,20 @@ public class CmdAdmin extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
-		if (!canCommandSenderUseCommand(sender))
-			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
+		canCommandSenderUseCommand(sender);
 		if (args.length < 1)
-			return;  // TODO: Print help command out?
+			return; // TODO: Print help command out?
 		try {
 			MyTownSubCommand cmd = commands.get(args[0]);
 			if (cmd == null)
 				throw new CommandNotFoundException();
 			cmd.canUse(sender);
 			cmd.process(sender, Arrays.copyOfRange(args, 1, args.length));
-		} catch (NoAccessException ex) {
-			MyTown.sendChatToPlayer(sender, ex.toString());
 		} catch (NumberFormatException ex) {
 			MyTown.sendChatToPlayer(sender, Formatter.commandError(Level.WARNING, Term.TownErrCmdNumberFormatException.toString()));
 		} catch (CommandException ex) {
 			throw ex;
-		}  catch (Throwable ex) {
+		} catch (Throwable ex) {
 			Log.log(Level.WARNING, String.format("Command execution error by %s", sender), ex);
 			MyTown.sendChatToPlayer(sender, Formatter.commandError(Level.SEVERE, ex.toString()));
 		}

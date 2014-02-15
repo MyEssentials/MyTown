@@ -32,14 +32,14 @@ public class Nation {
 		return name;
 	}
 
-	public String oldName(){
+	public String oldName() {
 		return oldName;
 	}
-	
-	public void setOldName(String name){
+
+	public void setOldName(String name) {
 		oldName = name;
 	}
-	
+
 	public Town capital() {
 		return capital;
 	}

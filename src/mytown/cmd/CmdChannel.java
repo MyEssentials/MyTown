@@ -7,35 +7,23 @@ import mytown.ChatChannel;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
-import mytown.cmd.api.MyTownCommand;
+import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.Resident;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.sperion.forgeperms.ForgePerms;
 
-public class CmdChannel extends CommandBase implements MyTownCommand {
+public class CmdChannel extends MyTownCommandBase {
 	@Override
 	public String getCommandName() {
 		return Term.ChannelCommand.toString();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List getCommandAliases() {
+	public List<?> getCommandAliases() {
 		return Arrays.asList(Term.ChannelCommandAliases.toString().split(" "));
-	}
-
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender) {
-		return true;
-	}
-
-	@Override
-	public boolean canConsoleUse() {
-		return false;
 	}
 
 	@Override
@@ -45,6 +33,7 @@ public class CmdChannel extends CommandBase implements MyTownCommand {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] var2) {
+		canCommandSenderUseCommand(sender);
 		if (!(sender instanceof EntityPlayer)) {
 			throw new CommandException(Term.ErrNotUsableByConsole.toString());
 		}
@@ -86,7 +75,6 @@ public class CmdChannel extends CommandBase implements MyTownCommand {
 
 	@Override
 	public String getPermNode() {
-		return "mytown.chat";
+		return null;
 	}
-
 }

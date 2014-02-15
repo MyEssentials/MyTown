@@ -5,7 +5,6 @@ import java.util.List;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
@@ -26,7 +25,7 @@ public class CmdTownInvite extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
@@ -34,9 +33,9 @@ public class CmdTownInvite extends MyTownSubCommandAdapter {
 		if (res.rank().compareTo(Rank.Assistant) >= 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
-	
+
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (args.length != 1) {
 			MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdInvite.toString(), Term.TownCmdInviteArgs.toString(), Term.TownCmdInviteDesc.toString(), null));

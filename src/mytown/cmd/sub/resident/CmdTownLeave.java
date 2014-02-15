@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
@@ -26,13 +25,13 @@ public class CmdTownLeave extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
 			throw new CommandException(Term.ChatErrNotInTown.toString());
 	}
-	
+
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);

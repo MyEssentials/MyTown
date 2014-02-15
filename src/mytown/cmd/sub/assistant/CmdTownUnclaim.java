@@ -5,12 +5,11 @@ import java.util.List;
 
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
-import mytown.entities.TownBlock;
 import mytown.entities.Resident.Rank;
+import mytown.entities.TownBlock;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +26,7 @@ public class CmdTownUnclaim extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
@@ -35,9 +34,9 @@ public class CmdTownUnclaim extends MyTownSubCommandAdapter {
 		if (res.rank().compareTo(Rank.Assistant) >= 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
-	
+
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.onlinePlayer == null) {
 			throw new NullPointerException("Onlineplayer is null");

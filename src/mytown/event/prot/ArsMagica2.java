@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 public class ArsMagica2 extends ProtBase {
 	Class<?> clEntitySpellProjectile, clEntityThrownRock, clEntityThrownSickle;
 	Field fThrowingEntity_EntityThrownRock, fThrowingEntity_EntityThrownSickle;
-	
+
 	@Override
 	public void load() throws Exception {
 		clEntitySpellProjectile = Class.forName("am2.entities.EntitySpellProjectile");
@@ -22,7 +22,7 @@ public class ArsMagica2 extends ProtBase {
 	public boolean loaded() {
 		return clEntitySpellProjectile != null && clEntityThrownRock != null && clEntityThrownSickle != null;
 	}
-	
+
 	@Override
 	public boolean isEntityInstance(Entity e) {
 		return clEntitySpellProjectile.isInstance(e) || clEntityThrownRock.isInstance(e) || clEntityThrownSickle.isInstance(e);

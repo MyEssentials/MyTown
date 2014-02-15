@@ -12,7 +12,6 @@ import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import mytown.entities.Town;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -216,8 +215,7 @@ public class CmdChat extends CommandBase implements MyTownCommand {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] var2) {
-		if (!(sender instanceof EntityPlayer))
-			throw new CommandException(Term.ErrNotUsableByConsole.toString());
+		canCommandSenderUseCommand(sender);
 		String msg = Joiner.on(' ').join(var2);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 

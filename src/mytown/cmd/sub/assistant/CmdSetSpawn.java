@@ -4,7 +4,6 @@ import java.util.List;
 
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
@@ -27,7 +26,7 @@ public class CmdSetSpawn extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
@@ -35,9 +34,9 @@ public class CmdSetSpawn extends MyTownSubCommandAdapter {
 		if (res.rank().compareTo(Rank.Assistant) >= 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
-	
+
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		TownBlock b = MyTownDatasource.instance.getBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
 

@@ -41,7 +41,8 @@ public class PortalGun extends ProtBase {
 
 	@Override
 	public boolean isEntityInstance(Entity e) {
-		return e.getClass() == clPortalBall;
+		return e.getClass().getName().equals("portalgun.common.entity.EntityPortalBall");
+		// return e.getClass() == clPortalBall;
 	}
 
 	@Override

@@ -39,8 +39,9 @@ public class ProjectileProtection extends ProtBase {
 		} else if (e instanceof EntityArrow) {
 			thrower = ((EntityArrow) e).shootingEntity;
 		}
-		
-		if (ProtectionEvents.instance.getNPCClasses().contains(thrower.getClass())) return null; // Ignore NPC's
+
+		if (ProtectionEvents.instance.getNPCClasses().contains(thrower.getClass()))
+			return null; // Ignore NPC's
 		if (thrower == null || !(thrower instanceof EntityPlayer))
 			return "Thrower is null or not a player";
 		Resident res = ProtectionEvents.instance.lastOwner = Resident.getOrMake((EntityPlayer) thrower);
@@ -87,7 +88,7 @@ public class ProjectileProtection extends ProtBase {
 
 			if (mop == null)
 				return null;
-			
+
 			if (mop.typeOfHit.equals(EnumMovingObjectType.ENTITY) && !res.canAttack(mop.entityHit) || mop.typeOfHit.equals(EnumMovingObjectType.TILE) && !res.canInteract(mop.blockX, mop.blockY, mop.blockZ, Permissions.Build)) {
 				return "Target in MyTown protected area";
 			}

@@ -329,7 +329,7 @@ public class PlayerEvents implements IPlayerTracker {
 			t.town().sendNotification(Level.WARNING, Term.MinecartMessedWith.toString());
 		}
 	}
-	
+
 	@ForgeSubscribe
 	public void entityEnterChunk(EntityEvent.EnteringChunk event) {
 		if (event.isCanceled())
@@ -348,7 +348,7 @@ public class PlayerEvents implements IPlayerTracker {
 	private MyTownDatasource source() {
 		return MyTownDatasource.instance;
 	}
-	
+
 	@Override
 	public void onPlayerLogin(EntityPlayer player) {
 		// load the resident

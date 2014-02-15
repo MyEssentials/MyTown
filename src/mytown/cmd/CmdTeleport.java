@@ -2,9 +2,8 @@ package mytown.cmd;
 
 import java.util.List;
 
-import mytown.Term;
+import mytown.Assert;
 import mytown.cmd.api.MyTownCommand;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandServerTp;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -13,16 +12,11 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-import com.sperion.forgeperms.ForgePerms;
-
 public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
-		if (cs instanceof EntityPlayerMP) {
-			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.tp");
-		}
-		return false;
+		Assert.Perm(cs, getPermNode(), canConsoleUse());
+		return true;
 	}
 
 	@Override
@@ -37,8 +31,7 @@ public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
-		if (!canCommandSenderUseCommand(cs))
-			throw new CommandException(Term.ErrCannotAccessCommand.toString());
+		canCommandSenderUseCommand(cs);
 		if (arg.length < 1) {
 			throw new WrongUsageException("/tp [player] <toplayer> | /tp [player] [dim] <x> <y> <z>");
 		} else {

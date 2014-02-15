@@ -36,7 +36,7 @@ public class Assert {
 			if (allowConsole) {
 				return;
 			} else {
-				throw new CommandException("commands.generic.permission"); // FIXME Might change to custom translation again!
+				throw new CommandException("commands.generic.permission"); // Might change to custom translation again!
 			}
 		}
 		if (node == null)
@@ -45,7 +45,7 @@ public class Assert {
 		if (ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
 			return;
 		}
-		throw new CommandException("commands.generic.permission"); // FIXME Might change to custom translation again!
-		//throw new NoAccessException(cs, node);
+		throw new CommandException("commands.generic.permission"); // Might change to custom translation again!
+		// throw new NoAccessException(cs, node);
 	}
 }

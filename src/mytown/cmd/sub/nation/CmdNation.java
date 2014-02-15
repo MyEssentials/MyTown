@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mytown.NoAccessException;
 import mytown.cmd.api.MyTownSubCommand;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.CommandException;
@@ -42,7 +41,7 @@ public class CmdNation extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 1)
 			return;
 		MyTownSubCommand cmd = commands.get(args[0]);

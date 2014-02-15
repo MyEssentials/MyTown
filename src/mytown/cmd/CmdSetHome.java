@@ -8,7 +8,6 @@ import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.PayHandler;
@@ -33,8 +32,7 @@ public class CmdSetHome extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!canCommandSenderUseCommand(cs))
-			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
+		canCommandSenderUseCommand(cs);
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
 
@@ -64,8 +62,6 @@ public class CmdSetHome extends MyTownCommandBase {
 					setHome(res, (EntityPlayerMP) res.onlinePlayer, (String[]) args[0]);
 				}
 			}, (Object) args);
-		} catch (NoAccessException ex) {
-			MyTown.sendChatToPlayer(cs, ex.toString());
 		} catch (CommandException ex) {
 			throw ex;
 		} catch (Throwable ex) {

@@ -2,13 +2,9 @@ package mytown.cmd.api;
 
 import java.util.List;
 
+import mytown.Assert;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.rcon.RConConsoleSource;
-import net.minecraft.server.MinecraftServer;
-
-import com.sperion.forgeperms.ForgePerms;
 
 /**
  * Base for all MyTown commands
@@ -18,12 +14,8 @@ import com.sperion.forgeperms.ForgePerms;
 public abstract class MyTownCommandBase implements MyTownCommand {
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		if (sender instanceof EntityPlayerMP) {
-			return ForgePerms.getPermissionManager().canAccess(sender.getCommandSenderName(), ((EntityPlayerMP) sender).worldObj.provider.getDimensionName(), getPermNode());
-		} else if ((sender instanceof MinecraftServer || sender instanceof RConConsoleSource) && canConsoleUse()) {
-			return true;
-		}
-		return false;
+		Assert.Perm(sender, getPermNode(), canConsoleUse());
+		return true;
 	}
 
 	@Override

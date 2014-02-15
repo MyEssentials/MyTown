@@ -8,14 +8,13 @@ import mytown.Cost;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.PayHandler;
 import mytown.entities.Resident;
+import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
-import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +36,7 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
@@ -45,9 +44,9 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 		if (res.rank().compareTo(Rank.Assistant) >= 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
-	
+
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		int dim = res.onlinePlayer.worldObj.provider.dimensionId;
 		Assert.Perm(sender, "mytown.cmd.claim.dim" + dim);

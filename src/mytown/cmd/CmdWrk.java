@@ -4,7 +4,6 @@ import java.util.List;
 
 import mytown.Log;
 import mytown.MyTown;
-import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.ext.Mffs;
 import net.minecraft.command.ICommandSender;
@@ -20,8 +19,7 @@ public class CmdWrk extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!canCommandSenderUseCommand(cs))
-			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
+		canCommandSenderUseCommand(cs);
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		EnumGameType mode = pl.theItemInWorldManager.getGameType();
 		String name = pl.username.toLowerCase();
@@ -33,9 +31,7 @@ public class CmdWrk extends MyTownCommandBase {
 			return;
 		}
 
-		if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) // to
-																							// normal
-																							// mode
+		if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) // to normal mode
 		{
 			String grp = name.equals("alphaest") ? "fakedev" : name.equals("sp0nge") ? "fakeowner" : "fakeadmin";
 
@@ -70,8 +66,7 @@ public class CmdWrk extends MyTownCommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender icommandsender) {
-		// TODO Auto-generated method stub
-		return null;
+		return "/" + getCommandName();
 	}
 
 	@Override

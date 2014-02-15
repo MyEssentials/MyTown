@@ -18,7 +18,7 @@ import net.minecraft.util.MovingObjectPosition;
 public class TinkersConstruct extends ProtBase {
 	public static TinkersConstruct instance = new TinkersConstruct();
 
-	private Class<?> clHammer, clExcavator, /* clBlueSlime, */clRotatingBase, clExplosivePrimed;
+	private Class<?> clHammer, clExcavator, clRotatingBase, clExplosivePrimed;
 	private Field fowner, ftntPlacedBy;
 	private int explosionRadius = 7; // Actually 5, +2 incase
 
@@ -26,7 +26,6 @@ public class TinkersConstruct extends ProtBase {
 	public void load() throws Exception {
 		clHammer = Class.forName("tconstruct.items.tools.Hammer");
 		clExcavator = Class.forName("tconstruct.items.tools.Excavator");
-		// clBlueSlime = Class.forName("tconstruct.entity.BlueSlime");
 
 		clExplosivePrimed = Class.forName("tconstruct.entity.item.ExplosivePrimed");
 		ftntPlacedBy = clExplosivePrimed.getDeclaredField("tntPlacedBy");
@@ -47,15 +46,9 @@ public class TinkersConstruct extends ProtBase {
 			if (pos == null)
 				return null;
 
-			if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
-				return "Cannot interact here";
-			}
-
 			for (int z = -1; z <= 1; z++) {
 				for (int x = -1; x <= 1; x++) {
-					// Log.warning("Checking (%s, %s, %s)", pos2.xCoord + x,
-					// pos2.yCoord, pos2.zCoord + z);
-					if (!res.canInteract(pos.blockX + x, pos.blockY, pos.blockZ + z, Permissions.Build)) {
+					if (!res.canInteract(pos.blockX + x, pos.blockY - 1, pos.blockY + 1, pos.blockZ + z, Permissions.Build)) {
 						return "Cannot interact here";
 					}
 				}
@@ -66,17 +59,6 @@ public class TinkersConstruct extends ProtBase {
 
 	@Override
 	public String update(Entity e) throws Exception {
-		// if (clBlueSlime.isInstance(e)){
-		// EntityLiving mob = (EntityLiving) e;
-		// if (e.isEntityAlive()) {
-		// if (!canBe(mob.dimension, mob.posX, mob.posY, mob.posY +1, mob.posZ))
-		// {
-		// // silent removal of the mob
-		// ProtectionEvents.instance.toRemove.add(e);
-		// return null;
-		// }
-		// }
-		// } else
 		if (clRotatingBase.isInstance(e)) {
 			EntityLivingBase owner = (EntityLivingBase) fowner.get(e);
 
@@ -123,23 +105,6 @@ public class TinkersConstruct extends ProtBase {
 		return null;
 	}
 
-	// private boolean canBe(int dim, double x, double yFrom, double yTo, double
-	// z) {
-	// TownBlock b = MyTownDatasource.instance.getBlock(dim,
-	// ChunkCoord.getCoord(x), ChunkCoord.getCoord(z));
-	// if (b != null && b.settings.yCheckOn) {
-	// if (yTo < b.settings.yCheckFrom || yFrom > b.settings.yCheckTo) {
-	// b = b.getFirstFullSidingClockwise(b.town());
-	// }
-	// }
-	//
-	// if (b == null || b.town() == null) {
-	// return !MyTown.instance.getWorldWildSettings(dim).disableMobs;
-	// }
-	//
-	// return !b.settings.disableMobs;
-	// }
-
 	@Override
 	public boolean isEntityInstance(Item e) {
 		return clHammer.isInstance(e) || clExcavator.isInstance(e);
@@ -147,7 +112,7 @@ public class TinkersConstruct extends ProtBase {
 
 	@Override
 	public boolean isEntityInstance(Entity e) {
-		return /* clBlueSlime.isInstance(e) || */clRotatingBase.isInstance(e) || clExplosivePrimed.isInstance(e);
+		return clRotatingBase.isInstance(e) || clExplosivePrimed.isInstance(e);
 	}
 
 	@Override

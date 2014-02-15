@@ -13,13 +13,14 @@ import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Dubstep Gun protection - Stops explosions caused by the Dubstep Gun
+ * 
  * @author Joe Goett
  */
 public class DubstepGun extends ProtBase {
 	public static DubstepGun instance = new DubstepGun();
 	Class<?> clEntitySoundCube;
 	Field fExplosionRadius, fShootingEntity;
-	
+
 	@Override
 	public void load() throws Exception {
 		clEntitySoundCube = Class.forName("net.minecraft.saintspack.EntitySoundCube");
@@ -39,19 +40,19 @@ public class DubstepGun extends ProtBase {
 
 	@Override
 	public String update(Entity e) throws Exception {
-		EntityLivingBase shooter = (EntityLivingBase)fShootingEntity.get(e);
-		if (ProtectionEvents.instance.getNPCClasses().contains(shooter.getClass())) return null; // Ignore NPC's
-		if (!(shooter instanceof EntityPlayer)){
+		EntityLivingBase shooter = (EntityLivingBase) fShootingEntity.get(e);
+		if (ProtectionEvents.instance.getNPCClasses().contains(shooter.getClass()))
+			return null; // Ignore NPC's
+		if (!(shooter instanceof EntityPlayer)) {
 			return "shooter not player";
 		}
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) shooter);
 		float explosionRadius = fExplosionRadius.getFloat(e);
 		// 4-corner check
-		if (!res.canInteract(e.dimension, (int)e.posX, (int)e.posY, (int)e.posZ, Permissions.Build)
-				|| !res.canInteract(e.dimension, (int)(e.posX-explosionRadius), (int)(e.posY-explosionRadius), (int)(e.posY+explosionRadius), (int)(e.posZ-explosionRadius), Permissions.Build)
-				|| !res.canInteract(e.dimension, (int)(e.posX-explosionRadius), (int)(e.posY-explosionRadius), (int)(e.posY+explosionRadius), (int)(e.posZ+explosionRadius), Permissions.Build)
-				|| !res.canInteract(e.dimension, (int)(e.posX+explosionRadius), (int)(e.posY-explosionRadius), (int)(e.posY+explosionRadius), (int)(e.posZ+explosionRadius), Permissions.Build)
-				|| !res.canInteract(e.dimension, (int)(e.posX+explosionRadius), (int)(e.posY-explosionRadius), (int)(e.posY+explosionRadius), (int)(e.posZ-explosionRadius), Permissions.Build)){
+		if (!res.canInteract(e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ, Permissions.Build) || !res.canInteract(e.dimension, (int) (e.posX - explosionRadius), (int) (e.posY - explosionRadius), (int) (e.posY + explosionRadius), (int) (e.posZ - explosionRadius), Permissions.Build)
+				|| !res.canInteract(e.dimension, (int) (e.posX - explosionRadius), (int) (e.posY - explosionRadius), (int) (e.posY + explosionRadius), (int) (e.posZ + explosionRadius), Permissions.Build)
+				|| !res.canInteract(e.dimension, (int) (e.posX + explosionRadius), (int) (e.posY - explosionRadius), (int) (e.posY + explosionRadius), (int) (e.posZ + explosionRadius), Permissions.Build)
+				|| !res.canInteract(e.dimension, (int) (e.posX + explosionRadius), (int) (e.posY - explosionRadius), (int) (e.posY + explosionRadius), (int) (e.posZ - explosionRadius), Permissions.Build)) {
 			return "Explosion would hit a protected town";
 		}
 		return null;

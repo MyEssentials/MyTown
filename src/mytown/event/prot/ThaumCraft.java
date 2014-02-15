@@ -106,6 +106,7 @@ public class ThaumCraft extends ProtBase {
 			if (focus == null)
 				return null;
 			String focusName = focus.getClass().getName();
+			int potency = (Integer) mGetFocusPotency.invoke(clItemWandCasting.cast(tool), item);
 
 			if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusFire")) {
 				List<Entity> list = getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(17), res.onlinePlayer, 17);
@@ -135,24 +136,21 @@ public class ThaumCraft extends ProtBase {
 					}
 				}
 			} else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusTrade")) {
-				if (!res.onlinePlayer.isSneaking()) {
-					MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
+				MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
 
-					if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-						int x = pos.blockX;
-						int y = pos.blockY;
-						int z = pos.blockZ;
-						int radius = 3;
-						int dim = res.onlinePlayer.dimension;
+				if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
+					int x = pos.blockX;
+					int y = pos.blockY;
+					int z = pos.blockZ;
+					int radius = 3 + potency;
+					int dim = res.onlinePlayer.dimension;
 
-						if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build)
-								|| !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
-							return "Cannot build here";
-						}
+					if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build)
+							|| !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+						return "Cannot build here";
 					}
 				}
 			} else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusPortableHole")) {
-				int potency = (Integer) mGetFocusPotency.invoke(clItemWandCasting.cast(tool), item);
 				int maxdist = 33 + potency * 8;
 				MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, maxdist);
 				if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {

@@ -3,10 +3,8 @@ package mytown.cmd;
 import java.util.List;
 
 import mytown.MyTownDatasource;
-import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.Resident;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -18,8 +16,7 @@ public class CmdSpawn extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!canCommandSenderUseCommand(cs))
-			throw new CommandException(Term.ErrCannotAccessCommand.toString());
+		canCommandSenderUseCommand(cs);
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
 

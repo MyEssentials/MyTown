@@ -25,8 +25,7 @@ public class CmdHome extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!canCommandSenderUseCommand(cs))
-			throw new net.minecraft.command.CommandException(Term.ErrCannotAccessCommand.toString());
+		canCommandSenderUseCommand(cs);
 		EntityPlayerMP pl = (EntityPlayerMP) cs;
 		Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
 
@@ -81,7 +80,7 @@ public class CmdHome extends MyTownCommandBase {
 
 	@Override
 	public List<?> addTabCompletionOptions(ICommandSender sender, String[] args) {
-		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayerMP)sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayerMP) sender);
 		return res.home;
 	}
 }

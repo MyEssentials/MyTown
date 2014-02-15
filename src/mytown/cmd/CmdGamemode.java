@@ -2,9 +2,7 @@ package mytown.cmd;
 
 import java.util.List;
 
-import mytown.Term;
 import mytown.cmd.api.MyTownCommand;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandGameMode;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -33,8 +31,7 @@ public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 
 	@Override
 	public void processCommand(ICommandSender cs, String[] args) {
-		if (!canCommandSenderUseCommand(cs))
-			throw new CommandException(Term.ErrCannotAccessCommand.toString());
+		canCommandSenderUseCommand(cs);
 		super.processCommand(cs, args);
 	}
 

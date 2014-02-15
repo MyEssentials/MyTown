@@ -6,7 +6,6 @@ import mytown.Assert;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
@@ -35,7 +34,7 @@ public class CmdTownPerm extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (args.length < 1) {
 			MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdPerm.toString(), Term.TownCmdPermArgs.toString(), Term.TownCmdPermDesc.toString(), null));
@@ -52,11 +51,11 @@ public class CmdTownPerm extends MyTownSubCommandAdapter {
 			showPermissions(sender, res, node);
 		} else {
 			String action = args[1];
-			if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 2) {  // Set
+			if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Set.toString()) && args.length > 2) { // Set
 				Assert.Perm(sender, "mytown.cmd.perm.set." + node + "." + args[2]);
 
 				setPermissions(sender, res, node, args[2], args.length > 3 ? args[3] : null);
-			} else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) {  //Force
+			} else if (action.equalsIgnoreCase(Term.TownCmdPermArgs2Force.toString())) { // Force
 				Assert.Perm(sender, "mytown.cmd.perm.force." + node + "." + (args.length > 2 ? args[2] : "all"));
 
 				flushPermissions(sender, res, node, args.length > 2 ? args[2] : null);

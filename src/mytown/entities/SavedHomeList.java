@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mytown.Assert;
-import mytown.NoAccessException;
 import mytown.Term;
 import net.minecraft.command.CommandException;
 import net.minecraft.entity.Entity;
@@ -58,7 +57,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 		}
 
 		for (SavedHome a : this) {
-			if ((a.name == null && name == "default") || a.name.equalsIgnoreCase(name)) {
+			if ((name == "default" && a.name == null) || a.name.equalsIgnoreCase(name)) {
 				return a;
 			}
 		}
@@ -74,7 +73,7 @@ public class SavedHomeList extends ArrayList<SavedHome> {
 		return name.replace('/', '_').replace('|', '_').replace(' ', '_');
 	}
 
-	public void assertSetHome(String name, Entity pos) throws CommandException, NoAccessException {
+	public void assertSetHome(String name, Entity pos) throws CommandException {
 		if (!owner.isOnline()) {
 			throw new CommandException(Term.HomeCmdOwnerNotOnline.toString());
 		}

@@ -10,6 +10,7 @@ import mytown.entities.Nation;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -27,11 +28,26 @@ public class CmdNationDelete extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public void canUse(ICommandSender sender) throws CommandException {
+		super.canUse(sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (res.town() == null) {
+			throw new CommandException(Term.ErrNotInTown.toString());
+		}
+		if (res.rank() != Rank.Mayor) {
+			throw new CommandException(Term.ErrNotMayor.toString());
+		}
+		if (res.town().nation() == null){
+			throw new CommandException(Term.TownErrNationSelfNotPartOfNation.toString());
+		}
+		if (res.town().nation().capital() != res.town()){
+			throw new CommandException(Term.TownErrNationNotCapital.toString(res.town().nation().name()));
+		}
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
-		if (res.town() == null || res.rank() != Rank.Mayor) {
-			return;
-		}
 
 		Town town = res.town();
 		Nation nation = town.nation();

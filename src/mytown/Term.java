@@ -212,7 +212,7 @@ public enum Term {
 	TownErrNationNotFound("Cannot find the nation by the name '%s'"), TownErrAlreadyInNation("This town is already part of a nation"), TownErrNationNameInUse("Name already in use"), TownErrNationNameCannotBeEmpty("Cannot set a empty name"), TownErrNationSelfNotPartOfNation(
 			"Your're not part of any nation"), TownErrNationNotPartOfNation("That town isn't part of this nation"), TownErrNationNoMayorOnline("The town of %s has no mayors currently online. Try again later"), TownErrNationCannotKickSelf("You cannot kick your own town"), TownErrNationCannotTransferSelf(
 			"You are already the capital"), TownErrNationYouDontHavePendingInvitations("You don't have any pending invitation"), TownErrNationInvitingSelf("Why are you inviting your own town?"), TownErrNationCantRemoveCapital("Cannot remove the capital town"), TownErrCannotDeleteInNation(
-			"Cannot delete the town when in a nation"),
+			"Cannot delete the town when in a nation"), TownErrNationPartOfNation("Already part of a nation"), TownErrNationNotCapital("Your not the capital of %s"),
 
 	// permissions - town command
 	TownCmdPerm("perm"), TownCmdPermArgs("town|res|plot [force [key]|set key [val]]"), TownCmdPermArgsTown("town"), TownCmdPermArgsResident("res"), TownCmdPermArgsPlot("plot"), TownCmdPermArgs2Set("set"), TownCmdPermArgs2Force("force"), TownCmdPermDesc("Shows, sets or forces the permissions"),

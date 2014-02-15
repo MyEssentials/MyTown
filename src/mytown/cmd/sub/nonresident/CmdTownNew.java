@@ -8,7 +8,6 @@ import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.PayHandler;
@@ -32,7 +31,7 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() != null)
@@ -40,7 +39,7 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		Assert.Perm(sender, "mytown.cmd.new.dim" + res.onlinePlayer.dimension);
 
@@ -64,7 +63,8 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 					String[] args = (String[]) ar2[0];
 
 					Town t = null;
-					try { // should never crash because we're doing the same checks before
+					try { // should never crash because we're doing the same
+							// checks before
 						t = new Town(args[0], res, (TownBlock) ar2[1]);
 					} catch (CommandException e) {
 						Log.severe("Town creation failed after taking payment", e);

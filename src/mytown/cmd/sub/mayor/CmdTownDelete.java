@@ -4,7 +4,6 @@ import java.util.List;
 
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
@@ -27,7 +26,7 @@ public class CmdTownDelete extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
@@ -35,12 +34,12 @@ public class CmdTownDelete extends MyTownSubCommandAdapter {
 		if (res.rank().compareTo(Rank.Mayor) >= 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
-	
+
 	@Override
 	public void process(ICommandSender sender, String[] args) {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (args.length == 1 && args[0].equalsIgnoreCase("ok")) {
-			if (res.town() == null){
+			if (res.town() == null) {
 				throw new CommandException(Term.ErrNotInTown.toString());
 			}
 			String name = res.town().name();

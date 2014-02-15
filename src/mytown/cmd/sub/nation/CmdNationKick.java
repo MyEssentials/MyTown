@@ -30,12 +30,26 @@ public class CmdNationKick extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public void canUse(ICommandSender sender) throws CommandException {
+		super.canUse(sender);
+		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
+		if (res.town() == null) {
+			throw new CommandException(Term.ErrNotInTown.toString());
+		}
+		if (res.rank() != Rank.Mayor) {
+			throw new CommandException(Term.ErrNotMayor.toString());
+		}
+		if (res.town().nation() != null){
+			throw new CommandException(Term.TownErrAlreadyInNation.toString());
+		}
+		if (res.town().nation().capital() != res.town()){
+			throw new CommandException(Term.TownErrNationNotCapital.toString(res.town().nation().name()));
+		}
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
-		if (res.town() == null || res.rank() != Rank.Mayor) {
-			return;
-		}
-
 		Town town = res.town();
 		Nation nation = town.nation();
 

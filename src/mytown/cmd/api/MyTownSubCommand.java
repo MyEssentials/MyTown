@@ -2,7 +2,6 @@ package mytown.cmd.api;
 
 import java.util.List;
 
-import mytown.NoAccessException;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
@@ -41,7 +40,7 @@ public interface MyTownSubCommand {
 	 * @throws CommandException
 	 * @throws NoAccessException
 	 */
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException;
+	public void canUse(ICommandSender sender) throws CommandException;
 
 	/**
 	 * Processes the sub-command
@@ -51,7 +50,7 @@ public interface MyTownSubCommand {
 	 * @throws CommandException
 	 * @throws NoAccessException
 	 */
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException;
+	public void process(ICommandSender sender, String[] args) throws CommandException;
 
 	/**
 	 * Returns the tab completion for the sub command

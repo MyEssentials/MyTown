@@ -89,7 +89,7 @@ public abstract class MyTownDB extends Database {
 			update_26_02_2013();
 		} else if (code.equals("27.02.2013")) {
 			update_27_02_2013();
-		} else if (code.endsWith("10.02.2014")){
+		} else if (code.endsWith("10.02.2014")) {
 			update_10_02_2014();
 		}
 	}
@@ -231,7 +231,7 @@ public abstract class MyTownDB extends Database {
 		PreparedStatement statement = prepare("alter table " + prefix + "residents ADD Homes TEXT");
 		statement.executeUpdate();
 	}
-	
+
 	private void update_10_02_2014() throws SQLException {
 		PreparedStatement statement = prepare("alter table " + prefix + "residents ADD Nick TEXT");
 		statement.executeUpdate();
@@ -503,8 +503,8 @@ public abstract class MyTownDB extends Database {
 					int tid = set.getInt("Town");
 					Town town = tid > 0 ? getTown(tid) : null;
 
-					Resident r = Resident.loadFromDB(set.getInt("Id"), set.getString("Name"), set.getString("Nick"), town, Rank.parse(set.getString("Rank")), ChatChannel.parse(set.getString("Channel")), iso8601Format.parse(set.getString("Created")), iso8601Format.parse(set.getString("LastLogin")), set.getString("Extra"),
-							set.getString("Homes"));
+					Resident r = Resident.loadFromDB(set.getInt("Id"), set.getString("Name"), set.getString("Nick"), town, Rank.parse(set.getString("Rank")), ChatChannel.parse(set.getString("Channel")), iso8601Format.parse(set.getString("Created")), iso8601Format.parse(set.getString("LastLogin")),
+							set.getString("Extra"), set.getString("Homes"));
 
 					residents.put(r.name().toLowerCase(), r);
 
@@ -589,4 +589,5 @@ public abstract class MyTownDB extends Database {
 
 		return new Town(pId, pName, pExtraBlocks, blocks, pExtra);
 	}
+
 }

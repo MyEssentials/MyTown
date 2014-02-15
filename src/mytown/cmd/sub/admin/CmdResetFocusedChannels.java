@@ -2,14 +2,13 @@ package mytown.cmd.sub.admin;
 
 import java.util.List;
 
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
 import mytown.ChatChannel;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
 
 public class CmdResetFocusedChannels extends MyTownSubCommandAdapter {
 
@@ -24,7 +23,7 @@ public class CmdResetFocusedChannels extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		int i = 0;
 		for (Resident r : MyTownDatasource.instance.residents.values()) {
 			if (r.activeChannel != ChatChannel.defaultChannel) {

@@ -35,25 +35,26 @@ public class CmdNick extends MyTownCommandBase {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+		canCommandSenderUseCommand(sender);
 		EntityPlayer pl = null;
 		String username = "";
 		String toNick = null;
-		if (args.length == 0){  // Reset Nick to null
-		} else if (args.length == 1){  // Change own nick
+		if (args.length == 0) { // Reset Nick to null
+		} else if (args.length == 1) { // Change own nick
 			username = sender.getCommandSenderName();
-			pl = (EntityPlayer)sender;
+			pl = (EntityPlayer) sender;
 			toNick = args[0];
-		} else if (args.length == 2){  // Pass a username into nick (can be own)
+		} else if (args.length == 2) { // Pass a username into nick (can be own)
 			username = args[0];
-			if (username.equals(sender.getCommandSenderName())){
-				pl = (EntityPlayer)sender;
-			} else{
+			if (username.equals(sender.getCommandSenderName())) {
+				pl = (EntityPlayer) sender;
+			} else {
 				Assert.Perm(sender, "mytown.ecmd.nick.other");
 				pl = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(username);
 			}
 			toNick = args[1];
 		}
-		if (pl == null){ // Player doesn't exist
+		if (pl == null) { // Player doesn't exist
 			MyTown.sendChatToPlayer(sender, String.format("Player %s doesn't exist", username));
 			return;
 		}

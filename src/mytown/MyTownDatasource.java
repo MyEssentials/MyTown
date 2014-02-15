@@ -1,5 +1,10 @@
 package mytown;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,13 +18,15 @@ import mytown.sql.MyTownDB;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
+import com.google.common.base.Joiner;
+
 public class MyTownDatasource extends MyTownDB {
 	public static MyTownDatasource instance = new MyTownDatasource();
 
-	public HashMap<String, Resident> residents = new HashMap<String, Resident>();
-	public HashMap<String, Town> towns = new HashMap<String, Town>();
-	public HashMap<String, TownBlock> blocks = new HashMap<String, TownBlock>();
-	public HashMap<String, Nation> nations = new HashMap<String, Nation>();
+	public HashMap<String, Resident> residents;
+	public HashMap<String, Town> towns;
+	public HashMap<String, TownBlock> blocks;
+	public HashMap<String, Nation> nations;
 
 	public static String getTownBlockKey(int dim, int x, int z) {
 		return dim + ";" + x + ";" + z;
@@ -44,8 +51,7 @@ public class MyTownDatasource extends MyTownDB {
 
 		for (Town t : towns.values()) {
 			for (TownBlock res : t.blocks()) {
-				if (res.owner_name != null) // map block owners
-				{
+				if (res.owner_name != null){ // map block owners
 					Resident r = getResident(res.owner_name);
 					res.sqlSetOwner(r);
 					res.owner_name = null;
@@ -174,23 +180,23 @@ public class MyTownDatasource extends MyTownDB {
 
 	@Override
 	public void saveTown(Town town) {
-    	if (!town.oldName().trim().isEmpty()){
-    		towns.remove(town.oldName().toLowerCase());
-    		town.setOldName("");
-    	}
-    	super.saveTown(town);
-    	towns.put(town.name().toLowerCase(), town);
+		if (!town.oldName().trim().isEmpty()) {
+			towns.remove(town.oldName().toLowerCase());
+			town.setOldName("");
+		}
+		super.saveTown(town);
+		towns.put(town.name().toLowerCase(), town);
 	}
-    
-    @Override
-    public void saveNation(Nation nation) {
-    	super.saveNation(nation);
-    	if (!nation.oldName().trim().isEmpty()){
-        	nations.remove(nation.oldName().toLowerCase());
-        	nation.setOldName("");
-    	}
-    	nations.put(nation.name().toLowerCase(), nation);
-    }
+
+	@Override
+	public void saveNation(Nation nation) {
+		super.saveNation(nation);
+		if (!nation.oldName().trim().isEmpty()) {
+			nations.remove(nation.oldName().toLowerCase());
+			nation.setOldName("");
+		}
+		nations.put(nation.name().toLowerCase(), nation);
+	}
 
 	public void unloadTown(Town t) {
 		towns.remove(t.name().toLowerCase());
@@ -268,5 +274,100 @@ public class MyTownDatasource extends MyTownDB {
 		}
 
 		return towns;
+	}
+
+	/**
+	 * Dumps the Database's tables to an sql formatted file
+	 * @param writer
+	 * @throws SQLException
+	 * @throws IOException
+	 */
+	public void dumpData(OutputStreamWriter writer) throws SQLException, IOException {
+		dumpResidents(writer);
+		dumpTowns(writer);
+		dumpNations(writer);
+		dumpUpdates(writer);		
+		writer.flush();
+	}
+
+	/**
+	 * Dump user table
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void dumpResidents(OutputStreamWriter writer) throws IOException{
+		if (residents.size() <= 0) return;
+		writer.append("/**\n");
+		writer.append(" * Residents\n");
+		writer.append(" */\n");
+		for (Resident res : residents.values()){
+			String resStr = String.format("INSERT INTO %sresidents (Id, Name, Nick, Town, Rank, Channel, Created, LastLogin, Extra, Friends, Homes) VALUES (%d, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n",
+					prefix, res.id(), res.name(), res.nick(), res.town() == null ? 0 : res.town().id(), res.rank().toString(), res.activeChannel.toString(),
+					iso8601Format.format(res.created()),iso8601Format.format(res.lastLogin()), res.serializeExtra(), Joiner.on(';').join(res.friends),
+					res.home.serialize());
+			writer.append("/* User " + res.name() + "*/\n");
+			writer.append(resStr);
+		}
+	}
+	
+	/**
+	 * Dump town table
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void dumpTowns(OutputStreamWriter writer) throws IOException{
+		if (towns.size() <= 0) return;
+		writer.append("\n/**\n");
+		writer.append(" * Towns\n");
+		writer.append(" */\n");
+		for (Town t : towns.values()){
+			String townStr = String.format("INSERT INTO %stowns (Id, Name, ExtraBlocks, Blocks, Extra) VALUES (%d, '%s', %d, '%s', '%s');\n", prefix, t.id(), t.name(), t.extraBlocks(), Joiner.on(" ").join(t.blocks()), t.serializeExtra());
+			writer.append("/* Town " + t.name() + " */\n");
+			writer.append(townStr);
+		}
+	}
+	
+	/**
+	 * Dump nation table
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void dumpNations(OutputStreamWriter writer) throws IOException{
+		if (nations.size() <= 0) return;
+		writer.append("\n/**\n");
+		writer.append(" * Nations\n");
+		writer.append(" */\n");
+		for (Nation n : nations.values()){
+			List<Integer> towns = new ArrayList<Integer>();
+			for (Town r : n.towns().values()) {
+				if (r.id() > 0) {
+					towns.add(r.id());
+				}
+			}
+			String sTowns = Joiner.on(';').join(towns);
+			
+			String nationStr = String.format("INSERT INTO %snations (Id, Name, Towns, Capital, Extra) VALUES (%d, '%s', '%s', '%d', '%s');\n", prefix, n.id(), n.name(), sTowns, n.capital().id(), n.serializeExtra());
+			writer.append("/* Nation " + n.name() + " */\n");
+			writer.append(nationStr);
+		}
+	}
+	
+	/**
+	 * Dump update table
+	 * @param writer
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void dumpUpdates(OutputStreamWriter writer) throws IOException, SQLException{
+		writer.append("\n/**\n");
+		writer.append(" * Updates\n");
+		writer.append(" */\n");
+		ResultSet r = null;
+		PreparedStatement s = prepare("SELECT * FROM " + prefix + "updates");
+		r = s.executeQuery();
+		while (r != null && r.next()) {
+			String updateStr = String.format("INSERT INTO %supdates (Code) VALUES ('%s');\n", prefix, r.getString("Code"));
+			writer.append(updateStr);
+		}
 	}
 }

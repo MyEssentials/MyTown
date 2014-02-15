@@ -54,7 +54,7 @@ public class Mobs extends ProtBase {
 
 		return null;
 	}
-	
+
 	@ForgeSubscribe
 	public void entityJoinWorld(EntityJoinWorldEvent ev) {
 		if (!isEntityInstance(ev.entity)) {

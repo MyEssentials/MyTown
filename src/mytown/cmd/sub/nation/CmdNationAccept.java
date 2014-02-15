@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.MyTownDatasource;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Nation;
@@ -28,7 +27,7 @@ public class CmdNationAccept extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void canUse(ICommandSender sender) throws CommandException, NoAccessException {
+	public void canUse(ICommandSender sender) throws CommandException {
 		super.canUse(sender);
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null) {
@@ -36,6 +35,9 @@ public class CmdNationAccept extends MyTownSubCommandAdapter {
 		}
 		if (res.rank() != Rank.Mayor) {
 			throw new CommandException(Term.ErrNotMayor.toString());
+		}
+		if (res.town().nation() != null){
+			throw new CommandException(Term.TownErrAlreadyInNation.toString());
 		}
 		if (res.town().pendingNationInvitation == null) {
 			throw new CommandException(Term.TownErrNationYouDontHavePendingInvitations.toString());

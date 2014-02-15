@@ -54,10 +54,10 @@ public class Town {
 		return oldName;
 	}
 
-	public void setOldName(String name){
+	public void setOldName(String name) {
 		oldName = name;
 	}
-	
+
 	public int id() {
 		return id;
 	}
@@ -139,7 +139,7 @@ public class Town {
 		canSetName(pName, null);
 		if (home != null) {
 			canAddBlock(home, true, null);
-			if (creator.isOnline() && creator.onlinePlayer != null){
+			if (creator.isOnline() && creator.onlinePlayer != null) {
 				Vec3 vec = Vec3.createVectorHelper(creator.onlinePlayer.posX, creator.onlinePlayer.posY, creator.onlinePlayer.posZ);
 				creator.town().setSpawn(home, vec, creator.onlinePlayer.rotationPitch, creator.onlinePlayer.rotationYaw);
 			}
@@ -595,7 +595,7 @@ public class Town {
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return Term.TownCmdListEntry.toString(name(), residents().size());
 	}
 }

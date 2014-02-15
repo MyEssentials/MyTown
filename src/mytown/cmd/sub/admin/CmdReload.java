@@ -2,12 +2,11 @@ package mytown.cmd.sub.admin;
 
 import java.util.List;
 
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
 import mytown.MyTown;
-import mytown.NoAccessException;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
 
 public class CmdReload extends MyTownSubCommandAdapter {
 
@@ -22,7 +21,7 @@ public class CmdReload extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public void process(ICommandSender sender, String[] args) throws CommandException, NoAccessException {
+	public void process(ICommandSender sender, String[] args) throws CommandException {
 		MyTown.instance.reload();
 		MyTown.sendChatToPlayer(sender, Term.TownadmModReloaded.toString());
 	}

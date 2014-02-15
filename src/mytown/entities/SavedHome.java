@@ -1,7 +1,9 @@
 package mytown.entities;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 
 public class SavedHome {
@@ -20,7 +22,8 @@ public class SavedHome {
 	}
 
 	public SavedHome(String name, Entity entityFrom) {
-		if (name == null) name = "default";
+		if (name == null)
+			name = "default";
 		this.name = name;
 		reset(entityFrom);
 	}
@@ -60,6 +63,7 @@ public class SavedHome {
 
 		SavedHome h = new SavedHome();
 		h.dim = entityFrom.worldObj.provider.getRespawnDimension(entityFrom);
+		c = EntityPlayer.verifyRespawnCoordinates(MinecraftServer.getServer().worldServerForDimension(h.dim), c, true);
 
 		h.x = c.posX;
 		h.y = c.posY;

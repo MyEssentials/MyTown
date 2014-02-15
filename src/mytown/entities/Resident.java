@@ -27,8 +27,6 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
@@ -119,7 +117,6 @@ public class Resident {
 	public void setRank(Rank r) {
 		rank = r;
 	}
-
 
 	public String name() {
 		return name;
@@ -449,16 +446,18 @@ public class Resident {
 		return postfix;
 	}
 
-	public void setNick(String nick){
-		if (nick == null) nick = name();
+	public void setNick(String nick) {
+		if (nick == null)
+			nick = name();
 		this.nick = nick;
 	}
-	
-	public String nick(){
-		if (nick == null) return name;
+
+	public String nick() {
+		if (nick == null)
+			return name;
 		return nick;
 	}
-	
+
 	public static Resident loadFromDB(int id, String name, String nick, Town town, Rank r, ChatChannel c, Date created, Date lastLogin, String extra, String home) {
 		Resident res = new Resident();
 		res.name = name;
@@ -598,36 +597,27 @@ public class Resident {
 	}
 
 	public void respawnPlayer(SavedHome h) {
-        if (!(onlinePlayer instanceof EntityPlayerMP)) {
-            throw new RuntimeException("Cannot move a non-player");
-        }
-
-        EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
-        WorldServer world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
-        
-        ChunkCoordinates c = new ChunkCoordinates(MathHelper.floor_double(h.x), MathHelper.floor_double(h.y), MathHelper.floor_double(h.z));
-        boolean forcedSpawn = pl.isSpawnForced(pl.dimension);
-        if (c != null){
-        	c = EntityPlayer.verifyRespawnCoordinates(world, c, forcedSpawn);
-        }
-        
-        if (c != null){
-        	pl.setLocationAndAngles(c.posX + 0.5F, c.posY + 0.1F, c.posZ + 0.5F, 0.0F, 0.0F);
-        } else {
-        	pl.setLocationAndAngles(h.x, h.y, h.x, h.look1, h.look2);
-        }
-
-		if (pl.dimension != h.dim) {
-			MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, h.dim);
+		if (!(onlinePlayer instanceof EntityPlayerMP)) {
+			throw new RuntimeException("Cannot move a non-player");
 		}
 
-        world.theChunkProviderServer.loadChunk((int) pl.posX >> 4, (int) pl.posZ >> 4);
+		EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
+		WorldServer world = null;
 
-        while (!world.getCollidingBoundingBoxes(pl, pl.boundingBox).isEmpty()) {
-            pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
-        }
-        
-        pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
+		if (pl.dimension != h.dim) {
+			pl.travelToDimension(h.dim);
+		}
+
+		world = MinecraftServer.getServer().worldServerForDimension(pl.dimension);
+		pl.setLocationAndAngles(h.x, h.y, h.z, h.look1, h.look2);
+
+		world.theChunkProviderServer.loadChunk((int) pl.posX >> 4, (int) pl.posZ >> 4);
+
+		while (!world.getCollidingBoundingBoxes(pl, pl.boundingBox).isEmpty()) {
+			pl.setPosition(pl.posX, pl.posY + 1.0D, pl.posZ);
+		}
+
+		pl.playerNetServerHandler.setPlayerLocation(pl.posX, pl.posY, pl.posZ, pl.rotationYaw, pl.rotationPitch);
 	}
 
 	public void sendToTownSpawn(Town t) {
