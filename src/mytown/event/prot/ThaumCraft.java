@@ -176,6 +176,16 @@ public class ThaumCraft extends ProtBase {
 				if (!res.canInteract(dim, x, y, y, z, Permissions.Build)) {
 					return "Cannot build here";
 				}
+			} else if (focusName.equals("vazkii.tinkerer.common.item.foci.ItemFocusDislocation")) {
+				MovingObjectPosition pos = getTargetBlock(res.onlinePlayer.worldObj, res.onlinePlayer, false);
+				if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
+					int blockId = res.onlinePlayer.worldObj.getBlockId(pos.blockX, pos.blockY, pos.blockZ);
+					for (int i : ProtectionEvents.instance.dislocatorBlacklist) {
+						if (i == blockId) {
+							return "Block is blacklisted";
+						}
+					}
+				}
 			}
 		}
 		return null;

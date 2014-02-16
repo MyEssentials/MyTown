@@ -26,7 +26,16 @@ public class ProjectileProtection extends ProtBase {
 
 	@Override
 	public boolean isEntityInstance(Entity e) {
-		return e instanceof IThrowableEntity || e instanceof EntityThrowable || e instanceof EntityArrow;
+		if (e instanceof IThrowableEntity || e instanceof EntityThrowable || e instanceof EntityArrow) {
+			int blockId = e.entityId;
+			for (int i : ProtectionEvents.instance.projectileBlacklist) {
+				if (i == blockId) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override

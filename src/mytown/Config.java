@@ -202,16 +202,21 @@ public class Config extends Configuration {
 	}
 
 	private void loadExtraProtectionConfig() {
-		ProtectionEvents.instance.mobsoffspawnonly = get("protex", "MobsOffSpawnOnly", false, "MobsOff perm controls mob spawning only").getBoolean(false);
+		String str;
+		ProtectionEvents.instance.mobsoffspawnonly = get("protex", "MobsOffSpawnOnly", false, "MobsOff controls mob spawning only, mobs are still allowed to move into protected areas.").getBoolean(false);
 		ProtectionEvents.instance.enabled = get("protex", "Enabled", true, "Run the extra protections").getBoolean(true);
 		ProtectionEvents.instance.dynamicEnabling = get("protex", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);
+		ProtectionEvents.instance.dislocatorBlacklist = ProtectionEvents.instance.stringToIdList(get("protex", "BlacklistDislocator", "", "Comma seperated list of item IDs banned from being moved.").getString());
+		ProtectionEvents.instance.projectileBlacklist = ProtectionEvents.instance.stringToIdList(get("protex", "BlacklistProjectile", "", "Comma seperated list of item IDs that can always be thrown.").getString());
 
 		if (ProtectionEvents.instance.dynamicEnabling) {
 			getCategory("protex").clear();
 
-			get("protex", "MobsOffSpawnOnly", false, "MobsOff perm controls mob spawning only").set(ProtectionEvents.instance.mobsoffspawnonly);
+			get("protex", "MobsOffSpawnOnly", false, "MobsOff controls mob spawning only, mobs are still allowed to move into protected areas.").set(ProtectionEvents.instance.mobsoffspawnonly);
 			get("protex", "Enabled", true, "Run the extra protections?").set(ProtectionEvents.instance.enabled);
 			get("protex", "DynamicEnabling", true, "Load all modules for which mods are present").set(ProtectionEvents.instance.dynamicEnabling);
+			get("protex", "BlacklistDislocator", "", "Comma seperated list of item IDs banned from being moved.").set(ProtectionEvents.instance.IdListToString(ProtectionEvents.instance.dislocatorBlacklist));
+			get("protex", "BlacklistProjectile", "", "Comma seperated list of item IDs that can always be thrown.").set(ProtectionEvents.instance.IdListToString(ProtectionEvents.instance.projectileBlacklist));
 		} else {
 			for (ProtBase prot : ProtectionEvents.getProtections()) {
 				prot.enabled = get("protex", prot.getMod(), prot.defaultEnabled(), prot.getComment()).getBoolean(false);
