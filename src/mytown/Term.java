@@ -143,6 +143,8 @@ public enum Term {
 	TownadmCmdResetFocusedChannels("reschannels"), TownadmCmdResetFocusedChannelsDesc("Reset the currently selected channel for all users to the default"),
 
 	TownadmCmdSnoopPrivateChat("snoop"), TownadmCmdSnoopPrivateChatDesc("Starts or stops logging private chat into server log"),
+	
+	TownadmCmdHome("home"), TownadmCmdHomeDesc("Teleports you to another players home"), TownadmCmdHomeArgs("playername [home]"),
 
 	// Town errors
 	ErrNotInTown("Your not in a town"), ErrNotMayor("Your not the town mayor"),

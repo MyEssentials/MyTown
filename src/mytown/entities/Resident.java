@@ -601,6 +601,9 @@ public class Resident {
 		if (!(onlinePlayer instanceof EntityPlayerMP)) {
 			throw new RuntimeException("Cannot move a non-player");
 		}
+		if (h == null){
+			return;
+		}
 
 		EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
 		WorldServer world = MinecraftServer.getServer().worldServerForDimension(h.dim);
