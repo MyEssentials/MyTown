@@ -24,6 +24,11 @@ public class CmdExtraRes extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length != 3) {
 			MyTown.sendChatToPlayer(sender, Formatter.formatAdminCommand(Term.TownadmCmdExtraRes.toString(), Term.TownadmCmdExtraResArgs.toString(), Term.TownadmCmdExtraResDesc.toString(), null));

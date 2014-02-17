@@ -26,6 +26,11 @@ public class CmdTownSet extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 3) {
 			MyTown.sendChatToPlayer(sender, Formatter.formatAdminCommand(Term.TownadmCmdSet.toString(), Term.TownadmCmdSetArgs.toString(), Term.TownadmCmdSetDesc.toString(), null));

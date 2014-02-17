@@ -23,6 +23,11 @@ public class CmdWipeDim extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 1) {
 			MyTown.sendChatToPlayer(sender, Formatter.formatAdminCommand(Term.TownadmCmdWipeDim.toString(), Term.TownadmCmdWipeDimArgs.toString(), Term.TownadmCmdWipeDimDesc.toString(), null));

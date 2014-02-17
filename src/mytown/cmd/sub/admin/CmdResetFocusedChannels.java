@@ -23,6 +23,11 @@ public class CmdResetFocusedChannels extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		int i = 0;
 		for (Resident r : MyTownDatasource.instance.residents.values()) {

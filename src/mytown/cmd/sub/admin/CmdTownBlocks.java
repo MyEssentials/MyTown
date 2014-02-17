@@ -25,6 +25,11 @@ public class CmdTownBlocks extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		canUse(sender);
 		if (args.length < 1) {

@@ -25,6 +25,11 @@ public class CmdUnclaim extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		int radius_rec = 0;
 		if (args.length > 0) {

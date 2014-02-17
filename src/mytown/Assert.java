@@ -38,13 +38,11 @@ public class Assert {
 				throw new CommandException("commands.generic.permission");
 			}
 		}
-		if (node == null)
-			return;
+		if (node == null) return;
 		EntityPlayer p = (EntityPlayer) cs;
 		if (ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
 			return;
 		}
 		throw new CommandException("commands.generic.permission");
-		// throw new NoAccessException(cs, node);
 	}
 }

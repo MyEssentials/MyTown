@@ -27,6 +27,11 @@ public class CmdClaim extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 1) { // /ta claim townname [playername] [[x.y:x.y] |
 								// rect [radius]]

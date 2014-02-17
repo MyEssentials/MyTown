@@ -22,6 +22,11 @@ public class CmdSnoopPM extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		boolean done = CmdPrivateMsg.snoopers.remove(MinecraftServer.getServer());
 		if (!done) {

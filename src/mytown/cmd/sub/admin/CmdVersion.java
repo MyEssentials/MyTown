@@ -22,6 +22,11 @@ public class CmdVersion extends MyTownSubCommandAdapter {
 	}
 
 	@Override
+	public boolean canUseByConsole() {
+		return true;
+	}
+	
+	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		MyTown.sendChatToPlayer(sender, String.format(Term.TownadmCmdVersionFormat.toString(), Constants.VERSION));
 	}
