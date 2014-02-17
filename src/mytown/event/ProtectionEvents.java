@@ -69,8 +69,7 @@ public class ProtectionEvents implements ITickHandler {
 	private List<Class> npcClasses = null;
 	public boolean dynamicEnabling = true;
 	public boolean mobsoffspawnonly = false;
-	public int[] dislocatorBlacklist;
-	public int[] projectileBlacklist;
+	public int[] projectileExemption;
 
 	public ProtectionEvents() {
 		ProtectionEvents.entityProtections.addAll(Arrays.asList(new ProtBase[] { Creeper.instance, Mobs.instance, LOTR.instance, TNT.instance, ThaumCraft.instance, PortalGun.instance, IndustrialCraft.instance, SteveCarts.instance, RailCraft.instance, TrainCraft.instance, Mekanism.instance,
@@ -84,18 +83,27 @@ public class ProtectionEvents implements ITickHandler {
 	public int[] stringToIdList(String string)
 	{
 		String[] strList = string.split(",");
-		int idList[] = new int[strList.length];
-	    for (int i=0; i < strList.length; i++) {
-	    	idList[i] = Integer.parseInt(strList[i].trim());
-	    }
+		int idList[];
+		if (string == null || string.length() == 0) {
+			idList = new int[0];
+		} else {
+			idList = new int[strList.length];
+		    for (int i=0; i < strList.length; i++) {
+		    	idList[i] = Integer.parseInt(strList[i].trim());
+		    }
+		}
 	    
 	    return idList;
 	}
 
 	public String IdListToString(int idList[])
 	{
-		String string = Arrays.toString(idList);
-	    return string.substring(1, string.length()-2);	// Remove brackets
+		if (idList == null || idList.length == 0) {
+			return "";
+		} else {
+			String string = Arrays.toString(idList);
+		    return string.substring(1, string.length()-2);	// Remove brackets
+		}
 	}
 
     public boolean isHostileMob(Entity e) {

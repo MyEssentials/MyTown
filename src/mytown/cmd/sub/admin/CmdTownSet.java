@@ -27,17 +27,17 @@ public class CmdTownSet extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
-		if (args.length < 4) {
+		if (args.length < 3) {
 			MyTown.sendChatToPlayer(sender, Formatter.formatAdminCommand(Term.TownadmCmdSet.toString(), Term.TownadmCmdSetArgs.toString(), Term.TownadmCmdSetDesc.toString(), null));
 		} else {
-			Town t = MyTownDatasource.instance.getTown(args[1]);
+			Town t = MyTownDatasource.instance.getTown(args[0]);
 			if (t == null) {
-				throw new CommandException(Term.TownErrNotFound.toString(), args[1]);
+				throw new CommandException(Term.TownErrNotFound.toString(), args[0]);
 			}
 
-			Rank rank = Rank.parse(args[2]);
+			Rank rank = Rank.parse(args[1]);
 
-			for (int i = 3; i < args.length; i++) {
+			for (int i = 2; i < args.length; i++) {
 				Resident r = MyTownDatasource.instance.getOrMakeResident(args[i]);
 				if (r.town() != null) {
 					if (r.town() != t) {
