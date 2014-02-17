@@ -17,7 +17,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.common.base.Joiner;
-import com.sperion.forgeperms.ForgePerms;
+
+import forgeperms.ForgePerms;
 
 public class CmdChat extends CommandBase implements MyTownCommand {
 	public ChatChannel channel;

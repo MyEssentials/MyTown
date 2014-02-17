@@ -27,7 +27,7 @@ public class CmdDumpDB extends MyTownSubCommandAdapter {
 	public boolean canUseByConsole() {
 		return true;
 	}
-	
+
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		canUse(sender);

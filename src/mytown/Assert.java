@@ -5,8 +5,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
-
-import com.sperion.forgeperms.ForgePerms;
+import forgeperms.ForgePerms;
 
 public class Assert {
 	/**
@@ -36,7 +35,7 @@ public class Assert {
 			if (allowConsole) {
 				return;
 			} else {
-				throw new CommandException("commands.generic.permission"); // Might change to custom translation again!
+				throw new CommandException("commands.generic.permission");
 			}
 		}
 		if (node == null)
@@ -45,7 +44,7 @@ public class Assert {
 		if (ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
 			return;
 		}
-		throw new CommandException("commands.generic.permission"); // Might change to custom translation again!
+		throw new CommandException("commands.generic.permission");
 		// throw new NoAccessException(cs, node);
 	}
 }

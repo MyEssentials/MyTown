@@ -22,7 +22,8 @@ import net.minecraft.item.ItemStack;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sperion.forgeperms.ForgePerms;
+
+import forgeperms.ForgePerms;
 
 public class CmdTownClaim extends MyTownSubCommandAdapter {
 	@Override

@@ -105,7 +105,7 @@ public class CmdMyTown extends MyTownCommandBase {
 	public boolean canConsoleUse() {
 		return true;
 	}
-	
+
 	@Override
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
 		if (args.length == 0) {

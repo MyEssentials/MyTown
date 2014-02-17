@@ -34,7 +34,7 @@ public class CmdNationDeny extends MyTownSubCommandAdapter {
 		if (res.rank() != Rank.Mayor) {
 			throw new CommandException(Term.ErrNotMayor.toString());
 		}
-		if (res.town().nation() != null){
+		if (res.town().nation() != null) {
 			throw new CommandException(Term.TownErrAlreadyInNation.toString());
 		}
 		if (res.town().pendingNationInvitation == null) {

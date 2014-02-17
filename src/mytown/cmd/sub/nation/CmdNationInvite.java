@@ -38,14 +38,14 @@ public class CmdNationInvite extends MyTownSubCommandAdapter {
 		if (res.rank() != Rank.Mayor) {
 			throw new CommandException(Term.ErrNotMayor.toString());
 		}
-		if (res.town().nation() == null){
+		if (res.town().nation() == null) {
 			throw new CommandException(Term.TownErrNationSelfNotPartOfNation.toString());
 		}
-		if (res.town().nation().capital() != res.town()){
+		if (res.town().nation().capital() != res.town()) {
 			throw new CommandException(Term.TownErrNationNotCapital.toString(res.town().nation().name()));
 		}
 	}
-	
+
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);

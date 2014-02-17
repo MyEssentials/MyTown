@@ -3,8 +3,7 @@ package mytown.entities;
 import mytown.MyTown;
 import mytown.Term;
 import net.minecraft.item.ItemStack;
-
-import com.sperion.forgeperms.ForgePerms;
+import forgeperms.ForgePerms;
 
 public class PayHandler {
 	public static long timeToPaySec = 1 * 60;

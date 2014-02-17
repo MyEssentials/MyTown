@@ -33,8 +33,9 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.DimensionManager;
 
 import com.google.common.base.Joiner;
-import com.sperion.forgeperms.ForgePerms;
-import com.sperion.forgeperms.api.IChatManager;
+
+import forgeperms.ForgePerms;
+import forgeperms.api.IChatManager;
 
 public class Resident {
 	public static boolean allowMemberToMemberPvp = false;

@@ -17,7 +17,8 @@ import net.minecraft.util.StringTranslate;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sperion.forgeperms.ForgePerms;
+
+import forgeperms.ForgePerms;
 
 public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand {
 	public static Map<EntityPlayer, EntityPlayer> lastMessages = Maps.newHashMap();

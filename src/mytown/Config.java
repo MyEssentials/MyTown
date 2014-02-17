@@ -202,7 +202,6 @@ public class Config extends Configuration {
 	}
 
 	private void loadExtraProtectionConfig() {
-		String str;
 		ProtectionEvents.instance.mobsoffspawnonly = get("protex", "MobsOffSpawnOnly", false, "MobsOff controls mob spawning only, mobs are still allowed to move into protected areas.").getBoolean(false);
 		ProtectionEvents.instance.enabled = get("protex", "Enabled", true, "Run the extra protections").getBoolean(true);
 		ProtectionEvents.instance.dynamicEnabling = get("protex", "DynamicEnabling", true, "Load all modules for which mods are present").getBoolean(true);

@@ -6,8 +6,7 @@ import mytown.cmd.api.MyTownCommand;
 import net.minecraft.command.CommandGameMode;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-
-import com.sperion.forgeperms.ForgePerms;
+import forgeperms.ForgePerms;
 
 public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 	@Override

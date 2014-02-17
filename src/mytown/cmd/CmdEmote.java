@@ -11,8 +11,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-
-import com.sperion.forgeperms.ForgePerms;
+import forgeperms.ForgePerms;
 
 public class CmdEmote extends CommandServerEmote implements MyTownCommand {
 	@Override

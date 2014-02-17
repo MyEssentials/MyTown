@@ -13,8 +13,7 @@ import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-
-import com.sperion.forgeperms.ForgePerms;
+import forgeperms.ForgePerms;
 
 public class CmdTownMayor extends MyTownSubCommandAdapter {
 

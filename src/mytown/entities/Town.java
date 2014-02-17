@@ -19,7 +19,8 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.DimensionManager;
 
 import com.google.common.base.Joiner;
-import com.sperion.forgeperms.ForgePerms;
+
+import forgeperms.ForgePerms;
 
 public class Town {
 	public static int minDistanceFromOtherTown = 5;

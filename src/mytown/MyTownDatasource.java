@@ -51,7 +51,7 @@ public class MyTownDatasource extends MyTownDB {
 
 		for (Town t : towns.values()) {
 			for (TownBlock res : t.blocks()) {
-				if (res.owner_name != null){ // map block owners
+				if (res.owner_name != null) { // map block owners
 					Resident r = getResident(res.owner_name);
 					res.sqlSetOwner(r);
 					res.owner_name = null;
@@ -278,6 +278,7 @@ public class MyTownDatasource extends MyTownDB {
 
 	/**
 	 * Dumps the Database's tables to an sql formatted file
+	 * 
 	 * @param writer
 	 * @throws SQLException
 	 * @throws IOException
@@ -286,58 +287,62 @@ public class MyTownDatasource extends MyTownDB {
 		dumpResidents(writer);
 		dumpTowns(writer);
 		dumpNations(writer);
-		dumpUpdates(writer);		
+		dumpUpdates(writer);
 		writer.flush();
 	}
 
 	/**
 	 * Dump user table
+	 * 
 	 * @param writer
 	 * @throws IOException
 	 */
-	private void dumpResidents(OutputStreamWriter writer) throws IOException{
-		if (residents.size() <= 0) return;
+	private void dumpResidents(OutputStreamWriter writer) throws IOException {
+		if (residents.size() <= 0)
+			return;
 		writer.append("/**\n");
 		writer.append(" * Residents\n");
 		writer.append(" */\n");
-		for (Resident res : residents.values()){
-			String resStr = String.format("INSERT INTO %sresidents (Id, Name, Nick, Town, Rank, Channel, Created, LastLogin, Extra, Friends, Homes) VALUES (%d, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n",
-					prefix, res.id(), res.name(), res.nick(), res.town() == null ? 0 : res.town().id(), res.rank().toString(), res.activeChannel.toString(),
-					iso8601Format.format(res.created()),iso8601Format.format(res.lastLogin()), res.serializeExtra(), Joiner.on(';').join(res.friends),
-					res.home.serialize());
+		for (Resident res : residents.values()) {
+			String resStr = String.format("INSERT INTO %sresidents (Id, Name, Nick, Town, Rank, Channel, Created, LastLogin, Extra, Friends, Homes) VALUES (%d, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n", prefix, res.id(), res.name(), res.nick(), res.town() == null ? 0 : res
+					.town().id(), res.rank().toString(), res.activeChannel.toString(), iso8601Format.format(res.created()), iso8601Format.format(res.lastLogin()), res.serializeExtra(), Joiner.on(';').join(res.friends), res.home.serialize());
 			writer.append("/* User " + res.name() + "*/\n");
 			writer.append(resStr);
 		}
 	}
-	
+
 	/**
 	 * Dump town table
+	 * 
 	 * @param writer
 	 * @throws IOException
 	 */
-	private void dumpTowns(OutputStreamWriter writer) throws IOException{
-		if (towns.size() <= 0) return;
+	private void dumpTowns(OutputStreamWriter writer) throws IOException {
+		if (towns.size() <= 0)
+			return;
 		writer.append("\n/**\n");
 		writer.append(" * Towns\n");
 		writer.append(" */\n");
-		for (Town t : towns.values()){
+		for (Town t : towns.values()) {
 			String townStr = String.format("INSERT INTO %stowns (Id, Name, ExtraBlocks, Blocks, Extra) VALUES (%d, '%s', %d, '%s', '%s');\n", prefix, t.id(), t.name(), t.extraBlocks(), Joiner.on(" ").join(t.blocks()), t.serializeExtra());
 			writer.append("/* Town " + t.name() + " */\n");
 			writer.append(townStr);
 		}
 	}
-	
+
 	/**
 	 * Dump nation table
+	 * 
 	 * @param writer
 	 * @throws IOException
 	 */
-	private void dumpNations(OutputStreamWriter writer) throws IOException{
-		if (nations.size() <= 0) return;
+	private void dumpNations(OutputStreamWriter writer) throws IOException {
+		if (nations.size() <= 0)
+			return;
 		writer.append("\n/**\n");
 		writer.append(" * Nations\n");
 		writer.append(" */\n");
-		for (Nation n : nations.values()){
+		for (Nation n : nations.values()) {
 			List<Integer> towns = new ArrayList<Integer>();
 			for (Town r : n.towns().values()) {
 				if (r.id() > 0) {
@@ -345,20 +350,21 @@ public class MyTownDatasource extends MyTownDB {
 				}
 			}
 			String sTowns = Joiner.on(';').join(towns);
-			
+
 			String nationStr = String.format("INSERT INTO %snations (Id, Name, Towns, Capital, Extra) VALUES (%d, '%s', '%s', '%d', '%s');\n", prefix, n.id(), n.name(), sTowns, n.capital().id(), n.serializeExtra());
 			writer.append("/* Nation " + n.name() + " */\n");
 			writer.append(nationStr);
 		}
 	}
-	
+
 	/**
 	 * Dump update table
+	 * 
 	 * @param writer
 	 * @throws IOException
 	 * @throws SQLException
 	 */
-	private void dumpUpdates(OutputStreamWriter writer) throws IOException, SQLException{
+	private void dumpUpdates(OutputStreamWriter writer) throws IOException, SQLException {
 		writer.append("\n/**\n");
 		writer.append(" * Updates\n");
 		writer.append(" */\n");

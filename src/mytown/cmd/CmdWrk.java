@@ -31,7 +31,9 @@ public class CmdWrk extends MyTownCommandBase {
 			return;
 		}
 
-		if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) // to normal mode
+		if (MinecraftServer.getServer().getConfigurationManager().getOps().contains(name)) // to
+																							// normal
+																							// mode
 		{
 			String grp = name.equals("alphaest") ? "fakedev" : name.equals("sp0nge") ? "fakeowner" : "fakeadmin";
 

@@ -10,7 +10,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.google.common.base.Joiner;
-import com.sperion.forgeperms.ForgePerms;
+
+import forgeperms.ForgePerms;
 
 /**
  * 
