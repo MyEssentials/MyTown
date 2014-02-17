@@ -147,6 +147,9 @@ public class ThaumCraft extends ProtBase {
 
 					if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build)
 							|| !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+// FIXME - Can't figure out what to swap this back too.
+//						res.onlinePlayer.worldObj.setBlock(x, y, z, blockid);
+
 						return "Cannot build here";
 					}
 				}
@@ -179,12 +182,7 @@ public class ThaumCraft extends ProtBase {
 			} else if (focusName.equals("vazkii.tinkerer.common.item.foci.ItemFocusDislocation")) {
 				MovingObjectPosition pos = getTargetBlock(res.onlinePlayer.worldObj, res.onlinePlayer, false);
 				if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-					int blockId = res.onlinePlayer.worldObj.getBlockId(pos.blockX, pos.blockY, pos.blockZ);
-					for (int i : ProtectionEvents.instance.dislocatorBlacklist) {
-						if (i == blockId) {
-							return "Block is blacklisted";
-						}
-					}
+// FIXME - Undo glitch for selection of protected block
 				}
 			}
 		}

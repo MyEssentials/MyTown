@@ -28,7 +28,7 @@ public class ProjectileProtection extends ProtBase {
 	public boolean isEntityInstance(Entity e) {
 		if (e instanceof IThrowableEntity || e instanceof EntityThrowable || e instanceof EntityArrow) {
 			int blockId = e.entityId;
-			for (int i : ProtectionEvents.instance.projectileBlacklist) {
+			for (int i : ProtectionEvents.instance.projectileExemption) {
 				if (i == blockId) {
 					return false;
 				}
@@ -49,13 +49,19 @@ public class ProjectileProtection extends ProtBase {
 			thrower = ((EntityArrow) e).shootingEntity;
 		}
 
-		if (ProtectionEvents.instance.getNPCClasses().contains(thrower.getClass()))
-			return null; // Ignore NPC's
+//		if (ProtectionEvents.instance.getNPCClasses().contains(thrower.getClass()))
+//			return null; // Ignore NPC's
+//		if (thrower == null || !(thrower instanceof EntityPlayer))
+//			return "Thrower is null or not a player";
+//		Resident res = ProtectionEvents.instance.lastOwner = Resident.getOrMake((EntityPlayer) thrower);
+//		if (res == null)
+//			return "Resident is null";
+// FIXME - For Avondale until this is fully tested.
 		if (thrower == null || !(thrower instanceof EntityPlayer))
-			return "Thrower is null or not a player";
+			return null;
 		Resident res = ProtectionEvents.instance.lastOwner = Resident.getOrMake((EntityPlayer) thrower);
 		if (res == null)
-			return "Resident is null";
+			return null;
 
 		Vec3 vec3 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX, e.posY, e.posZ);
 		Vec3 vec31 = e.worldObj.getWorldVec3Pool().getVecFromPool(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);

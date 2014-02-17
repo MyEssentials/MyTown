@@ -229,7 +229,7 @@ public enum Term {
 	// per errors
 	ErrPermSettingNotFound("The specified setting '%s' cannot be found"), ErrPermSettingCollectionNotFound("The specified node '%s' doesn't exist"), ErrPermNoChilds("The current permission node has no children"), ErrPermSupportedValues("§4Value type: §2%s§4, Supported values: §2%s"), ErrPermInvalidValue(
 			"§4Error: §2%s§4, Supported values: §2%s"), ErrPermYouDontHaveTown("You don't belong to any town"), ErrPermPlotNotInTown("The current block doesn't belong to any town"), ErrPermPlotNotInYourTown("The current block doesn't belong to your town"), ErrPermRankNotEnough(
-			"You have to be atleast the assistant of the town for this"),
+			"You have to be at least the assistant of the town for this"),
 
 	ErrPermCannotBuildHere("§4You cannot build in this area"), ErrPermCannotAccessHere("§4You cannot access things here"), ErrPermCannotPickup("§4You cannot pick items up here"),
 
