@@ -5,6 +5,7 @@ import java.util.List;
 import mytown.ChatChannel;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
+import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import net.minecraft.command.CommandException;
@@ -44,4 +45,9 @@ public class CmdResetFocusedChannels extends MyTownSubCommandAdapter {
 		return null;
 	}
 
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownadmCmdResetFocusedChannelsDesc.toString();
+	}
 }

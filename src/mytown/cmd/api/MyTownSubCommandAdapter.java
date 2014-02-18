@@ -28,7 +28,11 @@ public abstract class MyTownSubCommandAdapter implements MyTownSubCommand {
 		return null;
 	}
 
-	public String getHelp(ICommandSender sender){
-		return null;
+	public String getDesc(ICommandSender sender){
+		return "";
+	}
+	
+	public String getArgs(ICommandSender sender){
+		return "";
 	}
 }

@@ -3,6 +3,7 @@ package mytown.cmd.sub.admin;
 import java.util.List;
 
 import mytown.MyTown;
+import mytown.Term;
 import mytown.cmd.CmdPrivateMsg;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.CommandException;
@@ -42,4 +43,9 @@ public class CmdSnoopPM extends MyTownSubCommandAdapter {
 		return null;
 	}
 
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownadmCmdSnoopPrivateChatDesc.toString();
+	}
 }

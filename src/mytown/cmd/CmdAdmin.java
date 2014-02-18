@@ -114,15 +114,14 @@ public class CmdAdmin extends MyTownCommandBase {
 	 */
 	private void printHelp(ICommandSender sender){
 		StringBuilder help = new StringBuilder();
-		help.append("§2Admin Commands");
+		help.append("§9Admin Commands");
 		for (MyTownSubCommand cmd : commands.values()){
 			try{
 				cmd.canUse(sender);
-				String desc = cmd.getHelp(sender);
-				if (desc != null){
-					help.append("\n");
-					help.append(desc);
-				}
+				String desc = cmd.getDesc(sender);
+				String args = cmd.getArgs(sender);
+				help.append("\n");
+				help.append(Formatter.formatAdminCommand(cmd.getName(), args == null ? "" : args, desc == null ? "" : desc, "9"));
 			} catch(Exception e){}  // Ignore
 		}
 		MyTown.sendChatToPlayer(sender, Formatter.applyColorCodes(help.toString()));

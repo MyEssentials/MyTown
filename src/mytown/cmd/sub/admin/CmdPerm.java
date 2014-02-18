@@ -17,8 +17,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class CmdPerm extends MyTownSubCommandAdapter {
-
-
 	@Override
 	public String getName() {
 		return "perm";
@@ -147,5 +145,15 @@ public class CmdPerm extends MyTownSubCommandAdapter {
 
 		showPermissions(sender, node);
 		MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));
+	}
+
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownadmCmdPermDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownadmCmdPermArgs.toString();
 	}
 }

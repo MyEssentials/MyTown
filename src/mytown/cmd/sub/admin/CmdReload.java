@@ -36,4 +36,9 @@ public class CmdReload extends MyTownSubCommandAdapter {
 		return null;
 	}
 
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownadmCmdReloadDesc.toString();
+	}
 }

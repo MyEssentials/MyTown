@@ -58,7 +58,12 @@ public class CmdExtraRes extends MyTownSubCommandAdapter {
 	}
 
 	@Override
-	public String getHelp(ICommandSender sender) {
-		return getName() + " " + Term.TownadmCmdExtraArgs.toString() + " - " + Term.TownadmCmdClaimDesc.toString();
+	public String getDesc(ICommandSender sender){
+		return Term.TownadmCmdExtraDesc.toString();
+	}
+	
+	@Override
+	public String getArgs(ICommandSender sender){
+		return Term.TownadmCmdExtraArgs.toString();
 	}
 }

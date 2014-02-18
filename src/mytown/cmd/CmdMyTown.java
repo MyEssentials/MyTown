@@ -150,15 +150,15 @@ public class CmdMyTown extends MyTownCommandBase {
 	 */
 	private void printHelp(ICommandSender sender){
 		StringBuilder help = new StringBuilder();
-		help.append("§Commands");
+		help.append("§9Admin Commands");
 		for (MyTownSubCommand cmd : commands.values()){
 			try{
 				cmd.canUse(sender);
-				String desc = cmd.getHelp(sender);
-				if (desc != null){
-					help.append("\n");
-					help.append(desc);
-				}
+				String desc = cmd.getDesc(sender);
+				String args = cmd.getArgs(sender);
+				Formatter.formatAdminCommand(cmd.getName(), args, desc, "9");
+				help.append("\n");
+				help.append(desc);
 			} catch(Exception e){}  // Ignore
 		}
 		MyTown.sendChatToPlayer(sender, Formatter.applyColorCodes(help.toString()));
