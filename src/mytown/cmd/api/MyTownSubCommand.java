@@ -60,4 +60,6 @@ public interface MyTownSubCommand {
 	 * @return
 	 */
 	public List<String> tabComplete(ICommandSender sender, String[] args);
+
+	public String getHelp(ICommandSender sender);
 }

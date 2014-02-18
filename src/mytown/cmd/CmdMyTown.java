@@ -124,8 +124,10 @@ public class CmdMyTown extends MyTownCommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		canCommandSenderUseCommand(sender);
-		if (args.length < 1)
-			return; // TODO: Print help command out?
+		if (args.length < 1){
+			printHelp(sender);
+			return;
+		}
 		try {
 			MyTownSubCommand cmd = commands.get(args[0]);
 			if (cmd == null)
@@ -142,6 +144,26 @@ public class CmdMyTown extends MyTownCommandBase {
 		}
 	}
 
+	/**
+	 * Prints out the command help
+	 * @param sender
+	 */
+	private void printHelp(ICommandSender sender){
+		StringBuilder help = new StringBuilder();
+		help.append("§Commands");
+		for (MyTownSubCommand cmd : commands.values()){
+			try{
+				cmd.canUse(sender);
+				String desc = cmd.getHelp(sender);
+				if (desc != null){
+					help.append("\n");
+					help.append(desc);
+				}
+			} catch(Exception e){}  // Ignore
+		}
+		MyTown.sendChatToPlayer(sender, Formatter.applyColorCodes(help.toString()));
+	}
+	
 	@Override
 	public List<String> dumpCommands() {
 		List<String> cmds = new ArrayList<String>();

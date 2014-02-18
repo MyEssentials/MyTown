@@ -63,8 +63,11 @@ public class SavedHome {
 
 		SavedHome h = new SavedHome();
 		h.dim = entityFrom.worldObj.provider.getRespawnDimension(entityFrom);
-		c = EntityPlayer.verifyRespawnCoordinates(MinecraftServer.getServer().worldServerForDimension(h.dim), c, true);
-
+		ChunkCoordinates c2 = EntityPlayer.verifyRespawnCoordinates(MinecraftServer.getServer().worldServerForDimension(h.dim), c, true);
+		if (c2 != null){
+			c = c2;
+		}
+		
 		h.x = c.posX;
 		h.y = c.posY;
 		h.z = c.posZ;

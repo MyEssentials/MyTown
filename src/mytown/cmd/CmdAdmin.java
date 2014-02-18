@@ -16,6 +16,7 @@ import mytown.cmd.api.MyTownSubCommand;
 import mytown.cmd.sub.admin.CmdClaim;
 import mytown.cmd.sub.admin.CmdDumpDB;
 import mytown.cmd.sub.admin.CmdExtraRes;
+import mytown.cmd.sub.admin.CmdHome;
 import mytown.cmd.sub.admin.CmdPerm;
 import mytown.cmd.sub.admin.CmdReload;
 import mytown.cmd.sub.admin.CmdResetFocusedChannels;
@@ -30,7 +31,6 @@ import mytown.cmd.sub.admin.CmdTownSet;
 import mytown.cmd.sub.admin.CmdUnclaim;
 import mytown.cmd.sub.admin.CmdVersion;
 import mytown.cmd.sub.admin.CmdWipeDim;
-import mytown.cmd.sub.admin.CmdHome;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
@@ -88,8 +88,10 @@ public class CmdAdmin extends MyTownCommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		canCommandSenderUseCommand(sender);
-		if (args.length < 1)
-			return; // TODO: Print help command out?
+		if (args.length < 1 || args[0].equalsIgnoreCase("help")){
+			printHelp(sender);
+			return;
+		}
 		try {
 			MyTownSubCommand cmd = commands.get(args[0]);
 			if (cmd == null)
@@ -106,6 +108,26 @@ public class CmdAdmin extends MyTownCommandBase {
 		}
 	}
 
+	/**
+	 * Prints out the command help
+	 * @param sender
+	 */
+	private void printHelp(ICommandSender sender){
+		StringBuilder help = new StringBuilder();
+		help.append("§2Admin Commands");
+		for (MyTownSubCommand cmd : commands.values()){
+			try{
+				cmd.canUse(sender);
+				String desc = cmd.getHelp(sender);
+				if (desc != null){
+					help.append("\n");
+					help.append(desc);
+				}
+			} catch(Exception e){}  // Ignore
+		}
+		MyTown.sendChatToPlayer(sender, Formatter.applyColorCodes(help.toString()));
+	}
+	
 	@Override
 	public List<String> dumpCommands() {
 		List<String> cmds = new ArrayList<String>();

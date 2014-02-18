@@ -27,4 +27,8 @@ public abstract class MyTownSubCommandAdapter implements MyTownSubCommand {
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		return null;
 	}
+
+	public String getHelp(ICommandSender sender){
+		return null;
+	}
 }

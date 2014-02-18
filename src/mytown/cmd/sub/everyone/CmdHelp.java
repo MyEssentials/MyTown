@@ -43,4 +43,9 @@ public class CmdHelp implements MyTownSubCommand {
 		return null;
 	}
 
+	
+	@Override
+	public String getHelp(ICommandSender sender) {
+		return null;
+	}
 }

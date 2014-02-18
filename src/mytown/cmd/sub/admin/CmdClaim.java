@@ -149,4 +149,9 @@ public class CmdClaim extends MyTownSubCommandAdapter {
 		return null;
 	}
 
+	
+	@Override
+	public String getHelp(ICommandSender sender) {
+		return getName() + " " + Term.TownadmCmdClaimArgs.toString() + " - " + Term.TownadmCmdClaimDesc.toString();
+	}
 }
