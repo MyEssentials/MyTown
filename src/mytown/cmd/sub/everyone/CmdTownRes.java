@@ -44,4 +44,14 @@ public class CmdTownRes extends MyTownSubCommandAdapter {
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		return null;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdResDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdResArgs.toString();
+	}
 }

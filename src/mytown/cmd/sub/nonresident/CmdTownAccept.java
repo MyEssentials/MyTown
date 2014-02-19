@@ -50,4 +50,9 @@ public class CmdTownAccept extends MyTownSubCommandAdapter {
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		return null;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdAcceptDesc.toString();
+	}
 }

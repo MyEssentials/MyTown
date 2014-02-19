@@ -4,6 +4,7 @@ import java.util.List;
 
 import mytown.MyTown;
 import mytown.MyTownDatasource;
+import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.ICommandSender;
 
@@ -35,5 +36,9 @@ public class CmdNationList extends MyTownSubCommandAdapter {
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		return null;
 	}
-
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdNationListDesc.toString();
+	}
 }

@@ -50,4 +50,15 @@ public class CmdTownBlocks extends MyTownSubCommandAdapter {
 		return townList;
 	}
 
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownadmCmdTownBlocksDesc.toString();
+	}
+	
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownadmCmdTownBlocksArgs.toString();
+	}
 }

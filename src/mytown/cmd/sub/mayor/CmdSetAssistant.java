@@ -84,4 +84,14 @@ public class CmdSetAssistant extends MyTownSubCommandAdapter {
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		return null;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdAssistantDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdAssistantArgs.toString();
+	}
 }

@@ -37,16 +37,4 @@ public class CmdToggleGen extends MyTownSubCommandAdapter {
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		return null;
 	}
-
-	
-	@Override
-	public String getDesc(ICommandSender sender) {
-		return super.getDesc(sender);
-	}
-	
-
-	@Override
-	public String getArgs(ICommandSender sender) {
-		return super.getArgs(sender);
-	}
 }

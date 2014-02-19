@@ -71,5 +71,9 @@ public class CmdNationDelete extends MyTownSubCommandAdapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdNationDelDesc.toString();
+	}
 }

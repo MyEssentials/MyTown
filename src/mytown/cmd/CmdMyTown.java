@@ -124,7 +124,7 @@ public class CmdMyTown extends MyTownCommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		canCommandSenderUseCommand(sender);
-		if (args.length < 1){
+		if (args.length < 1 || args[0].equalsIgnoreCase("help")){
 			printHelp(sender);
 			return;
 		}
@@ -156,7 +156,7 @@ public class CmdMyTown extends MyTownCommandBase {
 				cmd.canUse(sender);
 				String desc = cmd.getDesc(sender);
 				String args = cmd.getArgs(sender);
-				Formatter.formatAdminCommand(cmd.getName(), args, desc, "9");
+				Formatter.formatCommand(cmd.getName(), args, desc, "f");
 				help.append("\n");
 				help.append(desc);
 			} catch(Exception e){}  // Ignore

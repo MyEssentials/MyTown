@@ -59,4 +59,14 @@ public class CmdTownInfo extends MyTownSubCommandAdapter {
 		list.addAll(MyTownDatasource.instance.towns.keySet());
 		return list;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdInfoDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdInfoArgs.toString();
+	}
 }

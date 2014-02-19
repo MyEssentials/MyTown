@@ -81,4 +81,14 @@ public class CmdFriend extends MyTownSubCommandAdapter {
 		}
 		return list;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdFriendDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdFriendArgs.toString();
+	}
 }

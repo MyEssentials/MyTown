@@ -43,7 +43,6 @@ public class CmdSnoopPM extends MyTownSubCommandAdapter {
 		return null;
 	}
 
-	
 	@Override
 	public String getDesc(ICommandSender sender) {
 		return Term.TownadmCmdSnoopPrivateChatDesc.toString();

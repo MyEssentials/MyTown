@@ -59,5 +59,5 @@ public class CmdNationAccept extends MyTownSubCommandAdapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 }

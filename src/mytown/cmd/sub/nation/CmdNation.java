@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mytown.Formatter;
+import mytown.MyTown;
 import mytown.cmd.api.MyTownSubCommand;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.CommandException;
@@ -42,8 +44,10 @@ public class CmdNation extends MyTownSubCommandAdapter {
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
-		if (args.length < 1)
+		if (args.length < 1 || args[0].equalsIgnoreCase("help")){
+			printHelp(sender);
 			return;
+		}
 		MyTownSubCommand cmd = commands.get(args[0]);
 		if (cmd == null)
 			throw new CommandNotFoundException();
@@ -65,4 +69,18 @@ public class CmdNation extends MyTownSubCommandAdapter {
 		return cmd.tabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
 	}
 
+	private void printHelp(ICommandSender sender){
+		StringBuilder help = new StringBuilder();
+		help.append("§Nation Commands");
+		for (MyTownSubCommand cmd : commands.values()){
+			try{
+				cmd.canUse(sender);
+				String desc = cmd.getDesc(sender);
+				String args = cmd.getArgs(sender);
+				help.append("\n");
+				help.append(Formatter.formatAdminCommand(cmd.getName(), args == null ? "" : args, desc == null ? "" : desc, "b"));
+			} catch(Exception e){}  // Ignore
+		}
+		MyTown.sendChatToPlayer(sender, Formatter.applyColorCodes(help.toString()));
+	}
 }

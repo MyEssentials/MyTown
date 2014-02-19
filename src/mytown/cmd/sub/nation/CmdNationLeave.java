@@ -44,5 +44,9 @@ public class CmdNationLeave extends MyTownSubCommandAdapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdNationLeaveDesc.toString();
+	}
 }

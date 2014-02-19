@@ -198,4 +198,14 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdClaimDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdClaimArgs.toString();
+	}
 }

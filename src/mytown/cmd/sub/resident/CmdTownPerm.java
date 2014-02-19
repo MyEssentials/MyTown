@@ -149,4 +149,14 @@ public class CmdTownPerm extends MyTownSubCommandAdapter {
 		showPermissions(sender, res, node);
 		MyTown.sendChatToPlayer(sender, Term.PermSetDone.toString(key, node));
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdPermDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdPermArgs.toString();
+	}
 }

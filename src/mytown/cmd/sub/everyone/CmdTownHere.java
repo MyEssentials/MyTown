@@ -3,6 +3,7 @@ package mytown.cmd.sub.everyone;
 import java.util.List;
 
 import mytown.MyTownDatasource;
+import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.Town;
@@ -40,5 +41,10 @@ public class CmdTownHere extends MyTownSubCommandAdapter {
 	@Override
 	public List<String> tabComplete(ICommandSender sender, String[] args) {
 		return null;
+	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdHereDesc.toString();
 	}
 }

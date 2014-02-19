@@ -86,5 +86,14 @@ public class CmdNationTransfer extends MyTownSubCommandAdapter {
 		nationTowns.addAll(n.towns().keySet());
 		return nationTowns;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdNationTransferDesc.toString();
+	}
 
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdNationTransferArgs.toString();
+	}
 }

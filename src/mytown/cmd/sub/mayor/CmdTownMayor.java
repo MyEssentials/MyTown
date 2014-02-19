@@ -72,5 +72,14 @@ public class CmdTownMayor extends MyTownSubCommandAdapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdMayorDesc.toString();
+	}
 
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdMayorArgs.toString();
+	}
 }

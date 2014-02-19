@@ -85,5 +85,14 @@ public class CmdNationKick extends MyTownSubCommandAdapter {
 		towns.addAll(nation.towns().keySet());
 		return towns;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdNationKickDesc.toString();
+	}
 
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdNationKickArgs.toString();
+	}
 }

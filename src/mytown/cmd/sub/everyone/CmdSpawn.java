@@ -74,4 +74,14 @@ public class CmdSpawn extends MyTownSubCommandAdapter {
 		}
 		return list;
 	}
+	
+	@Override
+	public String getDesc(ICommandSender sender) {
+		return Term.TownCmdSpawnDesc.toString();
+	}
+
+	@Override
+	public String getArgs(ICommandSender sender) {
+		return Term.TownCmdSpawnArgs.toString();
+	}
 }
