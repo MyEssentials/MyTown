@@ -5,7 +5,8 @@
 
 	<target name="clean">
 		<delete file="${environment.mcp_location}/src/minecraft/mcmod.info" />
-		<delete dir="${environment.mcp_location}/src/minecraft/com/sperion" />
+		<delete dir="${environment.mcp_location}/src/minecraft/forgeperms" />
+		<delete dir="${environment.mcp_location}/src/minecraft/pex" />
 		<delete dir="${environment.mcp_location}/src/minecraft/mytown" />
 		<delete dir="${environment.mcp_location}/src/minecraft/ic2" />
 		<delete dir="${environment.mcp_location}/src/minecraft/mithion" />
@@ -58,7 +59,7 @@
 	    <jar destfile="${environment.build_location}/MC ${build.minecraft_version}/MyTown-${build.mod_version}.${build.build_number}.jar">
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="mcmod.info" />
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="pack.mcmeta" />
-            <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/com/**,**/org/**"/>
+            <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/org/**,**/cpw/**,**/net/**,**/forgeperms/**,**/pex/**"/>
 	    </jar>
 
 	    <antcall target="clean" />
@@ -69,7 +70,7 @@
 	    <jar destfile="${environment.release_location}/MyTown-${build.mod_version}.${build.build_number}.jar">
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="mcmod.info" />
             <fileset dir="${environment.mcp_location}/src/minecraft/" includes="pack.mcmeta" />
-            <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/com/**,**/org/**"/>
+            <fileset dir="${environment.mcp_location}/reobf/minecraft" excludes="**/org/**,**/cpw/**,**/net/**,**/forgeperms/**,**/pex/**"/>
 	    </jar>
 
 	    <antcall target="clean" />
