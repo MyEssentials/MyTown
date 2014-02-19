@@ -614,7 +614,7 @@ public class Resident {
 		}
 		
 		if (pl.dimension != h.dim) {
-			pl.travelToDimension(h.dim);
+			MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, pl.worldObj.provider.getRespawnDimension(pl));
 		}
 		
 		pl.setLocationAndAngles(h.x + 0.5f, h.y + 0.1f, h.z + 0.5f, h.look1, h.look2);
