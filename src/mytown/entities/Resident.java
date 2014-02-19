@@ -18,6 +18,7 @@ import mytown.cmd.CmdChat;
 import mytown.entities.TownSettingCollection.ISettingsSaveHandler;
 import mytown.event.ProtectionEvents;
 import mytown.event.tick.WorldBorder;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -608,6 +609,10 @@ public class Resident {
 		EntityPlayerMP pl = (EntityPlayerMP) onlinePlayer;
 		WorldServer world = MinecraftServer.getServer().worldServerForDimension(h.dim);
 
+		if (pl == null){
+			throw new CommandException(Term.TownErrPlayerNotFound.toString());
+		}
+		
 		if (pl.dimension != h.dim) {
 			pl.travelToDimension(h.dim);
 		}
