@@ -18,6 +18,7 @@ import mytown.event.ProtBase;
 import mytown.event.ProtectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -32,7 +33,7 @@ public class ThaumCraft extends ProtBase {
 	public static ThaumCraft instance = new ThaumCraft();
 	public int explosionRadius = 6;
 
-	private Class<?> clTileArcaneBore, clEntityFrostShard, clItemWandCasting;
+	private Class<?> clTileArcaneBore, clEntityFrostShard, clItemWandCasting, clEntityPrimalOrb;
 	private Method mGetFocus, mGetFocusPotency;
 	private Field fBore_toDig, fBore_digX, fBore_digZ, fBore_digY, fFrostShard_shootingEntity;
 
@@ -43,7 +44,8 @@ public class ThaumCraft extends ProtBase {
 		mGetFocusPotency = clItemWandCasting.getDeclaredMethod("getFocusPotency", ItemStack.class);
 
 		clEntityFrostShard = Class.forName("thaumcraft.common.entities.projectile.EntityFrostShard");
-
+		clEntityPrimalOrb = Class.forName("thaumcraft.common.entities.projectile.EntityPrimalOrb");
+		
 		clTileArcaneBore = Class.forName("thaumcraft.common.tiles.TileArcaneBore");
 		fBore_toDig = clTileArcaneBore.getDeclaredField("toDig");
 		fBore_digX = clTileArcaneBore.getDeclaredField("digX");
@@ -55,12 +57,12 @@ public class ThaumCraft extends ProtBase {
 
 	@Override
 	public boolean loaded() {
-		return clEntityFrostShard != null;
+		return clTileArcaneBore != null || clEntityFrostShard != null || clItemWandCasting != null || clEntityPrimalOrb != null;
 	}
 
 	@Override
 	public boolean isEntityInstance(Entity e) {
-		return clEntityFrostShard.isInstance(e);
+		return clEntityFrostShard.isInstance(e) || clEntityPrimalOrb.isInstance(e);
 	}
 
 	@Override
@@ -75,25 +77,28 @@ public class ThaumCraft extends ProtBase {
 
 	@Override
 	public String update(Entity e) throws Exception {
+		Entity shooter = null;
+		int radius = 0;
+		int x = (int) (e.posX + e.motionX), y = (int) (e.posY + e.motionY), z = (int) (e.posZ + e.motionZ);
+		
 		if (clEntityFrostShard.isInstance(e)) {
-			Entity shooter = (Entity) fFrostShard_shootingEntity.get(e);
+			shooter = (Entity) fFrostShard_shootingEntity.get(e);
+			radius = 1;
+		} else if (clEntityPrimalOrb.isInstance(e)){
+			EntityThrowable primalOrb = (EntityThrowable)e;
+			shooter = primalOrb.getThrower();
+			radius = 4;
+		}
 
-			if (shooter == null || !(shooter instanceof EntityPlayer)) {
-				return "No owner";
-			}
-
-			Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) shooter);
-
-			int x = (int) (e.posX + e.motionX);
-			int y = (int) (e.posY + e.motionY);
-			int z = (int) (e.posZ + e.motionZ);
-			int radius = 1;
-			int dim = thrower.onlinePlayer.dimension;
-
-			if (!thrower.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build)
-					|| !thrower.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
-				return "Cannot build here";
-			}
+		if (shooter == null || !(shooter instanceof EntityPlayer)) {
+			return "No owner";
+		}
+		
+		Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) shooter);
+		int dim = thrower.onlinePlayer.dimension;
+		if (!thrower.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build)
+				|| !thrower.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+			return "Cannot build here";
 		}
 
 		return null;
@@ -144,9 +149,11 @@ public class ThaumCraft extends ProtBase {
 					int z = pos.blockZ;
 					int radius = 3 + potency;
 					int dim = res.onlinePlayer.dimension;
+					
+					Log.info("X: %s, Y: %s, Z: %s, Radius: %S, Dim: %s", x, y, z, radius, dim);
 
-					if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build)
-							|| !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
+					if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) ||
+						!res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
 // FIXME - Can't figure out what to swap this back too.
 //						res.onlinePlayer.worldObj.setBlock(x, y, z, blockid);
 

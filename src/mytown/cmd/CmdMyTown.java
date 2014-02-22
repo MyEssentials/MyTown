@@ -150,7 +150,7 @@ public class CmdMyTown extends MyTownCommandBase {
 	 */
 	private void printHelp(ICommandSender sender){
 		StringBuilder help = new StringBuilder();
-		help.append("§9Admin Commands");
+		help.append("§Commands");
 		for (MyTownSubCommand cmd : commands.values()){
 			try{
 				cmd.canUse(sender);
