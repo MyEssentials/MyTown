@@ -92,21 +92,7 @@ public class MyTown {
 
 		try {
 			Class.forName("net.minecraftforge.event.world.BlockEvent$BreakEvent");
-			MinecraftForge.EVENT_BUS.register(Class.forName("mytown.event.ExtraEvents").newInstance()); // A
-																										// sort
-																										// of
-																										// compat
-																										// for
-																										// older
-																										// versions
-																										// of
-																										// Forge
-																										// that
-																										// don't
-																										// contain
-																										// all
-																										// the
-																										// events
+			MinecraftForge.EVENT_BUS.register(Class.forName("mytown.event.ExtraEvents").newInstance());
 			Log.info("ExtraEvents loaded");
 		} catch (Exception e) {
 			Log.info("Failed to load ExtraEvents");

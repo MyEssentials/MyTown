@@ -53,10 +53,10 @@ public class CmdNationKick extends MyTownSubCommandAdapter {
 		Town town = res.town();
 		Nation nation = town.nation();
 
-		if (args.length == 3) {
-			Town t = MyTownDatasource.instance.getTown(args[2]);
+		if (args.length == 1) {
+			Town t = MyTownDatasource.instance.getTown(args[0]);
 			if (t == null) {
-				throw new CommandException(Term.TownErrNotFound.toString(), args[2]);
+				throw new CommandException(Term.TownErrNotFound.toString(), args[0]);
 			}
 
 			if (t.nation() != nation) {

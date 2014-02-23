@@ -47,16 +47,7 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 			MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), null));
 		} else {
 			TownBlock home = MyTownDatasource.instance.getOrMakeBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
-			try {
-				Town.assertNewTownParams(args[0], res, home);
-			} catch (CommandException e) {
-				if (home != null && home.town() == null) {
-					MyTownDatasource.instance.unloadBlock(home);
-				}
-
-				throw e;
-			}
-
+			
 			res.pay.requestPayment("townnew", Cost.TownNew.item, new PayHandler.IDone() {
 				@Override
 				public void run(Resident res, Object[] ar2) {

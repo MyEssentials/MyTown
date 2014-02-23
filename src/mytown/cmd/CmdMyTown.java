@@ -150,15 +150,14 @@ public class CmdMyTown extends MyTownCommandBase {
 	 */
 	private void printHelp(ICommandSender sender){
 		StringBuilder help = new StringBuilder();
-		help.append("§Commands");
+		help.append("Commands");
 		for (MyTownSubCommand cmd : commands.values()){
 			try{
 				cmd.canUse(sender);
 				String desc = cmd.getDesc(sender);
 				String args = cmd.getArgs(sender);
-				Formatter.formatCommand(cmd.getName(), args, desc, "f");
 				help.append("\n");
-				help.append(desc);
+				help.append(Formatter.formatCommand(cmd.getName(), args == null ? "" : args, desc == null ? "" : desc, null));
 			} catch(Exception e){}  // Ignore
 		}
 		MyTown.sendChatToPlayer(sender, Formatter.applyColorCodes(help.toString()));

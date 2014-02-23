@@ -48,8 +48,8 @@ public class CmdNationNew extends MyTownSubCommandAdapter {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		Town town = res.town();
 
-		if (args.length == 3) {
-			String name = args[2];
+		if (args.length == 1) {
+			String name = args[0];
 			Nation n = new Nation(name, town);
 
 			String msg = Term.NationBroadcastCreated.toString(town.name(), n.name());

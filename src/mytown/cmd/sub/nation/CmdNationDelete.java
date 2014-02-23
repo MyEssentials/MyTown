@@ -15,6 +15,11 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
+/**
+ * Command to delete nations
+ * /t nation delete yes
+ * @author Joe Goett
+ */
 public class CmdNationDelete extends MyTownSubCommandAdapter {
 
 	@Override
@@ -52,7 +57,7 @@ public class CmdNationDelete extends MyTownSubCommandAdapter {
 		Town town = res.town();
 		Nation nation = town.nation();
 
-		if (args.length == 3 && args[2].equalsIgnoreCase("yes")) {
+		if (args.length == 1 && args[0].equalsIgnoreCase("yes")) {
 			nation.delete();
 
 			String msg = Term.NationBroadcastDeleted.toString(nation.name());

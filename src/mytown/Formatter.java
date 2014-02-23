@@ -58,7 +58,7 @@ public class Formatter {
 			color = "f";
 		}
 
-		return String.format("§%s/%s %s §7%s §%s- %s", color, Term.TownAdmCommand, cmd, args, color, info);
+		return String.format("§%s/%s %s §7%s §%s- %s", color, "ta", cmd, args, color, info);
 	}
 
 	public static String commandError(Level lvl, String msg) {

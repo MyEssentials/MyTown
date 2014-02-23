@@ -9,6 +9,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.Town;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -22,6 +23,14 @@ public class CmdTownOnline extends MyTownSubCommandAdapter {
 	@Override
 	public String getPermNode() {
 		return "mytown.cmd.online";
+	}
+
+	@Override
+	public void canUse(ICommandSender sender) throws CommandException {
+		super.canUse(sender);
+		if (MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender).town() == null){
+			throw new CommandException(Term.ErrNotInTown.toString());
+		}
 	}
 
 	@Override
