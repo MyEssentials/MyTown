@@ -53,6 +53,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
+import com.sperion.forgeperms.api.IPermissionManager;
+
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
 public class MyTown {
@@ -64,7 +66,9 @@ public class MyTown {
 	public boolean isMCPC = false;
 	public Method MCPCRegisterCommand = null;
 
-	@Instance("MyTown")
+    public IPermissionManager permManager;
+
+    @Instance("MyTown")
 	public static MyTown instance;
 	public Config config = new Config();
 

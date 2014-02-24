@@ -2,11 +2,11 @@ package mytown.cmd;
 
 import java.util.List;
 
+import mytown.MyTown;
 import mytown.cmd.api.MyTownCommand;
 import net.minecraft.command.CommandGameMode;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import forgeperms.ForgePerms;
 
 public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 	@Override
@@ -23,7 +23,7 @@ public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
 			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.gm");
+			return MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.gm");
 		}
 		return false;
 	}

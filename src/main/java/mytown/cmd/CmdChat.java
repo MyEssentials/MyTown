@@ -18,7 +18,6 @@ import net.minecraft.server.MinecraftServer;
 
 import com.google.common.base.Joiner;
 
-import forgeperms.ForgePerms;
 
 public class CmdChat extends CommandBase implements MyTownCommand {
 	public ChatChannel channel;
@@ -111,7 +110,7 @@ public class CmdChat extends CommandBase implements MyTownCommand {
 	}
 
 	public static String sendGlobalChat(Resident res, String msg, ChatChannel ch, boolean emote) {
-		if (!ForgePerms.getPermissionManager().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
+		if (!MyTown.instance.permManager.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
 			msg = msg.toLowerCase();
 		}
 
@@ -193,7 +192,7 @@ public class CmdChat extends CommandBase implements MyTownCommand {
 			return;
 		}
 
-		if (ForgePerms.getPermissionManager().canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
+		if (MyTown.instance.permManager.canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
 			msg = Formatter.applyColorCodes(msg);
 		}
 

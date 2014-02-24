@@ -18,7 +18,6 @@ import net.minecraft.util.StringTranslate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import forgeperms.ForgePerms;
 
 public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand {
 	public static Map<EntityPlayer, EntityPlayer> lastMessages = Maps.newHashMap();
@@ -29,7 +28,7 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
 			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
+			return MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
 		}
 		return false;
 	}
@@ -83,7 +82,7 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 
 		lastMessages.put(target, sender);
 
-		if (ForgePerms.getPermissionManager().canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
+		if (MyTown.instance.permManager.canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
 			msg = Formatter.applyColorCodes(msg);
 		}
 

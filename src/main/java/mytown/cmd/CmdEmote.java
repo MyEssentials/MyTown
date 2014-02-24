@@ -3,6 +3,7 @@ package mytown.cmd;
 import java.util.List;
 
 import mytown.Formatter;
+import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
@@ -11,14 +12,13 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import forgeperms.ForgePerms;
 
 public class CmdEmote extends CommandServerEmote implements MyTownCommand {
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
 			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return ForgePerms.getPermissionManager().canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.me");
+			return MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.me");
 		}
 		return false;
 	}

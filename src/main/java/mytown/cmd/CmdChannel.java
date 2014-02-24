@@ -12,7 +12,6 @@ import mytown.entities.Resident;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import forgeperms.ForgePerms;
 
 public class CmdChannel extends MyTownCommandBase {
 	@Override
@@ -51,7 +50,7 @@ public class CmdChannel extends MyTownCommandBase {
 				ch = ChatChannel.defaultChannel;
 			}
 
-			if (!ForgePerms.getPermissionManager().canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
+			if (!MyTown.instance.permManager.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
 				MyTown.sendChatToPlayer(sender, "§4You cannot focus to " + ch.name + " channel");
 				return;
 			}

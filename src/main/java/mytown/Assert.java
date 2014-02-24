@@ -5,10 +5,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.rcon.RConConsoleSource;
 import net.minecraft.server.MinecraftServer;
-import com.sperion.forgeperms.api.IPermissionManager;
+
 
 public class Assert {
-    public static IPermissionManager permManager;
 	/**
 	 * Checks if command server has the given permission node. Does NOT allow
 	 * console to access.
@@ -41,7 +40,7 @@ public class Assert {
 		}
 		if (node == null) return;
 		EntityPlayer p = (EntityPlayer) cs;
-		if (permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
+		if (MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
 			return;
 		}
 		throw new CommandException("commands.generic.permission");
