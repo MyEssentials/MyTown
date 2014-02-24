@@ -233,4 +233,8 @@ public class CmdChat extends CommandBase implements MyTownCommand {
 		return "mytown.chat.focus." + channel.name.toLowerCase();
 	}
 
+    @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
 }

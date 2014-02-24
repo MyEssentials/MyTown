@@ -58,4 +58,9 @@ public class CmdEmote extends CommandServerEmote implements MyTownCommand {
 	public String getPermNode() {
 		return "mytown.ecmd.me";
 	}
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
 }

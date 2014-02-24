@@ -130,4 +130,9 @@ public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 	public String getPermNode() {
 		return "mytown.adm.cmd.tp";
 	}
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
 }

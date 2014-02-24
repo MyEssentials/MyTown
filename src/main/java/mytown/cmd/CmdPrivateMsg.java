@@ -110,4 +110,9 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 	public String getPermNode() {
 		return "mytown.ecmd.msg";
 	}
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
 }

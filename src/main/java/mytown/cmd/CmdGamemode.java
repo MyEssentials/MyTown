@@ -43,4 +43,9 @@ public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 	public String getPermNode() {
 		return "mytown.adm.cmd.gm";
 	}
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
+    }
 }
