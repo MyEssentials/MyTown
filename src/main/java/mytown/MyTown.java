@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import com.sperion.forgeperms.api.IChatManager;
+import com.sperion.forgeperms.api.IEconomyManager;
 import mytown.cmd.CmdAdmin;
 import mytown.cmd.CmdChannel;
 import mytown.cmd.CmdChat;
@@ -67,6 +69,8 @@ public class MyTown {
 	public Method MCPCRegisterCommand = null;
 
     public IPermissionManager permManager;
+    public IChatManager chatManager;
+    public IEconomyManager economyManager;
 
     @Instance("MyTown")
 	public static MyTown instance;

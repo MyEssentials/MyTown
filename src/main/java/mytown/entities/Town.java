@@ -20,7 +20,6 @@ import net.minecraftforge.common.DimensionManager;
 
 import com.google.common.base.Joiner;
 
-import forgeperms.ForgePerms;
 
 public class Town {
 	public static int minDistanceFromOtherTown = 5;
@@ -216,19 +215,19 @@ public class Town {
 			return 1;
 		}
 
-		if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.32")) {
+		if (MyTown.instance.permManager.canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.32")) {
 			return 32;
 		}
-		if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.16")) {
+		if (MyTown.instance.permManager.canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.16")) {
 			return 16;
 		}
-		if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.8")) {
+		if (MyTown.instance.permManager.canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.8")) {
 			return 8;
 		}
-		if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.4")) {
+		if (MyTown.instance.permManager.canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.4")) {
 			return 4;
 		}
-		if (ForgePerms.getPermissionManager().canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.2")) {
+		if (MyTown.instance.permManager.canAccess(mayor.name(), DimensionManager.getProvider(mayor.prevDimension).getDimensionName(), "mytown.mayor.blocks.2")) {
 			return 2;
 		}
 
@@ -240,16 +239,16 @@ public class Town {
 			return 1;
 		}
 
-		if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.10")) {
+		if (MyTown.instance.permManager.canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.10")) {
 			return 10;
 		}
-		if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.8")) {
+		if (MyTown.instance.permManager.canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.8")) {
 			return 8;
 		}
-		if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.4")) {
+		if (MyTown.instance.permManager.canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.4")) {
 			return 4;
 		}
-		if (ForgePerms.getPermissionManager().canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.2")) {
+		if (MyTown.instance.permManager.canAccess(res.name(), DimensionManager.getProvider(res.prevDimension).getDimensionName(), "mytown.resident.blocksmulti.2")) {
 			return 2;
 		}
 
@@ -261,9 +260,9 @@ public class Town {
 		int perRes = blocksPerResident();
 		for (Resident r : residents) {
 			b += perRes * residentBlockMultiplier(r) + r.extraBlocks;
-			b += ForgePerms.getChatManager().getPlayerInfoInteger(String.valueOf(r.prevDimension), r.name(), "mytown.res.blocks", 0);
-			String playerGroup = ForgePerms.getPermissionManager().getPrimaryGroup(String.valueOf(r.prevDimension), r.name());
-			b += ForgePerms.getChatManager().getGroupInfoInteger(String.valueOf(r.prevDimension), playerGroup, "mytown.res.blocks", 0);
+			b += MyTown.instance.chatManager.getPlayerInfoInteger(String.valueOf(r.prevDimension), r.name(), "mytown.res.blocks", 0);
+			String playerGroup = MyTown.instance.permManager.getPrimaryGroup(String.valueOf(r.prevDimension), r.name());
+			b += MyTown.instance.chatManager.getGroupInfoInteger(String.valueOf(r.prevDimension), playerGroup, "mytown.res.blocks", 0);
 		}
 
 		return b;

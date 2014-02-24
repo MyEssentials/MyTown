@@ -3,7 +3,6 @@ package mytown.entities;
 import mytown.MyTown;
 import mytown.Term;
 import net.minecraft.item.ItemStack;
-import forgeperms.ForgePerms;
 
 public class PayHandler {
 	public static long timeToPaySec = 1 * 60;
@@ -36,7 +35,7 @@ public class PayHandler {
 			return false;
 		}
 
-		if (ForgePerms.getEconomyManager().playerWithdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)) {
+		if (MyTown.instance.economyManager.playerWithdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)) {
 			purchaseComplete();
 			return true;
 		}
@@ -55,15 +54,15 @@ public class PayHandler {
 		requestedItem = stack;
 		doneHandler = actor;
 		doneHandlerArgs = args;
-		if (stack == null || stack.stackSize < 1 || ForgePerms.getPermissionManager().canAccess(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cost.bypass." + action)) {
+		if (stack == null || stack.stackSize < 1 || MyTown.instance.permManager.canAccess(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cost.bypass." + action)) {
 			purchaseComplete();
 		} else {
-			if (ForgePerms.getEconomyManager().rightClickToPay()) {
+			if (MyTown.instance.economyManager.rightClickToPay()) {
 				timeUntil = System.currentTimeMillis() + timeToPaySec * 1000;
 				notifyUser();
 			} else {
-				if (ForgePerms.getEconomyManager().playerWithdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)) {
-					MyTown.sendChatToPlayer(owner.onlinePlayer, "Took " + ForgePerms.getEconomyManager().format(requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize));
+				if (MyTown.instance.economyManager.playerWithdraw(owner.name(), owner.onlinePlayer.worldObj.provider.getDimensionName(), requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize)) {
+					MyTown.sendChatToPlayer(owner.onlinePlayer, "Took " + MyTown.instance.economyManager.format(requestedItem.itemID + ":" + requestedItem.getItemDamage(), requestedItem.stackSize));
 					purchaseComplete();
 				} else {
 					MyTown.sendChatToPlayer(owner.onlinePlayer, "You don't have enough money to pay for this! Now, WASH THE DISHES!");

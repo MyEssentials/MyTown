@@ -13,7 +13,6 @@ import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import forgeperms.ForgePerms;
 
 public class CmdTownMayor extends MyTownSubCommandAdapter {
 
@@ -56,7 +55,7 @@ public class CmdTownMayor extends MyTownSubCommandAdapter {
 				throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 			}
 
-			if (!ForgePerms.getPermissionManager().canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
+			if (!MyTown.instance.permManager.canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
 				throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement.toString());
 			}
 

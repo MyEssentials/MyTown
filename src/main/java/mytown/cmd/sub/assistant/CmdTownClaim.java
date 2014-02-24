@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import forgeperms.ForgePerms;
 
 public class CmdTownClaim extends MyTownSubCommandAdapter {
 	@Override
@@ -67,7 +66,7 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 
 		CommandException firstError = null;
 		int requestedBlocks = 0, ableToClaim = 0, alreadyOwn = 0;
-		boolean bypassFarawayRestriction = ForgePerms.getPermissionManager().canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.faraway");
+		boolean bypassFarawayRestriction = MyTown.instance.permManager.canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.faraway");
 		List<TownBlock> blocks = Lists.newArrayList();
 
 		for (int z = cz - radius_rec; z <= cz + radius_rec; z++) {
