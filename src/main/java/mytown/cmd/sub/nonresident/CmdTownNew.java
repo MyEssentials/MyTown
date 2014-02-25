@@ -46,13 +46,27 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 			MyTown.sendChatToPlayer(sender, Formatter.formatCommand(Term.TownCmdNew.toString(), Term.TownCmdNewArgs.toString(), Term.TownCmdNewDesc.toString(), null));
 		} else {
 			TownBlock home = MyTownDatasource.instance.getOrMakeBlock(res.onlinePlayer.dimension, res.onlinePlayer.chunkCoordX, res.onlinePlayer.chunkCoordZ);
+			try{
+				Town.assertNewTownParams(args[0], res, home);
+			} catch(CommandException e){
+                if (home != null && home.town() == null) {
+                    MyTownDatasource.instance.unloadBlock(home);
+                }
+
+                throw e;
+			}
 
 			res.pay.requestPayment("townnew", Cost.TownNew.item, new PayHandler.IDone() {
 				@Override
 				public void run(Resident res, Object[] ar2) {
 					String[] args = (String[]) ar2[0];
 
-					Town t = new Town(args[0], res, (TownBlock) ar2[1]);
+					Town t = null;
+					try{
+						t = new Town(args[0], res, (TownBlock) ar2[1]);
+					} catch(Exception e){
+						MyTown.instance.coreLog.warning("Town creation failed after taking payment! ", e);
+					}
 
 					// emulate that the player just entered it
 					res.checkLocation();
