@@ -1,0 +1,41 @@
+package mytown.cmd;
+
+import mytown.MyTownDatasource;
+import mytown.cmd.api.MyTownCommandBase;
+import mytown.entities.Resident;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
+
+import java.util.List;
+
+public class CmdSpawn extends MyTownCommandBase {
+	@Override
+	public String getCommandName() {
+		return "spawn";
+	}
+
+	@Override
+	public void processCommand(ICommandSender cs, String[] args) {
+		canCommandSenderUseCommand(cs);
+		EntityPlayerMP pl = (EntityPlayerMP) cs;
+		Resident res = MyTownDatasource.instance.getOrMakeResident(pl);
+
+		res.asyncStartSpawnTeleport(null);
+	}
+
+	@Override
+	public String getCommandUsage(ICommandSender icommandsender) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> dumpCommands() {
+		return null;
+	}
+
+	@Override
+	public String getPermNode() {
+		return "mytown.ecmd.spawn";
+	}
+}
