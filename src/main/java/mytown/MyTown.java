@@ -1,5 +1,6 @@
 package mytown;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import com.sperion.forgeperms.api.IChatManager;
-import com.sperion.forgeperms.api.IEconomyManager;
+import forgeperms.api.IChatManager;
+import forgeperms.api.IEconomyManager;
 import mytown.cmd.CmdAdmin;
 import mytown.cmd.CmdChannel;
 import mytown.cmd.CmdChat;
@@ -55,7 +56,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-import com.sperion.forgeperms.api.IPermissionManager;
+import forgeperms.api.*;
 
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
@@ -78,9 +79,24 @@ public class MyTown {
 
 	public List<MyTownCommand> commands = new ArrayList<MyTownCommand>();
 
+    public void initPermManager() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<?> forgePerms = Class.forName("forgeperms.ForgePerms");
+        permManager = (IPermissionManager) forgePerms.getMethod("getPermissionManager").invoke(null);
+    }
+
+    public void initChatManager() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<?> forgePerms = Class.forName("forgeperms.ForgePerms");
+        chatManager = (IChatManager) forgePerms.getMethod("getChatManager").invoke(null);
+    }
+
+    public void initEcoManager() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Class<?> forgePerms = Class.forName("forgeperms.ForgePerms");
+        economyManager = (IEconomyManager) forgePerms.getMethod("getEconomyManager").invoke(null);
+    }
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
-		isMCPC = MinecraftServer.getServer().getServerModName().contains("mcpc");
+        isMCPC = MinecraftServer.getServer().getServerModName().contains("mcpc");
 		Log.init();
 		addCommands();
 		config.loadConfig();
@@ -88,6 +104,21 @@ public class MyTown {
 
 	@EventHandler
 	public void modsLoaded(FMLServerStartedEvent var1) {
+        try {
+            initPermManager();
+            initChatManager();
+            initEcoManager();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 		try {
 			MyTownDatasource.instance.init();
 		} catch (Exception ex) {
