@@ -32,7 +32,7 @@ public class CmdTownRename extends MyTownSubCommandAdapter {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
 			throw new CommandException(Term.ChatErrNotInTown.toString());
-		if (res.rank().compareTo(Rank.Mayor) <= 0)
+		if (res.rank().compareTo(Rank.Mayor) < 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
 

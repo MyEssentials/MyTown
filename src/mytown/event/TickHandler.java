@@ -2,7 +2,7 @@ package mytown.event;
 
 import java.util.EnumSet;
 
-import mytown.Log;
+import mytown.MyTown;
 import mytown.event.tick.OldResidentRemover;
 import mytown.event.tick.OldTownRemover;
 import mytown.event.tick.WorldBorder;
@@ -45,7 +45,7 @@ public class TickHandler implements ITickHandler {
 			try {
 				t.run();
 			} catch (Throwable e) {
-				Log.severe("Tick handler '" + t.name() + "' tick failed.", e);
+				MyTown.instance.coreLog.severe("Tick handler '" + t.name() + "' tick failed.", e);
 			}
 		}
 	}

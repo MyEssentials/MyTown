@@ -3,7 +3,6 @@ package mytown.event.tick;
 import java.util.Date;
 import java.util.List;
 
-import mytown.Log;
 import mytown.MyTown;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
@@ -74,15 +73,15 @@ public class OldResidentRemover extends TickBase {
 										// this player
 						}
 
-						Log.info("[OldResidentRemover]Assigning new mayor for town %s - %s (%s)", r.town().name(), nextMayor.name(), nextMayor.rank().toString());
+						MyTown.instance.coreLog.info("[OldResidentRemover]Assigning new mayor for town %s - %s (%s)", r.town().name(), nextMayor.name(), nextMayor.rank().toString());
 						r.town().setResidentRank(nextMayor, Rank.Mayor);
 					}
 				}
 				Town t = r.town();
 				r.town().removeResident(r);
-				Log.info("[OldResidentRemover]Removed resident %s from town %s", r.name(), t.name());
+				MyTown.instance.coreLog.info("[OldResidentRemover]Removed resident %s from town %s", r.name(), t.name());
 			} catch (Exception e) {
-				Log.severe("[OldResidentRemover]Error removing resident %s", e, r.name());
+				MyTown.instance.coreLog.severe("[OldResidentRemover]Error removing resident %s", e, r.name());
 			}
 		}
 	}

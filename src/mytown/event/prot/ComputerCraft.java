@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import mytown.ChatChannel;
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.cmd.CmdChat;
@@ -85,7 +84,7 @@ public class ComputerCraft extends ProtBase {
 
 		ChunkCoordinates c = new ChunkCoordinates(e.xCoord, e.yCoord, e.zCoord);
 		if (canScream(c)) {
-			Log.severe(String.format("§4Stopped a computercraft turtle found @ dim %s, %s,%s,%s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord));
+			MyTown.instance.bypassLog.severe(String.format("§4Stopped a computercraft turtle found @ dim %s, %s,%s,%s", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord));
 
 			String msg = String.format("A turtle stopped @ %s,%s,%s because it wasn't allowed there", e.xCoord, e.yCoord, e.zCoord);
 			String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);

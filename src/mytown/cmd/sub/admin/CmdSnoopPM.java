@@ -8,7 +8,6 @@ import mytown.cmd.CmdPrivateMsg;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.server.MinecraftServer;
 
 public class CmdSnoopPM extends MyTownSubCommandAdapter {
 
@@ -29,12 +28,8 @@ public class CmdSnoopPM extends MyTownSubCommandAdapter {
 	
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
-		boolean done = CmdPrivateMsg.snoopers.remove(MinecraftServer.getServer());
-		if (!done) {
-			CmdPrivateMsg.snoopers.add(MinecraftServer.getServer());
-		}
-
-		MyTown.sendChatToPlayer(sender, "§aSnooping is now " + (done ? "§4off" : "§2on"));
+		CmdPrivateMsg.snoop = !CmdPrivateMsg.snoop;
+		MyTown.sendChatToPlayer(sender, "§aSnooping is now " + (CmdPrivateMsg.snoop ? "§4off" : "§2on"));
 	}
 
 	@Override

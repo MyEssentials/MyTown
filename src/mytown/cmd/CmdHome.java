@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import mytown.Cost;
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -50,7 +49,7 @@ public class CmdHome extends MyTownCommandBase {
 		} catch (CommandException ex) {
 			throw ex;
 		} catch (Throwable ex) {
-			Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+			MyTown.instance.coreLog.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
 			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
 		}
 	}

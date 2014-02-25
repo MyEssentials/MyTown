@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mytown.Log;
 import mytown.MyTown;
 import mytown.event.TickBase;
 import net.minecraft.entity.Entity;
@@ -115,7 +114,7 @@ public class WorldBorder extends TickBase {
 				sEx = String.format(", %.2f c/s, %s remaining", speed, (tRemH > 0 ? tRemH + "h " : "") + (tRemM > 0 || tRemH > 0 ? tRemM + "m " : "") + tRemS + "s");
 			}
 
-			Log.info("[WorldBorder] %s of %s chunks done - %s%%%s", done, total, (int) prc, sEx);
+			MyTown.instance.coreLog.info("[WorldBorder] %s of %s chunks done - %s%%%s", done, total, (int) prc, sEx);
 
 			lastDone = done;
 			lastStamp = System.currentTimeMillis();
@@ -131,7 +130,7 @@ public class WorldBorder extends TickBase {
 			}
 
 			if (done) {
-				Log.info("[WorldBorder] All done. Disabled in config.");
+				MyTown.instance.coreLog.info("[WorldBorder] All done. Disabled in config.");
 
 				ConfigCategory cat = MyTown.instance.config.getCategory("worldborder.generator");
 				cat.clear();
@@ -178,7 +177,7 @@ public class WorldBorder extends TickBase {
 			}
 
 			MyTown.instance.config.save();
-			Log.info("[WorldBorder] Stopped chunk gen.");
+			MyTown.instance.coreLog.info("[WorldBorder] Stopped chunk gen.");
 		}
 	}
 

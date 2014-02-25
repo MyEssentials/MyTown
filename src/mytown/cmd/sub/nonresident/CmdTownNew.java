@@ -5,7 +5,6 @@ import java.util.List;
 import mytown.Assert;
 import mytown.Cost;
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -53,13 +52,7 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 				public void run(Resident res, Object[] ar2) {
 					String[] args = (String[]) ar2[0];
 
-					Town t = null;
-					try { // should never crash because we're doing the same
-							// checks before
-						t = new Town(args[0], res, (TownBlock) ar2[1]);
-					} catch (CommandException e) {
-						Log.severe("Town creation failed after taking payment", e);
-					}
+					Town t = new Town(args[0], res, (TownBlock) ar2[1]);
 
 					// emulate that the player just entered it
 					res.checkLocation();

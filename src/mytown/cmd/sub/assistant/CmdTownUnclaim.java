@@ -31,7 +31,7 @@ public class CmdTownUnclaim extends MyTownSubCommandAdapter {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
 			throw new CommandException(Term.ChatErrNotInTown.toString());
-		if (res.rank().compareTo(Rank.Assistant) <= 0)
+		if (res.rank().compareTo(Rank.Assistant) < 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
 
@@ -45,7 +45,7 @@ public class CmdTownUnclaim extends MyTownSubCommandAdapter {
 		int radius_rec = 0;
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase(Term.TownCmdUnclaimArgs1.toString())) {
-				radius_rec = Integer.parseInt(args[21]);
+				radius_rec = Integer.parseInt(args[1]);
 			} else {
 				throw new CommandException(Term.TownErrCmdUnknownArgument.toString(), args[0]);
 			}

@@ -143,7 +143,7 @@ public enum Term {
 	TownadmCmdResetFocusedChannels("reschannels"), TownadmCmdResetFocusedChannelsDesc("Reset the currently selected channel for all users to the default"),
 
 	TownadmCmdSnoopPrivateChat("snoop"), TownadmCmdSnoopPrivateChatDesc("Starts or stops logging private chat into server log"),
-	
+
 	TownadmCmdHome("home"), TownadmCmdHomeDesc("Teleports you to another players home"), TownadmCmdHomeArgs("playername [home]"),
 
 	// Town errors
@@ -296,7 +296,7 @@ public enum Term {
 		BufferedWriter writer;
 		if (filename.trim() == "" || filename.trim().isEmpty())
 			return;
-		Log.info("Dumping terms to %s", filename);
+		MyTown.instance.coreLog.info("Dumping terms to %s", filename);
 		try {
 			FileWriter fw = new FileWriter(Constants.CONFIG_FOLDER + filename);
 			writer = new BufferedWriter(fw);
@@ -308,7 +308,7 @@ public enum Term {
 			}
 			writer.close();
 		} catch (Exception e) {
-			Log.warning("Failed to dump the terms because %s", e.getMessage());
+			MyTown.instance.coreLog.warning("Failed to dump the terms because %s", e.getMessage());
 		}
 	}
 }

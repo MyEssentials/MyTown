@@ -3,7 +3,9 @@ package mytown;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
 
+import mytown.cmd.CmdPrivateMsg;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.ItemIdRange;
 import mytown.entities.Nation;
@@ -48,7 +50,7 @@ public class Config extends Configuration {
 			TickHandler.instance.loadConfigs();
 			WorldBorder.instance.loadConfig();
 		} catch (Exception e) {
-			Log.severe(Constants.MODNAME + " was unable to load it\'s configuration successfully", e);
+			MyTown.instance.coreLog.severe(Constants.MODNAME + " was unable to load it\'s configuration successfully", e);
 			throw new RuntimeException(e);
 		} finally {
 			save(); // re-save to add the missing configuration variables
@@ -57,6 +59,22 @@ public class Config extends Configuration {
 
 	private void loadGeneralConfigs() throws IOException {
 		Property prop;
+		
+		prop = get("general", "coreLoggingLevel", Level.INFO.getName());
+		prop.comment = "The logging level for the core log";
+		MyTown.instance.coreLog.logger.setLevel(Level.parse(prop.getString()));
+		
+		prop = get("general", "bypassLoggingLevel", Level.INFO.getName());
+		prop.comment = "The logging level for the bypass log";
+		MyTown.instance.bypassLog.logger.setLevel(Level.parse(prop.getString()));
+		
+		prop = get("general", "chatLoggingLevel", Level.INFO.getName());
+		prop.comment = "The logging level for the chat log";
+		MyTown.instance.chatLog.logger.setLevel(Level.parse(prop.getString()));
+		
+		prop = get("general", "pmLoggingLevel", Level.INFO.getName());
+		prop.comment = "The logging level for the private message log";
+		MyTown.instance.pmLog.logger.setLevel(Level.parse(prop.getString()));
 
 		prop = get("general", "showTownLoginMessage", true);
 		prop.comment = "Whether to show the login message to town members when another member logins in";
@@ -154,6 +172,10 @@ public class Config extends Configuration {
 
 	private void loadChatConfigs() {
 		Property prop;
+		
+		prop = get("chat", "SnoopPrivateMessages", true);
+		prop.comment = "Setting this to true will enable snooping/logging of private messages";
+		CmdPrivateMsg.snoop = prop.getBoolean(true);
 
 		prop = get("chat", "DisableAutomaticChannelUse", false);
 		prop.comment = "Setting this stops player messages from using the MyTown channel functionality.\n";

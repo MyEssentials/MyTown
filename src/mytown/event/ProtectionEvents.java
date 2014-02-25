@@ -6,7 +6,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.entities.ItemIdRange;
@@ -176,12 +175,12 @@ public class ProtectionEvents implements ITickHandler {
 				String sTool = String.format("[%s] %s", item.itemID + (item.isStackable() && item.getItemDamage() > 0 ? ":" + item.getItemDamage() : ""), tool.getUnlocalizedName());
 
 				EntityPlayer pl = r.onlinePlayer;
-				Log.severe(String.format("[%s]Player %s tried to bypass at dim %d, %d,%d,%d using %s - %s", lastCheck.getClass().getSimpleName(), pl.username, pl.dimension, (int) pl.posX, (int) pl.posY, (int) pl.posZ, sTool, kill));
+				MyTown.instance.bypassLog.severe(String.format("[%s]Player %s tried to bypass at dim %d, %d,%d,%d using %s - %s", lastCheck.getClass().getSimpleName(), pl.username, pl.dimension, (int) pl.posX, (int) pl.posY, (int) pl.posZ, sTool, kill));
 				MyTown.sendChatToPlayer(pl, "§4You cannot use that here - " + kill);
 				return false;
 			}
 		} catch (Exception er) {
-			Log.severe("Error in player " + r.onlinePlayer.toString() + " item use check", er);
+			MyTown.instance.bypassLog.severe("Error in player " + r.onlinePlayer.toString() + " item use check", er);
 		}
 		return true;
 	}
@@ -234,13 +233,13 @@ public class ProtectionEvents implements ITickHandler {
 				if (kill != null) {
 					if (lastOwner != null) {
 						if (lastOwner.isOnline()) {
-							Log.severe(String.format("Player %s tried to bypass at dim %d, %d,%d,%d using %s - %s", lastOwner.name(), lastOwner.onlinePlayer.dimension, (int) lastOwner.onlinePlayer.posX, (int) lastOwner.onlinePlayer.posY, (int) lastOwner.onlinePlayer.posZ, e.toString(), kill));
+							MyTown.instance.bypassLog.severe(String.format("Player %s tried to bypass at dim %d, %d,%d,%d using %s - %s", lastOwner.name(), lastOwner.onlinePlayer.dimension, (int) lastOwner.onlinePlayer.posX, (int) lastOwner.onlinePlayer.posY, (int) lastOwner.onlinePlayer.posZ, e.toString(), kill));
 							MyTown.sendChatToPlayer(lastOwner.onlinePlayer, "§4You cannot use that here - " + kill);
 						} else {
-							Log.severe(String.format("Player %s tried to bypass using %s - %s", lastOwner.name(), e.toString(), kill));
+							MyTown.instance.bypassLog.severe(String.format("Player %s tried to bypass using %s - %s", lastOwner.name(), e.toString(), kill));
 						}
 					} else {
-						Log.severe(String.format("Entity %s tried to bypass using %s", e.toString(), kill));
+						MyTown.instance.bypassLog.severe(String.format("Entity %s tried to bypass using %s", e.toString(), kill));
 					}
 
 					toRemove.add(e);
@@ -275,13 +274,13 @@ public class ProtectionEvents implements ITickHandler {
 					String block = String.format("TileEntity %s @ dim %s, %s,%s,%s", t.getClass().toString(), t.worldObj.provider.dimensionId, t.xCoord, t.yCoord, t.zCoord);
 					if (lastOwner != null) {
 						if (lastOwner.isOnline()) {
-							Log.severe(String.format("Player %s tried to bypass at dim %d, %d,%d,%d using %s - %s", lastOwner.name(), lastOwner.onlinePlayer.dimension, (int) lastOwner.onlinePlayer.posX, (int) lastOwner.onlinePlayer.posY, (int) lastOwner.onlinePlayer.posZ, block, kill));
+							MyTown.instance.bypassLog.severe(String.format("Player %s tried to bypass at dim %d, %d,%d,%d using %s - %s", lastOwner.name(), lastOwner.onlinePlayer.dimension, (int) lastOwner.onlinePlayer.posX, (int) lastOwner.onlinePlayer.posY, (int) lastOwner.onlinePlayer.posZ, block, kill));
 							MyTown.sendChatToPlayer(lastOwner.onlinePlayer, "§4You cannot use that here - " + kill);
 						} else {
-							Log.severe(String.format("Player %s tried to bypass using %s - %s", lastOwner.name(), block, kill));
+							MyTown.instance.bypassLog.severe(String.format("Player %s tried to bypass using %s - %s", lastOwner.name(), block, kill));
 						}
 					} else {
-						Log.severe(String.format("TileEntity %s tried to bypass using %s", block, kill));
+						MyTown.instance.bypassLog.severe(String.format("TileEntity %s tried to bypass using %s", block, kill));
 					}
 
 					toRemoveTile.add(t);
@@ -294,7 +293,7 @@ public class ProtectionEvents implements ITickHandler {
 			}
 		} catch (Exception er) {
 			String ms = e == null ? t == null ? "#unknown#" : t.toString() : e.toString();
-			Log.severe("Error in entity " + ms + " pre-update check", er);
+			MyTown.instance.bypassLog.severe("Error in entity " + ms + " pre-update check", er);
 		}
 	}
 
@@ -338,7 +337,7 @@ public class ProtectionEvents implements ITickHandler {
 					prot.load();
 				} catch (Exception e) {
 					prot.enabled = false;
-					Log.info("§f[§1Prot§f]Module %s §4failed §fto load. (%s)", prot.getClass().getSimpleName(), e.getMessage());
+					MyTown.instance.coreLog.info("§f[§1Prot§f]Module %s §4failed §fto load. (%s)", prot.getClass().getSimpleName(), e.getMessage());
 					if (!dynamicEnabling) {
 						throw new RuntimeException("ProtectionEvents cannot load " + prot.getClass().getSimpleName() + " class. Is " + prot.getMod() + " loaded?", e);
 					}
@@ -346,7 +345,7 @@ public class ProtectionEvents implements ITickHandler {
 			}
 
 			if (prot.enabled) {
-				Log.info("§f[§1Prot§f]Module %s §2loaded§f.", prot.getClass().getSimpleName());
+				MyTown.instance.coreLog.info("§f[§1Prot§f]Module %s §2loaded§f.", prot.getClass().getSimpleName());
 			}
 		}
 

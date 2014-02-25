@@ -30,15 +30,13 @@ public class CmdTownLeave extends MyTownSubCommandAdapter {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
 			throw new CommandException(Term.ChatErrNotInTown.toString());
+		if (res.rank() == Rank.Mayor)
+			throw new CommandException(Term.TownErrMayorsCantLeaveTheTown.toString());
 	}
 
 	@Override
 	public void process(ICommandSender sender, String[] args) throws CommandException {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
-		if (res.rank() == Rank.Mayor) {
-			throw new CommandException(Term.TownErrMayorsCantLeaveTheTown.toString());
-		}
-
 		Town t = res.town();
 		t.sendNotification(Level.INFO, Term.TownPlayerLeft.toString(res.name()));
 		t.removeResident(res);

@@ -3,7 +3,6 @@ package mytown.event.tick;
 import java.util.ArrayList;
 import java.util.List;
 
-import mytown.Log;
 import mytown.MyTown;
 import mytown.entities.Town;
 import mytown.event.TickBase;
@@ -45,24 +44,24 @@ public class OldTownRemover extends TickBase {
 							List<Town> nationTowns = new ArrayList<Town>();
 							nationTowns.addAll(t.nation().towns().values());
 							Town newCapitol = nationTowns.get(nationTowns.indexOf(t) == 0 ? 1 : 0);
-							Log.info(String.format("[OldTownRemover]Moving capitol of %s to %s", t.nation().name(), newCapitol.name()));
+							MyTown.instance.coreLog.info(String.format("[OldTownRemover]Moving capitol of %s to %s", t.nation().name(), newCapitol.name()));
 							t.nation().setCapital(newCapitol);
 							t.nation().removeTown(t);
 						} else {
-							Log.info(String.format("[OldTownRemover]Deleting nation %s", t.nation().name()));
+							MyTown.instance.coreLog.info(String.format("[OldTownRemover]Deleting nation %s", t.nation().name()));
 							t.nation().delete();
 						}
 					} else {
-						Log.info(String.format("[OldTownRemover]Removing town %s from nation %s", t.name(), t.nation().name()));
+						MyTown.instance.coreLog.info(String.format("[OldTownRemover]Removing town %s from nation %s", t.name(), t.nation().name()));
 						t.nation().removeTown(t);
 					}
 				}
 
 				t.deleteTown();
 
-				Log.info("[OldTownRemover]Deleted town " + t.name());
+				MyTown.instance.coreLog.info("[OldTownRemover]Deleted town " + t.name());
 			} catch (Exception e) {
-				Log.severe("[OldTownRemover]Error deleting town " + t.name(), e);
+				MyTown.instance.coreLog.severe("[OldTownRemover]Error deleting town " + t.name(), e);
 			}
 		}
 	}

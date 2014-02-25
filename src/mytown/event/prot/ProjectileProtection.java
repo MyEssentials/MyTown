@@ -104,7 +104,7 @@ public class ProjectileProtection extends ProtBase {
 			if (mop == null)
 				return null;
 
-			if (mop.typeOfHit.equals(EnumMovingObjectType.ENTITY) && !res.canAttack(mop.entityHit) || mop.typeOfHit.equals(EnumMovingObjectType.TILE) && !res.canInteract(mop.blockX, mop.blockY, mop.blockZ, Permissions.Build)) {
+			if (mop.typeOfHit.equals(EnumMovingObjectType.ENTITY) && !res.canAttack(mop.entityHit) || mop.typeOfHit.equals(EnumMovingObjectType.TILE) && !res.canInteract(e.dimension, mop.blockX, mop.blockY, mop.blockZ, Permissions.Build)) {
 				return "Target in MyTown protected area";
 			}
 		}

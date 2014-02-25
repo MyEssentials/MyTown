@@ -2,7 +2,6 @@ package mytown.cmd;
 
 import java.util.List;
 
-import mytown.Log;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.ext.Mffs;
@@ -41,7 +40,7 @@ public class CmdWrk extends MyTownCommandBase {
 			MinecraftServer.getServer().getConfigurationManager().removeOp(name);
 			if (Mffs.check()) {
 				Mffs.removeAdminBypass(name);
-				Log.info("User " + name + " removed from MFFS bypass");
+				MyTown.instance.coreLog.info("User " + name + " removed from MFFS bypass");
 				MyTown.sendChatToPlayer(pl, "Removed from MFFS bypass");
 			}
 
@@ -56,7 +55,7 @@ public class CmdWrk extends MyTownCommandBase {
 
 			if (Mffs.check()) {
 				Mffs.grantAdminBypass(name);
-				Log.info("User " + name + " added to MFFS bypass");
+				MyTown.instance.coreLog.info("User " + name + " added to MFFS bypass");
 				MyTown.sendChatToPlayer(pl, "Granted MFFS bypass");
 			}
 

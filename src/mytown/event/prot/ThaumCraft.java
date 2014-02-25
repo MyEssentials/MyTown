@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mytown.ChunkCoord;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Utils;
@@ -95,7 +94,8 @@ public class ThaumCraft extends ProtBase {
 		}
 		
 		Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) shooter);
-		int dim = thrower.onlinePlayer.dimension;
+		
+		int dim = e.dimension;
 		if (!thrower.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build)
 				|| !thrower.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !thrower.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
 			return "Cannot build here";
@@ -116,10 +116,10 @@ public class ThaumCraft extends ProtBase {
 			if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusFire")) {
 				List<Entity> list = getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(17), res.onlinePlayer, 17);
 
-				Log.info(list.toString());
+				MyTown.instance.bypassLog.info(list.toString());
 
 				for (Entity e : list) {
-					Log.info("%s attacked %s", res.name(), e.getClass().getSimpleName());
+					MyTown.instance.bypassLog.info("%s attacked %s", res.name(), e.getClass().getSimpleName());
 					if (!res.canAttack(e)) {
 						return "Cannot attack here";
 					}
@@ -127,7 +127,7 @@ public class ThaumCraft extends ProtBase {
 			} else if (focusName.equals("thaumcraft.common.items.wands.foci.ItemFocusShock")) {
 				List<Entity> list = getTargets(res.onlinePlayer.worldObj, res.onlinePlayer.getLook(17), res.onlinePlayer, 20);
 				for (Entity e : list) {
-					Log.info("%s attacked %s", res.name(), e.getClass().getSimpleName());
+					MyTown.instance.bypassLog.info("%s attacked %s", res.name(), e.getClass().getSimpleName());
 					if (!res.canAttack(e)) {
 						return "Cannot attack here";
 					}
@@ -150,7 +150,7 @@ public class ThaumCraft extends ProtBase {
 					int radius = 3 + potency;
 					int dim = res.onlinePlayer.dimension;
 					
-					Log.info("X: %s, Y: %s, Z: %s, Radius: %S, Dim: %s", x, y, z, radius, dim);
+					MyTown.instance.bypassLog.info("X: %s, Y: %s, Z: %s, Radius: %S, Dim: %s", x, y, z, radius, dim);
 
 					if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) ||
 						!res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
@@ -209,12 +209,12 @@ public class ThaumCraft extends ProtBase {
 				if (b == null) {
 					if (MyTown.instance.getWorldWildSettings(e.worldObj.provider.dimensionId).allowTCBores)
 						return null;
-					Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) [Wild] which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
+					MyTown.instance.bypassLog.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) [Wild] which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
 					fBore_toDig.set(e, false);
 				} else {
 					if (b.settings.allowTCBores)
 						return null;
-					Log.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) [Town] which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
+					MyTown.instance.bypassLog.warning(String.format("Thaumcraft bore at Dim %s (%s,%s,%s) tried to break (%s,%s,%s) [Town] which failed.", e.worldObj.provider.dimensionId, e.xCoord, e.yCoord, e.zCoord, fBore_digX.getInt(e), fBore_digY.getInt(e), fBore_digZ.getInt(e)));
 					fBore_toDig.set(e, false);
 				}
 			}

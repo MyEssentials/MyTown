@@ -5,7 +5,6 @@ import ic2.api.event.LaserEvent;
 import java.util.logging.Level;
 
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -63,7 +62,7 @@ public class PlayerEvents implements IPlayerTracker {
 		if (res == null)
 			return;
 		if (!res.canAttack(event.hitentity)) {
-			Log.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+			MyTown.instance.coreLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
 			MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Target in MyTown protected area");
 			event.setCanceled(true);
 		}
@@ -78,8 +77,8 @@ public class PlayerEvents implements IPlayerTracker {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) event.owner);
 		if (res == null)
 			return;
-		if (!res.canInteract(event.x, event.y, event.z, Permissions.Build)) {
-			Log.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+		if (!res.canInteract(event.world.provider.dimensionId, event.x, event.y, event.z, Permissions.Build)) {
+			MyTown.instance.coreLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
 			MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Target in MyTown protected area");
 			event.setCanceled(true);
 		}
@@ -99,10 +98,10 @@ public class PlayerEvents implements IPlayerTracker {
 
 		// Do a 4-corner check. Hopefully wont need much else to protect against
 		// Mining Laser explosions
-		if (!res.canInteract(x, y, z, Permissions.Build) || !res.canInteract(x - explosionRadius, y, z - explosionRadius, Permissions.Build) || !res.canInteract(x - explosionRadius, y, z + explosionRadius, Permissions.Build)
-				|| !res.canInteract(x + explosionRadius, y, z - explosionRadius, Permissions.Build) || !res.canInteract(x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
+		if (!res.canInteract(event.world.provider.dimensionId, x, y, z, Permissions.Build) || !res.canInteract(event.world.provider.dimensionId, x - explosionRadius, y, z - explosionRadius, Permissions.Build) || !res.canInteract(event.world.provider.dimensionId, x - explosionRadius, y, z + explosionRadius, Permissions.Build)
+				|| !res.canInteract(event.world.provider.dimensionId, x + explosionRadius, y, z - explosionRadius, Permissions.Build) || !res.canInteract(event.world.provider.dimensionId, x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
 			event.setCanceled(true);
-			Log.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Explosion would hit a protected town", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+			MyTown.instance.coreLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Explosion would hit a protected town", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
 			MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Explosion would hit a protected town");
 			return;
 		}
@@ -355,7 +354,7 @@ public class PlayerEvents implements IPlayerTracker {
 		Resident res = source().getOrMakeResident(player);
 
 		if (!WorldBorder.instance.isWithinArea(player)) {
-			Log.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.", res.nick(), player.dimension, player.posX, player.posY, player.posZ));
+			MyTown.instance.coreLog.warning(String.format("Player %s logged in over the world edge %s (%s, %s, %s). Sending to spawn.", res.nick(), player.dimension, player.posX, player.posY, player.posZ));
 			res.respawnPlayer();
 		}
 
@@ -365,7 +364,7 @@ public class PlayerEvents implements IPlayerTracker {
 		res.location2 = t != null && t.town() != null ? t.owner() : null;
 
 		if (!res.canInteract(t, (int) player.posY, Permissions.Enter)) {
-			Log.warning(String.format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", res.nick(), res.location.name(), player.dimension, player.posX, player.posY, player.posZ));
+			MyTown.instance.coreLog.warning(String.format("Player %s logged in at a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", res.nick(), res.location.name(), player.dimension, player.posX, player.posY, player.posZ));
 			res.respawnPlayer();
 		}
 
@@ -389,15 +388,23 @@ public class PlayerEvents implements IPlayerTracker {
 
 	@Override
 	public void onPlayerChangedDimension(EntityPlayer player) {
+		if (player == null) return;
+		Resident res = MyTownDatasource.instance.getOrMakeResident(player);
+		res.prevDimension2 = res.prevDimension;
+		res.prevDimension = player.dimension;
 	}
 
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) {
 	}
-
+	
 	@ForgeSubscribe
 	public void serverChat(ServerChatEvent ev) {
-		if (ev.isCanceled() || ev.message == null || ev.message.trim().length() < 1 || !Formatter.formatChat) {
+		if (ev.isCanceled() || ev.message == null || ev.message.trim().length() < 1) {
+			return;
+		}
+		if (!Formatter.formatChat){
+			MyTown.instance.chatLog.info("%s: %s", ev.player.getDisplayName(), ev.message);
 			return;
 		}
 		if (!disableAutoChatChannelUsage) {

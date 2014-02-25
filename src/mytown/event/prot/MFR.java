@@ -19,6 +19,7 @@ public class MFR extends ProtBase {
 	public void load() throws Exception {
 		clEntityNeedle = Class.forName("powercrystals.minefactoryreloaded.entity.EntityNeedle");
 		f_owner = clEntityNeedle.getDeclaredField("_owner");
+		f_owner.setAccessible(true);
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class MFR extends ProtBase {
 			int x = (int) (needle.posX + needle.motionX);
 			int y = (int) (needle.posY + needle.motionY);
 			int z = (int) (needle.posZ + needle.motionZ);
-			int dim = thrower.onlinePlayer.dimension;
+			int dim = e.dimension;
 
 			if (!thrower.canInteract(dim, x, y, z, Permissions.Build)) {
 				return "Needle would land in a town";

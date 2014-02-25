@@ -5,7 +5,6 @@ import java.util.Map;
 
 import mytown.Assert;
 import mytown.Cost;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -42,7 +41,7 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 		Resident res = MyTownDatasource.instance.getOrMakeResident((EntityPlayer) sender);
 		if (res.town() == null)
 			throw new CommandException(Term.ChatErrNotInTown.toString());
-		if (res.rank().compareTo(Rank.Assistant) <= 0)
+		if (res.rank().compareTo(Rank.Assistant) < 0)
 			throw new CommandException(Term.ErrPermRankNotEnough.toString());
 	}
 
@@ -181,7 +180,7 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 
 							sb.append(String.format("(%s,%s)", b.x(), b.z()));
 						} catch (CommandException e) {
-							Log.severe("Block claiming failed after payment", e);
+							MyTown.instance.coreLog.severe("Block claiming failed after payment", e);
 						}
 					}
 

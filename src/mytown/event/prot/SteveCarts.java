@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import mytown.ChatChannel;
 import mytown.ChunkCoord;
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.cmd.CmdChat;
@@ -121,7 +120,7 @@ public class SteveCarts extends ProtBase {
 	private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {
 		dropMinecart(e);
 
-		Log.severe(String.format("§4Stopped a steve cart found @ dim %s, %s,%s,%s", e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ));
+		MyTown.instance.bypassLog.severe(String.format("§4Stopped a steve cart found @ dim %s, %s,%s,%s", e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ));
 
 		String msg = String.format("A steve cart broke @ %s,%s,%s because it wasn't allowed there", (int) e.posX, (int) e.posY, (int) e.posZ);
 		String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);

@@ -2,7 +2,6 @@ package mytown.cmd;
 
 import java.util.List;
 
-import mytown.Log;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
 import net.minecraft.command.CommandBase;
@@ -54,7 +53,7 @@ public class CmdSetSpawn extends MyTownCommandBase {
 		WorldServer w = MinecraftServer.getServer().worldServerForDimension(dim);
 		w.provider.setSpawnPoint(x, y, z);
 
-		Log.warning(String.format("Server spawn for dimension %s set to %s,%s,%s by %s", dim, x, y, z, cs.getCommandSenderName()));
+		MyTown.instance.coreLog.warning(String.format("Server spawn for dimension %s set to %s,%s,%s by %s", dim, x, y, z, cs.getCommandSenderName()));
 		MyTown.sendChatToPlayer(pl, String.format("Server spawn for dimension %s set to %s,%s,%s", dim, x, y, z));
 	}
 

@@ -1,5 +1,6 @@
 package mytown;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,14 +69,25 @@ public class MyTown {
 	public static MyTown instance;
 	public Config config = new Config();
 
+	public Log coreLog;
+	public Log chatLog;
+	public Log pmLog;
+	public Log bypassLog;
+
 	public List<MyTownCommand> commands = new ArrayList<MyTownCommand>();
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
+		coreLog = new Log("MyTown", new File(ev.getModConfigurationDirectory()+"/MyTown/logs", "core.log"));
+		chatLog = new Log("Chat", new File(ev.getModConfigurationDirectory()+"/MyTown/logs", "chat.log"));
+		pmLog = new Log("PM", new File(ev.getModConfigurationDirectory()+"/MyTown/logs", "privateMessages.log"));
+		bypassLog = new Log("Bypass", new File(ev.getModConfigurationDirectory()+"/MyTown/logs", "bypass.log"));
+
 		isMCPC = MinecraftServer.getServer().getServerModName().contains("mcpc");
-		Log.init();
+		// X_Log.init();
 		addCommands();
 		config.loadConfig();
+		coreLog.debug("Test debug message...");
 	}
 
 	@EventHandler
@@ -93,9 +105,9 @@ public class MyTown {
 		try {
 			Class.forName("net.minecraftforge.event.world.BlockEvent$BreakEvent");
 			MinecraftForge.EVENT_BUS.register(Class.forName("mytown.event.ExtraEvents").newInstance());
-			Log.info("ExtraEvents loaded");
+			coreLog.info("ExtraEvents loaded");
 		} catch (Exception e) {
-			Log.info("Failed to load ExtraEvents");
+			coreLog.info("Failed to load ExtraEvents");
 		}
 
 		MinecraftForge.EVENT_BUS.register(ProtectionEvents.instance);
@@ -114,7 +126,7 @@ public class MyTown {
 			config.save(); // re-save to add the missing configuration variables
 		}
 
-		Log.info("Loaded");
+		coreLog.info("Loaded");
 	}
 
 	@EventHandler
@@ -148,7 +160,7 @@ public class MyTown {
 		if (isMCPC) {
 			try {
 				MCPCRegisterCommand = net.minecraft.command.CommandHandler.class.getMethod("registerCommand", ICommand.class, String.class);
-				Log.info("MCPC detected. Set up special command registration, just for it ;)");
+				coreLog.info("MCPC detected. Set up special command registration, just for it ;)");
 			} catch (Exception e) {
 				isMCPC = false; // Set isMCPC to false
 			}
@@ -193,7 +205,7 @@ public class MyTown {
 
 	public static void sendChatToPlayer(ICommandSender sender, String msg) {
 		if (sender instanceof MinecraftServer) {
-			Log.info(msg);
+			MyTown.instance.coreLog.info(msg);
 			return;
 		}
 		sender.sendChatToPlayer(ChatMessageComponent.createFromText(msg));

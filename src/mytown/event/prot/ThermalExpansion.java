@@ -45,7 +45,7 @@ public class ThermalExpansion extends ProtBase {
 			int x = (int) (t.posX + t.motionX);
 			int y = (int) (t.posY + t.motionY);
 			int z = (int) (t.posZ + t.motionZ);
-			int dim = thrower.onlinePlayer.dimension;
+			int dim = e.dimension;
 
 			if (!thrower.canInteract(dim, x, y, z, Permissions.Build)) {
 				return "Florb would land in a town";

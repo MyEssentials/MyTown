@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
@@ -103,7 +102,7 @@ public class CmdAdmin extends MyTownCommandBase {
 		} catch (CommandException ex) {
 			throw ex;
 		} catch (Throwable ex) {
-			Log.log(Level.WARNING, String.format("Command execution error by %s", sender), ex);
+			MyTown.instance.coreLog.log(Level.WARNING, String.format("Command execution error by %s", sender), ex);
 			MyTown.sendChatToPlayer(sender, Formatter.commandError(Level.SEVERE, ex.toString()));
 		}
 	}

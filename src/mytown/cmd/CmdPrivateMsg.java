@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
@@ -21,6 +20,7 @@ import com.google.common.collect.Maps;
 import forgeperms.ForgePerms;
 
 public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand {
+	public static boolean snoop = true;
 	public static Map<EntityPlayer, EntityPlayer> lastMessages = Maps.newHashMap();
 	public static Map<EntityPlayer, EntityPlayer> chatLock = Maps.newHashMap();
 	public static List<ICommandSender> snoopers = Lists.newArrayList();
@@ -75,7 +75,6 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 		MyTown.sendChatToPlayer(sender, "§dNow chatting with " + Resident.getOrMake(target).formattedName());
 	}
 
-	@SuppressWarnings("unused")
 	public static void sendChat(EntityPlayer sender, EntityPlayer target, String msg) {
 		if (sender == null || target == null || msg == null) {
 			return;
@@ -86,11 +85,11 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 		if (ForgePerms.getPermissionManager().canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
 			msg = Formatter.applyColorCodes(msg);
 		}
-
-		for (ICommandSender cs : snoopers) {
-			Log.direct(String.format("§7[%s §7-> %s§7] %s", Resident.getOrMake(sender).formattedName(), Resident.getOrMake(target).formattedName(), msg));
+		
+		if (snoop){
+			MyTown.instance.chatLog.info("§7[%s §7-> %s§7] %s", Resident.getOrMake(sender).formattedName(), Resident.getOrMake(target).formattedName(), msg);
 		}
-
+			
 		if (!Formatter.formatChat) {
 			StringTranslate strTranslate = new StringTranslate();
 			MyTown.sendChatToPlayer(sender, "\u00a77\u00a7o" + strTranslate.translateKeyFormat("commands.message.display.outgoing", new Object[] { target.getCommandSenderName(), msg }));

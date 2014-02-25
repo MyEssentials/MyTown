@@ -27,14 +27,14 @@ public class TwilightForest extends ProtBase {
 		if (cTFCrumbleHorn.isInstance(tool)) {
 			MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 10.0D);
 
-			if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
+			if (!res.canInteract(res.prevDimension, pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
 				return "Cannot interact here";
 			}
 
 			for (int z = 1; z <= 5; z++) {
 				for (int x = -2; x <= 2; x++) {
 					for (int y = -2; y <= 2; y++) {
-						if (!res.canInteract(pos.blockX + x, pos.blockY + y, pos.blockZ + z, Permissions.Build)) {
+						if (!res.canInteract(res.prevDimension, pos.blockX + x, pos.blockY + y, pos.blockZ + z, Permissions.Build)) {
 							return "Cannot interact here";
 						}
 					}

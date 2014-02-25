@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mytown.ChatChannel;
-import mytown.Log;
+import mytown.MyTown;
 import mytown.entities.Nation;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
@@ -244,7 +244,7 @@ public abstract class MyTownDB extends Database {
 			return;
 		}
 
-		Log.info("[DB]Doing update '%s' - %s", code, desc);
+		MyTown.instance.coreLog.info("[DB]Doing update '%s' - %s", code, desc);
 
 		doUpdateSwitch(code);
 

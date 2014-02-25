@@ -44,7 +44,7 @@ public class Erebus extends ProtBase {
 		int x = (int) (t.posX + t.motionX);
 		int y = (int) (t.posY + t.motionY);
 		int z = (int) (t.posZ + t.motionZ);
-		int dim = thrower.onlinePlayer.dimension;
+		int dim = e.dimension;
 
 		if (!thrower.canInteract(dim, x - radius, y, z - radius, Permissions.Build) || !thrower.canInteract(dim, x - radius, y, z + radius, Permissions.Build) ||
 				!thrower.canInteract(dim, x + radius, y, z - radius, Permissions.Build)	|| !thrower.canInteract(dim, x + radius, y, z + radius, Permissions.Build)) {

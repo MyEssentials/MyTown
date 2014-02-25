@@ -42,7 +42,7 @@ public class RangedTools extends ProtBase {
 	public String update(Resident res, Item tool, ItemStack item) throws Exception {
 		MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, false, 20);
 		if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-			if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
+			if (!res.canInteract(res.prevDimension, pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
 				return "Cannot build here";
 			}
 		} else if (pos != null && pos.typeOfHit == EnumMovingObjectType.ENTITY) {
@@ -54,7 +54,7 @@ public class RangedTools extends ProtBase {
 		// liquids
 		pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, true, 20);
 		if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-			if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
+			if (!res.canInteract(res.prevDimension, pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
 				return "Cannot build here";
 			}
 		} else if (pos != null && pos.typeOfHit == EnumMovingObjectType.ENTITY) {

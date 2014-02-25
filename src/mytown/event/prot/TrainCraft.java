@@ -2,7 +2,6 @@ package mytown.event.prot;
 
 import mytown.ChatChannel;
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.cmd.CmdChat;
@@ -62,7 +61,7 @@ public class TrainCraft extends ProtBase {
 	private void blockAction(EntityMinecart e) throws IllegalArgumentException, IllegalAccessException {
 		dropMinecart(e);
 
-		Log.severe(String.format("§4Stopped a train found in %s @ dim %s, %s,%s,%s", e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ));
+		MyTown.instance.bypassLog.severe(String.format("§4Stopped a train found in %s @ dim %s, %s,%s,%s", e.dimension, (int) e.posX, (int) e.posY, (int) e.posZ));
 
 		String msg = String.format("A train broke @ %s,%s,%s because it wasn't allowed there", (int) e.posX, (int) e.posY, (int) e.posZ);
 		String formatted = Formatter.formatChatSystem(msg, ChatChannel.Local);

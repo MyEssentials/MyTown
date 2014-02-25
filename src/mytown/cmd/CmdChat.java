@@ -4,14 +4,12 @@ import java.util.List;
 
 import mytown.ChatChannel;
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import mytown.entities.Town;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -20,7 +18,7 @@ import com.google.common.base.Joiner;
 
 import forgeperms.ForgePerms;
 
-public class CmdChat extends CommandBase implements MyTownCommand {
+public class CmdChat implements MyTownCommand {
 	public ChatChannel channel;
 
 	public CmdChat(ChatChannel ch) {
@@ -205,12 +203,11 @@ public class CmdChat extends CommandBase implements MyTownCommand {
 		} else if (channel == ChatChannel.Nation) {
 			s = sendNationChat(sender, msg, emote);
 		} else {
-			s = sendGlobalChat(sender, msg, channel, emote); // trade, help,
-																// global
+			s = sendGlobalChat(sender, msg, channel, emote); // trade, help, global
 		}
-
+		
 		if (s != null) {
-			Log.direct(s);
+			MyTown.instance.chatLog.info(s);
 		}
 	}
 
@@ -231,6 +228,30 @@ public class CmdChat extends CommandBase implements MyTownCommand {
 	@Override
 	public String getPermNode() {
 		return "mytown.chat.focus." + channel.name.toLowerCase();
+	}
+
+	
+	@Override
+	public List<?> getCommandAliases() {
+		return null;
+	}
+	
+
+	@Override
+	public List<?> addTabCompletionOptions(ICommandSender icommandsender, String[] astring) {
+		return null;
+	}
+	
+
+	@Override
+	public boolean isUsernameIndex(String[] astring, int i) {
+		return false;
+	}
+	
+
+	@Override
+	public int compareTo(Object o) {
+		return 0;
 	}
 
 }

@@ -66,7 +66,7 @@ public class SingleBlockTools extends ProtBase {
 		MovingObjectPosition pos = Utils.getMovingObjectPositionFromPlayer(res.onlinePlayer.worldObj, res.onlinePlayer, liquid);
 
 		if (pos != null && pos.typeOfHit == EnumMovingObjectType.TILE) {
-			if (!res.canInteract(pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
+			if (!res.canInteract(res.prevDimension, pos.blockX, pos.blockY, pos.blockZ, Permissions.Build)) {
 				return "Cannot build here";
 			}
 		} else if (pos != null && pos.typeOfHit == EnumMovingObjectType.ENTITY) {

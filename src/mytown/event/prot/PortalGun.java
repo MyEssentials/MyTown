@@ -71,7 +71,7 @@ public class PortalGun extends ProtBase {
 			}
 
 			for (int i = 0; i < 7; i++) {
-				if (!r.canInteract(collision.blockX + xPos[i], collision.blockY + yPos[i], collision.blockZ + zPos[i], Permissions.Build)) {
+				if (!r.canInteract(e.dimension, collision.blockX + xPos[i], collision.blockY + yPos[i], collision.blockZ + zPos[i], Permissions.Build)) {
 					return "Cannot shoot portals in this town";
 				}
 			}

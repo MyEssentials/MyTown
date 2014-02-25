@@ -140,10 +140,6 @@ public class Town {
 		canSetName(pName, null);
 		if (home != null) {
 			canAddBlock(home, true, null);
-			if (creator.isOnline() && creator.onlinePlayer != null) {
-				Vec3 vec = Vec3.createVectorHelper(creator.onlinePlayer.posX, creator.onlinePlayer.posY, creator.onlinePlayer.posZ);
-				creator.town().setSpawn(home, vec, creator.onlinePlayer.rotationPitch, creator.onlinePlayer.rotationYaw);
-			}
 		}
 	}
 
@@ -164,6 +160,9 @@ public class Town {
 			home.setTown(this);
 			blocks.add(home);
 		}
+		
+		Vec3 vec = Vec3.createVectorHelper(creator.onlinePlayer.posX, creator.onlinePlayer.posY, creator.onlinePlayer.posZ);
+		setSpawn(home, vec, creator.onlinePlayer.rotationPitch, creator.onlinePlayer.rotationYaw);
 
 		setSettings();
 		MyTownDatasource.instance.addTown(this);

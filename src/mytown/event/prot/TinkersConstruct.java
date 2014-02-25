@@ -71,7 +71,7 @@ public class TinkersConstruct extends ProtBase {
 			int x = (int) (e.posX + e.motionX);
 			int y = (int) (e.posY + e.motionY);
 			int z = (int) (e.posZ + e.motionZ);
-			int dim = thrower.onlinePlayer.dimension;
+			int dim = e.dimension;
 
 			if (!thrower.canInteract(dim, x, y, z, Permissions.Build)) {
 				// return (clLaunchedPotion.isInstance(e) ? "Potion" : "Dagger")
@@ -94,8 +94,8 @@ public class TinkersConstruct extends ProtBase {
 
 			Resident res = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident((EntityPlayer) placer);
 
-			if (!res.canInteract(x - explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(x - explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)
-					|| !res.canInteract(x + explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(x + explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)) {
+			if (!res.canInteract(e.dimension, x - explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(e.dimension, x - explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)
+					|| !res.canInteract(e.dimension, x + explosionRadius, y - explosionRadius, y + explosionRadius, z - explosionRadius, Permissions.Build) || !res.canInteract(e.dimension, x + explosionRadius, y - explosionRadius, y + explosionRadius, z + explosionRadius, Permissions.Build)) {
 				return "Explosion would hit a protected town";
 			}
 

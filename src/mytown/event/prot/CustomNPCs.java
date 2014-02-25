@@ -2,7 +2,7 @@ package mytown.event.prot;
 
 import java.util.List;
 
-import mytown.Log;
+import mytown.MyTown;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
 
@@ -48,7 +48,7 @@ public class CustomNPCs extends ProtBase {
 			list.add(Class.forName(name));
 		} catch (Throwable t) {
 			if (debug) {
-				Log.warning(String.format("Cannot load %s for Custom NPCs", name));
+				MyTown.instance.coreLog.warning(String.format("Cannot load %s for Custom NPCs", name));
 			}
 		}
 	}

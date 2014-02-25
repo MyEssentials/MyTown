@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -34,7 +33,7 @@ public class CmdDelHome extends MyTownCommandBase {
 			res.home.delete(args.length == 0 ? null : args[0]);
 			MyTown.sendChatToPlayer(cs, args.length == 0 ? Term.HomeCmdHomeDeleted.toString() : Term.HomeCmdHome2Deleted.toString(args[0]));
 		} catch (Throwable ex) {
-			Log.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
+			MyTown.instance.coreLog.log(Level.WARNING, String.format("Command execution error by %s", cs), ex);
 			MyTown.sendChatToPlayer(cs, Formatter.commandError(Level.SEVERE, ex.toString()));
 		}
 	}

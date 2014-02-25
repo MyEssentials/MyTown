@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import mytown.ChatChannel;
 import mytown.ChunkCoord;
 import mytown.Formatter;
-import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -323,7 +322,7 @@ public class Resident {
 			if (Town.pvpSafeTowns != null && targetBlock != null && targetBlock.town() != null) {
 				for (String s : Town.pvpSafeTowns) {
 					if (targetBlock.town().name().equals(s)) {
-						Log.log(Level.INFO, "Found safe town: %s", s);
+						MyTown.instance.coreLog.log(Level.INFO, "Found safe town: %s", s);
 						return false;
 					}
 				}
@@ -420,7 +419,7 @@ public class Resident {
 		String prefix;
 		IChatManager chatManager = ForgePerms.getChatManager();
 		if (chatManager == null) {
-			Log.info("Chat Manager is null!");
+			MyTown.instance.chatLog.info("Chat Manager is null!");
 			return "";
 		} else {
 			prefix = chatManager.getPlayerPrefix(w, name());
@@ -437,7 +436,7 @@ public class Resident {
 		String postfix;
 		IChatManager chatManager = ForgePerms.getChatManager();
 		if (chatManager == null) {
-			Log.info("Chat Manager is null!");
+			MyTown.instance.chatLog.info("Chat Manager is null!");
 			return "";
 		} else {
 			postfix = chatManager.getPlayerSuffix(w, name());
@@ -528,7 +527,7 @@ public class Resident {
 					TownBlock block2 = source.getBlock(onlinePlayer.dimension, pX, pZ);
 					if (block2 != null && block2.town() != null && !canInteract(block2, (int) onlinePlayer.posY, TownSettingCollection.Permissions.Enter)) {
 						// bounce failed, send to spawn
-						Log.warning(String.format("Player %s is inside a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", name(), block2.town().name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ));
+						MyTown.instance.coreLog.warning(String.format("Player %s is inside a enemy town %s (%s, %s, %s, %s) with bouncing on. Sending to spawn.", name(), block2.town().name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ));
 
 						respawnPlayer();
 					}
@@ -595,14 +594,21 @@ public class Resident {
 	}
 
 	public void respawnPlayer() {
-		respawnPlayer(null);
+		respawnPlayer(null, true);
+	}
+	
+	public void respawnPlayer(SavedHome h){
+		respawnPlayer(h, false);
 	}
 
-	public void respawnPlayer(SavedHome h) {
+	public void respawnPlayer(SavedHome h, boolean worldSpawn) {
 		if (!(onlinePlayer instanceof EntityPlayerMP)) {
 			throw new RuntimeException("Cannot move a non-player");
 		}
 		if (h == null){
+			if (worldSpawn){
+				sendToServerSpawn();
+			}
 			return;
 		}
 
@@ -686,7 +692,7 @@ public class Resident {
 
 						if (!WorldBorder.instance.isWithinArea(onlinePlayer)) {
 							// bounce failed, send to spawn
-							Log.warning(String.format("Player %s is over the edge of the world %s (%s, %s, %s). Sending to spawn.", name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ));
+							MyTown.instance.coreLog.warning(String.format("Player %s is over the edge of the world %s (%s, %s, %s). Sending to spawn.", name(), onlinePlayer.dimension, onlinePlayer.posX, onlinePlayer.posY, onlinePlayer.posZ));
 
 							respawnPlayer();
 						}
