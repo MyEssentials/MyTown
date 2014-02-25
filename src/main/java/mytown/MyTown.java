@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import forgeperms.api.IChatManager;
-import forgeperms.api.IEconomyManager;
 import mytown.cmd.CmdAdmin;
 import mytown.cmd.CmdChannel;
 import mytown.cmd.CmdChat;
