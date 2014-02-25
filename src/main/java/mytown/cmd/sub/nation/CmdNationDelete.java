@@ -1,7 +1,5 @@
 package mytown.cmd.sub.nation;
 
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -14,6 +12,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+
+import java.util.List;
 
 /**
  * Command to delete nations

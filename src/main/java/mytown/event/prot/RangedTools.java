@@ -1,7 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Method;
-
 import mytown.Utils;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
@@ -11,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+
+import java.lang.reflect.Method;
 
 public class RangedTools extends ProtBase {
 	public static RangedTools instance = new RangedTools();

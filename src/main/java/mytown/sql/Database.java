@@ -1,15 +1,11 @@
 package mytown.sql;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 
 public abstract class Database {
 

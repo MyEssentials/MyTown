@@ -1,21 +1,17 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import mytown.ChatChannel;
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
+import mytown.*;
 import mytown.cmd.CmdChat;
 import mytown.entities.TownBlock;
 import mytown.event.ProtBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 public class ComputerCraft extends ProtBase {
 	public static ComputerCraft instance = new ComputerCraft();

@@ -1,18 +1,14 @@
 package mytown.cmd;
 
-import java.util.List;
-import java.util.logging.Level;
-
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import mytown.*;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.Resident;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import java.util.List;
+import java.util.logging.Level;
 
 public class CmdDelHome extends MyTownCommandBase {
 	@Override

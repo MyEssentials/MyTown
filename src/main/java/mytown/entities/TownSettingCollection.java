@@ -1,15 +1,14 @@
 package mytown.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.base.Joiner;
 import mytown.MyTown;
 import mytown.Term;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.google.common.base.Joiner;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 

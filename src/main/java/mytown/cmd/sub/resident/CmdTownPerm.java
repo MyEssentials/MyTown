@@ -1,12 +1,6 @@
 package mytown.cmd.sub.resident;
 
-import java.util.List;
-
-import mytown.Assert;
-import mytown.Formatter;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import mytown.*;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
@@ -15,6 +9,8 @@ import mytown.entities.TownSettingCollection;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 /**
  * The /mytown perm town|res|plot [force [key]|set key [val]] command Shows,

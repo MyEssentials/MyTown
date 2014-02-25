@@ -1,13 +1,7 @@
 package mytown.cmd;
 
-import java.util.List;
-
-import mytown.ChatChannel;
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import com.google.common.base.Joiner;
+import mytown.*;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import mytown.entities.Town;
@@ -16,7 +10,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
-import com.google.common.base.Joiner;
+import java.util.List;
 
 
 public class CmdChat extends CommandBase implements MyTownCommand {

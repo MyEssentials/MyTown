@@ -1,8 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
 import mytown.event.ProtBase;
@@ -14,6 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class ModularPowersuits extends ProtBase {
 	public static ModularPowersuits instance = new ModularPowersuits();

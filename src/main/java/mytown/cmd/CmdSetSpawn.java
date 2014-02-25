@@ -1,7 +1,5 @@
 package mytown.cmd;
 
-import java.util.List;
-
 import mytown.Log;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
@@ -11,6 +9,8 @@ import net.minecraft.command.NumberInvalidException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
+
+import java.util.List;
 
 public class CmdSetSpawn extends MyTownCommandBase {
 	@Override

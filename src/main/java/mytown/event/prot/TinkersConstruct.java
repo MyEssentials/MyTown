@@ -1,7 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-
 import mytown.MyTownDatasource;
 import mytown.Utils;
 import mytown.entities.Resident;
@@ -14,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
+
+import java.lang.reflect.Field;
 
 public class TinkersConstruct extends ProtBase {
 	public static TinkersConstruct instance = new TinkersConstruct();

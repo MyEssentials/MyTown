@@ -1,7 +1,5 @@
 package mytown.cmd.sub.nation;
 
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -11,6 +9,8 @@ import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 public class CmdNationDeny extends MyTownSubCommandAdapter {
 

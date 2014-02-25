@@ -1,10 +1,10 @@
 package mytown.cmd.api;
 
-import java.util.List;
-
 import mytown.Assert;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+
+import java.util.List;
 
 /**
  * Base for all MyTown commands

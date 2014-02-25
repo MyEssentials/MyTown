@@ -1,8 +1,5 @@
 package mytown.cmd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import mytown.ChatChannel;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -12,6 +9,9 @@ import mytown.entities.Resident;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CmdChannel extends MyTownCommandBase {
 	@Override

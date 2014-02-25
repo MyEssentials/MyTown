@@ -1,9 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
 import mytown.ChunkCoord;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -14,6 +10,10 @@ import mytown.event.ProtBase;
 import mytown.event.ProtectionEvents;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BuildCraft extends ProtBase {
 	public static BuildCraft instance = new BuildCraft();

@@ -1,10 +1,10 @@
 package mytown;
 
+import mytown.entities.Resident;
+
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import mytown.entities.Resident;
 
 public class Formatter {
 	public static boolean formatChat = true;

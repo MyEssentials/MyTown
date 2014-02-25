@@ -1,11 +1,11 @@
 package mytown;
 
+import net.minecraftforge.common.Configuration.UnicodeInputStreamReader;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
-import net.minecraftforge.common.Configuration.UnicodeInputStreamReader;
 
 public class TermTranslator {
 	public static String defaultEncoding = "UTF-8";

@@ -1,7 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Method;
-
 import mytown.Utils;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
@@ -14,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import java.lang.reflect.Method;
 
 public class SingleBlockTools extends ProtBase {
 	public static SingleBlockTools instance = new SingleBlockTools();

@@ -1,14 +1,14 @@
 package mytown.event.tick;
 
-import java.util.Date;
-import java.util.List;
-
 import mytown.Log;
 import mytown.MyTown;
 import mytown.entities.Resident;
 import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
 import mytown.event.TickBase;
+
+import java.util.Date;
+import java.util.List;
 
 public class OldResidentRemover extends TickBase {
 	public int daysOld = -1;

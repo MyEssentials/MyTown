@@ -1,11 +1,11 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Method;
-
 import mytown.Utils;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
+
+import java.lang.reflect.Method;
 
 public class LOTR extends ProtBase {
 	public static LOTR instance = new LOTR();

@@ -1,19 +1,7 @@
 package mytown.entities;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-
-import mytown.ChatChannel;
-import mytown.ChunkCoord;
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import com.google.common.base.Joiner;
+import mytown.*;
 import mytown.cmd.CmdChat;
 import mytown.entities.TownSettingCollection.ISettingsSaveHandler;
 import mytown.event.ProtectionEvents;
@@ -33,7 +21,12 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.DimensionManager;
 
-import com.google.common.base.Joiner;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
 
 public class Resident {
 	public static boolean allowMemberToMemberPvp = false;

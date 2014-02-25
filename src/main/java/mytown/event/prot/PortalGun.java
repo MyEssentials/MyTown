@@ -1,9 +1,6 @@
 package mytown.event.prot;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.collect.Lists;
 import mytown.ChunkCoord;
 import mytown.MyTownDatasource;
 import mytown.entities.Resident;
@@ -15,7 +12,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
-import com.google.common.collect.Lists;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PortalGun extends ProtBase {
 	public static PortalGun instance = new PortalGun();

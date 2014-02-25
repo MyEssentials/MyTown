@@ -1,7 +1,5 @@
 package mytown.cmd.sub.everyone;
 
-import java.util.List;
-
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
@@ -10,6 +8,8 @@ import mytown.entities.Town;
 import mytown.entities.TownBlock;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 public class CmdTownHere extends MyTownSubCommandAdapter {
 	@Override

@@ -1,7 +1,6 @@
 package mytown.event.prot;
 
-import java.util.List;
-
+import cpw.mods.fml.common.registry.IThrowableEntity;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
 import mytown.event.ProtBase;
@@ -14,7 +13,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import cpw.mods.fml.common.registry.IThrowableEntity;
+
+import java.util.List;
 
 public class ProjectileProtection extends ProtBase {
 	public static ProjectileProtection instance = new ProjectileProtection();

@@ -1,11 +1,5 @@
 package mytown.cmd.sub.nation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownSubCommand;
@@ -13,6 +7,8 @@ import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.*;
 
 public class CmdNation extends MyTownSubCommandAdapter {
 	private Map<String, MyTownSubCommand> commands;

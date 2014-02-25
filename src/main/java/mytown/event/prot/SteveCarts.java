@@ -1,21 +1,16 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
-import mytown.ChatChannel;
-import mytown.ChunkCoord;
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
+import mytown.*;
 import mytown.cmd.CmdChat;
 import mytown.entities.TownBlock;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.Vec3;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class SteveCarts extends ProtBase {
 	public static SteveCarts instance = new SteveCarts();

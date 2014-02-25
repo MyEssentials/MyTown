@@ -1,14 +1,6 @@
 package mytown.cmd;
 
-import java.util.List;
-import java.util.logging.Level;
-
-import mytown.Cost;
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import mytown.*;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.PayHandler;
 import mytown.entities.Resident;
@@ -16,6 +8,9 @@ import mytown.entities.SavedHome;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import java.util.List;
+import java.util.logging.Level;
 
 public class CmdHome extends MyTownCommandBase {
 	@Override

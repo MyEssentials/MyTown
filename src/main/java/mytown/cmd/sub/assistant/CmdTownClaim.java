@@ -1,14 +1,8 @@
 package mytown.cmd.sub.assistant;
 
-import java.util.List;
-import java.util.Map;
-
-import mytown.Assert;
-import mytown.Cost;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import mytown.*;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.PayHandler;
 import mytown.entities.Resident;
@@ -20,8 +14,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
 
 
 public class CmdTownClaim extends MyTownSubCommandAdapter {

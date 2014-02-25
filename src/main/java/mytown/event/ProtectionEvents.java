@@ -1,44 +1,15 @@
 package mytown.event;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.entities.ItemIdRange;
 import mytown.entities.Resident;
-import mytown.event.prot.BuildCraft;
-import mytown.event.prot.ComputerCraft;
-import mytown.event.prot.Creeper;
-import mytown.event.prot.CustomNPCs;
-import mytown.event.prot.DubstepGun;
-import mytown.event.prot.Erebus;
-import mytown.event.prot.FireBall;
-import mytown.event.prot.FlansMod;
-import mytown.event.prot.IndustrialCraft;
-import mytown.event.prot.LOTR;
-import mytown.event.prot.LycanitesMobs;
-import mytown.event.prot.MFR;
-import mytown.event.prot.Mekanism;
-import mytown.event.prot.MinecartProtection;
-import mytown.event.prot.Mobs;
-import mytown.event.prot.ModularPowersuits;
-import mytown.event.prot.PortalGun;
-import mytown.event.prot.ProjectileProtection;
-import mytown.event.prot.RailCraft;
-import mytown.event.prot.Reliquary;
-import mytown.event.prot.SteveCarts;
-import mytown.event.prot.TNT;
-import mytown.event.prot.ThaumCraft;
-import mytown.event.prot.TheMistsOfRioV;
-import mytown.event.prot.ThermalExpansion;
-import mytown.event.prot.TinkersConstruct;
-import mytown.event.prot.TrainCraft;
-import mytown.event.prot.TwilightForest;
+import mytown.event.prot.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.INpc;
@@ -48,11 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
+import java.util.*;
 
 public class ProtectionEvents implements ITickHandler {
 	public static ArrayList<ProtBase> entityProtections = new ArrayList<ProtBase>();

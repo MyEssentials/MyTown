@@ -1,9 +1,9 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
+
+import java.lang.reflect.Field;
 
 public class ArsMagica2 extends ProtBase {
 	Class<?> clEntitySpellProjectile, clEntityThrownRock, clEntityThrownSickle;

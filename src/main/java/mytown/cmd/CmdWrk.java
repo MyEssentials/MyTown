@@ -1,7 +1,5 @@
 package mytown.cmd;
 
-import java.util.List;
-
 import mytown.Log;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
@@ -10,6 +8,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.EnumGameType;
+
+import java.util.List;
 
 public class CmdWrk extends MyTownCommandBase {
 	@Override

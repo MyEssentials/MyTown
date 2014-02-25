@@ -1,12 +1,12 @@
 package mytown.cmd.sub.everyone;
 
-import java.util.List;
-
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommand;
 import net.minecraft.command.ICommandSender;
+
+import java.util.List;
 
 public class CmdHelp implements MyTownSubCommand {
 	@Override

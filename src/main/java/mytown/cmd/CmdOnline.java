@@ -1,17 +1,13 @@
 package mytown.cmd;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.Resident;
 import net.minecraft.command.ICommandSender;
+
+import java.util.*;
 
 public class CmdOnline extends MyTownCommandBase {
 	@Override

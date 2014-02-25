@@ -1,7 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-
 import mytown.ChunkCoord;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -9,6 +7,8 @@ import mytown.entities.TownBlock;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
+
+import java.lang.reflect.Field;
 
 public class Creeper extends ProtBase {
 	public static Creeper instance = new Creeper();

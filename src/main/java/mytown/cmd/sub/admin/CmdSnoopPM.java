@@ -1,7 +1,5 @@
 package mytown.cmd.sub.admin;
 
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.Term;
 import mytown.cmd.CmdPrivateMsg;
@@ -9,6 +7,8 @@ import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+
+import java.util.List;
 
 public class CmdSnoopPM extends MyTownSubCommandAdapter {
 

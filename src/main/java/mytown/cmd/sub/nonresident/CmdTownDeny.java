@@ -1,7 +1,5 @@
 package mytown.cmd.sub.nonresident;
 
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -10,6 +8,8 @@ import mytown.entities.Resident;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 public class CmdTownDeny extends MyTownSubCommandAdapter {
 	@Override

@@ -1,7 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-
 import mytown.MyTownDatasource;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
@@ -10,6 +8,8 @@ import mytown.event.ProtectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.lang.reflect.Field;
 
 /**
  * Dubstep Gun protection - Stops explosions caused by the Dubstep Gun

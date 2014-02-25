@@ -1,7 +1,5 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-
 import mytown.MyTownDatasource;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
@@ -12,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+
+import java.lang.reflect.Field;
 
 public class FlansMod extends ProtBase {
 	public static FlansMod instance = new FlansMod();

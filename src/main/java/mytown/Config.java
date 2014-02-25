@@ -1,16 +1,7 @@
 package mytown;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-
 import mytown.cmd.api.MyTownCommand;
-import mytown.entities.ItemIdRange;
-import mytown.entities.Nation;
-import mytown.entities.Resident;
-import mytown.entities.SavedHomeList;
-import mytown.entities.Town;
-import mytown.entities.TownSettingCollection;
+import mytown.entities.*;
 import mytown.entities.TownSettingCollection.ISettingsSaveHandler;
 import mytown.event.PlayerEvents;
 import mytown.event.ProtBase;
@@ -24,6 +15,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class Config extends Configuration {
 	public Config() {

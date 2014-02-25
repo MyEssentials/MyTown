@@ -1,13 +1,13 @@
 package mytown.event;
 
-import java.util.EnumSet;
-
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
 import mytown.Log;
 import mytown.event.tick.OldResidentRemover;
 import mytown.event.tick.OldTownRemover;
 import mytown.event.tick.WorldBorder;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
+
+import java.util.EnumSet;
 
 public class TickHandler implements ITickHandler {
 	public static TickHandler instance = new TickHandler();

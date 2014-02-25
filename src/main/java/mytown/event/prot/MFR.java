@@ -1,13 +1,13 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-
 import mytown.MyTownDatasource;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
 import mytown.event.ProtBase;
 import mytown.event.ProtectionEvents;
 import net.minecraft.entity.Entity;
+
+import java.lang.reflect.Field;
 
 public class MFR extends ProtBase {
 	public static MFR instance = new MFR();

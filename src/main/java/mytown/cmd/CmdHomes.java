@@ -1,13 +1,8 @@
 package mytown.cmd;
 
-import java.util.List;
-import java.util.logging.Level;
-
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import mytown.*;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.Resident;
 import mytown.entities.SavedHome;
@@ -15,8 +10,8 @@ import mytown.entities.SavedHomeList;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.logging.Level;
 
 public class CmdHomes extends MyTownCommandBase {
 	@Override

@@ -1,9 +1,6 @@
 package mytown.event.tick;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
+import com.google.common.collect.Lists;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.event.TickBase;
@@ -15,7 +12,9 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Property;
 
-import com.google.common.collect.Lists;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class WorldBorder extends TickBase {
 	public static WorldBorder instance = new WorldBorder();

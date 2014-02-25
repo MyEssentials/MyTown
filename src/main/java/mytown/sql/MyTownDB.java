@@ -1,17 +1,7 @@
 package mytown.sql;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import mytown.ChatChannel;
 import mytown.Log;
 import mytown.entities.Nation;
@@ -20,8 +10,13 @@ import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
 import mytown.entities.TownBlock;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 public abstract class MyTownDB extends Database {
 

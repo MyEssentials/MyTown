@@ -1,9 +1,9 @@
 package mytown.cmd.api;
 
-import java.util.List;
-
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.List;
 
 /**
  * Interface for all MyTown sub-commands

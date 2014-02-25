@@ -1,14 +1,13 @@
 package mytown.cmd.sub.everyone;
 
-import java.util.List;
-
+import com.google.common.base.Joiner;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import net.minecraft.command.ICommandSender;
 
-import com.google.common.base.Joiner;
+import java.util.List;
 
 public class CmdTownList extends MyTownSubCommandAdapter {
 	@Override

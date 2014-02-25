@@ -1,12 +1,12 @@
 package mytown.cmd;
 
-import java.util.List;
-
 import mytown.MyTownDatasource;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.entities.Resident;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import java.util.List;
 
 public class CmdSpawn extends MyTownCommandBase {
 	@Override

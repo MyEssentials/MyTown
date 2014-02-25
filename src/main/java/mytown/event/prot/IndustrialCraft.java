@@ -1,10 +1,10 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Field;
-
 import mytown.Utils;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
+
+import java.lang.reflect.Field;
 
 public class IndustrialCraft extends ProtBase {
 	public static IndustrialCraft instance = new IndustrialCraft();

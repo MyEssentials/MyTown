@@ -1,13 +1,7 @@
 package mytown.event.prot;
 
 import mods.railcraft.api.carts.IExplosiveCart;
-import mytown.ChatChannel;
-import mytown.ChunkCoord;
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Utils;
+import mytown.*;
 import mytown.cmd.CmdChat;
 import mytown.entities.TownBlock;
 import mytown.event.ProtBase;

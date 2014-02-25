@@ -1,8 +1,5 @@
 package mytown.cmd.sub.nation;
 
-import java.util.List;
-import java.util.logging.Level;
-
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
@@ -12,6 +9,9 @@ import mytown.entities.Resident.Rank;
 import mytown.entities.Town;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
+import java.util.logging.Level;
 
 public class CmdNationLeave extends MyTownSubCommandAdapter {
 

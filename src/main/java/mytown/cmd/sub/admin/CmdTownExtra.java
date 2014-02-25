@@ -1,7 +1,5 @@
 package mytown.cmd.sub.admin;
 
-import java.util.List;
-
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -10,6 +8,8 @@ import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.entities.Town;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.List;
 
 public class CmdTownExtra extends MyTownSubCommandAdapter {
 

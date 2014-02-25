@@ -1,9 +1,9 @@
 package mytown.entities;
 
+import net.minecraft.item.ItemStack;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
 
 public class ItemIdRange {
 	public int fromId = -1;

@@ -1,10 +1,10 @@
 package mytown.event.prot;
 
-import java.util.List;
-
 import mytown.Log;
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
+
+import java.util.List;
 
 public class CustomNPCs extends ProtBase {
 	public static CustomNPCs instance = new CustomNPCs();

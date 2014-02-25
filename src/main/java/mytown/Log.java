@@ -1,11 +1,11 @@
 package mytown;
 
+import cpw.mods.fml.common.FMLLog;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cpw.mods.fml.common.FMLLog;
 
 public class Log {
 	private static final Pattern color_pattern = Pattern.compile("(?i)§([0-9A-FK-OR])");

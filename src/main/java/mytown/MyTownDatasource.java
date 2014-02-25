@@ -1,5 +1,14 @@
 package mytown;
 
+import com.google.common.base.Joiner;
+import mytown.entities.Nation;
+import mytown.entities.Resident;
+import mytown.entities.Town;
+import mytown.entities.TownBlock;
+import mytown.sql.MyTownDB;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.PreparedStatement;
@@ -9,16 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import mytown.entities.Nation;
-import mytown.entities.Resident;
-import mytown.entities.Town;
-import mytown.entities.TownBlock;
-import mytown.sql.MyTownDB;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-
-import com.google.common.base.Joiner;
 
 public class MyTownDatasource extends MyTownDB {
 	public static MyTownDatasource instance = new MyTownDatasource();

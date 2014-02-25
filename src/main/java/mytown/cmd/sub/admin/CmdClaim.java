@@ -1,7 +1,5 @@
 package mytown.cmd.sub.admin;
 
-import java.util.List;
-
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -13,6 +11,8 @@ import mytown.entities.TownBlock;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 public class CmdClaim extends MyTownSubCommandAdapter {
 

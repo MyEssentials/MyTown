@@ -1,16 +1,12 @@
 package mytown.cmd;
 
-import java.util.List;
-
 import mytown.Assert;
 import mytown.cmd.api.MyTownCommand;
-import net.minecraft.command.CommandServerTp;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.NumberInvalidException;
-import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.command.WrongUsageException;
+import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+
+import java.util.List;
 
 public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 	@Override

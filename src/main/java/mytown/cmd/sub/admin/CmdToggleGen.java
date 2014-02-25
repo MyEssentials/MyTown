@@ -1,12 +1,12 @@
 package mytown.cmd.sub.admin;
 
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.cmd.api.MyTownSubCommandAdapter;
 import mytown.event.tick.WorldBorder;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.List;
 
 public class CmdToggleGen extends MyTownSubCommandAdapter {
 

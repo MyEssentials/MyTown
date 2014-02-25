@@ -1,14 +1,13 @@
 package mytown.ext;
 
+import com.google.common.base.Joiner;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.google.common.base.Joiner;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
 
 public class Mffs {
 	private static int checked = 0;

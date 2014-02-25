@@ -1,15 +1,8 @@
 package mytown.event;
 
+import cpw.mods.fml.common.IPlayerTracker;
 import ic2.api.event.LaserEvent;
-
-import java.util.logging.Level;
-
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
-import mytown.Utils;
+import mytown.*;
 import mytown.cmd.CmdChat;
 import mytown.entities.ItemIdRange;
 import mytown.entities.Resident;
@@ -22,16 +15,7 @@ import net.minecraft.block.BlockRail;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemEgg;
-import net.minecraft.item.ItemEnderEye;
-import net.minecraft.item.ItemExpBottle;
-import net.minecraft.item.ItemFishingRod;
-import net.minecraft.item.ItemMinecart;
-import net.minecraft.item.ItemPotion;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
@@ -47,7 +31,8 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
-import cpw.mods.fml.common.IPlayerTracker;
+
+import java.util.logging.Level;
 
 public class PlayerEvents implements IPlayerTracker {
 	public static boolean disableAutoChatChannelUsage;

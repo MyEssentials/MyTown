@@ -1,8 +1,5 @@
 package mytown.cmd.sub.resident;
 
-import java.util.List;
-import java.util.logging.Level;
-
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
@@ -12,6 +9,9 @@ import mytown.entities.Town;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
+import java.util.logging.Level;
 
 public class CmdTownLeave extends MyTownSubCommandAdapter {
 	@Override

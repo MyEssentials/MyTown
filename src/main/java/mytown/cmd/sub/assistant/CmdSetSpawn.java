@@ -1,7 +1,5 @@
 package mytown.cmd.sub.assistant;
 
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.Term;
@@ -13,6 +11,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
+
+import java.util.List;
 
 public class CmdSetSpawn extends MyTownSubCommandAdapter {
 	@Override

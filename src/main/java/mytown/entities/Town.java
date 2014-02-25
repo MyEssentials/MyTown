@@ -1,15 +1,7 @@
 package mytown.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
-import mytown.ChunkCoord;
-import mytown.Formatter;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
-import mytown.Term;
+import com.google.common.base.Joiner;
+import mytown.*;
 import mytown.entities.Resident.Rank;
 import mytown.entities.TownSettingCollection.ISettingsSaveHandler;
 import net.minecraft.command.CommandException;
@@ -18,7 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.DimensionManager;
 
-import com.google.common.base.Joiner;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 
 
 public class Town {

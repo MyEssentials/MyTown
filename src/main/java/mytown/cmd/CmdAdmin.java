@@ -1,39 +1,19 @@
 package mytown.cmd;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
 import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.cmd.api.MyTownSubCommand;
-import mytown.cmd.sub.admin.CmdClaim;
-import mytown.cmd.sub.admin.CmdDumpDB;
-import mytown.cmd.sub.admin.CmdExtraRes;
+import mytown.cmd.sub.admin.*;
 import mytown.cmd.sub.admin.CmdHome;
-import mytown.cmd.sub.admin.CmdPerm;
-import mytown.cmd.sub.admin.CmdReload;
-import mytown.cmd.sub.admin.CmdResetFocusedChannels;
-import mytown.cmd.sub.admin.CmdSnoopPM;
-import mytown.cmd.sub.admin.CmdToggleGen;
-import mytown.cmd.sub.admin.CmdTownBlocks;
-import mytown.cmd.sub.admin.CmdTownDelete;
-import mytown.cmd.sub.admin.CmdTownExtra;
-import mytown.cmd.sub.admin.CmdTownNew;
-import mytown.cmd.sub.admin.CmdTownRem;
-import mytown.cmd.sub.admin.CmdTownSet;
-import mytown.cmd.sub.admin.CmdUnclaim;
-import mytown.cmd.sub.admin.CmdVersion;
-import mytown.cmd.sub.admin.CmdWipeDim;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.*;
+import java.util.logging.Level;
 
 public class CmdAdmin extends MyTownCommandBase {
 	Map<String, MyTownSubCommand> commands;

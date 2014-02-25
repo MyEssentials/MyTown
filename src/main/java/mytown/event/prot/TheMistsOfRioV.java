@@ -1,5 +1,6 @@
 package mytown.event.prot;
 
+import cpw.mods.fml.common.registry.IThrowableEntity;
 import mytown.MyTownDatasource;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
@@ -12,7 +13,6 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import cpw.mods.fml.common.registry.IThrowableEntity;
 
 public class TheMistsOfRioV extends ProtBase {
 	public static TheMistsOfRioV instance = new TheMistsOfRioV();

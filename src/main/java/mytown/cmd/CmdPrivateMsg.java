@@ -1,8 +1,7 @@
 package mytown.cmd;
 
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
@@ -15,8 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.StringTranslate;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
 
 
 public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand {

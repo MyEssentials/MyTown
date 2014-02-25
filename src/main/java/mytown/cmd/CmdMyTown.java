@@ -1,12 +1,5 @@
 package mytown.cmd;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
 import mytown.Formatter;
 import mytown.Log;
 import mytown.MyTown;
@@ -14,20 +7,9 @@ import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.cmd.api.MyTownSubCommand;
 import mytown.cmd.sub.assistant.CmdSetSpawn;
-import mytown.cmd.sub.assistant.CmdTownClaim;
-import mytown.cmd.sub.assistant.CmdTownInvite;
-import mytown.cmd.sub.assistant.CmdTownKick;
-import mytown.cmd.sub.assistant.CmdTownPlot;
-import mytown.cmd.sub.assistant.CmdTownUnclaim;
-import mytown.cmd.sub.everyone.CmdFriend;
-import mytown.cmd.sub.everyone.CmdHelp;
+import mytown.cmd.sub.assistant.*;
+import mytown.cmd.sub.everyone.*;
 import mytown.cmd.sub.everyone.CmdSpawn;
-import mytown.cmd.sub.everyone.CmdTownHere;
-import mytown.cmd.sub.everyone.CmdTownInfo;
-import mytown.cmd.sub.everyone.CmdTownList;
-import mytown.cmd.sub.everyone.CmdTownMap;
-import mytown.cmd.sub.everyone.CmdTownOnline;
-import mytown.cmd.sub.everyone.CmdTownRes;
 import mytown.cmd.sub.mayor.CmdSetAssistant;
 import mytown.cmd.sub.mayor.CmdTownDelete;
 import mytown.cmd.sub.mayor.CmdTownMayor;
@@ -41,6 +23,9 @@ import mytown.cmd.sub.resident.CmdTownPerm;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.*;
+import java.util.logging.Level;
 
 public class CmdMyTown extends MyTownCommandBase {
 	private Map<String, MyTownSubCommand> commands;

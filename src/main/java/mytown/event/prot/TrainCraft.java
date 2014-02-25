@@ -1,10 +1,6 @@
 package mytown.event.prot;
 
-import mytown.ChatChannel;
-import mytown.Formatter;
-import mytown.Log;
-import mytown.MyTown;
-import mytown.MyTownDatasource;
+import mytown.*;
 import mytown.cmd.CmdChat;
 import mytown.entities.TownBlock;
 import mytown.event.ProtBase;

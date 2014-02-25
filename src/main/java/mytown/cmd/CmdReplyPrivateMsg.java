@@ -1,14 +1,14 @@
 package mytown.cmd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CmdReplyPrivateMsg extends MyTownCommandBase {
 	@Override

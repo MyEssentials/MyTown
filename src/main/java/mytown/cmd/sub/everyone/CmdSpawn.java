@@ -1,8 +1,5 @@
 package mytown.cmd.sub.everyone;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mytown.Assert;
 import mytown.Cost;
 import mytown.MyTownDatasource;
@@ -15,6 +12,9 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CmdSpawn extends MyTownSubCommandAdapter {
 	@Override

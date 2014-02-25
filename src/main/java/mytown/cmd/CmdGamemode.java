@@ -1,12 +1,12 @@
 package mytown.cmd;
 
-import java.util.List;
-
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommand;
 import net.minecraft.command.CommandGameMode;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import java.util.List;
 
 public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 	@Override

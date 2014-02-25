@@ -1,10 +1,10 @@
 package mytown.cmd.api;
 
-import java.util.List;
-
 import mytown.Assert;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+
+import java.util.List;
 
 /**
  * A helper class for MyTownSubCommand. Allows anyone with the given perm node,

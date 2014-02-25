@@ -1,24 +1,21 @@
 package mytown.event;
 
-import java.util.List;
-
 import mytown.MyTownDatasource;
 import mytown.entities.Resident;
 import mytown.entities.TownBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-//import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityMinecart;
-//import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumMovingObjectType;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
+
+import java.util.List;
+
+//import net.minecraft.entity.EntityLiving;
+//import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class ProtBase {
 	public boolean enabled = false;

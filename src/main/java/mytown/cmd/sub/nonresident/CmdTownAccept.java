@@ -1,8 +1,5 @@
 package mytown.cmd.sub.nonresident;
 
-import java.util.List;
-import java.util.logging.Level;
-
 import mytown.MyTownDatasource;
 import mytown.Term;
 import mytown.cmd.api.MyTownSubCommandAdapter;
@@ -11,6 +8,9 @@ import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
+import java.util.logging.Level;
 
 public class CmdTownAccept extends MyTownSubCommandAdapter {
 

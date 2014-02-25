@@ -1,9 +1,9 @@
 package mytown.event.prot;
 
-import java.lang.reflect.Method;
-
 import mytown.event.ProtBase;
 import net.minecraft.entity.Entity;
+
+import java.lang.reflect.Method;
 
 public class LycanitesMobs extends ProtBase {
 	public static LycanitesMobs instance = new LycanitesMobs();

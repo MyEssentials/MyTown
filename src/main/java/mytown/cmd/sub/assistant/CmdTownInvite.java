@@ -1,7 +1,5 @@
 package mytown.cmd.sub.assistant;
 
-import java.util.List;
-
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -12,6 +10,8 @@ import mytown.entities.Resident.Rank;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.List;
 
 public class CmdTownInvite extends MyTownSubCommandAdapter {
 	@Override

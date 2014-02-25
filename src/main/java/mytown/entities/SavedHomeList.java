@@ -1,8 +1,7 @@
 package mytown.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import mytown.Assert;
 import mytown.Term;
 import net.minecraft.command.CommandException;
@@ -10,8 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SavedHomeList extends ArrayList<SavedHome> {
 	private static final long serialVersionUID = 5008778401802591440L;
