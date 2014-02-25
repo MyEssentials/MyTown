@@ -1,33 +1,20 @@
 package mytown;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.logging.Level;
-
-import mytown.cmd.CmdAdmin;
-import mytown.cmd.CmdChannel;
-import mytown.cmd.CmdChat;
-import mytown.cmd.CmdDelHome;
-import mytown.cmd.CmdEmote;
-import mytown.cmd.CmdGamemode;
-import mytown.cmd.CmdHome;
-import mytown.cmd.CmdHomes;
-import mytown.cmd.CmdMyTown;
-import mytown.cmd.CmdNick;
-import mytown.cmd.CmdOnline;
-import mytown.cmd.CmdPrivateMsg;
-import mytown.cmd.CmdReplyPrivateMsg;
-import mytown.cmd.CmdSetHome;
-import mytown.cmd.CmdSetSpawn;
-import mytown.cmd.CmdSpawn;
-import mytown.cmd.CmdTeleport;
-import mytown.cmd.CmdWrk;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
+import forgeperms.api.IChatManager;
+import forgeperms.api.IEconomyManager;
+import forgeperms.api.IPermissionManager;
+import mytown.cmd.*;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.ItemIdRange;
 import mytown.entities.TownSettingCollection;
@@ -42,19 +29,12 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
-import forgeperms.api.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.logging.Level;
 
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
