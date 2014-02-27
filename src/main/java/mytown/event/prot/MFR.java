@@ -31,7 +31,7 @@ public class MFR extends ProtBase {
 				return "No owner";
 			}
 
-			Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getResident(owner);
+			Resident thrower = ProtectionEvents.instance.lastOwner = MyTownDatasource.instance.getOrMakeResident(owner);
 
 			int x = (int) (needle.posX + needle.motionX);
 			int y = (int) (needle.posY + needle.motionY);
