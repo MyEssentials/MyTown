@@ -23,7 +23,7 @@ public class ExtraEvents {
 
 		if (!res.canInteract(event.world.provider.dimensionId, event.x, event.y, event.z, Permissions.Build)) {
 			MyTown.instance.coreLog.severe("[BlockBreak]Player %s tried to bypass at dim %d, (%d,%d,%d) - Cannot destroy here", res.name(), player.dimension, (int) player.posX, (int) player.posY, (int) player.posZ);
-			MyTown.sendChatToPlayer(res.onlinePlayer, "§4You cannot do that here - Cannot destroy here");
+			MyTown.sendChatToPlayer(event.getPlayer(), "§4You cannot do that here - Cannot destroy here");
 			event.setCanceled(true);
 		}
 	}

@@ -63,7 +63,7 @@ public class PlayerEvents implements IPlayerTracker {
 		if (res == null)
 			return;
 		if (!res.canAttack(event.hitentity)) {
-			MyTown.instance.coreLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+			MyTown.instance.bypassLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", event.owner, event.world.provider.dimensionId, (int) event.lasershot.posX, (int) event.lasershot.posY, (int) event.lasershot.posZ);
 			MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Target in MyTown protected area");
 			event.setCanceled(true);
 		}
@@ -79,7 +79,7 @@ public class PlayerEvents implements IPlayerTracker {
 		if (res == null)
 			return;
 		if (!res.canInteract(event.world.provider.dimensionId, event.x, event.y, event.z, Permissions.Build)) {
-			MyTown.instance.coreLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+			MyTown.instance.bypassLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Target in MyTown protected area", event.owner, event.world.provider.dimensionId, (int) event.lasershot.posX, (int) event.lasershot.posY, (int) event.lasershot.posZ);
 			MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Target in MyTown protected area");
 			event.setCanceled(true);
 		}
@@ -103,7 +103,7 @@ public class PlayerEvents implements IPlayerTracker {
 				|| !res.canInteract(event.world.provider.dimensionId, x - explosionRadius, y, z + explosionRadius, Permissions.Build) || !res.canInteract(event.world.provider.dimensionId, x + explosionRadius, y, z - explosionRadius, Permissions.Build)
 				|| !res.canInteract(event.world.provider.dimensionId, x + explosionRadius, y, z + explosionRadius, Permissions.Build)) {
 			event.setCanceled(true);
-			MyTown.instance.coreLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Explosion would hit a protected town", res.onlinePlayer, res.onlinePlayer.dimension, (int) res.onlinePlayer.posX, (int) res.onlinePlayer.posY, (int) res.onlinePlayer.posZ);
+			MyTown.instance.bypassLog.severe("[IC2]Player %s tried to bypass at dim %d, %d,%d,%d using Mining Laser - Explosion would hit a protected town", event.owner, event.world.provider.dimensionId, (int) event.lasershot.posX, (int) event.lasershot.posY, (int) event.lasershot.posZ);
 			MyTown.sendChatToPlayer((EntityPlayer) event.owner, "§4You cannot use that here - Explosion would hit a protected town");
 			return;
 		}
