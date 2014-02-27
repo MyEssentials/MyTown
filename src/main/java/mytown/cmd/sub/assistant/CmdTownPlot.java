@@ -54,7 +54,7 @@ public class CmdTownPlot extends MyTownSubCommandAdapter {
 			Resident target = null;
 
 			if (args[0] != null && !args[0].equals("") && !args[0].equalsIgnoreCase("none") && !args[0].equalsIgnoreCase("null")) {
-				target = MyTownDatasource.instance.getResident(args[1]);
+				target = MyTownDatasource.instance.getResident(args[0]);
 				if (target == null) {
 					throw new CommandException(Term.TownErrPlayerNotFound.toString());
 				}
