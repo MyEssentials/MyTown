@@ -150,12 +150,11 @@ public class ThaumCraft extends ProtBase {
 					int radius = 3 + potency;
 					int dim = res.onlinePlayer.dimension;
 
-					MyTown.instance.bypassLog.info("X: %s, Y: %s, Z: %s, Radius: %S, Dim: %s", x, y, z, radius, dim);
-
 					if (!res.canInteract(dim, x - radius, y - radius, y + radius, z - radius, Permissions.Build) || !res.canInteract(dim, x - radius, y - radius, y + radius, z + radius, Permissions.Build) || !res.canInteract(dim, x + radius, y - radius, y + radius, z - radius, Permissions.Build)
 							|| !res.canInteract(dim, x + radius, y - radius, y + radius, z + radius, Permissions.Build)) {
 						// FIXME - Can't figure out what to swap this back too.
 						// res.onlinePlayer.worldObj.setBlock(x, y, z, blockid);
+						MyTown.instance.bypassLog.info("X: %s, Y: %s, Z: %s, Radius: %S, Dim: %s", x, y, z, radius, dim);
 
 						return "Cannot build here";
 					}
