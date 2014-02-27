@@ -5,11 +5,12 @@ import mytown.MyTownDatasource;
 import mytown.entities.Resident;
 import mytown.entities.TownSettingCollection.Permissions;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.BlockEvent;
 
 public class ExtraEvents {
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void blockBroken(BlockEvent.BreakEvent event) {
 		if (event.isCanceled())
 			return;

@@ -35,6 +35,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -52,7 +53,7 @@ public class PlayerEvents implements IPlayerTracker {
 	public static boolean disableAutoChatChannelUsage;
 	public int explosionRadius = 6; // IC2 Mining Laser explosion radius
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void laserHitEntity(LaserEvent.LaserHitsEntityEvent event) {
 		if (event.isCanceled())
 			return;
@@ -68,7 +69,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void laserHitBlock(LaserEvent.LaserHitsBlockEvent event) {
 		if (event.isCanceled())
 			return;
@@ -84,7 +85,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void laserExplodes(LaserEvent.LaserExplodesEvent event) {
 		if (event.isCanceled())
 			return;
@@ -108,7 +109,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void interact(PlayerInteractEvent ev) {
 		if (ev.isCanceled())
 			return;
@@ -231,7 +232,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void pickup(EntityItemPickupEvent ev) {
 		if (ev.isCanceled())
 			return;
@@ -248,7 +249,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void entityAttack(AttackEntityEvent ev) {
 		if (ev.isCanceled())
 			return;
@@ -261,7 +262,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void onLivingAttackEvent(LivingAttackEvent ev) {
 		if (ev.isCanceled() || ev.entity != null)
 			return;
@@ -297,7 +298,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void entityInteract(EntityInteractEvent ev) {
 		if (ev.isCanceled())
 			return;
@@ -310,7 +311,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void minecartCollision(MinecartCollisionEvent ev) {
 		if (!(ev.collider instanceof EntityPlayer))
 			return;
@@ -330,7 +331,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void entityEnterChunk(EntityEvent.EnteringChunk event) {
 		if (event.isCanceled())
 			return;
@@ -400,7 +401,7 @@ public class PlayerEvents implements IPlayerTracker {
 	public void onPlayerRespawn(EntityPlayer player) {
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void serverChat(ServerChatEvent ev) {
 		if (ev.isCanceled() || ev.message == null || ev.message.trim().length() < 1) {
 			return;
@@ -416,7 +417,7 @@ public class PlayerEvents implements IPlayerTracker {
 		}
 	}
 
-	@ForgeSubscribe
+	@ForgeSubscribe(priority=EventPriority.HIGHEST)
 	public void livingUpdate(LivingUpdateEvent ev) {
 		if (ev.isCanceled() || !(ev.entityLiving instanceof EntityPlayer)) {
 			return;
