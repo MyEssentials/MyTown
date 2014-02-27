@@ -3,6 +3,7 @@ package mytown.cmd;
 import java.util.List;
 import java.util.Map;
 
+import mytown.Assert;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommand;
@@ -25,16 +26,13 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
-		if (cs instanceof EntityPlayerMP) {
-			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.msg");
-		}
-		return false;
+		Assert.Perm(cs, getPermNode(), canConsoleUse());
+		return true;
 	}
 
 	@Override
 	public boolean canConsoleUse() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -108,7 +106,6 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 		return "mytown.ecmd.msg";
 	}
 
-	
 	@Override
 	public int compareTo(Object o) {
 		return 0;

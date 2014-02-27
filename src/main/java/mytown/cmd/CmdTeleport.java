@@ -21,7 +21,7 @@ public class CmdTeleport extends CommandServerTp implements MyTownCommand {
 
 	@Override
 	public boolean canConsoleUse() {
-		return false;
+		return true;
 	}
 
 	@Override

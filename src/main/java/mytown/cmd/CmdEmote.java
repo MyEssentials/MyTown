@@ -2,30 +2,26 @@ package mytown.cmd;
 
 import java.util.List;
 
+import mytown.Assert;
 import mytown.Formatter;
-import mytown.MyTown;
 import mytown.MyTownDatasource;
 import mytown.cmd.api.MyTownCommand;
 import mytown.entities.Resident;
 import net.minecraft.command.CommandServerEmote;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 public class CmdEmote extends CommandServerEmote implements MyTownCommand {
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
-		if (cs instanceof EntityPlayerMP) {
-			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.ecmd.me");
-		}
-		return false;
+		Assert.Perm(cs, getPermNode(), canConsoleUse());
+		return true;
 	}
 
 	@Override
 	public boolean canConsoleUse() {
-		return false;
+		return true;
 	}
 
 	@Override
