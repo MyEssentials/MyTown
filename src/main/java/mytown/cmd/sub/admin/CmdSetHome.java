@@ -47,7 +47,7 @@ public class CmdSetHome extends MyTownSubCommandAdapter {
 		int dim;
 		double x, y, z;
 		
-		if (args.length > 2){
+		if (args.length == 6){
 			dim = Integer.parseInt(args[2]);
 			x = Integer.parseInt(args[3]);
 			y = Integer.parseInt(args[4]);
