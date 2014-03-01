@@ -6,4 +6,4 @@ branches:
     only:
         - Stable
 after_success:
-	- "./upload.sh"
+    - "./upload.sh"
