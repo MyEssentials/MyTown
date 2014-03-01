@@ -1,5 +1,3 @@
-This is the release branch. If you want to development branch check here https://github.com/legobear154/MyTown/tree/dev
-
 MyTown
 ======
 
