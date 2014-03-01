@@ -30,6 +30,8 @@ import mytown.cmd.sub.admin.CmdTownSet;
 import mytown.cmd.sub.admin.CmdUnclaim;
 import mytown.cmd.sub.admin.CmdVersion;
 import mytown.cmd.sub.admin.CmdWipeDim;
+import mytown.cmd.sub.admin.CmdHomes;
+import mytown.cmd.sub.admin.CmdSetHome;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
@@ -43,6 +45,8 @@ public class CmdAdmin extends MyTownCommandBase {
 		commands.put("dump", new CmdDumpDB());
 		commands.put("extrares", new CmdExtraRes());
 		commands.put("home", new CmdHome());
+		commands.put("homes", new CmdHomes());
+		commands.put("sethome", new CmdSetHome());
 		commands.put("perm", new CmdPerm());
 		commands.put("reload", new CmdReload());
 		commands.put("reschannels", new CmdResetFocusedChannels());
