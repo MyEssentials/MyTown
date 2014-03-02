@@ -35,6 +35,7 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 			MyTown.sendChatToPlayer(sender, Formatter.formatAdminCommand(Term.TownadmCmdNew.toString(), Term.TownadmCmdNewArgs.toString(), Term.TownadmCmdNewDesc.toString(), null));
 		} else {
 			Resident r = MyTownDatasource.instance.getOrMakeResident(args[1]);
+			Town.assertNewTownParams(args[0], r, null);
 			Town t = new Town(args[0], r, null);
 			MyTown.sendChatToPlayer(sender, Term.TownadmCreatedNewTown.toString(t.name(), r.name()));
 		}

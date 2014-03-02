@@ -141,9 +141,7 @@ public class Town {
 		}
 	}
 
-	public Town(String pName, Resident creator, TownBlock home) throws CommandException {
-		assertNewTownParams(pName, creator, home);
-
+	public Town(String pName, Resident creator, TownBlock home) {
 		id = -1;
 		name = pName;
 

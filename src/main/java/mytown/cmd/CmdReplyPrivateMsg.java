@@ -7,7 +7,6 @@ import mytown.MyTown;
 import mytown.cmd.api.MyTownCommandBase;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
 public class CmdReplyPrivateMsg extends MyTownCommandBase {
@@ -24,15 +23,15 @@ public class CmdReplyPrivateMsg extends MyTownCommandBase {
 	@Override
 	public void processCommand(ICommandSender cs, String[] arg) {
 		canCommandSenderUseCommand(cs);
-		EntityPlayer pl = CmdPrivateMsg.lastMessages.get(cs);
+		ICommandSender pl = CmdPrivateMsg.lastMessages.get(cs);
 
 		if (pl == null) {
 			MyTown.sendChatToPlayer(cs, "§4Noone to reply to");
 		} else {
 			if (arg.length > 0) {
-				CmdPrivateMsg.sendChat((EntityPlayer) cs, pl, CommandBase.func_82360_a(cs, arg, 0));
+				CmdPrivateMsg.sendChat(cs, pl, CommandBase.func_82360_a(cs, arg, 0));
 			} else {
-				CmdPrivateMsg.lockChatWithNotify((EntityPlayer) cs, pl);
+				CmdPrivateMsg.lockChatWithNotify(cs, pl);
 			}
 		}
 	}

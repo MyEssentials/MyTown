@@ -71,7 +71,8 @@ public abstract class MyTownDB extends Database {
 		doUpdate(codes, "14.12.2012", "Adds 'Friends' field to 'Residents' table");
 		doUpdate(codes, "16.12.2012", "Creates 'Nations' table");
 		doUpdate(codes, "27.02.2013", "Adds 'Homes' field to 'Residents' table");
-		doUpdate(codes, "10.02.2014", "Adds 'Nick' fiend to 'Residents' table");
+		doUpdate(codes, "10.02.2014", "Adds 'Nick' field to 'Residents' table");
+//		doUpdate(codes, "01.03.2014", "Adds 'Tax' field to 'Towns' table");     Disabled for now
 	}
 
 	private void doUpdateSwitch(String code) throws SQLException {
@@ -89,8 +90,10 @@ public abstract class MyTownDB extends Database {
 			update_26_02_2013();
 		} else if (code.equals("27.02.2013")) {
 			update_27_02_2013();
-		} else if (code.endsWith("10.02.2014")) {
+		} else if (code.equals("10.02.2014")) {
 			update_10_02_2014();
+		} else if (code.equals("01.03.2014")) {
+			update_01_03_2014();
 		}
 	}
 
@@ -234,6 +237,11 @@ public abstract class MyTownDB extends Database {
 
 	private void update_10_02_2014() throws SQLException {
 		PreparedStatement statement = prepare("alter table " + prefix + "residents ADD Nick TEXT");
+		statement.executeUpdate();
+	}
+	
+	private void update_01_03_2014() throws SQLException {
+		PreparedStatement statement = prepare("alter table " + prefix + "towns ADD Tax INTEGER");
 		statement.executeUpdate();
 	}
 

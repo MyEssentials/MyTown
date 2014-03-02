@@ -61,12 +61,7 @@ public class CmdTownNew extends MyTownSubCommandAdapter {
 				public void run(Resident res, Object[] ar2) {
 					String[] args = (String[]) ar2[0];
 
-					Town t = null;
-					try{
-						t = new Town(args[0], res, (TownBlock) ar2[1]);
-					} catch(Exception e){
-						MyTown.instance.coreLog.warning("Town creation failed after taking payment! ", e);
-					}
+					Town t = new Town(args[0], res, (TownBlock) ar2[1]);
 
 					// emulate that the player just entered it
 					res.checkLocation();

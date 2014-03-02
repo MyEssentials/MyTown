@@ -6,8 +6,8 @@ import java.util.Map;
 import mytown.Assert;
 import mytown.Formatter;
 import mytown.MyTown;
+import mytown.MyTownDatasource;
 import mytown.cmd.api.MyTownCommand;
-import mytown.entities.Resident;
 import net.minecraft.command.CommandServerMessage;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
@@ -20,8 +20,8 @@ import com.google.common.collect.Maps;
 
 public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand {
 	public static boolean snoop = true;
-	public static Map<EntityPlayer, EntityPlayer> lastMessages = Maps.newHashMap();
-	public static Map<EntityPlayer, EntityPlayer> chatLock = Maps.newHashMap();
+	public static Map<ICommandSender, ICommandSender> lastMessages = Maps.newHashMap();
+	public static Map<ICommandSender, ICommandSender> chatLock = Maps.newHashMap();
 	public static List<ICommandSender> snoopers = Lists.newArrayList();
 
 	@Override
@@ -47,7 +47,7 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 
 			if (arg.length > 1) { // send chat
 				String msg = func_82361_a(cs, arg, 1, !(cs instanceof EntityPlayer));
-				sendChat((EntityPlayer) cs, target, msg);
+				sendChat(cs, target, msg);
 			} else { // lock mode
 				lockChatWithNotify((EntityPlayer) cs, target);
 			}
@@ -58,32 +58,30 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 		}
 	}
 
-	public static void stopLockChatWithNotify(EntityPlayer sender) {
-		EntityPlayer pl = chatLock.remove(sender);
-
-		if (pl != null) {
-			MyTown.sendChatToPlayer(pl, "§dStopped chatting with " + Resident.getOrMake(pl).formattedName());
+	public static void stopLockChatWithNotify(ICommandSender sender) {
+		if (sender != null) {
+			MyTown.sendChatToPlayer(sender, "§dStopped chatting with " + MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName()).formattedName());
 		}
 	}
 
-	public static void lockChatWithNotify(EntityPlayer sender, EntityPlayer target) {
+	public static void lockChatWithNotify(ICommandSender sender, ICommandSender target) {
 		chatLock.put(sender, target);
-		MyTown.sendChatToPlayer(sender, "§dNow chatting with " + Resident.getOrMake(target).formattedName());
+		MyTown.sendChatToPlayer(sender, "§dNow chatting with " + MyTownDatasource.instance.getOrMakeResident(target.getCommandSenderName()).formattedName());
 	}
 
-	public static void sendChat(EntityPlayer sender, EntityPlayer target, String msg) {
+	public static void sendChat(ICommandSender sender, ICommandSender target, String msg) {
 		if (sender == null || target == null || msg == null) {
 			return;
 		}
 
 		lastMessages.put(target, sender);
 
-		if (MyTown.instance.permManager.canAccess(sender.username, sender.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
+		if (MyTown.instance.permManager.canAccess(sender.getCommandSenderName(), sender.getEntityWorld().provider.getDimensionName(), "mytown.chat.allowcolors")) {
 			msg = Formatter.applyColorCodes(msg);
 		}
 
 		if (snoop) {
-			MyTown.instance.chatLog.info("§7[%s §7-> %s§7] %s", Resident.getOrMake(sender).formattedName(), Resident.getOrMake(target).formattedName(), msg);
+			MyTown.instance.chatLog.info("§7[%s §7-> %s§7] %s", MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName()), MyTownDatasource.instance.getOrMakeResident(target.getCommandSenderName()), msg);
 		}
 
 		if (!Formatter.formatChat) {
@@ -91,8 +89,8 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 			MyTown.sendChatToPlayer(sender, "\u00a77\u00a7o" + strTranslate.translateKeyFormat("commands.message.display.outgoing", new Object[] { target.getCommandSenderName(), msg }));
 			MyTown.sendChatToPlayer(target, "\u00a77\u00a7o" + strTranslate.translateKeyFormat("commands.message.display.incoming", new Object[] { sender.getCommandSenderName(), msg }));
 		} else {
-			MyTown.sendChatToPlayer(sender, Formatter.formatPrivMsg(Resident.getOrMake(sender), Resident.getOrMake(target), msg, true));
-			MyTown.sendChatToPlayer(target, Formatter.formatPrivMsg(Resident.getOrMake(sender), Resident.getOrMake(target), msg, false));
+			MyTown.sendChatToPlayer(sender, Formatter.formatPrivMsg(MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName()), MyTownDatasource.instance.getOrMakeResident(target.getCommandSenderName()), msg, true));
+			MyTown.sendChatToPlayer(target, Formatter.formatPrivMsg(MyTownDatasource.instance.getOrMakeResident(sender.getCommandSenderName()), MyTownDatasource.instance.getOrMakeResident(target.getCommandSenderName()), msg, false));
 		}
 	}
 
