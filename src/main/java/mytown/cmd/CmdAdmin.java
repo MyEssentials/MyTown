@@ -13,6 +13,7 @@ import mytown.Term;
 import mytown.cmd.api.MyTownCommandBase;
 import mytown.cmd.api.MyTownSubCommand;
 import mytown.cmd.sub.admin.CmdClaim;
+import mytown.cmd.sub.admin.CmdDelHome;
 import mytown.cmd.sub.admin.CmdDumpDB;
 import mytown.cmd.sub.admin.CmdExtraRes;
 import mytown.cmd.sub.admin.CmdHome;
@@ -42,6 +43,7 @@ public class CmdAdmin extends MyTownCommandBase {
 	public CmdAdmin() {
 		commands = new HashMap<String, MyTownSubCommand>();
 		commands.put("claim", new CmdClaim());
+		commands.put("delhome", new CmdDelHome());
 		commands.put("dump", new CmdDumpDB());
 		commands.put("extrares", new CmdExtraRes());
 		commands.put("home", new CmdHome());
