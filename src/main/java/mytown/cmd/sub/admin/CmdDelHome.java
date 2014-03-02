@@ -16,7 +16,7 @@ import mytown.Formatter;
  * Allows admins to delete other players homes /ta delhome [playername]
  * [homename]
  * 
- * @author Ken Woodland
+ * @author krwminer
  */
 public class CmdDelHome extends MyTownSubCommandAdapter {
 	@Override
