@@ -178,8 +178,14 @@ public class PlayerEvents implements IPlayerTracker {
 		} else if (action == Action.RIGHT_CLICK_BLOCK) {
 			if (!r.onlinePlayer.isSneaking()) {
 				TileEntity te = r.onlinePlayer.worldObj.getBlockTileEntity(x, y, z);
-				if (te != null && te instanceof IInventory && ((IInventory) te).isUseableByPlayer(r.onlinePlayer)) {
-					perm = Permissions.Access;
+				if (te != null && te instanceof IInventory){
+					try{
+						if (((IInventory) te).isUseableByPlayer(r.onlinePlayer)) {
+							perm = Permissions.Access;
+						}
+					} catch(AbstractMethodError e){
+						MyTown.instance.coreLog.warning("A tile entity (%s) didn't extend isUseableByPlayer correctly! Shame on the mod maker!", te.getClass());
+					}
 				}
 			}
 

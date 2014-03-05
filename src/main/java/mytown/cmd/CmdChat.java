@@ -201,8 +201,7 @@ public class CmdChat implements MyTownCommand {
 		} else if (channel == ChatChannel.Nation) {
 			s = sendNationChat(sender, msg, emote);
 		} else {
-			s = sendGlobalChat(sender, msg, channel, emote); // trade, help,
-																// global
+			s = sendGlobalChat(sender, msg, channel, emote); // trade, help, global
 		}
 
 		if (s != null) {
