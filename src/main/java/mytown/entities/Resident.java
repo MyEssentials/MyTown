@@ -26,14 +26,19 @@ import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.network.ForgePacket;
+import net.minecraftforge.common.network.packet.DimensionRegisterPacket;
 
 import com.google.common.base.Joiner;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import forgeperms.api.IChatManager;
 
 public class Resident {
@@ -582,6 +587,8 @@ public class Resident {
 				onlinePlayer.motionX *= -1;
 				onlinePlayer.motionY *= -1;
 				onlinePlayer.motionZ *= -1;
+
+				// onlinePlayer.mountEntity(e); // unomunts
 			}
 
 			((EntityPlayerMP) onlinePlayer).playerNetServerHandler.setPlayerLocation(prevX, prevY, prevZ, prevYaw, prevPitch);
@@ -617,6 +624,16 @@ public class Resident {
 		}
 		
 		if (pl.dimension != h.dim) {
+			/*
+			 * For MCPC+ send the Forge DimensionRegisterPacket to the client before changing dimensions.
+			 * Just in case this dimension was created by bukkit and the client does not know about it yet.
+			 */
+			if (MyTown.instance.isMCPC) {
+				Packet250CustomPayload[] dimensionRegisterPackets = ForgePacket.makePacketSet(new DimensionRegisterPacket(h.dim, DimensionManager.getProviderType(h.dim)));
+	        	for (int i = 0; i < dimensionRegisterPackets.length; i++) {
+	        		PacketDispatcher.sendPacketToPlayer(dimensionRegisterPackets[i], (Player)pl);
+	        	}
+			}
 			MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension(pl, h.dim);
 		}
 		
