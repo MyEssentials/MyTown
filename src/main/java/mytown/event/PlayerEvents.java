@@ -184,7 +184,7 @@ public class PlayerEvents implements IPlayerTracker {
 							perm = Permissions.Access;
 						}
 					} catch(AbstractMethodError e){
-						MyTown.instance.coreLog.warning("A tile entity (%s) didn't extend isUseableByPlayer correctly! Shame on the mod maker!", te.getClass());
+						MyTown.instance.coreLog.warning("A tile entity (%s) didn't extend isUseableByPlayer correctly! Shame on the mod maker!", te.getClass().getName());
 					}
 				}
 			}

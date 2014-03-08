@@ -570,6 +570,11 @@ public class Resident {
 				MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP) onlinePlayer, prevDimension);
 			}
 
+			// Reverse player
+			onlinePlayer.motionX *= -1;
+			onlinePlayer.motionY *= -1;
+			onlinePlayer.motionZ *= -1;
+
 			if (onlinePlayer.ridingEntity != null) {
 				// reversing boats
 				Entity e = onlinePlayer.ridingEntity;
@@ -578,10 +583,6 @@ public class Resident {
 				e.motionY *= -1;
 				e.motionZ *= -1;
 				e.setPosition(prevX, prevY, prevZ);
-
-				onlinePlayer.motionX *= -1;
-				onlinePlayer.motionY *= -1;
-				onlinePlayer.motionZ *= -1;
 			}
 
 			((EntityPlayerMP) onlinePlayer).playerNetServerHandler.setPlayerLocation(prevX, prevY, prevZ, prevYaw, prevPitch);
