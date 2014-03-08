@@ -588,15 +588,10 @@ public class Resident {
 				e.motionY *= -1;
 				e.motionZ *= -1;
 				e.setPosition(prevX, prevY, prevZ);
-<<<<<<< HEAD
-=======
 
 				onlinePlayer.motionX *= -1;
 				onlinePlayer.motionY *= -1;
 				onlinePlayer.motionZ *= -1;
-
-				// onlinePlayer.mountEntity(e); // unomunts
->>>>>>> 655f9be42e0e34bf7cb8c0cca3339af14d48341a
 			}
 
 			((EntityPlayerMP) onlinePlayer).playerNetServerHandler.setPlayerLocation(prevX, prevY, prevZ, prevYaw, prevPitch);
