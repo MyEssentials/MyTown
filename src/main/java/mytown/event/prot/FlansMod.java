@@ -65,6 +65,8 @@ public class FlansMod extends ProtBase {
 			Vec3 posVec = Vec3.createVectorHelper(e.posX, e.posY, e.posZ);
 			Vec3 nextPosVec = Vec3.createVectorHelper(e.posX + e.motionX, e.posY + e.motionY, e.posZ + e.motionZ);
 			MovingObjectPosition hit = e.worldObj.rayTraceBlocks_do_do(posVec, nextPosVec, false, true);
+			
+			if (hit == null) return null;
 
 			if (hit.typeOfHit == EnumMovingObjectType.TILE && !res.canInteract(e.dimension, hit.blockX, hit.blockY, hit.blockZ, Permissions.Build) || hit.typeOfHit == EnumMovingObjectType.ENTITY && !res.canAttack(hit.entityHit)) {
 				return "Target protected by MyTown";

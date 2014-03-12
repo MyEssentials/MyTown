@@ -129,7 +129,7 @@ public class Config extends Configuration {
 
 		Town.pvpSafeTowns = get("general", "PVPSafeTown", "Spawn,Server", "Towns that PVP is disabled in, reguardless of the AllowPvpInTown setting.").getString().split(",");
 
-		prop = get("general", "LeftClickAccessBlocks", "1000:2", "Which blocks should be considered as access when someone is hitting them. Like TE Barrels");
+		prop = get("general", "LeftClickAccessBlocks", "1000:2", "Which blocks should be considered as access when someone is hitting them. Like TE Barrels. Separate each id with a semicolon (;)");
 		MyTown.instance.leftClickAccessBlocks = ItemIdRange.parseList(Arrays.asList(prop.getString().split(";")));
 
 		Resident.teleportToSpawnWaitSeconds = get("general", "SpawnTeleportTimeout", Resident.teleportToSpawnWaitSeconds, "How many seconds the /spawn teleport takes").getInt();
