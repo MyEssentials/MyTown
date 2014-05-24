@@ -1,9 +1,0 @@
-language: java
-env:
-  global:
-    secure: J2rrxMC5DiYF2JdpbTvjdTTLj3xNgKOiBSbb1GUD1STFBDOBwK2kJ0uDSlyAnjakFEkoX/+i3OZqZzhqW1AWygv+l1iUegxi3/r+9coiCHoi6Kf9b9ekP230MgsvXdBbtVKq14FouXETgVlhp2JxNRjk9xR3kOMHt5wMKqvQdno=
-branches:
-    only:
-        - Stable
-after_success:
-    - "./upload.sh"

@@ -3,6 +3,7 @@ package mytown.cmd;
 import java.util.Arrays;
 import java.util.List;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.ChatChannel;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -50,7 +51,7 @@ public class CmdChannel extends MyTownCommandBase {
 				ch = ChatChannel.defaultChannel;
 			}
 
-			if (!MyTown.instance.permManager.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
+			if (!ForgePermsAPI.permManager.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.focus." + ch.name.toLowerCase())) {
 				MyTown.sendChatToPlayer(sender, "§4You cannot focus to " + ch.name + " channel");
 				return;
 			}

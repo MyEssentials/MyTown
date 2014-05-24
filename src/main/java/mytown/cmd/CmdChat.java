@@ -2,6 +2,7 @@ package mytown.cmd;
 
 import java.util.List;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.ChatChannel;
 import mytown.Formatter;
 import mytown.MyTown;
@@ -107,7 +108,7 @@ public class CmdChat implements MyTownCommand {
 	}
 
 	public static String sendGlobalChat(Resident res, String msg, ChatChannel ch, boolean emote) {
-		if (!MyTown.instance.permManager.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
+		if (!ForgePermsAPI.permManager.canAccess(res.onlinePlayer.username, res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcaps")) {
 			msg = msg.toLowerCase();
 		}
 
@@ -189,7 +190,7 @@ public class CmdChat implements MyTownCommand {
 			return;
 		}
 
-		if (MyTown.instance.permManager.canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
+		if (ForgePermsAPI.permManager.canAccess(sender.onlinePlayer.username, sender.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.chat.allowcolors")) {
 			msg = Formatter.applyColorCodes(msg);
 		}
 

@@ -1,5 +1,6 @@
 package mytown;
 
+import forgeperms.api.ForgePermsAPI;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,7 +42,7 @@ public class Assert {
 		if (node == null)
 			return;
 		EntityPlayer p = (EntityPlayer) cs;
-		if (MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
+		if (ForgePermsAPI.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), node)) {
 			return;
 		}
 		throw new CommandException("commands.generic.permission");

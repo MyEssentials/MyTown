@@ -2,6 +2,7 @@ package mytown.cmd;
 
 import java.util.List;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.MyTown;
 import mytown.cmd.api.MyTownCommand;
 import net.minecraft.command.CommandGameMode;
@@ -23,7 +24,7 @@ public class CmdGamemode extends CommandGameMode implements MyTownCommand {
 	public boolean canCommandSenderUseCommand(ICommandSender cs) {
 		if (cs instanceof EntityPlayerMP) {
 			EntityPlayerMP p = (EntityPlayerMP) cs;
-			return MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.gm");
+			return ForgePermsAPI.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.adm.cmd.gm");
 		}
 		return false;
 	}

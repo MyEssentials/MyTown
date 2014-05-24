@@ -3,6 +3,7 @@ package mytown.cmd;
 import java.util.List;
 import java.util.Map;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.Assert;
 import mytown.Formatter;
 import mytown.MyTown;
@@ -76,7 +77,7 @@ public class CmdPrivateMsg extends CommandServerMessage implements MyTownCommand
 
 		lastMessages.put(target, sender);
 
-		if (MyTown.instance.permManager.canAccess(sender.getCommandSenderName(), sender.getEntityWorld().provider.getDimensionName(), "mytown.chat.allowcolors")) {
+		if (ForgePermsAPI.permManager.canAccess(sender.getCommandSenderName(), sender.getEntityWorld().provider.getDimensionName(), "mytown.chat.allowcolors")) {
 			msg = Formatter.applyColorCodes(msg);
 		}
 

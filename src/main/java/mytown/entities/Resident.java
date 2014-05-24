@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.ChatChannel;
 import mytown.ChunkCoord;
 import mytown.Formatter;
@@ -175,19 +176,19 @@ public class Resident {
 	}
 
 	public boolean shouldShowTownBlocks() {
-		return MyTown.instance.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.showblocks");
+		return ForgePermsAPI.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.showblocks");
 	}
 
 	public boolean shouldShowPlayerLocation() {
-		return MyTown.instance.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.showlocation");
+		return ForgePermsAPI.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.showlocation");
 	}
 
 	public boolean canByPassCheck(TownSettingCollection.Permissions level) {
-		return MyTown.instance.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass." + level.toString().toLowerCase());
+		return ForgePermsAPI.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass." + level.toString().toLowerCase());
 	}
 
 	public boolean pvpBypass() {
-		return MyTown.instance.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.pvp");
+		return ForgePermsAPI.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.pvp");
 	}
 
 	public String getOwnedBlocks() {
@@ -421,7 +422,7 @@ public class Resident {
 		String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
 
 		String prefix;
-		IChatManager chatManager = MyTown.instance.chatManager;
+		IChatManager chatManager = ForgePermsAPI.chatManager;
 		if (chatManager == null) {
 			MyTown.instance.chatLog.info("Chat Manager is null!");
 			return "";
@@ -438,7 +439,7 @@ public class Resident {
 		String w = onlinePlayer != null ? String.valueOf(onlinePlayer.dimension) : null;
 
 		String postfix;
-		IChatManager chatManager = MyTown.instance.chatManager;
+		IChatManager chatManager = ForgePermsAPI.chatManager;
 		if (chatManager == null) {
 			MyTown.instance.chatLog.info("Chat Manager is null!");
 			return "";
@@ -838,7 +839,7 @@ public class Resident {
 		teleportTargetHome = home;
 
 		System.currentTimeMillis();
-		long takesTime = MyTown.instance.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
+		long takesTime = ForgePermsAPI.permManager.canAccess(name(), DimensionManager.getProvider(prevDimension).getDimensionName(), "mytown.adm.bypass.teleportwait") ? 0 : home != null ? teleportToHomeWaitSeconds * 1000 : teleportToSpawnWaitSeconds * 1000;
 
 		teleportToSpawnStamp = System.currentTimeMillis() + takesTime;
 

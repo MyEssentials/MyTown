@@ -3,6 +3,7 @@ package mytown.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.MyTown;
 import mytown.Term;
 import net.minecraft.command.CommandException;
@@ -239,7 +240,7 @@ public class TownSettingCollection {
 		for (TownSetting set : settings) {
 			if (!isWild || set.wildValue != null) {
 				EntityPlayer p = (EntityPlayer) cs;
-				if (all || MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getSerializationKey()) || MyTown.instance.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set.*")) {
+				if (all || ForgePermsAPI.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set." + node + "." + set.getSerializationKey()) || ForgePermsAPI.permManager.canAccess(p.username, p.worldObj.provider.getDimensionName(), "mytown.cmd.perm.set.*")) {
 					MyTown.sendChatToPlayer(cs, String.format("§a%s §2[%s] : %s%s", set.getName(), set.getSerializationKey(), set.value == null ? "§d" : "§c", set.getVisualValue()));
 				}
 			}
