@@ -46,7 +46,7 @@ public class CmdSpawn extends MyTownSubCommandAdapter {
 			target = t;
 		}
 		
-		Assert.Perm(sender, "mytown.cmd.town.spawn." + target.name());
+		//Assert.Perm(sender, "mytown.cmd.town.spawn." + target.name());
 		
 		if (target.spawnBlock == null || target.getSpawn() == null) {
 			throw new CommandException(Term.TownErrSpawnNotSet.toString());
