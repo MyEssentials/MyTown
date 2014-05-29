@@ -16,7 +16,7 @@ public class Mekanism extends ProtBase {
 
 	@Override
 	public void load() throws Exception {
-		clEntityObsidianTNT = Class.forName("mekanism.common.EntityObsidianTNT");
+		clEntityObsidianTNT = Class.forName("mekanism.common.entity.EntityObsidianTNT");
 		fEntityObsidianTNT_Fuse = clEntityObsidianTNT.getDeclaredField("fuse");
 		fMekanism_ObsidianTNTBlastRadius = Class.forName("mekanism.common.Mekanism").getDeclaredField("obsidianTNTBlastRadius");
 

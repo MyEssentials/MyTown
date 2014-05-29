@@ -11,6 +11,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
+import cpw.mods.fml.relauncher.SideOnly;
+import forgeperms.api.ForgePermsAPI;
+import forgeperms.api.IChatManager;
+import forgeperms.api.IEconomyManager;
+import forgeperms.api.IPermissionManager;
 import mytown.cmd.CmdAdmin;
 import mytown.cmd.CmdChannel;
 import mytown.cmd.CmdChat;
@@ -54,9 +59,6 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
-import forgeperms.api.IChatManager;
-import forgeperms.api.IEconomyManager;
-import forgeperms.api.IPermissionManager;
 
 @Mod(modid = Constants.MODID, name = Constants.MODNAME, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 @NetworkMod(clientSideRequired = false, serverSideRequired = true)
@@ -69,28 +71,9 @@ public class MyTown {
 	public boolean isMCPC = false;
 	public Method MCPCRegisterCommand = null;
 
-	public IPermissionManager permManager;
-	public IChatManager chatManager;
-	public IEconomyManager economyManager;
-
 	@Instance("MyTown")
 	public static MyTown instance;
 	public Config config = new Config();
-
-	public void initPermManager() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-		Class<?> forgePerms = Class.forName("forgeperms.ForgePerms");
-		permManager = (IPermissionManager) forgePerms.getMethod("getPermissionManager").invoke(null);
-	}
-
-	public void initChatManager() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-		Class<?> forgePerms = Class.forName("forgeperms.ForgePerms");
-		chatManager = (IChatManager) forgePerms.getMethod("getChatManager").invoke(null);
-	}
-
-	public void initEcoManager() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-		Class<?> forgePerms = Class.forName("forgeperms.ForgePerms");
-		economyManager = (IEconomyManager) forgePerms.getMethod("getEconomyManager").invoke(null);
-	}
 
 	public Log coreLog;
 	public Log chatLog;
@@ -105,8 +88,8 @@ public class MyTown {
 		chatLog = new Log("Chat", new File(ev.getModConfigurationDirectory() + "/MyTown/logs", "chat.log"));
 		pmLog = new Log("PM", new File(ev.getModConfigurationDirectory() + "/MyTown/logs", "privateMessages.log"));
 		bypassLog = new Log("Bypass", new File(ev.getModConfigurationDirectory() + "/MyTown/logs", "bypass.log"));
-
-		isMCPC = MinecraftServer.getServer().getServerModName().contains("mcpc");
+		if(ev.getSide() == Side.SERVER)
+			isMCPC = MinecraftServer.getServer().getServerModName().contains("mcpc");
 		// X_Log.init();
 		addCommands();
 		config.loadConfig();
@@ -115,21 +98,6 @@ public class MyTown {
 
 	@EventHandler
 	public void modsLoaded(FMLServerStartedEvent var1) {
-		try {
-			initPermManager();
-			initChatManager();
-			initEcoManager();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 		try {
 			MyTownDatasource.instance.init();
 		} catch (Exception ex) {

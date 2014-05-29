@@ -3,6 +3,7 @@ package mytown.cmd.sub.assistant;
 import java.util.List;
 import java.util.Map;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.Assert;
 import mytown.Cost;
 import mytown.MyTown;
@@ -64,7 +65,7 @@ public class CmdTownClaim extends MyTownSubCommandAdapter {
 
 		CommandException firstError = null;
 		int requestedBlocks = 0, ableToClaim = 0, alreadyOwn = 0;
-		boolean bypassFarawayRestriction = MyTown.instance.permManager.canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.faraway");
+		boolean bypassFarawayRestriction = ForgePermsAPI.permManager.canAccess(res.name(), res.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.adm.bypass.faraway");
 		List<TownBlock> blocks = Lists.newArrayList();
 
 		for (int z = cz - radius_rec; z <= cz + radius_rec; z++) {

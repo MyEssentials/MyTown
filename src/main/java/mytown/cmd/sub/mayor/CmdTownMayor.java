@@ -3,6 +3,7 @@ package mytown.cmd.sub.mayor;
 import java.util.List;
 import java.util.logging.Level;
 
+import forgeperms.api.ForgePermsAPI;
 import mytown.Formatter;
 import mytown.MyTown;
 import mytown.MyTownDatasource;
@@ -55,7 +56,7 @@ public class CmdTownMayor extends MyTownSubCommandAdapter {
 				throw new CommandException(Term.TownErrPlayerNotInYourTown.toString());
 			}
 
-			if (!MyTown.instance.permManager.canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
+			if (!ForgePermsAPI.permManager.canAccess(r.onlinePlayer.username, r.onlinePlayer.worldObj.provider.getDimensionName(), "mytown.cmd.new")) {
 				throw new CommandException(Term.TownErrPlayerDoesntHaveAccessToTownManagement.toString());
 			}
 
