@@ -52,10 +52,10 @@ public class CmdNationInvite extends MyTownSubCommandAdapter {
 		Town town = res.town();
 		Nation nation = town.nation();
 
-		if (args.length == 2) {
+		if (args.length == 1) {
 			Town t = MyTownDatasource.instance.getTown(args[0]);
 			if (t == null) {
-				throw new CommandException(Term.TownErrNotFound.toString(), args[1]);
+				throw new CommandException(Term.TownErrNotFound.toString(), args[0]);
 			}
 			if (t == town) {
 				throw new CommandException(Term.TownErrNationInvitingSelf.toString());
