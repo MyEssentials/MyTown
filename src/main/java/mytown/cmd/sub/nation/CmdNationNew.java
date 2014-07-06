@@ -25,7 +25,7 @@ public class CmdNationNew extends MyTownSubCommandAdapter {
 
 	@Override
 	public String getPermNode() {
-		return "nation";
+		return "mytown.cmd.nationnew";
 	}
 
 	@Override
